@@ -1,0 +1,11 @@
+Problems
+--------
+
+-	Check fullscreen switch + restore problems
+-	15-bit/16-bit alpha routines
+
+
+ToDo
+----
+
+-	15/16-bit blend routines

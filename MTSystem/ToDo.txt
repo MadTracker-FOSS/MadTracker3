@@ -1,0 +1,11 @@
+Problems
+--------
+
+
+
+ToDo
+----
+
+=	MTFile (and MTFolder) -> multiple classes (MTHTTPFile, MTFTPFile, MTZipFile, MTRARFile, etc.)
+-	Built-in ZIP support (folder-like)
+-	Built-in FTP and HTTP protocols

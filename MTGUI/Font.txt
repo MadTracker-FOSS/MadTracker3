@@ -1,0 +1,6 @@
+ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?_-=# = null and characters (68)
+\O1\O2\O3 = Note Off (3) = 80 81 82
+\F1\F2\F3 = Fade Out (3) = 84 85 86
+\C1\C2\C3 = Note Cut (3) = 88 89 8A
+\U\D\u\d\L\R\l\r  = Up/Down/Left/Right (Fine/Strong) (8) = 98 99 9A 9B 9C 9D 9E 9F
+\0\1\2\3\4\5\6\7  = Drums (8) = 90 91 92 93 94 95 96 97

@@ -1,0 +1,36 @@
+Problems
+--------
+
+-	MTControl::window -> make functions for setmodified and wrapper to follow the window chain if any
+-	get_blittable_region to optimize resizings
+v	Shadows are drawn on hidden places & MT3 logo gets copied on the CPU monitor & Tab buttons are shown before ??
+v	Bug with context menu
+		1.	Right-click on edit box
+		2.	Right-click on sequencer titlebar (which is over the edit box window)
+v	Resize problems (tab control)
+
+
+ToDo
+----
+
+-	"Waiting for processes to terminate..." window if time > 5 seconds (max. 30 sec.) with "Kill" button
+
+GUI
+
+-	[Tab] -> No focus -> First control
+-	HTML Viewer
+-	MTPanel
+-	MTSlider
+-	MTUpDown
+-	MTTreeView
+-	MTDragObject
+
+Skins
+
+-	Focused -> blink flag (for custom skins)
+-	Multiple font styles with names (big, narrow, bold, etc.)
+-	Procedural render (lines, rect, etc.) -> Faster
+		Menu: Higlight, Light, Face, Shadow, Dark Shadow (5)
+		Borders: idem (5)
+		Buttons (procedural): idem (5)
+		Windows (procedural): idem + Caption Gradient (2x2) (+ angle) + Border (2) (11)

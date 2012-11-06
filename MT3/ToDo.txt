@@ -1,0 +1,53 @@
+-	Display	Logo, Tips, Small Sequencer, Oscillos, Spectrum, Custom, etc.
+?	Desktop	Icons, shortcuts, topbar, trash, etc.
+-	Hints	Too much bass/trebles, clipping, etc.
+-	Track oscillo -> paint with mouse (ie keep the button down)
+-	Metronome
+-	Volume transpose + other transposes
+-	Track selecting mode
+-	Default values (pattern length, BPM, ticks, LPB, etc)
+-	Song monitor (display, cf IT)
+=	Empty pattern/ins/spl displayed differently
+-	Joystick, mouse, keyboard, MIDI keyboard = controller
+-	Live recording for automation (knobs, etc.)
+-	Statistics for objects (where it is used, etc.)
+?	Voice tracker (sing -> track)
+-	Objects sorting
+
+-	Live Mode
+	-	Fade in/out
+	-	Mute
+	-	Pattern trigger (+quantization)
+	-	Volume slide
+	-	Effects parameters pre-set (with trigger)
+
+-	Step/Pattern playing
+-	Drums rotating squares (display)
+-	Drums samples tools (mark points, etc.)
+-	Pattern -> loop a part, start from a point, etc.
+-	Step -> next note
+
+-	Wave Export Loop exporting:
+	-	cut remainder: this truncates (cuts off) the sound at the end of the pattern
+	-	leave remainder: this extends the time of the output .wav to however long it
+		takes all of the sounds to finish playing
+	-	loop remainder: this takes the material that would be truncated (cut off)
+		under the cut remainder option and automaticaly pastes it over the start of
+		the outputed .wav so that it sounds nice when looping
+
+-	Network -> last modif. user (cache system)
+-	HTML comments
+-	Advanced CD-Audio extractor
+-	Automation snapshot (last point or all points)
+-	MT2DAT code
+-	MIDI Export
+-	Full MIDI support (sync)
+-	Templates
+-	Custom Keyboard
+-	Undo
+-	Find+Replace
+-	Postprocessors (master track fx)
+-	Soft synths (waves + postprocess)
+-	Cubase VST plugins
+-	Multi-track Wave Export
+-	Pattern/Loop/... volume optimizer

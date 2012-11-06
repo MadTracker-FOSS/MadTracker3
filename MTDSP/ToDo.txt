@@ -1,0 +1,12 @@
+Problems
+--------
+
+ToDo
+----
+
+-	Optimized routines (empty buffer, mix, etc.)
+-	Linear interpolation
+-	Cubic interpolations
+-	Sinc interpolations
+=	Filters
+-	Resampling

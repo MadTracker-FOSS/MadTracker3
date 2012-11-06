@@ -1,0 +1,112 @@
+Problems
+--------
+
+
+
+How?
+----
+
+Volume:
+
+			  Track
+				|
+	  TVol		|	  TVol			Track volume & panning
+				V
+		x	 Pattern	x
+				|
+ .--< PVol?		|	  PPan?	>--.	Pattern volume & panning
+ |				V			   |
+ |			Instrument		   |
+ |				|			   |
+ |	  IGVol		|	  IGPan	   |	Instrument volume
+ |				V			   |
+ |		x	Instrument	x	   |
+ |				|			   |
+ `--> IDVol		|	  IDPan	<--'	Oscillator volume (in instrument)
+				V
+		x	Enveloppe	x
+				|
+	   EPan		|	  EPan			Instrument envelopes
+				V
+			Oscillator
+
+
+gvol = global volume
+mvol = internal volume
+cvol = envelope volume
+tvol = cvol*mvol
+
+
+
+ToDo
+----
+
+-	No more sequences limit per layer
+-	Automation per sequence, per layer or per pattern
+-	Anticipated creation of pattern instances
+-	Creation of instrument instances via module -> get a handle
+	Send of events via module/handle
+	-> allows to delay events
+-	Voice effects (effect that varies with the notes, etc. (i.e. distortion, filter, etc.))
+-	Time to live for rejected channels
+-	Pattern columns
+	-	User can choose which rows he wants, and how much
+	-	Contextual help for rows, effects, etc. (hint window)
+	-	Extension for row types
+	v	Note, Drum, Instrument selector, Panning, Volume, XM effect, IT effect, MT effect, etc.
+v	Pattern load/save stream -> dependent of the load function (except for internal format)
+-	FX Commands -> one function per command (not switch-case)
+-	Silent mode (no process, but events) for solo or analys purpose
+-	Track panning
+-	Flanger (amout + delay)
+-	Multi-tap delay + filter
+-	Instruments groups
+-	Layered instruments
+-	Instr -> multi-layer spl (volume)
+-	Instr -> big keyboard
+-	Pingpong envelopes
+-	Smooth envelope (cubic)
+-	Log cutoff
+-	Envelope presets (auto+instr)
+-	Advanced Instruments
+	-	Envelope morphing
+	-	Panning mapping
+	-	Volume mapping
+	-	Pitch mapping
+	-	Cutoff mapping etc.
+	-	Morph mapping
+-	Arpeggiator (pitch+cutoff)
+	-	Multiple patterns
+-	Scale tuning (12 => 17, 19, etc.)
+-	Intelligent transpose (follow a scale)
+
+-	Flexible MT3 Format
+	-	Data chunks
+		-	Multiple chunks for the same object at any position
+		-	Streaming optimized
+	-	Used Extensions Information
+		-	Artist name, group, label, etc.
+
+-	Multiple envelope display (transparent)
+-	Multi-select object edit (same type)
+
+-	Flip loop
+-	Crop sample
+-	Tune tone
+-	Copyrighted samples
+-	Loop Display/Edit
+
+-	C-4 -> BDR C#4 -> SND ... (note renaming)
+-	Default values for each kind of patterns
+v	Unquantized patterns
+-	Pattern -> groove mapping (each track or global)
+-	Groove patterns (auto tick mapping)
+-	VisualFX (inline automation for patterns fx [+track fx])
+-	XM & IT patterns
+-	XM ins text -> comment
+-	MIDI patterns
+		+0 4 timestamp
+		+4 4 length
+		+8 x datas
+-	Recording -> MIDI session
+	Convert to std pattern, etc.

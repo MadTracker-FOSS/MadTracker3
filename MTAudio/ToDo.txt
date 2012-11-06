@@ -1,0 +1,17 @@
+Problems
+--------
+
+-	Check sound clicks/pops
+
+
+How?
+----
+
+
+ToDo
+----
+
+-	Multi-output -> sync (Callback)
+-	ASIO support
+-	Nosound device with zero latency
+v	Driver Classes (MME, DirectSound, ASIO, etc.)

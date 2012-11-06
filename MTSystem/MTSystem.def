@@ -1,0 +1,89 @@
+LIBRARY    MTSYSTEM.MTX
+EXPORTS    MTXMain @1
+
+EXPORTS    mtmemalloc
+           mtmemfree
+           mtmemrealloc
+           mtdialog
+           mtresdialog
+           mtauthdialog
+           mtshowoserror
+           mtshowlastoserror
+           mtlog
+           mtflog
+           mtdump
+           mtenter
+           mtfenter
+           mtleave
+           mtgetcallstack
+
+EXPORTS	   initKernel
+	   uninitKernel
+	   stopThreads
+           mtgetsysthread
+           mtgetcurrentthread
+	   mtissysthread
+	   mtsetprivatedata
+	   mtgetprivatedata
+	   mtlocalalloc
+	   mtlocalfree
+	   mtlocalset
+	   mtlocalget
+	   mtthreadcreate
+	   mtprocesscreate
+	   mtlockcreate
+	   mtlockdelete
+	   mteventcreate
+	   mteventdelete
+	   mttimercreate
+	   mttimerevent
+	   mttimerdelete
+	   mtcpumonitorcreate
+	   mtsyscounter
+	   mtsyscounterex
+	   mtsyswait
+	   mtsyswaitmultiple
+	   mtgetlasterror
+	   mtsetlasterror
+
+EXPORTS    mtarraycreate
+           mtarraydelete
+	   mthashcreate
+	   mthashdelete
+
+EXPORTS    mtresfind
+           mtresopen
+	   mtresclose
+
+EXPORTS    mtconfigfind
+           mtconfigopen
+	   mtconfigclose
+	   mtminiconfigcreate
+	   mtminiconfigdelete
+
+EXPORTS    initFiles
+           uninitFiles
+	   mtfileopen
+           mtfileclose
+	   mtfolderopen
+	   mtfolderclose
+	   mtfileexists
+	   mtfilecopy
+	   mtfiledelete
+	   mtfilerename
+	   mtfiletype
+	   mtfilemaketemp
+	   mttempfile
+
+EXPORTS    initSocket
+           uninitSocket
+           initInternet
+	   uninitInternet
+	   mtbase64decode_len
+	   mtbase64decode
+	   mtbase64decode_binary
+	   mtbase64encode_len
+	   mtbase64encode
+	   mtbase64encode_binary
+	   md5
+	   md5b

@@ -1,0 +1,126 @@
+MadTracker 3 File Format Specifications
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+                                  Copyright © 2005,2006 Yannick Delwiche
+                                                     All rights reserved
+
+Conventions
+¯¯¯¯¯¯¯¯¯¯¯
+  S* = Null-terminated string
+  P* = Packed number (most significant bits define the number of bytes)
+
+
+Main Structure
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+	Offset	Size	Description
+        ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+	+0	32	Identifier
+	
+			"MadTracker 3 Module"
+			"MadTracker 3 Project"
+			"MadTracker 3 Package"
+			"MadTracker 3 Object"
+			"MadTracker 3 Key"
+	
+	+32	32	Creator software
+	
+			"MadTracker"
+	
+	+64	8	Creator software version
+	
+	 +0	2	Major
+	 +2	2	Minor
+	 +4	2	Revision
+	 +6	2	Build
+	
+	+72	48	File description
+	
+			<Module name>
+			<Project name>
+			<Package name>
+			<Object name>
+			<User name>
+	
+	+120	8	File version
+	
+	 +0	2	Major
+	 +2	2	Minor
+	 +4	2	Revision
+	 +6	2	Build
+	
+	+128	4	Number of objects (NO)
+	
+	+132	16	MD5 checksum of objects indexes
+	
+	+148	NO*?	Objects index
+	
+	 +0	4	Parent
+	 +4	4	Type
+	 +8	P*	Offset
+	 +?	P*	Size
+	 +?	1	Encoding
+	 +?	1	Part
+	 +?	1	Flags
+	
+	  .0		Stored in a seperate file
+
+
+Global Object Structure
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+	Part 0 only. Other parts are object-dependent.
+	
+	Offset	Size	Description
+	¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+	+0	16	MD5 checksum
+	+16	4	ID
+	+20	4	Flags
+	+24	4	Color
+	
+	 +0	1	R
+	 +1	1	G
+	 +2	1	B
+	 +3	1	A
+	
+	+28	S*	Name
+	+?	?	Data
+
+
+User Structure (0xF0000001)
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+	Offset	Size	Description
+	¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+	+0	8	User GUID
+	
+	 +0	4	Timestamp
+	 +4	4	Random data
+	
+			0x0 0x0 = Unregistered (anonymous) user
+			0x0 0x1 = Registered user
+			0x0 0x2 = Professional registered user
+			0x0 0x3 = Beta tester
+			0x0 0x4 = MadTracker staff
+	
+	+8	S*	User name
+	+?	S*	User group
+	+?	S*	User e-mail
+	+?	S*	User homepage
+
+
+Access Control List Structure (0xF0000002)
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+	Offset	Size	Description
+	¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+	+0	8	User GUID
+	+8	4	Access rights
+	
+	 .0		Can read
+	 .1		Can write/modify
+	 .2		Can copy/duplicate
+	 .3		Can delete
+	 .4		Can play
+	 .31		Is owner
+	
+	+8	4	Expiration date
+	
+	 +0	2	Year
+	 +2	1	Month
+	 +3	1	Day

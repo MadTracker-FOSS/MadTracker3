@@ -1,0 +1,123 @@
+MTCM_MOUSEDOWN
+
+	button		Mouse button (DB_LEFT, DB_RIGHT or DB_MIDDLE)
+	buttons		Buttons state (DB_LEFT, DB_RIGHT, DB_MIDDLE, DB_CONTROL or DB_SHIFT)
+	x					Mouse X position
+	y					Mouse Y position
+
+
+MTCM_MOUSEMOVE
+
+	buttons		Buttons state (DB_LEFT, DB_RIGHT, DB_MIDDLE, DB_CONTROL or DB_SHIFT)
+	x					Mouse X position
+	y					Mouse Y position
+
+
+MTCM_MOUSEUP
+
+	button		Mouse button (DB_LEFT, DB_RIGHT or DB_MIDDLE)
+	buttons		Buttons state (DB_LEFT, DB_RIGHT, DB_MIDDLE, DB_CONTROL or DB_SHIFT)
+	x					Mouse X position
+	y					Mouse Y position
+
+
+MTCM_MOUSECLICK
+
+	button		Mouse button (DB_LEFT, DB_RIGHT or DB_MIDDLE)
+	buttons		Buttons state (DB_LEFT, DB_RIGHT, DB_MIDDLE, DB_CONTROL or DB_SHIFT)
+	x					Mouse X position
+	y					Mouse Y position
+
+
+MTCM_MOUSEWHEEL
+
+	button		Mouse button (DB_LEFT, DB_RIGHT or DB_MIDDLE)
+	buttons		Buttons state (DB_LEFT, DB_RIGHT, DB_MIDDLE, DB_CONTROL or DB_SHIFT)
+	x					Mouse X position
+	y					Mouse Y position
+	param3		Wheel delta
+
+
+MTCM_KEYDOWN
+
+	buttons		Buttons state (DB_SHIFT or DB_CONTROL)
+	key				Virtual-key code
+	scancode	Scancode
+	repeat		Repeat count
+
+
+MTCM_KEYUP
+
+	buttons		Buttons state (DB_SHIFT or DB_CONTROL)
+	key				Virtual-key code
+	scancode	Scancode
+
+
+MTCM_CHAR
+
+	key				Character
+	scancode	Scancode
+	repeat		Repeat count
+
+
+MTCM_ENTER
+
+
+MTCM_LEAVE
+
+
+MTCM_BOUNDS
+
+	w					New control width
+	h					New control height
+
+
+MTCM_FLUSH
+
+	l					Left
+	t					Top
+	w					Width
+	h					Height
+
+
+MTCM_ACTION
+
+	param1		User-defined parameter
+
+
+MTCM_ITEMCHANGE
+
+
+MTCM_ITEMSELECT
+
+
+MTCM_SHORTCUT
+
+
+MTCM_TIMER
+
+
+MTCM_REFRESH
+
+
+MTCM_CLOSE
+
+
+MTCM_DESTROY
+
+
+MTCM_NOTIFY
+
+	param1			0 = Skin changed
+							1 = Display changed
+
+
+MTCM_CHANGE
+
+	param1			Flags changed
+	param2			Flags set or cleared
+	dr					Area to repaint
+
+
+MTCM_TOUCHED
+
