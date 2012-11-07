@@ -22,7 +22,7 @@ CFLAGS = -O2 -m32 # Yeah, let's assume 32-bit for now.
 
 # Dynamic Libraries
 # TODO
-DEPENDENCIES = -lFLAC
+DEPENDENCIES = -lFLAC `pkg-config --libs gtk+-2.0`
 
 # Includes
 INCLUDES = -I..
@@ -36,6 +36,7 @@ INCLUDES += -I../MTDisplay
 INCLUDES += -I../MTGUI
 INCLUDES += -I../MTObjects
 INCLUDES += -I../MTSystem
+INCLUDES += `pkg-config --cflags gtk+-2.0`
 
 # Defines
 # TODO
