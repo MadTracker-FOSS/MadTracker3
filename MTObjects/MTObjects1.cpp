@@ -26,7 +26,7 @@
 #include "MTGraphs.h"
 #include "MTDelay.h"
 #include "MTGenerator.h"
-#include "MTObjectsRES.h"
+#include "../Interface/MTObjectsRES.h"
 #ifdef _DEBUG
 #	include "MTTest.h"
 #endif

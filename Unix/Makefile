@@ -22,7 +22,7 @@ CFLAGS = -O2 -m32 # Yeah, let's assume 32-bit for now.
 
 # Dynamic Libraries
 # TODO
-DEPENDENCIES = -lFLAC `pkg-config --libs gtk+-2.0`
+DEPENDENCIES = -lFLAC `pkg-config --libs gtk+-2.0 libxml2`
 
 # Includes
 INCLUDES = -I..

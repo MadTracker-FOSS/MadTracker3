@@ -15,7 +15,7 @@
 #include "MTOscillator.h"
 #include "MTModule.h"
 #include "MTObjects1.h"
-#include "MTObjectsRES.h"
+#include "../Interface/MTObjectsRES.h"
 #include "MTXSystem2.h"
 //---------------------------------------------------------------------------
 SampleType *sampletype;

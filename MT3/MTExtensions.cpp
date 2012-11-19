@@ -26,7 +26,7 @@
 #include "MTInterface.h"
 #include "MTConsole.h"
 #include "MTXModule.h"
-#include "MT3RES.h"
+#include "../Interface/MT3RES.h"
 //---------------------------------------------------------------------------
 static const char *mt3name = {"MadTracker"};
 static const int mt3version = 0x30000;

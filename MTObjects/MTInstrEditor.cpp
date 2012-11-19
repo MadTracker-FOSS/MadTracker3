@@ -12,7 +12,7 @@
 //---------------------------------------------------------------------------
 #include "MTInstrEditor.h"
 #include "MTXInput.h"
-#include "MTObjectsRES.h"
+#include "../Interface/MTObjectsRES.h"
 //---------------------------------------------------------------------------
 MTShortcut ienav[2] = {
 	{0,KB_SPACE,0,0,0},

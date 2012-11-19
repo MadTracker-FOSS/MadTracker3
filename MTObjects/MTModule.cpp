@@ -17,7 +17,7 @@
 #include "MTObjects1.h"
 #include "MTObjects2.h"
 #include "MTObjectsASM.h"
-#include "MTObjectsRES.h"
+#include "../Interface/MTObjectsRES.h"
 #include "MTXSystem2.h"
 #include "MTGraphs.h"
 //---------------------------------------------------------------------------
