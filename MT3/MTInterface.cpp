@@ -5,7 +5,7 @@
 //		Platforms:	Win32
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTInterface.cpp 111 2007-02-16 12:58:43Z Yannick $
 //
@@ -26,7 +26,7 @@
 #include "MTXSystem.h"
 #include "MTXInput.h"
 #include "MTXSystem2.h"
-#include "../../debug/Interface/MT3RES.h"
+#include "MT3RES.h"
 //---------------------------------------------------------------------------
 void MTCT designmode(MTShortcut*,MTControl*,MTUndo*);
 //---------------------------------------------------------------------------

@@ -5,14 +5,14 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTInstrEditor.cpp 78 2005-08-28 20:59:58Z Yannick $
 //
 //---------------------------------------------------------------------------
 #include "MTInstrEditor.h"
 #include "MTXInput.h"
-#include "../../debug/Interface/MTObjectsRES.h"
+#include "MTObjectsRES.h"
 //---------------------------------------------------------------------------
 MTShortcut ienav[2] = {
 	{0,KB_SPACE,0,0,0},

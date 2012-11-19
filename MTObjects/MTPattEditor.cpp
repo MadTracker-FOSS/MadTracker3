@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTPattEditor.cpp 78 2005-08-28 20:59:58Z Yannick $
 //
@@ -13,7 +13,7 @@
 #include "MTPattEditor.h"
 #include "MTPattManager.h"
 #include "MTXInput.h"
-#include "../../debug/Interface/MTObjectsRES.h"
+#include "MTObjectsRES.h"
 //---------------------------------------------------------------------------
 MTShortcut penav[16] = {
 	{0,KB_DOWN,MTT_nextline,0,0},

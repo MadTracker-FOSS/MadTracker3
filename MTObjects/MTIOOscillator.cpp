@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTIOOscillator.cpp 111 2007-02-16 12:58:43Z Yannick $
 //
@@ -13,7 +13,7 @@
 #include <string.h>
 #include "MTOscillator.h"
 #include "MTObjects1.h"
-#include "MTRIFF.h"
+#include "MTRiff.h"
 #include "MTXSystem2.h"
 //---------------------------------------------------------------------------
 // Sample Load Functions

@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTGenerator.cpp 100 2005-11-30 20:19:39Z Yannick $
 //
@@ -14,7 +14,7 @@
 #include <math.h>
 #include "MTGenerator.h"
 #include "MTObjects1.h"
-#include "../../debug/Interface/MTObjectsRES.h"
+#include "MTObjectsRES.h"
 #include "MTXSystem2.h"
 //---------------------------------------------------------------------------
 GeneratorType *generatortype;

@@ -5,7 +5,7 @@
 //		Platforms:	Win32,Linux
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTKernel.cpp 111 2007-02-16 12:58:43Z Yannick $
 //
@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include "MTKernel.h"
 #include "MTXSystem2.h"
-#include "../../debug/Interface/MTSystemRES.h"
+#include "MTSystemRES.h"
 #ifdef _WIN32
 #	include <mmsystem.h>
 #else

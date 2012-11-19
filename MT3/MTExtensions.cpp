@@ -5,7 +5,7 @@
 //		Platforms:	Win32,Linux
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTExtensions.cpp 111 2007-02-16 12:58:43Z Yannick $
 //
@@ -26,7 +26,7 @@
 #include "MTInterface.h"
 #include "MTConsole.h"
 #include "MTXModule.h"
-#include "../../debug/Interface/MT3RES.h"
+#include "MT3RES.h"
 //---------------------------------------------------------------------------
 static const char *mt3name = {"MadTracker"};
 static const int mt3version = 0x30000;

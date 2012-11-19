@@ -5,17 +5,17 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTPattManager.cpp 111 2007-02-16 12:58:43Z Yannick $
 //
 //---------------------------------------------------------------------------
 #include "MTPattEditor.h"
 #include "MTPattManager.h"
-#include "../MTGUI/MTGUITools.h"
+#include "MTGUITools.h"
 #include "MTXSkin.h"
 #include "MTXInput.h"
-#include "../../debug/Interface/MTObjectsRES.h"
+#include "MTObjectsRES.h"
 #include "MTXSystem2.h"
 //---------------------------------------------------------------------------
 MTPattManager::MTPattManager(MTCustomWinControl *control):

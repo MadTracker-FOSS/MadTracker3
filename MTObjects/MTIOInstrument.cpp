@@ -5,14 +5,14 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTIOInstrument.cpp 78 2005-08-28 20:59:58Z Yannick $
 //
 //---------------------------------------------------------------------------
 #include <string.h>
 #include "MTInstrument.h"
-#include "MTRIFF.h"
+#include "MTRiff.h"
 #include "MTObjects1.h"
 #include "MTXSystem2.h"
 //---------------------------------------------------------------------------

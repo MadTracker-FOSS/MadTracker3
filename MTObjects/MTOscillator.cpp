@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTOscillator.cpp 111 2007-02-16 12:58:43Z Yannick $
 //
@@ -15,7 +15,7 @@
 #include "MTOscillator.h"
 #include "MTModule.h"
 #include "MTObjects1.h"
-#include "../../debug/Interface/MTObjectsRES.h"
+#include "MTObjectsRES.h"
 #include "MTXSystem2.h"
 //---------------------------------------------------------------------------
 SampleType *sampletype;

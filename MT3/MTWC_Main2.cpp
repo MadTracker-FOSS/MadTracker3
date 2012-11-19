@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTWC_Main2.cpp 68 2005-08-26 22:19:12Z Yannick $
 //
@@ -15,7 +15,7 @@
 #include "MTWC_Main2.h"
 #include "MTXGUI.h"
 #include "MTXSkin.h"
-#include "../../debug/Interface/MT3RES.h"
+#include "MT3RES.h"
 //---------------------------------------------------------------------------
 extern MTGUIInterface *gi;
 MTWC_main2 *w_main2;

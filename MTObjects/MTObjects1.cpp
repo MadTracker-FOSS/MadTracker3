@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTObjects1.cpp 111 2007-02-16 12:58:43Z Yannick $
 //
@@ -26,7 +26,7 @@
 #include "MTGraphs.h"
 #include "MTDelay.h"
 #include "MTGenerator.h"
-#include "../../debug/Interface/MTObjectsRES.h"
+#include "MTObjectsRES.h"
 #ifdef _DEBUG
 #	include "MTTest.h"
 #endif
