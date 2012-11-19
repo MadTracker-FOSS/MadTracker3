@@ -39,6 +39,9 @@
         <in>plugin.h</in>
       </df>
       <df name="Interface">
+        <in>MT3RES.h</in>
+        <in>MTObjectsRES.h</in>
+        <in>MTSystemRES.h</in>
       </df>
       <df name="MT3">
         <in>MT3.cpp</in>
