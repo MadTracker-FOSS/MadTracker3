@@ -301,12 +301,6 @@
         <ccTool>
         </ccTool>
       </item>
-      <item path="Interface/MT3RES.h" ex="true" tool="3" flavor2="0">
-      </item>
-      <item path="Interface/MTObjectsRES.h" ex="true" tool="3" flavor2="0">
-      </item>
-      <item path="Interface/MTSystemRES.h" ex="true" tool="3" flavor2="0">
-      </item>
       <item path="MT3/MT3.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
         </ccTool>
@@ -332,12 +326,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -428,12 +422,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -474,12 +468,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -496,12 +490,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -514,12 +508,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -532,12 +526,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -550,12 +544,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -568,12 +562,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -586,12 +580,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -608,12 +602,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -626,12 +620,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -644,12 +638,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -662,12 +656,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -682,12 +676,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -700,12 +694,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -718,12 +712,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -736,12 +730,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -754,12 +748,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -772,12 +766,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -790,12 +784,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -808,12 +802,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -826,12 +820,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -844,12 +838,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -862,12 +856,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -880,12 +874,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -922,12 +916,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -992,12 +986,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -1014,12 +1008,12 @@
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
-            <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
-            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
+            <pElem>/usr/include/pixman-1</pElem>
             <pElem>/usr/include/libpng12</pElem>
+            <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
           </incDir>
         </ccTool>
       </item>
@@ -1114,18 +1108,18 @@
             <pElem>MTObjects</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0/</pElem>
             <pElem>MTDSP</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
             <pElem>MTSystem</pElem>
-            <pElem>MTAudio</pElem>
             <pElem>.</pElem>
+            <pElem>MTAudio</pElem>
             <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
             <pElem>/usr/include/pango-1.0</pElem>
             <pElem>/usr/include/freetype2</pElem>
             <pElem>MTGUI</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>in_mt3</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>MTDisplay</pElem>
