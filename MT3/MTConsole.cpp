@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTConsole.cpp 100 2005-11-30 20:19:39Z Yannick $
 //
@@ -126,7 +126,6 @@ int MTConsole::userinput(const char *input)
 	int x,y;
 	bool ok = false;
 	char cmd[64];
-	char *e;
 
 	if (mi->processinput(input)!=0) ok = true;
 	for (x=0;x<next;x++){
@@ -147,7 +146,7 @@ int MTConsole::userinput(const char *input)
 	};
 	if (!ok){
 		char buf[256];
-		e = strchr(input,' ');
+		const char *e = strchr(input,' ');
 		if (e){
 			x = e-input;
 			if (x>sizeof(cmd)-1) x = sizeof(cmd)-1;

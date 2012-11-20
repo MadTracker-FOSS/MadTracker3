@@ -5,7 +5,7 @@
 //		Platforms:	Win32,Linux
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTData.cpp 111 2007-02-16 12:58:43Z Yannick $
 //
@@ -284,7 +284,7 @@ bool init()
 		extern const char *argv0;
 		extern char *cmdline;
 		const char *binpath = getenv("_");
-		char *b1 = strrchr(binpath,'/')+1;
+		const char *b1 = strrchr(binpath,'/')+1;
 		int l;
 		if (!b1) binpath = argv0;
 		else if (!strstr(argv0,b1)) binpath = argv0;
@@ -292,15 +292,15 @@ bool init()
 		if (l==-1) strcpy(applpath,binpath);
 		else applpath[l] = 0;
 		e = strchr(applpath,0)-1;
-		while (*e!='/') *e-- = 0;
+		while (*e != +'/') *e-- = 0;
 		cmd = cmdline;
 		strcpy(userpath,getenv("HOME"));
 		e = strchr(userpath,0);
-		if (*(e-1)!='/'){
+		if (*(e-1) != '/'){
 			*e++ = '/';
 			*e = 0;
 		};
-		strcpy(e,".MadTracker/");
+		strcpy(e,".MadTracker/"); //This needs to be fixed
 #	endif
 	strcpy(prefs.syspath[SP_ROOT],applpath);
 	strcpy(prefs.syspath[SP_USER],userpath);
