@@ -292,7 +292,7 @@ bool init()
 		if (l==-1) strcpy(applpath,binpath);
 		else applpath[l] = 0;
 		e = strchr(applpath,0)-1;
-		while (*e != +'/') *e-- = 0;
+		while (*e != '/') *e-- = 0;
 		cmd = cmdline;
 		strcpy(userpath,getenv("HOME"));
 		e = strchr(userpath,0);
