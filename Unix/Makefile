@@ -36,8 +36,7 @@ INCLUDES += -I../MTDisplay
 INCLUDES += -I../MTGUI
 INCLUDES += -I../MTObjects
 INCLUDES += -I../MTSystem
-INCLUDES += `pkg-config --cflags gtk+-2.0`
-INCLUDES += `pkg-config --cflags libxml-2.0`
+INCLUDES += `pkg-config --cflags gtk+-2.0 libxml-2.0`
 
 # Defines
 # TODO
