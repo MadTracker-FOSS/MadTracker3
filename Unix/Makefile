@@ -18,7 +18,7 @@ else
 endif
 
 # Compiler flags
-CFLAGS = -O2 -m32 # Yeah, let's assume 32-bit for now.
+CFLAGS = -O2 -Wno-write-strings -m32 # Yeah, let's assume 32-bit for now.
 
 # Dynamic Libraries
 # TODO
@@ -37,6 +37,7 @@ INCLUDES += -I../MTGUI
 INCLUDES += -I../MTObjects
 INCLUDES += -I../MTSystem
 INCLUDES += `pkg-config --cflags gtk+-2.0`
+INCLUDES += `pkg-config --cflags libxml-2.0`
 
 # Defines
 # TODO

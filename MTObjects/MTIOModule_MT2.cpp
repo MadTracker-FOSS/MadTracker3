@@ -24,10 +24,11 @@
 #define MF_DRUMSAUTO      0x08
 #define MF_MASTERAUTO     0x10
 
-#define PACKED
 #if defined __BORLANDC__
+#	define PACKED
 #	pragma -a2
 #elif defined(WIN32) || defined(__FLAT__)
+#	define PACKED
 #	pragma pack(push)
 #	pragma pack(2)
 #else
