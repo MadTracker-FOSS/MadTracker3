@@ -100,29 +100,29 @@ MTDISPLAYSRC = \
 	$(MTDISPLAYSRCDIR)/MTGDIBitmap.cpp \
 	$(MTDISPLAYSRCDIR)/MTGDIDevice.cpp
 MTGUISRC = \
-	$(MTGUISRCDIR)/MTOSSkin.cpp \
-	$(MTGUISRCDIR)/MTItems.cpp \
-	$(MTGUISRCDIR)/MTControl.cpp \
-	$(MTGUISRCDIR)/MTGUITools.cpp \
 	$(MTGUISRCDIR)/MTButton.cpp \
-	$(MTGUISRCDIR)/MTSkin.cpp \
-	$(MTGUISRCDIR)/MTGUI.cpp \
-	$(MTGUISRCDIR)/MTLabel.cpp \
-	$(MTGUISRCDIR)/MTVisual.cpp \
-	$(MTGUISRCDIR)/MTEdit.cpp \
-	$(MTGUISRCDIR)/MTGUI1.cpp \
-	$(MTGUISRCDIR)/MTWinControl.cpp \
-	$(MTGUISRCDIR)/MTSign.cpp \
-	$(MTGUISRCDIR)/MTWindow.cpp \
-	$(MTGUISRCDIR)/MTTabControl.cpp \
-	$(MTGUISRCDIR)/MTSysControls.cpp \
-	$(MTGUISRCDIR)/MTCustControls.cpp \
 	$(MTGUISRCDIR)/MTCheckBox.cpp \
+	$(MTGUISRCDIR)/MTControl.cpp \
+	$(MTGUISRCDIR)/MTCustControls.cpp \
 	$(MTGUISRCDIR)/MTDesktop.cpp \
+	$(MTGUISRCDIR)/MTEdit.cpp \
+	$(MTGUISRCDIR)/MTGUI.cpp \
+	$(MTGUISRCDIR)/MTGUI1.cpp \
+	$(MTGUISRCDIR)/MTGUITools.cpp \
+	$(MTGUISRCDIR)/MTItems.cpp \
+	$(MTGUISRCDIR)/MTLabel.cpp \
+	$(MTGUISRCDIR)/MTOSSkin.cpp \
 	$(MTGUISRCDIR)/MTOSWindow.cpp \
+	$(MTGUISRCDIR)/MTPanel.cpp \
 	$(MTGUISRCDIR)/MTProgress.cpp \
+	$(MTGUISRCDIR)/MTSign.cpp \
+	$(MTGUISRCDIR)/MTSkin.cpp \
+	$(MTGUISRCDIR)/MTSysControls.cpp \
+	$(MTGUISRCDIR)/MTTabControl.cpp \
 	$(MTGUISRCDIR)/MTToolBar.cpp \
-	$(MTGUISRCDIR)/MTPanel.cpp
+	$(MTGUISRCDIR)/MTVisual.cpp \
+	$(MTGUISRCDIR)/MTWinControl.cpp \
+	$(MTGUISRCDIR)/MTWindow.cpp
 MTOBJECTSSRC = \
 	$(MTOBJECTSSRCDIR)/MTAutomation.cpp \
 	$(MTOBJECTSSRCDIR)/MTColumns.cpp \
