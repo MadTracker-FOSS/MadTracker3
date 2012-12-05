@@ -63,42 +63,42 @@ MTSYSTEMSRCDIR = ../MTSystem
 
 # Source lists
 MT3SRC = \
+	$(MT3SRCDIR)/MT3.cpp \
 	$(MT3SRCDIR)/MTConsole.cpp \
-	$(MT3SRCDIR)/MTInterface.cpp \
-	$(MT3SRCDIR)/MTWC_Main.cpp \
-	$(MT3SRCDIR)/MTWC_Main2.cpp \
 	$(MT3SRCDIR)/MTData.cpp \
 	$(MT3SRCDIR)/MTExtensions.cpp \
-	$(MT3SRCDIR)/MT3.cpp
+	$(MT3SRCDIR)/MTInterface.cpp \
+	$(MT3SRCDIR)/MTWC_Main.cpp \
+	$(MT3SRCDIR)/MTWC_Main2.cpp
 MTAISRC = \
-	$(MTAISRCDIR)/MTAI1.cpp \
-	$(MTAISRCDIR)/MTAI.cpp
+	$(MTAISRCDIR)/MTAI.cpp \
+	$(MTAISRCDIR)/MTAI1.cpp
 MTAUDIOSRC = \
-	$(MTAUDIOSRCDIR)/MTAudio1.cpp \
 	$(MTAUDIOSRCDIR)/MTAudio.cpp \
+	$(MTAUDIOSRCDIR)/MTAudio1.cpp \
 	$(MTAUDIOSRCDIR)/MTAudio2.cpp \
-	$(MTAUDIOSRCDIR)/MTDirectSound.cpp \
 	$(MTAUDIOSRCDIR)/MTDevDSP.cpp \
+	$(MTAUDIOSRCDIR)/MTDirectSound.cpp \
 	$(MTAUDIOSRCDIR)/MTWaveOut.cpp
 MTDSPSRC = \
-	$(MTDSPSRCDIR)/MTCatmullASM.cpp \
 	$(MTDSPSRCDIR)/MTBufferASM.cpp \
-	$(MTDSPSRCDIR)/MTResamplingASM.cpp \
+	$(MTDSPSRCDIR)/MTCatmullASM.cpp \
 	$(MTDSPSRCDIR)/MTDSP.cpp \
-	$(MTDSPSRCDIR)/MTFilterASM.cpp \
 	$(MTDSPSRCDIR)/MTDSP1.cpp \
+	$(MTDSPSRCDIR)/MTFilterASM.cpp \
+	$(MTDSPSRCDIR)/MTResamplingASM.cpp \
 	$(MTDSPSRCDIR)/MTShaper.cpp
 MTDISPLAYSRC = \
 	$(MTDISPLAYSRCDIR)/MTDXBitmap.cpp \
 	$(MTDISPLAYSRCDIR)/MTDXDevice.cpp \
-	$(MTDISPLAYSRCDIR)/MTDisplayMMX.cpp \
 	$(MTDISPLAYSRCDIR)/MTDecode.cpp \
-	$(MTDISPLAYSRCDIR)/MTGDIDevice.cpp \
-	$(MTDISPLAYSRCDIR)/MTDisplayASM.cpp \
-	$(MTDISPLAYSRCDIR)/MTGDIBitmap.cpp \
-	$(MTDISPLAYSRCDIR)/MTDisplayDevice.cpp \
 	$(MTDISPLAYSRCDIR)/MTDisplay.cpp \
-	$(MTDISPLAYSRCDIR)/MTDisplay1.cpp
+	$(MTDISPLAYSRCDIR)/MTDisplay1.cpp \
+	$(MTDISPLAYSRCDIR)/MTDisplayASM.cpp \
+	$(MTDISPLAYSRCDIR)/MTDisplayDevice.cpp \
+	$(MTDISPLAYSRCDIR)/MTDisplayMMX.cpp \
+	$(MTDISPLAYSRCDIR)/MTGDIBitmap.cpp \
+	$(MTDISPLAYSRCDIR)/MTGDIDevice.cpp
 MTGUISRC = \
 	$(MTGUISRCDIR)/MTOSSkin.cpp \
 	$(MTGUISRCDIR)/MTItems.cpp \
@@ -124,50 +124,50 @@ MTGUISRC = \
 	$(MTGUISRCDIR)/MTToolBar.cpp \
 	$(MTGUISRCDIR)/MTPanel.cpp
 MTOBJECTSSRC = \
-	$(MTOBJECTSSRCDIR)/MTTest.cpp \
-	$(MTOBJECTSSRCDIR)/MTInstrument.cpp \
-	$(MTOBJECTSSRCDIR)/MTObjectsASM.cpp \
-	$(MTOBJECTSSRCDIR)/MTIOInstrument.cpp \
-	$(MTOBJECTSSRCDIR)/MTObjects2.cpp \
-	$(MTOBJECTSSRCDIR)/MTGenerator.cpp \
-	$(MTOBJECTSSRCDIR)/MTXMCommands.cpp \
-	$(MTOBJECTSSRCDIR)/MTFilter.cpp \
-	$(MTOBJECTSSRCDIR)/MTOscillator.cpp \
-	$(MTOBJECTSSRCDIR)/MTEffect.cpp \
-	$(MTOBJECTSSRCDIR)/MTObjects1.cpp \
-	$(MTOBJECTSSRCDIR)/MTIOModule_MT2.cpp \
-	$(MTOBJECTSSRCDIR)/MTGraphs.cpp \
-	$(MTOBJECTSSRCDIR)/MTModule.cpp \
-	$(MTOBJECTSSRCDIR)/MTSeqManager.cpp \
 	$(MTOBJECTSSRCDIR)/MTAutomation.cpp \
-	$(MTOBJECTSSRCDIR)/MTPattern.cpp \
-	$(MTOBJECTSSRCDIR)/MTDelay.cpp \
-	$(MTOBJECTSSRCDIR)/MTTrack.cpp \
-	$(MTOBJECTSSRCDIR)/MTIOOscillator.cpp \
 	$(MTOBJECTSSRCDIR)/MTColumns.cpp \
-	$(MTOBJECTSSRCDIR)/MTObject.cpp \
+	$(MTOBJECTSSRCDIR)/MTDelay.cpp \
+	$(MTOBJECTSSRCDIR)/MTEffect.cpp \
+	$(MTOBJECTSSRCDIR)/MTFilter.cpp \
+	$(MTOBJECTSSRCDIR)/MTGenerator.cpp \
+	$(MTOBJECTSSRCDIR)/MTGraphs.cpp \
+	$(MTOBJECTSSRCDIR)/MTIOInstrument.cpp \
+	$(MTOBJECTSSRCDIR)/MTIOModule_MT2.cpp \
+	$(MTOBJECTSSRCDIR)/MTIOOscillator.cpp \
 	$(MTOBJECTSSRCDIR)/MTInstrEditor.cpp \
-	$(MTOBJECTSSRCDIR)/MTPattEditor.cpp \
+	$(MTOBJECTSSRCDIR)/MTInstrument.cpp \
+	$(MTOBJECTSSRCDIR)/MTModule.cpp \
+	$(MTOBJECTSSRCDIR)/MTObject.cpp \
 	$(MTOBJECTSSRCDIR)/MTObjects.cpp \
-	$(MTOBJECTSSRCDIR)/MTPattManager.cpp
+	$(MTOBJECTSSRCDIR)/MTObjects1.cpp \
+	$(MTOBJECTSSRCDIR)/MTObjects2.cpp \
+	$(MTOBJECTSSRCDIR)/MTObjectsASM.cpp \
+	$(MTOBJECTSSRCDIR)/MTOscillator.cpp \
+	$(MTOBJECTSSRCDIR)/MTPattEditor.cpp \
+	$(MTOBJECTSSRCDIR)/MTPattManager.cpp \
+	$(MTOBJECTSSRCDIR)/MTPattern.cpp \
+	$(MTOBJECTSSRCDIR)/MTSeqManager.cpp \
+	$(MTOBJECTSSRCDIR)/MTTest.cpp \
+	$(MTOBJECTSSRCDIR)/MTTrack.cpp \
+	$(MTOBJECTSSRCDIR)/MTXMCommands.cpp
 MTSYSTEMSRC = \
-	$(MTSYSTEMSRCDIR)/MTStructures.cpp \
-	$(MTSYSTEMSRCDIR)/MTKernel.cpp \
-	$(MTSYSTEMSRCDIR)/MTFile.cpp \
-	$(MTSYSTEMSRCDIR)/MTXML.cpp \
-	$(MTSYSTEMSRCDIR)/MTConfig.cpp \
-	$(MTSYSTEMSRCDIR)/MTSystem.cpp \
-	$(MTSYSTEMSRCDIR)/MTSocket.cpp \
-	$(MTSYSTEMSRCDIR)/MTInternet.cpp \
-	$(MTSYSTEMSRCDIR)/strnatcmp.cpp \
-	$(MTSYSTEMSRCDIR)/MTLocalFile.cpp \
-	$(MTSYSTEMSRCDIR)/MTMemoryFile.cpp \
-	$(MTSYSTEMSRCDIR)/MTHTTPFile.cpp \
 	$(MTSYSTEMSRCDIR)/MTBase64.cpp \
+	$(MTSYSTEMSRCDIR)/MTConfig.cpp \
+	$(MTSYSTEMSRCDIR)/MTFile.cpp \
+	$(MTSYSTEMSRCDIR)/MTHTTPFile.cpp \
+	$(MTSYSTEMSRCDIR)/MTInternet.cpp \
+	$(MTSYSTEMSRCDIR)/MTKernel.cpp \
+	$(MTSYSTEMSRCDIR)/MTLocalFile.cpp \
+	$(MTSYSTEMSRCDIR)/MTMD5.cpp \
+	$(MTSYSTEMSRCDIR)/MTMemoryFile.cpp \
 	$(MTSYSTEMSRCDIR)/MTMiniConfig.cpp \
 	$(MTSYSTEMSRCDIR)/MTResources.cpp \
+	$(MTSYSTEMSRCDIR)/MTSocket.cpp \
+	$(MTSYSTEMSRCDIR)/MTStructures.cpp \
+	$(MTSYSTEMSRCDIR)/MTSystem.cpp \
 	$(MTSYSTEMSRCDIR)/MTSystem1.cpp \
-	$(MTSYSTEMSRCDIR)/MTMD5.cpp
+	$(MTSYSTEMSRCDIR)/MTXML.cpp \
+	$(MTSYSTEMSRCDIR)/strnatcmp.cpp
 
 # Object code lists
 MT3OBJ = $(MT3SRC:%.cpp=%.o)
