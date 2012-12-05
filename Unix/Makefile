@@ -176,7 +176,7 @@ MTSYSTEMOBJ = $(MTSYSTEMSRC:%.cpp=%.o)
 
 # Targets
 
-all: mt3 audio dsp display gui objects system
+all: mt3 ai audio dsp display gui objects system
 
 mt3: $(MT3OBJ)
 	$(CXX) $(CFLAGS) -ldl -o $(TARGET)/madtracker.$(TARGET) $(MT3OBJ)
