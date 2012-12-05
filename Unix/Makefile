@@ -36,16 +36,7 @@ GTK2LIB = `pkg-config --libs gtk+-2.0`
 XML2LIB = `pkg-config --libs libxml-2.0`
 
 # Includes
-INCLUDES = -I..
-INCLUDES += -I../Headers
-INCLUDES += -I../MT3
-INCLUDES += -I../MTAI
-INCLUDES += -I../MTAudio
-INCLUDES += -I../MTDSP
-INCLUDES += -I../MTDisplay
-INCLUDES += -I../MTGUI
-INCLUDES += -I../MTObjects
-INCLUDES += -I../MTSystem
+INCLUDES = -I.. -I../Headers
 INCLUDES += `pkg-config --cflags gtk+-2.0 libxml-2.0`
 
 # Defines
