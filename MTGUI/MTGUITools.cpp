@@ -14,6 +14,11 @@
 #ifdef _DEBUG
 	#include <assert.h>
 #endif
+#ifdef _WIN32
+	#include <windows.h>
+#else
+	#include <gdk/gdk.h>
+#endif
 #include "MTXSystem.h"
 #include "MTXSystem2.h"
 //---------------------------------------------------------------------------
@@ -53,6 +58,63 @@ void pminmax(MTPoint &min,MTPoint &max)
 }
 
 #ifdef _WIN32
+bool rectinrgn(MTRect &r,void *rgn)
+{
+	return (RectInRegion((HRGN) rgn, (RECT*) &r) != 0);
+}
+
+void *recttorgn(MTRect &r)
+{
+	return (void*) CreateRectRgnIndirect((RECT*) &r);
+}
+
+void rgntorect(void *rgn,MTRect &r)
+{
+	GetRgnBox((HRGN) rgn, (RECT*) &r);
+}
+
+void offsetrgn(void *rgn,int ox,int oy)
+{
+	OffsetRgn((HRGN) rgn, ox, oy);
+	lastrgn = 0;
+}
+
+void *copyrgn(void *rgn)
+{
+	HRGN tmp = CreateRectRgn(0, 0, 1, 1);
+	CombineRgn((HRGN) tmp, (HRGN) rgn, (HRGN) rgn, RGN_COPY);
+	return tmp;
+}
+
+bool isemptyrgn(void *rgn)
+{
+	return (GetRegionData((HRGN) rgn, 0, 0) == sizeof(RGNDATAHEADER));
+}
+
+void deletergn(void *rgn)
+{
+	DeleteObject((HRGN) rgn);
+	lastrgn = 0;
+}
+
+void intersectrgn(void *rgn,void *operand)
+{
+	CombineRgn((HRGN) rgn, (HRGN) rgn, (HRGN) operand, RGN_AND);
+	lastrgn = 0;
+}
+
+void addrgn(void *rgn,void *operand)
+{
+	CombineRgn((HRGN) rgn, (HRGN) rgn, (HRGN) operand, RGN_OR);
+	lastrgn = 0;
+}
+
+void subtractrgn(void *rgn,void *operand)
+{
+	CombineRgn((HRGN)rgn,(HRGN)rgn,(HRGN)operand,RGN_DIFF);
+	lastrgn = 0;
+}
+
 int rgngetnrects(void *rgn)
 {
 	if (lastrgn!=rgn){
@@ -116,7 +178,62 @@ void deletefont(void *font)
 	DeleteObject((HFONT)font);
 }
 #else
-//TODO
+bool rectinrgn(MTRect &r,void *rgn)
+{
+	return (gdk_region_rect_in((GdkRegion*) rgn, (GdkRectangle*) &r) == GDK_OVERLAP_RECTANGLE_IN);
+}
+
+void *recttorgn(MTRect &r)
+{
+	return (void*) gdk_region_rectangle((GdkRectangle*)&r);
+}
+
+void rgntorect(void *rgn,MTRect &r)
+{
+	gdk_region_get_clipbox((GdkRegion*) rgn, (GdkRectangle*) &r);
+}
+
+void offsetrgn(void *rgn,int ox,int oy)
+{
+	gdk_region_offset((GdkRegion*)rgn, ox, oy);
+	lastrgn = 0;
+}
+
+void *copyrgn(void *rgn)
+{
+	return (void*) gdk_region_copy((GdkRegion*) rgn);
+}
+
+bool isemptyrgn(void *rgn)
+{
+	return (gdk_region_empty((GdkRegion*) rgn) != 0);
+}
+
+void deletergn(void *rgn)
+{
+	gdk_region_destroy((GdkRegion*) rgn);
+	lastrgn = 0;
+}
+
+void intersectrgn(void *rgn,void *operand)
+{
+	gdk_region_intersect((GdkRegion*) rgn, (GdkRegion*) operand);
+	lastrgn = 0;
+}
+
+void addrgn(void *rgn,void *operand)
+{
+	gdk_region_union((GdkRegion*) rgn, (GdkRegion*) operand);
+	lastrgn = 0;
+}
+
+void subtractrgn(void *rgn,void *operand)
+{
+	gdk_region_subtract((GdkRegion*) rgn, (GdkRegion*) operand);
+	lastrgn = 0;
+}
+
+// TODO: GTK PORT
 #endif
 
 int calccolor(int source,int dest,float f)

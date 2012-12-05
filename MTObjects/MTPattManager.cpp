@@ -12,7 +12,7 @@
 //---------------------------------------------------------------------------
 #include "MTPattEditor.h"
 #include "MTPattManager.h"
-#include "MTGUITools.h"
+#include "../MTGUI/MTGUITools.h"
 #include "MTXSkin.h"
 #include "MTXInput.h"
 #include "../Interface/MTObjectsRES.h"

@@ -28,16 +28,24 @@ endif
 #endif
 
 # Compiler flags
-# TODO: Yeah, let's assume 32-bit for now.
 CFLAGS = -O2 -Wno-write-strings -m32
 
 # Dynamic Libraries
-GTK2LIB = `pkg-config --libs gtk+-2.0`
-XML2LIB = `pkg-config --libs libxml-2.0`
 
 # Includes
 INCLUDES = -I.. -I../Headers
-INCLUDES += `pkg-config --cflags gtk+-2.0 libxml-2.0`
+
+# Dependencies
+ifeq ($(UNAME), Darwin)
+	# TODO: GTK2INC/XML2INC/GTK2LIB
+	XML2LIB = -lxml2
+endif
+ifeq ($(UNAME), Linux)
+	GTK2INC = $(shell pkg-config --cflags gtk+-2.0)
+	XML2INC = $(shell pkg-config --cflags libxml-2.0)
+	GTK2LIB = $(shell pkg-config --libs gtk+-2.0)
+	XML2LIB = $(shell pkg-config --libs libxml-2.0)
+endif
 
 # Defines
 DEFINES = -DMTSYSTEM_EXPORTS
@@ -200,6 +208,12 @@ system: $(MTSYSTEMOBJ)
 
 $(MT3SRCDIR)/%.o: $(MT3SRCDIR)/%.cpp
 	$(CXX) $(CFLAGS) -c -o $@ $< $(INCLUDES) $(DEFINES)
+
+$(MTGUISRCDIR)/%.o: $(MTGUISRCDIR)/%.cpp
+	$(CXX) $(CFLAGS) $(GTK2INC) -c -o $@ $< $(INCLUDES) $(DEFINES)
+
+$(MTSYSTEMSRCDIR)/%.o: $(MTSYSTEMSRCDIR)/%.cpp
+	$(CXX) $(CFLAGS) $(XML2INC) -c -o $@ $< $(INCLUDES) $(DEFINES)
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) -fPIC -c -o $@ $< $(INCLUDES) $(DEFINES)
