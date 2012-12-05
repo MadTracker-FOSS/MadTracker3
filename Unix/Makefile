@@ -30,10 +30,9 @@ endif
 # Compiler flags
 CFLAGS = -O2 -Wno-write-strings -m32
 
-# Dynamic Libraries
-
-# Includes
+# Includes/Defines
 INCLUDES = -I.. -I../Headers
+DEFINES = -DMTSYSTEM_EXPORTS
 
 # Dependencies
 ifeq ($(UNAME), Darwin)
@@ -46,9 +45,6 @@ ifeq ($(UNAME), Linux)
 	GTK2LIB = $(shell pkg-config --libs gtk+-2.0)
 	XML2LIB = $(shell pkg-config --libs libxml-2.0)
 endif
-
-# Defines
-DEFINES = -DMTSYSTEM_EXPORTS
 
 # Source directories
 MT3SRCDIR = ../MT3
