@@ -1,28 +1,39 @@
 # Makefile for MadTracker 3
 # Written by Ethan "flibitijibibo" Lee
 
-# General TODO Stuff:
-# - ASM files! Oh noes!
-# - Non-cpp/h files! Oh noes?
-# - 64-bit support.
-
 # System information
 UNAME = $(shell uname)
 ARCH = $(shell uname -m)
 
-# Compiler
+# Compiler, target/file names
 ifeq ($(UNAME), Darwin)
 	CXX = clang++
-else
-	CXX = g++
+	TARGET = osx
+	LIBSUFFIX = dylib
 endif
+ifeq ($(UNAME), Linux)
+	CXX = g++
+	TARGET = x86
+	LIBSUFFIX = so
+endif
+# We are assuming 32-bit until a 64-bit port is made.
+#ifeq ($(UNAME), Linux)
+#	CXX = g++
+#	ifeq ($(ARCH), x86_64)
+#		TARGET = x86_64
+#	else
+#		TARGET = x86
+#	endif
+#	LIBSUFFIX = so
+#endif
 
 # Compiler flags
-CFLAGS = -O2 -Wno-write-strings -m32 # Yeah, let's assume 32-bit for now.
+# TODO: Yeah, let's assume 32-bit for now.
+CFLAGS = -O2 -Wno-write-strings -m32
 
 # Dynamic Libraries
-# TODO
-DEPENDENCIES = -ldl `pkg-config --libs libxml-2.0` # gtk+-2.0?
+GTK2LIB = `pkg-config --libs gtk+-2.0`
+XML2LIB = `pkg-config --libs libxml-2.0`
 
 # Includes
 INCLUDES = -I..
@@ -38,24 +49,7 @@ INCLUDES += -I../MTSystem
 INCLUDES += `pkg-config --cflags gtk+-2.0 libxml-2.0`
 
 # Defines
-# TODO
 DEFINES = -DMTSYSTEM_EXPORTS
-
-# Executable name
-ifeq ($(UNAME), Darwin)
-	EXECUTABLE = osx/madtracker.osx
-endif
-ifeq ($(UNAME), Linux)
-	EXECUTABLE = x86/madtracker.x86
-endif
-# We are assuming 32-bit until a 64-bit port is made.
-#ifeq ($(UNAME), Linux)
-#	ifeq ($(ARCH), x86_64)
-#		EXECUTABLE = x86_64/madtracker.x86_64
-#	else
-#		EXECUTABLE = x86/madtracker.x86
-#	endif
-#endif
 
 # Source directories
 MT3SRCDIR = ../MT3
@@ -64,7 +58,7 @@ MTAUDIOSRCDIR = ../MTAudio
 MTDSPSRCDIR = ../MTDSP
 MTDISPLAYSRCDIR = ../MTDisplay
 MTGUISRCDIR = ../MTGUI
-MTOBJECTSRCDIR = ../MTObjects
+MTOBJECTSSRCDIR = ../MTObjects
 MTSYSTEMSRCDIR = ../MTSystem
 
 # Source lists
@@ -129,33 +123,33 @@ MTGUISRC = \
 	$(MTGUISRCDIR)/MTProgress.cpp \
 	$(MTGUISRCDIR)/MTToolBar.cpp \
 	$(MTGUISRCDIR)/MTPanel.cpp
-MTOBJECTSRC = \
-	$(MTOBJECTSRCDIR)/MTTest.cpp \
-	$(MTOBJECTSRCDIR)/MTInstrument.cpp \
-	$(MTOBJECTSRCDIR)/MTObjectsASM.cpp \
-	$(MTOBJECTSRCDIR)/MTIOInstrument.cpp \
-	$(MTOBJECTSRCDIR)/MTObjects2.cpp \
-	$(MTOBJECTSRCDIR)/MTGenerator.cpp \
-	$(MTOBJECTSRCDIR)/MTXMCommands.cpp \
-	$(MTOBJECTSRCDIR)/MTFilter.cpp \
-	$(MTOBJECTSRCDIR)/MTOscillator.cpp \
-	$(MTOBJECTSRCDIR)/MTEffect.cpp \
-	$(MTOBJECTSRCDIR)/MTObjects1.cpp \
-	$(MTOBJECTSRCDIR)/MTIOModule_MT2.cpp \
-	$(MTOBJECTSRCDIR)/MTGraphs.cpp \
-	$(MTOBJECTSRCDIR)/MTModule.cpp \
-	$(MTOBJECTSRCDIR)/MTSeqManager.cpp \
-	$(MTOBJECTSRCDIR)/MTAutomation.cpp \
-	$(MTOBJECTSRCDIR)/MTPattern.cpp \
-	$(MTOBJECTSRCDIR)/MTDelay.cpp \
-	$(MTOBJECTSRCDIR)/MTTrack.cpp \
-	$(MTOBJECTSRCDIR)/MTIOOscillator.cpp \
-	$(MTOBJECTSRCDIR)/MTColumns.cpp \
-	$(MTOBJECTSRCDIR)/MTObject.cpp \
-	$(MTOBJECTSRCDIR)/MTInstrEditor.cpp \
-	$(MTOBJECTSRCDIR)/MTPattEditor.cpp \
-	$(MTOBJECTSRCDIR)/MTObjects.cpp \
-	$(MTOBJECTSRCDIR)/MTPattManager.cpp
+MTOBJECTSSRC = \
+	$(MTOBJECTSSRCDIR)/MTTest.cpp \
+	$(MTOBJECTSSRCDIR)/MTInstrument.cpp \
+	$(MTOBJECTSSRCDIR)/MTObjectsASM.cpp \
+	$(MTOBJECTSSRCDIR)/MTIOInstrument.cpp \
+	$(MTOBJECTSSRCDIR)/MTObjects2.cpp \
+	$(MTOBJECTSSRCDIR)/MTGenerator.cpp \
+	$(MTOBJECTSSRCDIR)/MTXMCommands.cpp \
+	$(MTOBJECTSSRCDIR)/MTFilter.cpp \
+	$(MTOBJECTSSRCDIR)/MTOscillator.cpp \
+	$(MTOBJECTSSRCDIR)/MTEffect.cpp \
+	$(MTOBJECTSSRCDIR)/MTObjects1.cpp \
+	$(MTOBJECTSSRCDIR)/MTIOModule_MT2.cpp \
+	$(MTOBJECTSSRCDIR)/MTGraphs.cpp \
+	$(MTOBJECTSSRCDIR)/MTModule.cpp \
+	$(MTOBJECTSSRCDIR)/MTSeqManager.cpp \
+	$(MTOBJECTSSRCDIR)/MTAutomation.cpp \
+	$(MTOBJECTSSRCDIR)/MTPattern.cpp \
+	$(MTOBJECTSSRCDIR)/MTDelay.cpp \
+	$(MTOBJECTSSRCDIR)/MTTrack.cpp \
+	$(MTOBJECTSSRCDIR)/MTIOOscillator.cpp \
+	$(MTOBJECTSSRCDIR)/MTColumns.cpp \
+	$(MTOBJECTSSRCDIR)/MTObject.cpp \
+	$(MTOBJECTSSRCDIR)/MTInstrEditor.cpp \
+	$(MTOBJECTSSRCDIR)/MTPattEditor.cpp \
+	$(MTOBJECTSSRCDIR)/MTObjects.cpp \
+	$(MTOBJECTSSRCDIR)/MTPattManager.cpp
 MTSYSTEMSRC = \
 	$(MTSYSTEMSRCDIR)/MTStructures.cpp \
 	$(MTSYSTEMSRCDIR)/MTKernel.cpp \
@@ -182,34 +176,42 @@ MTAUDIOOBJ = $(MTAUDIOSRC:%.cpp=%.o)
 MTDSPOBJ = $(MTDSPSRC:%.cpp=%.o)
 MTDISPLAYOBJ = $(MTDISPLAYSRC:%.cpp=%.o)
 MTGUIOBJ = $(MTGUISRC:%.cpp=%.o)
-MTOBJECTOBJ = $(MTOBJECTSRC:%.cpp=%.o)
+MTOBJECTSOBJ = $(MTOBJECTSSRC:%.cpp=%.o)
 MTSYSTEMOBJ = $(MTSYSTEMSRC:%.cpp=%.o)
 
 # Targets
 
-all: mt3 audio dsp display gui object system
+all: mt3 audio dsp display gui objects system
 
 mt3: $(MT3OBJ)
-	$(CXX) $(CFLAGS) $(MT3OBJ) -o $(EXECUTABLE) $(DEPENDENCIES)
-
-# TODO: Are all these targets lib files?
+	$(CXX) $(CFLAGS) -ldl -o $(TARGET)/madtracker.$(TARGET) $(MT3OBJ)
 
 ai: $(MTAIOBJ)
+	$(CXX) $(CFLAGS) -fpic -fPIC -shared -o $(TARGET)/mtai.$(LIBSUFFIX) $(MTAIOBJ)
 
 audio: $(MTAUDIOOBJ)
+	$(CXX) $(CFLAGS) -fpic -fPIC -shared -o $(TARGET)/mtaudio.$(LIBSUFFIX) $(MTAUDIOOBJ)
 
 dsp: $(MTDSPOBJ)
+	$(CXX) $(CFLAGS) -fpic -fPIC -shared -o $(TARGET)/mtdsp.$(LIBSUFFIX) $(MTDSPOBJ)
 
 display: $(MTDISPLAYOBJ)
+	$(CXX) $(CFLAGS) -fpic -fPIC -shared -o $(TARGET)/mtdisplay.$(LIBSUFFIX) $(MTDISPLAYOBJ)
 
 gui: $(MTGUIOBJ)
+	$(CXX) $(CFLAGS) $(GTK2LIB) -fpic -fPIC -shared -o $(TARGET)/mtgui.$(LIBSUFFIX) $(MTGUIOBJ)
 
-object: $(MTOBJECTOBJ)
+objects: $(MTOBJECTSOBJ)
+	$(CXX) $(CFLAGS) -fpic -fPIC -shared -o $(TARGET)/mtobjects.$(LIBSUFFIX) $(MTOBJECTSOBJ)
 
 system: $(MTSYSTEMOBJ)
+	$(CXX) $(CFLAGS) $(XML2LIB) -fpic -fPIC -shared -o $(TARGET)/mtsystem.$(LIBSUFFIX) $(MTSYSTEMOBJ)
 
-%.o: %.cpp
+$(MT3SRCDIR)/%.o: $(MT3SRCDIR)/%.cpp
 	$(CXX) $(CFLAGS) -c -o $@ $< $(INCLUDES) $(DEFINES)
 
+%.o: %.cpp
+	$(CXX) $(CFLAGS) -fPIC -c -o $@ $< $(INCLUDES) $(DEFINES)
+
 clean:
-	rm -f $(MT3OBJ) $(MTAIOBJ) $(MTAUDIOOBJ) $(MTDSPOBJ) $(MTDISPLAYOBJ) $(MTGUIOBJ) $(MTOBJECTOBJ) $(MTSYSTEMOBJ) $(EXECUTABLE)
+	rm -f $(MT3OBJ) $(MTAIOBJ) $(MTAUDIOOBJ) $(MTDSPOBJ) $(MTDISPLAYOBJ) $(MTGUIOBJ) $(MTOBJECTSOBJ) $(MTSYSTEMOBJ) $(TARGET)/madtracker.$(TARGET) $(TARGET)/mt*.$(LIBSUFFIX)
