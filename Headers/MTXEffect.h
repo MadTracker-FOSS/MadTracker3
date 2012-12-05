@@ -56,5 +56,28 @@ public:
 	virtual int MTCT process(int ooffset,int ioffset,int count,bool &silence) = 0;
 	virtual void MTCT setparam(int id,double value,int steps = 0) { };
 };
+
+Effect::Effect(MTObject *parent,int type,int i):
+Node(parent,type,i),
+ei(0)
+{
+	int x;
+
+	for (x=0;x<noutputs;x++){
+		outputs[x].s = x;
+		outputs[x].d = x;
+		outputs[x].m = 1.0;
+	};
+}
+
+Effect::~Effect()
+{
+}
+
+int Effect::process(int ooffset,int ioffset,int count,bool &silence)
+{
+	if (ei) return ei->process(ooffset,ioffset,count,silence);
+	return 0;
+}
 //---------------------------------------------------------------------------
 #endif

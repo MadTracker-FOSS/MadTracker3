@@ -22,7 +22,7 @@ CFLAGS = -O2 -Wno-write-strings -m32 # Yeah, let's assume 32-bit for now.
 
 # Dynamic Libraries
 # TODO
-DEPENDENCIES = -lFLAC `pkg-config --libs gtk+-2.0 libxml2`
+DEPENDENCIES = -ldl `pkg-config --libs libxml-2.0` # gtk+-2.0?
 
 # Includes
 INCLUDES = -I..
@@ -39,7 +39,7 @@ INCLUDES += `pkg-config --cflags gtk+-2.0 libxml-2.0`
 
 # Defines
 # TODO
-DEFINES = -DFLIBIT_RULES
+DEFINES = -DMTSYSTEM_EXPORTS
 
 # Executable name
 ifeq ($(UNAME), Darwin)
@@ -58,7 +58,6 @@ endif
 #endif
 
 # Source directories
-HEADERSRCDIR = ../Headers
 MT3SRCDIR = ../MT3
 MTAISRCDIR = ../MTAI
 MTAUDIOSRCDIR = ../MTAudio
@@ -69,9 +68,6 @@ MTOBJECTSRCDIR = ../MTObjects
 MTSYSTEMSRCDIR = ../MTSystem
 
 # Source lists
-HEADERSRC = \
-	$(HEADERSRCDIR)/MTXSystem2.cpp \
-	$(HEADERSRCDIR)/MTXEffect.cpp
 MT3SRC = \
 	$(MT3SRCDIR)/MTConsole.cpp \
 	$(MT3SRCDIR)/MTInterface.cpp \
@@ -180,7 +176,6 @@ MTSYSTEMSRC = \
 	$(MTSYSTEMSRCDIR)/MTMD5.cpp
 
 # Object code lists
-HEADEROBJ = $(HEADERSRC:%.cpp=%.o)
 MT3OBJ = $(MT3SRC:%.cpp=%.o)
 MTAIOBJ = $(MTAISRC:%.cpp=%.o)
 MTAUDIOOBJ = $(MTAUDIOSRC:%.cpp=%.o)
@@ -192,21 +187,29 @@ MTSYSTEMOBJ = $(MTSYSTEMSRC:%.cpp=%.o)
 
 # Targets
 
-all: $(HEADEROBJ) $(MT3OBJ) $(MTAIOBJ) $(MTAUDIOOBJ) $(MTDSPOBJ) $(MTDISPLAYOBJ) $(MTGUIOBJ) $(MTOBJECTOBJ) $(MTSYSTEMOBJ)
-	$(CXX) $(CFLAGS) $(HEADEROBJ) $(MT3OBJ) $(MTAIOBJ) $(MTOBJECTOBJ) $(MTSYSTEMOBJ) -o $(EXECUTABLE) $(DEPENDENCIES)
+all: mt3 audio dsp display gui object system
 
-headers: $(HEADEROBJ)
 mt3: $(MT3OBJ)
+	$(CXX) $(CFLAGS) $(MT3OBJ) -o $(EXECUTABLE) $(DEPENDENCIES)
+
+# TODO: Are all these targets lib files?
+
 ai: $(MTAIOBJ)
+
 audio: $(MTAUDIOOBJ)
+
 dsp: $(MTDSPOBJ)
+
 display: $(MTDISPLAYOBJ)
+
 gui: $(MTGUIOBJ)
+
 object: $(MTOBJECTOBJ)
+
 system: $(MTSYSTEMOBJ)
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) -c -o $@ $< $(INCLUDES) $(DEFINES)
 
 clean:
-	rm -f $(HEADEROBJ) $(MT3OBJ) $(MTAIOBJ) $(MTAUDIOOBJ) $(MTDSPOBJ) $(MTDISPLAYOBJ) $(MTGUIOBJ) $(MTOBJECTOBJ) $(MTSYSTEMOBJ) $(EXECUTABLE)
+	rm -f $(MT3OBJ) $(MTAIOBJ) $(MTAUDIOOBJ) $(MTDSPOBJ) $(MTDISPLAYOBJ) $(MTGUIOBJ) $(MTOBJECTOBJ) $(MTSYSTEMOBJ) $(EXECUTABLE)
