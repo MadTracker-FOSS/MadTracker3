@@ -36,14 +36,11 @@ DEFINES = -DMTSYSTEM_EXPORTS
 
 # Dependencies
 ifeq ($(UNAME), Darwin)
-	# TODO: GTK2INC/XML2INC/GTK2LIB
-	XML2LIB = -lxml2
+	# TODO: GTK2INC/GTK2LIB
 endif
 ifeq ($(UNAME), Linux)
 	GTK2INC = $(shell pkg-config --cflags gtk+-2.0)
-	XML2INC = $(shell pkg-config --cflags libxml-2.0)
 	GTK2LIB = $(shell pkg-config --libs gtk+-2.0)
-	XML2LIB = $(shell pkg-config --libs libxml-2.0)
 endif
 
 # Source directories
@@ -161,7 +158,6 @@ MTSYSTEMSRC = \
 	$(MTSYSTEMSRCDIR)/MTStructures.cpp \
 	$(MTSYSTEMSRCDIR)/MTSystem.cpp \
 	$(MTSYSTEMSRCDIR)/MTSystem1.cpp \
-	$(MTSYSTEMSRCDIR)/MTXML.cpp \
 	$(MTSYSTEMSRCDIR)/strnatcmp.cpp
 
 # Object code lists
@@ -200,16 +196,13 @@ objects: $(MTOBJECTSOBJ)
 	$(CXX) $(CFLAGS) -fpic -fPIC -shared -o $(TARGET)/mtobjects.$(LIBSUFFIX) $(MTOBJECTSOBJ)
 
 system: $(MTSYSTEMOBJ)
-	$(CXX) $(CFLAGS) $(XML2LIB) -fpic -fPIC -shared -o $(TARGET)/mtsystem.$(LIBSUFFIX) $(MTSYSTEMOBJ)
+	$(CXX) $(CFLAGS) -fpic -fPIC -shared -o $(TARGET)/mtsystem.$(LIBSUFFIX) $(MTSYSTEMOBJ)
 
 $(MT3SRCDIR)/%.o: $(MT3SRCDIR)/%.cpp
 	$(CXX) $(CFLAGS) -c -o $@ $< $(INCLUDES) $(DEFINES)
 
 $(MTGUISRCDIR)/%.o: $(MTGUISRCDIR)/%.cpp
 	$(CXX) $(CFLAGS) $(GTK2INC) -c -o $@ $< $(INCLUDES) $(DEFINES)
-
-$(MTSYSTEMSRCDIR)/%.o: $(MTSYSTEMSRCDIR)/%.cpp
-	$(CXX) $(CFLAGS) $(XML2INC) -c -o $@ $< $(INCLUDES) $(DEFINES)
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) -fPIC -c -o $@ $< $(INCLUDES) $(DEFINES)

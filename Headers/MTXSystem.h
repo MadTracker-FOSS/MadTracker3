@@ -397,21 +397,6 @@ public:
 	virtual int MTCT savetostream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER)) = 0;
 };
 
-class MTXML{
-public:
-	virtual ~MTXML() = 0;
-	virtual void* MTCT readfile(const char *file,const char *encoding) = 0;
-	virtual void* MTCT readmemory(const char *buf,int size,const char *encoding) = 0;
-	virtual char* MTCT getname(void *node) = 0;
-	virtual void* MTCT getchildren(void *node) = 0;
-	virtual void* MTCT getlast(void *node) = 0;
-	virtual void* MTCT getparent(void *node) = 0;
-	virtual void* MTCT getnext(void *node) = 0;
-	virtual void* MTCT getprev(void *node) = 0;
-	virtual char* MTCT getcontent(void *node) = 0;
-	virtual void* MTCT getproperties(void *node) = 0;
-};
-
 class MTCPUMonitor{
 public:
 	int flushid;
