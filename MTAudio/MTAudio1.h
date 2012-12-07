@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTAudio1.h 111 2007-02-16 12:58:43Z Yannick $
 //
@@ -13,47 +13,23 @@
 #ifndef MTAUDIO1_INCLUDED
 #define MTAUDIO1_INCLUDED
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
+#include "MTXAudio.h"
 //---------------------------------------------------------------------------
 static const int audiotype = FOURCC('X','A','U','D');
 
 #define MAX_AUDIODEVICES 256
 #define PRIVATE_BUFFER   4096
 
-#include "MTXSystem.h"
-#include "MTXObjects.h"
-#include "MTXTrack.h"
 #include "MTAudioDevice.h"
 //---------------------------------------------------------------------------
-struct WaveDevice{
-	char *name;
-	MTAudioDevice *device;
-	MTAudioDeviceManager *manager;
-	Track *master;
-	double timeopened;
-	int nchannels;
-	int bits;
-	int datasamples;
-};
 
-struct WaveOutput{
-	int ndevices;
-	int sync;
-	WaveDevice *device[MAX_AUDIODEVICES];
-	int frequency;
-	float mincpu,maxcpu;
-	float latency,interval;
-	int playlng;
-	int buffersamples;
-	MTTimer *timer;
-	MTLock *lock;
-	MTEvent *event;
+
 /*
 	int nbuffers;
 	float bufferms;
 	int buffersamples;
 */
-};
+
 
 struct MTDevice{
 	char *devicename;
