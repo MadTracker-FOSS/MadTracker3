@@ -5,23 +5,13 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTConfig.h 76 2005-08-28 20:43:23Z Yannick $
 //
 //---------------------------------------------------------------------------
 #ifndef MTCONFIG_INCLUDED
 #define MTCONFIG_INCLUDED
-//---------------------------------------------------------------------------
-enum MTConfigType{
-	MTCT_CONFIG = 0,
-	MTCT_SINTEGER,
-	MTCT_UINTEGER,
-	MTCT_FLOAT,
-	MTCT_BOOLEAN,
-	MTCT_STRING,
-	MTCT_BINARY
-};
 //---------------------------------------------------------------------------
 class MTConfigFile;
 //---------------------------------------------------------------------------

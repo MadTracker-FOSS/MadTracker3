@@ -5,7 +5,7 @@
 //		Platforms:	Win32,Linux
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTKernel.h 100 2005-11-30 20:19:39Z Yannick $
 //
@@ -20,23 +20,8 @@
 #define MTT_HIGHER   1
 #define MTT_HIGH     2
 #define MTT_REALTIME 15
-
-enum MTProcessType{
-	MTP_LOADMODULE = 0x10000,
-	MTP_SAVEMODULE,
-	MTP_LOADINSTRUMENT,
-	MTP_SAVEINSTRUMENT,
-	MTP_LOADSAMPLE,
-	MTP_SAVESAMPLE,
-	MTP_BUILDPEAKS = 0x20000,
-	MTP_NETWORK = 0x30000,
-	MTP_EXPORT = 0x40000,
-	MTP_INTERNET = 0x50000
-};
-
 #define MTPF_CANCANCEL   1
 #define MTPF_HASPROGRESS 2
-
 #define MTPS_INIT     -1
 #define MTPS_WAITING  0
 #define MTPS_WORKING  1
@@ -44,6 +29,7 @@ enum MTProcessType{
 
 #define MAX_STACK 1024
 //---------------------------------------------------------------------------
+#include "MTXSystem.h"
 #include "MTXExtension.h"
 //---------------------------------------------------------------------------
 class MTLock;
