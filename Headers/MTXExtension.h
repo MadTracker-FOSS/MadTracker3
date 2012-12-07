@@ -348,90 +348,36 @@ typedef MTXInterfaces* MTCT MTXMainCall(MTInterface *mti);
 //---------------------------------------------------------------------------
 //	Swapping functions to convert little<->big endian
 //---------------------------------------------------------------------------
-#ifndef __BORLANDC__
 
-#ifdef WIN32
-#	pragma warning(disable: 4035)
+#ifdef FASTCALL
+#error FASTCALL previously defined?
 #endif
 
-static inline short swap_word(short a)
-{
-#	ifndef __GNUG__
-		__asm{
-			mov		ax,a
-			xchg	al,ah
-		};
-#	else
-		long r;
-		asm ("xchg %%al,%%ah":"=a"(r):"a"(a));
-		return r;
-#	endif
-}
-
-static inline long swap_dword(long a)
-{
-#	ifndef __GNUG__
-		__asm{
-			mov		eax,a
-			bswap	eax
-		};
-#	else
-		long r;
-		asm ("bswap %%eax":"=a"(r):"a"(a));
-		return r;
-#	endif
-}
-
-static inline void int64todouble(mt_int64 *int64,double *d)
-{
-#	ifndef __GNUG__
-		__asm{
-			fild	qword ptr int64
-			fstp	qword ptr d
-		};
-#	else
-		asm ("fildl %1; fstpl %0":"=m"(d):"m"(int64));
-#	endif
-}
-
-static inline mt_int32 doubletoint32(double d)
-{
-#	ifndef __GNUG__
-		__asm{
-			push	0
-			fild	qword ptr d
-			fstp	dword ptr [esp]
-			pop		eax
-		};
-#	else
-		int i;
-		asm ("fistl %0":"=m"(i):"t"(d));
-		return i;
-#	endif
-}
-
-#ifdef WIN32
-#	pragma warning(default: 4035)
-#endif
-
+#if defined(__GNUC__)
+#define FASTCALL __attribute__((fastcall))
+#elif defined(_MSC_VER)
+#define FASTCALL __fastcall
 #else
+#error Need a fastcall macro for this compiler!
+#endif
 
-inline short __fastcall swap_word(short a)
+inline short FASTCALL swap_word(short a)
 {
 	return (a>>8)|((a & 0xFF)<<8);
 }
 
-inline long __fastcall swap_dword(long a)
+inline long FASTCALL swap_dword(long a)
 {
 	return (a>>24)|((a & 0xFF0000)>>8)|((a & 0xFF00)<<8)|((a & 0xFF)<<24);
 }
 
-inline void __fastcall int64todouble(void *int64,double *d)
+inline void FASTCALL int64todouble(void *int64,double *d)
 {
 	*d = ((double)(*(int*)int64))*4294967296.0+(double)(*(((int*)int64)+1));
 }
 
-#endif
+#undef FASTCALL
+
 //---------------------------------------------------------------------------
 //	Some functions that are not part of the C++ standard library
 //---------------------------------------------------------------------------
@@ -455,4 +401,4 @@ inline char* strlwr(char* str)
 #define stricmp strcasecmp
 #endif
 //---------------------------------------------------------------------------
-#endif
+#endif // MTXEXTENSION_INCLUDED
