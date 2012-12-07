@@ -1302,10 +1302,6 @@ hashdelete(mthashdelete),
 	miniconfigcreate(mtminiconfigcreate),
 	miniconfigdelete(mtminiconfigdelete),
 #endif
-#ifdef MTSYSTEM_XML
-	xmlcreate(mtxmlcreate),
-	xmldelete(mtxmldelete),
-#endif
 lockcreate(mtlockcreate),
 lockdelete(mtlockdelete),
 eventcreate(mteventcreate),
@@ -1787,9 +1783,6 @@ bool MTSystemInterface::init()
 #	ifdef MTSYSTEM_INTERNET
 		initInternet();
 #	endif
-#	ifdef MTSYSTEM_XML
-		initXML();
-#	endif
 	status |= MTX_INITIALIZED;
 	return true;
 }
@@ -1805,9 +1798,6 @@ void MTSystemInterface::uninit()
 	mtmemfree(platform);
 	mtmemfree(build);
 	mtmemfree(processor);
-#	ifdef MTSYSTEM_XML
-		uninitXML();
-#	endif
 #	ifdef MTSYSTEM_INTERNET
 		uninitInternet();
 		uninitSocket();

@@ -140,9 +140,6 @@ class MTHash;
 #ifdef MTSYSTEM_MINICONFIG
 #	include "MTMiniConfig.h"
 #endif
-#ifdef MTSYSTEM_XML
-#	include "MTXML.h"
-#endif
 #include "MTFile.h"
 #include "MTKernel.h"
 #include "MTResources.h"
@@ -228,13 +225,6 @@ public:
 #else
 	void* miniconfigcreate;
 	void* miniconfigdelete;
-#endif
-#ifdef MTSYSTEM_XML
-	MTXML* (MTCT *xmlcreate)();
-	void (MTCT *xmldelete)(MTXML *xml);
-#else
-	void* xmlcreate;
-	void* xmldelete;
 #endif
 	MTLock* (MTCT *lockcreate)();
 	void (MTCT *lockdelete)(MTLock *lock);

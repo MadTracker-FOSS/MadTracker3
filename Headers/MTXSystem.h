@@ -465,8 +465,6 @@ public:
 	void (MTCT* configclose)(MTConfigFile* file);
 	MTMiniConfig* (MTCT *miniconfigcreate)();
 	void (MTCT *miniconfigdelete)(MTMiniConfig *cfg);
-	MTXML* (MTCT *xmlcreate)();
-	void (MTCT *xmldelete)(MTXML *xml);
 	MTLock* (MTCT *lockcreate)();
 	void (MTCT *lockdelete)(MTLock *lock);
 	MTEvent* (MTCT *eventcreate)(bool autoreset,int interval,int resolution,bool periodic,bool pulse);
