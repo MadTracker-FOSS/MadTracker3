@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#include <sys/stat.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <linux/soundcard.h>
