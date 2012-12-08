@@ -181,17 +181,20 @@ enum MTConfigType{
 #define A(_A,_T) ((_T**)_A->a)
 #define D(_A,_T) ((_T*)_A->d)
 
-#if defined(MTSYSTEM_EXPORTS) && defined(_WIN32)
-#	define MTTRY   __try{
-#	define MTCATCH }__except(LPTOP_LEVEL_EXCEPTION_FILTER(si->onerror)(GetExceptionInformation())){
-#	define MTEND };
+#ifdef MTSYSTEM_EXPORTS
+#	ifdef _WIN32
+#		define MTTRY   __try{
+#		define MTCATCH }__except(LPTOP_LEVEL_EXCEPTION_FILTER(si->onerror)(GetExceptionInformation())){
+#		define MTEND };
+#	else
+#		define MTTRY   try{if (sigsetjmp((__jmp_buf_tag*)mttry(false),1)==0){
+#		define MTCATCH }else{throw "Got signal!";}}catch(...){
+#		define MTEND }mttry(true);
+#	endif
 #else
-	typedef	void* (*_mt_try)(bool);
-#	define MTTRY   try{if (sigsetjmp((__jmp_buf_tag*)((_mt_try)si->onerror)(false),1)==0){
-#	define MTCATCH }else{throw "Got signal!";}}catch(...){
-//#	define MTTRY   if (sigsetjmp((__jmp_buf_tag*)((_mt_try)si->onerror)(false),1)==0){
-//#	define MTCATCH }else{
-#	define MTEND }((_mt_try)si->onerror)(true);
+#	define MTTRY   try{
+#	define MTCATCH }catch(...){
+#	define MTEND };
 #endif
 //---------------------------------------------------------------------------
 class MTThread;
@@ -202,6 +205,12 @@ public:
 	virtual ~MTLock() = 0;
 	virtual bool MTCT lock(int timeout = -1) = 0;
 	virtual void MTCT unlock() = 0;
+private:
+        #ifdef _WIN32
+        	CRITICAL_SECTION critical;
+        #else
+        	pthread_mutex_t mutex;
+        #endif
 };
 
 class MTEvent{
@@ -325,6 +334,7 @@ public:
 	};
 
 	inline void* operator[](unsigned int i){ return (a)?a[i]:((d)?(char*)d+_is*i:0); };
+        MTArray(int allocby,int itemsize = 0);
 	virtual ~MTArray() = 0;
 	virtual int MTCT additem(int at,void *item) = 0;
 	virtual int MTCT additems(int at,int count) = 0;
@@ -338,6 +348,19 @@ public:
 	virtual void MTCT reset() = 0;
 	virtual void* MTCT next() = 0;
 	virtual void MTCT sort(SortProc proc) = 0;
+private:
+	int mallocby;
+	int na;
+	int countid;
+	void quicksort(int lo,int hi,SortProc proc);
+	void quicksortf(int lo,int hi,SortProc proc);
+};
+
+struct MTHashData{
+	unsigned int key;
+	char *ckey;
+	void *data;
+	int reserved;
 };
 
 class MTHash{
@@ -358,6 +381,11 @@ public:
 	virtual void MTCT clear(bool deldata = false,ItemProc proc = 0,void *param = 0) = 0;
 	virtual void MTCT reset() = 0;
 	virtual void* MTCT next() = 0;
+private:
+	MTHashData *hash;
+	int mallocby;
+	int na;
+	int countid;
 };
 
 class MTResources{
@@ -375,6 +403,18 @@ public:
 	virtual bool MTCT addresource(int type,int uid,void *res,int size) = 0;
 	virtual bool MTCT addfile(int type,int uid,MTFile *f) = 0;
 	virtual const char* MTCT getresourceurl() = 0;
+private:
+	struct MTResTable{
+		int type;
+		int uid;
+		int offset;
+		int size;
+	} *table;
+	MTFile *mf;
+	int nres,onres,nares;
+	bool modified;
+	bool mownfile;
+	void MTCT setmodified();
 };
 
 class MTConfigFile{
@@ -395,6 +435,9 @@ public:
 	virtual bool MTCT setparameter(const char *paramname,void *value,int type,int size) = 0;
 	virtual int MTCT loadfromstream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER)) = 0;
 	virtual int MTCT savetostream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER)) = 0;
+private:
+	int np;
+	MTHash *mp;
 };
 
 class MTCPUMonitor{

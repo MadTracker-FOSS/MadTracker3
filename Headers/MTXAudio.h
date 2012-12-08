@@ -2,7 +2,7 @@
 //
 //	MadTracker 3 Public Extension Header
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	http://www.madtracker.org/
 //	info@madtracker.org
@@ -18,7 +18,7 @@
 static const int audiotype = FOURCC('X','A','U','D');
 
 #define MAX_AUDIODEVICES 256
-#define PRIVATE_BUFFER   1024
+#define PRIVATE_BUFFER   1024 //was 4096 in MTAudio1.h...
 //---------------------------------------------------------------------------
 struct WaveDevice;
 struct WaveOutput;
@@ -72,6 +72,7 @@ class MTAudioDeviceManager{
 public:
 	char *devicename[16];
 
+        MTAudioDeviceManager(){ mtmemzero(devicename,sizeof(devicename)); };
 	virtual MTAudioDevice* MTCT newdevice(int id) = 0;
 	virtual void MTCT deldevice(MTAudioDevice *device) = 0;
 };
@@ -90,6 +91,8 @@ public:
 	virtual void MTCT deldevicemanager(MTAudioDeviceManager *manager) = 0;
 	virtual WaveOutput* MTCT getoutput() = 0;
 	virtual void MTCT debugpoint(int offset,const char *text) = 0;
+private:
+	MTThread *thread;
 };
 //---------------------------------------------------------------------------
 #endif

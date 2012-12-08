@@ -32,7 +32,6 @@ CFLAGS = -O2 -Wno-write-strings -m32
 
 # Includes/Defines
 INCLUDES = -I.. -I../Headers
-DEFINES = -DMTSYSTEM_EXPORTS
 
 # Dependencies
 ifeq ($(UNAME), Darwin)

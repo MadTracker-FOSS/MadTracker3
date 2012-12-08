@@ -5,7 +5,7 @@
 //		Platforms:	Win32,Linux
 //		Processors: x86
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTSystem1.h 111 2007-02-16 12:58:43Z Yannick $
 //
@@ -95,25 +95,9 @@
 #	define LEAVE()
 #	define CALLSTACK
 #endif
-#define mtnew(_T) (_T*)mtmemalloc(sizeof(_T),MTM_ZERO)
 #define A(_A,_T) ((_T**)_A->a)
 #define D(_A,_T) ((_T*)_A->d)
 
-#ifdef MTSYSTEM_EXPORTS
-#	ifdef _WIN32
-#		define MTTRY   __try{
-#		define MTCATCH }__except(LPTOP_LEVEL_EXCEPTION_FILTER(si->onerror)(GetExceptionInformation())){
-#		define MTEND };
-#	else
-#		define MTTRY   try{if (sigsetjmp((__jmp_buf_tag*)mttry(false),1)==0){
-#		define MTCATCH }else{throw "Got signal!";}}catch(...){
-#		define MTEND }mttry(true);
-#	endif
-#else
-#	define MTTRY   try{
-#	define MTCATCH }catch(...){
-#	define MTEND };
-#endif
 //---------------------------------------------------------------------------
 class MTConfigFile;
 class MTFileHook;
@@ -144,6 +128,7 @@ class MTHash;
 #include "MTKernel.h"
 #include "MTResources.h"
 #include "MTStructures.h"
+#include "MTXSystem.h"
 //---------------------------------------------------------------------------
 #ifdef _WIN32
 #	include <windows.h>
@@ -151,8 +136,6 @@ class MTHash;
 #	include <setjmp.h>
 #endif
 //---------------------------------------------------------------------------
-static const int systemtype = FOURCC('X','S','Y','S');
-
 #ifdef MTSYSTEM_EXPORTS
 /*--SDK--*/
 class MTSystemInterface : public MTXInterface{

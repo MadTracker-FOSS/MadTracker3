@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTMiniConfig.h 76 2005-08-28 20:43:23Z Yannick $
 //
@@ -22,19 +22,9 @@
 class MTMiniConfig;
 //---------------------------------------------------------------------------
 #include "MTConfig.h"
+#include "MTXSystem.h"
 //---------------------------------------------------------------------------
-class MTMiniConfig{
-public:
-	MTMiniConfig();
-	virtual ~MTMiniConfig();
-	virtual bool MTCT getparameter(const char *paramname,void *value,int desiredtype,int size);
-	virtual bool MTCT setparameter(const char *paramname,const void *value,int type,int size);
-	virtual int MTCT loadfromstream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER));
-	virtual int MTCT savetostream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER));
-private:
-	int np;
-	MTHash *mp;
-};
+
 //---------------------------------------------------------------------------
 extern "C"
 {

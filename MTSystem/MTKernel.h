@@ -51,19 +51,6 @@ typedef void (MTCT *TimerProc)(MTTimer *timer,int param);
 #endif
 #include "MTXGUI.h"
 //---------------------------------------------------------------------------
-class MTLock{
-public:
-	MTLock();
-	virtual ~MTLock();
-	virtual bool MTCT lock(int timeout = -1);
-	virtual void MTCT unlock();
-private:
-#ifdef _WIN32
-	CRITICAL_SECTION critical;
-#else
-	pthread_mutex_t mutex;
-#endif
-};
 
 #ifndef _WIN32
 struct _mutex_cond{
