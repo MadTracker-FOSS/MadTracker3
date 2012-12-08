@@ -27,6 +27,7 @@ class MTAudioDeviceManager;
 class MTAudioInterface;
 //---------------------------------------------------------------------------
 #include "MTXSystem.h"
+#include "MTXSystem2.h"
 #include "MTXObject.h"
 #include "MTXTrack.h"
 //---------------------------------------------------------------------------
