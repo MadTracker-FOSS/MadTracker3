@@ -238,8 +238,6 @@
         <in>MTSystem.cpp</in>
         <in>MTSystem1.cpp</in>
         <in>MTSystem1.h</in>
-        <in>MTXML.cpp</in>
-        <in>MTXML.h</in>
         <in>strnatcmp.cpp</in>
         <in>strnatcmp.h</in>
       </df>
@@ -1056,10 +1054,6 @@
         </ccTool>
       </item>
       <item path="MTSystem/MTSystem1.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool>
-        </ccTool>
-      </item>
-      <item path="MTSystem/MTXML.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
         </ccTool>
       </item>

@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTAudio1.cpp 111 2007-02-16 12:58:43Z Yannick $
 //
@@ -14,6 +14,7 @@
 #include "MTAudio1.h"
 #include "MTAudio2.h"
 #include "MTXGUI.h"
+#include "MTXAudio.h"
 #include "MTXControls.h"
 #include "MTXModule.h"
 #include "MTXSystem2.h"
