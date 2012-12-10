@@ -16,6 +16,12 @@ ifeq ($(UNAME), Linux)
 	TARGET = x86
 	LIBSUFFIX = so
 endif
+ifeq ($(UNAME), MinGW*)
+	CXX = g++
+	TARGET = exe
+	LIBSUFFIX = dll
+endif
+
 # We are assuming 32-bit until a 64-bit port is made.
 #ifeq ($(UNAME), Linux)
 #	CXX = g++

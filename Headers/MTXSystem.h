@@ -419,13 +419,13 @@ private:
 
 class MTConfigFile{
 public:
-	virtual ~MTConfigFile() = 0;
-	virtual void MTCT clear() = 0;
-	virtual bool MTCT setsection(const char *name) = 0;
-	virtual bool MTCT getparameter(const char *paramname,void *value,int desiredtype,int size) = 0;
-	virtual bool MTCT createsection(const char *name) = 0;
-	virtual bool MTCT setparameter(const char *paramname,void *value,int type,int size) = 0;
-	virtual const char* MTCT getfilename() = 0;
+	virtual ~MTConfigFile();
+	virtual void MTCT clear();
+	virtual bool MTCT setsection(const char *name);
+	virtual bool MTCT getparameter(const char *paramname,void *value,int desiredtype,int size);
+	virtual bool MTCT createsection(const char *name);
+	virtual bool MTCT setparameter(const char *paramname,void *value,int type,int size);
+	virtual const char* MTCT getfilename();
 };
 
 class MTMiniConfig{

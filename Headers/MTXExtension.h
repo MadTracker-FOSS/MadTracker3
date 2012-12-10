@@ -2,7 +2,7 @@
 //
 //	MadTracker 3 Public Extension Header
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	http://www.madtracker.org/
 //	info@madtracker.org
@@ -288,10 +288,10 @@ public:
 	const MTXKey *key;
 	int status;
 
-	virtual bool MTCT init() = 0;
-	virtual void MTCT uninit() = 0;
-	virtual void MTCT start() = 0;
-	virtual void MTCT stop() = 0;
+	virtual bool MTCT init();
+	virtual void MTCT uninit();
+	virtual void MTCT start();
+	virtual void MTCT stop();
 	virtual void MTCT processcmdline(void *params){ };
 	virtual void MTCT showusage(void *out){ };
 	virtual int MTCT config(int command,int param){ return 0; };

@@ -60,13 +60,13 @@ class MTAudioDevice{
 public:
 	int datasamples;
 
-	virtual bool MTCT init(float frequency,int nchannels,int bits,double latency) = 0;
-	virtual void MTCT uninit() = 0;
-	virtual bool MTCT play() = 0;
-	virtual bool MTCT stop() = 0;
+	virtual bool MTCT init(float frequency,int nchannels,int bits,double latency);
+	virtual void MTCT uninit();
+	virtual bool MTCT play();
+	virtual bool MTCT stop();
 	virtual int MTCT getposition(bool playback = false) = 0;
-	virtual bool MTCT getdata(int position,int length,void **ptr1,void **ptr2,unsigned long *lng1,unsigned long *lng2) = 0;
-	virtual bool MTCT writedata(void *ptr1,void *ptr2,unsigned long lng1,unsigned long lng2) = 0;
+	virtual bool MTCT getdata(int position,int length,void **ptr1,void **ptr2,unsigned long *lng1,unsigned long *lng2);
+	virtual bool MTCT writedata(void *ptr1,void *ptr2,unsigned long lng1,unsigned long lng2);
 };
 
 class MTAudioDeviceManager{
@@ -82,16 +82,16 @@ class MTAudioInterface : public MTXInterface{
 public:
 	bool running,recording;
 
-	virtual int MTCT getnumdevices() = 0;
-	virtual const char* MTCT getdevicename(int id) = 0;
-	virtual void MTCT selectdevice(int id) = 0;
-	virtual void MTCT unselectdevices() = 0;
-	virtual void MTCT activatedevices() = 0;
-	virtual void MTCT deactivatedevices() = 0;
-	virtual bool MTCT adddevicemanager(MTAudioDeviceManager *manager) = 0;
-	virtual void MTCT deldevicemanager(MTAudioDeviceManager *manager) = 0;
-	virtual WaveOutput* MTCT getoutput() = 0;
-	virtual void MTCT debugpoint(int offset,const char *text) = 0;
+	virtual int MTCT getnumdevices();
+	virtual const char* MTCT getdevicename(int id);
+	virtual void MTCT selectdevice(int id);
+	virtual void MTCT unselectdevices();
+	virtual void MTCT activatedevices();
+	virtual void MTCT deactivatedevices();
+	virtual bool MTCT adddevicemanager(MTAudioDeviceManager *manager);
+	virtual void MTCT deldevicemanager(MTAudioDeviceManager *manager);
+	virtual WaveOutput* MTCT getoutput();
+	virtual void MTCT debugpoint(int offset,const char *text);
 private:
 	MTThread *thread;
 };
