@@ -60,6 +60,7 @@ class MTAudioDevice{
 public:
 	int datasamples;
 
+	// FIXME: These were pure, should this class be extended? -flibit
 	virtual bool MTCT init(float frequency,int nchannels,int bits,double latency);
 	virtual void MTCT uninit();
 	virtual bool MTCT play();
@@ -82,6 +83,21 @@ class MTAudioInterface : public MTXInterface{
 public:
 	bool running,recording;
 
+	// FIXME: DEBUG? -flibit
+	MTArray *_dp;
+
+	// FIXME: Should this be explicitly here? -flibit
+	MTAudioInterface();
+	bool MTCT init();
+	void MTCT uninit();
+	void MTCT start();
+	void MTCT stop();
+	void MTCT processcmdline(void *params);
+	void MTCT showusage(void *out);
+	int MTCT config(int command,int param);
+	int MTCT processinput(const char *input);
+
+	// FIXME: These were pure, should this class be extended? -flibit
 	virtual int MTCT getnumdevices();
 	virtual const char* MTCT getdevicename(int id);
 	virtual void MTCT selectdevice(int id);

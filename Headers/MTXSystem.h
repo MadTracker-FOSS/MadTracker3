@@ -419,6 +419,7 @@ private:
 
 class MTConfigFile{
 public:
+	// FIXME: These were pure, should this class be extended? -flibit
 	virtual ~MTConfigFile();
 	virtual void MTCT clear();
 	virtual bool MTCT setsection(const char *name);
