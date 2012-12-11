@@ -277,6 +277,11 @@
           <buildCommand>${MAKE} -f Makefile</buildCommand>
           <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
           <executablePath></executablePath>
+          <ccTool>
+            <incDir>
+              <pElem>Headers</pElem>
+            </incDir>
+          </ccTool>
         </makeTool>
       </makefileType>
       <item path="Headers/MTXEffect.h" ex="true" tool="3" flavor2="0">

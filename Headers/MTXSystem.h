@@ -121,7 +121,7 @@ enum MTMessageBoxButtons{
 	eMTD_OKCANCEL,
 	eMTD_YESNO,
 	eMTD_YESNOCANCEL
-}
+};
 
 enum MTConfigType{
 	MTCT_CONFIG = 0,
