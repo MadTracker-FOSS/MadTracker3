@@ -116,6 +116,13 @@ enum MTProcessType{
 #define MTDR_CANCEL     -2
 #define MTDR_TIMEOUT    -4
 
+enum MTMessageBoxButtons{
+	eMTD_OK = 0,
+	eMTD_OKCANCEL,
+	eMTD_YESNO,
+	eMTD_YESNOCANCEL
+}
+
 enum MTConfigType{
 	MTCT_CONFIG = 0,
 	MTCT_SINTEGER,

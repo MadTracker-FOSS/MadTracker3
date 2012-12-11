@@ -951,14 +951,17 @@ int mtdialog(char *message,char *caption,char *buttons,int flags,int timeout)
 			h = ob->height;
 			r = l+ob->width;
 			ob->switchflags(MTCF_HIDDEN,true);
-			switch ((int)buttons){
-			case (int)MTD_OK:
+
+			const int buttonAddr = (int) buttons;
+
+			switch (buttonAddr){
+			case eMTD_OK:
 				b[7] = (MTButton*)gi->newcontrol(MTC_BUTTON,0,alert,l,t,0,h,0);
 				b[7]->setcaption(d_ok);
 				b[7]->modalresult = 0;
 				alert->focus(b[7]);
 				break;
-			case (int)MTD_OKCANCEL:
+			case eMTD_OKCANCEL:
 				b[6] = (MTButton*)gi->newcontrol(MTC_BUTTON,0,alert,l,t,0,h,0);
 				b[7] = (MTButton*)gi->newcontrol(MTC_BUTTON,0,alert,l,t,0,h,0);
 				b[6]->setcaption(d_ok);
@@ -968,7 +971,7 @@ int mtdialog(char *message,char *caption,char *buttons,int flags,int timeout)
 				if (cbutton>1) cbutton = 1;
 				alert->focus(b[6+cbutton]);
 				break;
-			case (int)MTD_YESNO:
+			case eMTD_YESNO:
 				b[6] = (MTButton*)gi->newcontrol(MTC_BUTTON,0,alert,l,t,0,h,0);
 				b[7] = (MTButton*)gi->newcontrol(MTC_BUTTON,0,alert,l,t,0,h,0);
 				b[6]->setcaption(d_yes);
@@ -978,7 +981,7 @@ int mtdialog(char *message,char *caption,char *buttons,int flags,int timeout)
 				if (cbutton>1) cbutton = 1;
 				alert->focus(b[6+cbutton]);
 				break;
-			case (int)MTD_YESNOCANCEL:
+			case eMTD_YESNOCANCEL:
 				b[5] = (MTButton*)gi->newcontrol(MTC_BUTTON,0,alert,l,t,0,h,0);
 				b[6] = (MTButton*)gi->newcontrol(MTC_BUTTON,0,alert,l,t,0,h,0);
 				b[7] = (MTButton*)gi->newcontrol(MTC_BUTTON,0,alert,l,t,0,h,0);
@@ -1081,8 +1084,11 @@ int mtdialog(char *message,char *caption,char *buttons,int flags,int timeout)
 			int c,ret;
 			ret = MTDR_NULL;
 			fprintf(stdout,"-- %s --"NL"%s"NL"--"NL,caption,message);
-			switch ((int)buttons){
-			case (int)MTD_OKCANCEL:
+
+			const int buttonAddr = (int) buttons;
+
+			switch (buttonAddr){
+			case eMTD_OKCANCEL:
 				fputs("[Ok][Cancel]?",stdout);
 				while (true){
 					c = mtgetchar();
@@ -1096,7 +1102,7 @@ int mtdialog(char *message,char *caption,char *buttons,int flags,int timeout)
 					};
 				};
 				break;
-			case (int)MTD_YESNO:
+			case eMTD_YESNO:
 				fputs("[Yes][No]?",stdout);
 				while (true){
 					c = mtgetchar();
@@ -1110,7 +1116,7 @@ int mtdialog(char *message,char *caption,char *buttons,int flags,int timeout)
 					};
 				};
 				break;
-			case (int)MTD_YESNOCANCEL:
+			case eMTD_YESNOCANCEL:
 				fputs("[Yes][No][Cancel]?",stdout);
 				while (true){
 					c = mtgetchar();
