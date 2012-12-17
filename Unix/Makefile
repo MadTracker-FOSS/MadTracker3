@@ -41,11 +41,13 @@ INCLUDES = -I.. -I../Headers -I../Interface
 
 # Dependencies
 ifeq ($(UNAME), Darwin)
-	# TODO: GTK2INC/GTK2LIB
+	# TODO:
 endif
 ifeq ($(UNAME), Linux)
-	GTK2INC = $(shell pkg-config --cflags gtk+-2.0)
-	GTK2LIB = $(shell pkg-config --libs gtk+-2.0)
+	SDLINC = $(shell sdl-config --cflags)
+	SDLLIB = $(shell sdl-config --libs)
+	GTKINC = $(shell pkg-config --cflags gtk+-2.0)
+	GTKLIB = $(shell pkg-config --libs gtk+-2.0)
 endif
 
 # Source directories
@@ -86,16 +88,12 @@ MTDSPSRC = \
 	$(MTDSPSRCDIR)/MTResamplingASM.cpp \
 	$(MTDSPSRCDIR)/MTShaper.cpp
 MTDISPLAYSRC = \
-	$(MTDISPLAYSRCDIR)/MTDXBitmap.cpp \
-	$(MTDISPLAYSRCDIR)/MTDXDevice.cpp \
 	$(MTDISPLAYSRCDIR)/MTDecode.cpp \
 	$(MTDISPLAYSRCDIR)/MTDisplay.cpp \
 	$(MTDISPLAYSRCDIR)/MTDisplay1.cpp \
-	$(MTDISPLAYSRCDIR)/MTDisplayASM.cpp \
 	$(MTDISPLAYSRCDIR)/MTDisplayDevice.cpp \
-	$(MTDISPLAYSRCDIR)/MTDisplayMMX.cpp \
-	$(MTDISPLAYSRCDIR)/MTGDIBitmap.cpp \
-	$(MTDISPLAYSRCDIR)/MTGDIDevice.cpp
+	$(MTDISPLAYSRCDIR)/MTSDLBitmap.cpp \
+	$(MTDISPLAYSRCDIR)/MTSDLDevice.cpp
 MTGUISRC = \
 	$(MTGUISRCDIR)/MTButton.cpp \
 	$(MTGUISRCDIR)/MTCheckBox.cpp \
@@ -192,10 +190,10 @@ dsp: $(MTDSPOBJ)
 	$(CXX) $(CFLAGS) -fpic -fPIC -shared -o $(TARGET)/mtdsp.$(LIBSUFFIX) $(MTDSPOBJ)
 
 display: $(MTDISPLAYOBJ)
-	$(CXX) $(CFLAGS) -fpic -fPIC -shared -o $(TARGET)/mtdisplay.$(LIBSUFFIX) $(MTDISPLAYOBJ)
+	$(CXX) $(CFLAGS) $(SDLLIB) -fpic -fPIC -shared -o $(TARGET)/mtdisplay.$(LIBSUFFIX) $(MTDISPLAYOBJ)
 
 gui: $(MTGUIOBJ)
-	$(CXX) $(CFLAGS) $(GTK2LIB) -fpic -fPIC -shared -o $(TARGET)/mtgui.$(LIBSUFFIX) $(MTGUIOBJ)
+	$(CXX) $(CFLAGS) $(GTKLIB) -fpic -fPIC -shared -o $(TARGET)/mtgui.$(LIBSUFFIX) $(MTGUIOBJ)
 
 objects: $(MTOBJECTSOBJ)
 	$(CXX) $(CFLAGS) -fpic -fPIC -shared -o $(TARGET)/mtobjects.$(LIBSUFFIX) $(MTOBJECTSOBJ)
@@ -206,8 +204,11 @@ system: $(MTSYSTEMOBJ)
 $(MT3SRCDIR)/%.o: $(MT3SRCDIR)/%.cpp
 	$(CXX) $(CFLAGS) -c -o $@ $< $(INCLUDES) $(DEFINES)
 
+$(MTDISPLAYSRCDIR)/%.o: $(MTDISPLAYSRCDIR)/%.cpp
+	$(CXX) $(CFLAGS) $(SDLINC) -c -o $@ $< $(INCLUDES) $(DEFINES)
+
 $(MTGUISRCDIR)/%.o: $(MTGUISRCDIR)/%.cpp
-	$(CXX) $(CFLAGS) $(GTK2INC) -c -o $@ $< $(INCLUDES) $(DEFINES)
+	$(CXX) $(CFLAGS) $(GTKINC) -c -o $@ $< $(INCLUDES) $(DEFINES)
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) -fPIC -c -o $@ $< $(INCLUDES) $(DEFINES)
