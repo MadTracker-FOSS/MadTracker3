@@ -45,7 +45,7 @@ ifeq ($(UNAME), Darwin)
 endif
 ifeq ($(UNAME), Linux)
 	SDLINC = $(shell sdl-config --cflags)
-	SDLLIB = $(shell sdl-config --libs)
+	SDLLIB = $(shell sdl-config --libs) -lSDL_image
 	GTKINC = $(shell pkg-config --cflags gtk+-2.0)
 	GTKLIB = $(shell pkg-config --libs gtk+-2.0)
 endif
