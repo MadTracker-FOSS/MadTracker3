@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTFile.h 100 2005-11-30 20:19:39Z Yannick $
 //
@@ -39,45 +39,7 @@ class MTFolder;
 //---------------------------------------------------------------------------
 #include "MTXExtension.h"
 #include "MTKernel.h"
-//---------------------------------------------------------------------------
-class MTFileHook{
-public:
-	virtual MTFile* MTCT fileopen(char *url,int flags) = 0;
-	virtual MTFolder* MTCT folderopen(char *url) = 0;
-	virtual bool MTCT filecopy(char *source,char *dest) = 0;
-	virtual bool MTCT filerename(char *source,char *dest) = 0;
-	virtual bool MTCT filedelete(char *url) = 0;
-	virtual void MTCT filetype(const char *url,char *type,int length) = 0;
-};
-
-class MTFile{
-public:
-	char *url;
-
-	MTFile(){ url = 0; };
-	virtual ~MTFile(){ };
-	virtual int MTCT read(void *buffer,int size) = 0;
-	virtual int MTCT readln(char *buffer,int maxsize) = 0;
-//	virtual int MTCT reads(char *buffer,int maxsize) = 0;
-	virtual int MTCT write(const void *buffer,int size) = 0;
-	virtual int MTCT seek(int pos,int origin) = 0;
-	virtual void* MTCT getpointer(int offset,int size) = 0;
-	virtual void MTCT releasepointer(void *mem) = 0;
-	virtual int MTCT length() = 0;
-	virtual int MTCT pos() = 0;
-	virtual bool MTCT eof() = 0;
-	virtual bool MTCT seteof() = 0;
-	virtual bool MTCT gettime(int *modified,int *accessed) = 0;
-	virtual bool MTCT settime(int *modified,int *accessed) = 0;
-	virtual MTFile* MTCT subclass(int start,int length,int access) = 0;
-};
-
-class MTFolder{
-public:
-	virtual ~MTFolder(){ };
-	virtual bool MTCT getfile(const char **name,int *attrib,double *size) = 0;
-	virtual bool MTCT next() = 0;
-};
+#include "MTXSystem.h"
 //---------------------------------------------------------------------------
 extern "C"
 {

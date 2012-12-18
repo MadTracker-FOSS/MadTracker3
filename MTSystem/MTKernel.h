@@ -53,77 +53,6 @@ typedef void (MTCT *TimerProc)(MTTimer *timer,int param);
 #include "MTXSystem.h"
 //---------------------------------------------------------------------------
 
-
-
-class MTThread : public MTEvent{
-public:
-	mt_uint32 id;
-	int type;
-	int result;
-	bool terminated;
-
-	MTThread(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,char *name);
-	MTThread();
-	virtual ~MTThread();
-	bool MTCT pulse();
-	bool MTCT set();
-	bool MTCT reset();
-	virtual void MTCT start();
-	virtual bool MTCT getmessage(int &msg,int &param1,int &param2,bool wait = false);
-	virtual void MTCT postmessage(int msg,int param1,int param2);
-	virtual void MTCT terminate();
-protected:
-#ifdef _WIN32
-	static DWORD WINAPI SysThread(MTThread*);
-#else
-	static void* SysThread(void*);
-	int _p[2];
-	pthread_attr_t *attr;
-#endif
-	ThreadProc mproc;
-	char *mname;
-	void *mparam;
-	int mpriority;
-	bool mautofree;
-	bool running;
-	bool hasmsg;
-};
-
-class MTProcess : public MTThread{
-public:
-	int status;
-	int priority;
-	void *data;
-	void *guidata;
-	float progress;
-	ProcessProc mpproc;
-
-	MTProcess(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,char *name);
-	virtual ~MTProcess();
-	void MTCT start();
-	virtual void MTCT setprogress(float p);
-private:
-	static int MTCT syncprocessproc(MTSync *s);
-};
-
-class MTTimer{
-public:
-	MTTimer(int interval,int resolution,bool periodic,int param,TimerProc proc);
-	MTTimer(int interval,int resolution,bool periodic,MTEvent *event,bool pulse = false);
-	virtual ~MTTimer();
-private:
-#ifdef _WIN32
-	static void CALLBACK WinTimerProc(UINT,UINT,DWORD,DWORD,DWORD);
-#else
-	static void LinuxTimerProc(sigval);
-#endif
-	MTEvent *event;
-	int id;
-	int res;
-	int mparam;
-	TimerProc mproc;
-};
-
 struct MTCPUState{
 	double starttime;
 	double lasttime;
@@ -135,25 +64,6 @@ struct MTCPUState{
 	bool used;
 };
 
-class MTCPUMonitor{
-public:
-	int flushid;
-	MTCPUMonitor(int ncounters);
-	virtual ~MTCPUMonitor();
-	virtual void MTCT startslice(int id);
-	virtual void MTCT endslice(int id);
-	virtual void MTCT flushcpu(int id);
-	virtual void MTCT startadd(int id);
-	virtual void MTCT endadd(int id);
-	virtual double MTCT getcpu(int id);
-	virtual void* MTCT getcpustate(int id);
-	virtual int MTCT getcpustateid(void *s);
-	virtual int MTCT addcpustate();
-	virtual void MTCT delcpustate(int id);
-private:
-	int n;
-	MTCPUState *state;
-};
 //---------------------------------------------------------------------------
 extern "C"
 {

@@ -18,6 +18,7 @@
 #	include <windows.h>
 #else
 #	include <setjmp.h>
+#       include <signal.h>
 #endif
 #ifndef _WIN32
 struct _mutex_cond{
@@ -268,14 +269,21 @@ public:
 	int type;
 	int result;
 	bool terminated;
+        bool MTCT pulse();
+	bool MTCT set();
+	bool MTCT reset();
 
-	virtual ~MTThread() = 0;
-	virtual void MTCT start() = 0;
-	virtual bool MTCT getmessage(int &msg,int &param1,int &param2,bool wait = false) = 0;
-	virtual void MTCT postmessage(int msg,int param1,int param2) = 0;
-	virtual void MTCT terminate() = 0;
+        MTThread(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,char *name);
+        virtual void MTCT start();
+	virtual bool MTCT getmessage(int &msg,int &param1,int &param2,bool wait = false);
+	virtual void MTCT postmessage(int msg,int param1,int param2);
 protected:
-#ifndef _WIN32
+#ifdef _WIN32
+	static DWORD WINAPI SysThread(MTThread*);
+#else
+        static void* SysThread(void*);
+	int _p[2];
+	pthread_attr_t *attr;
 	int d1,d2;
 	void *d3;
 #endif
@@ -285,6 +293,7 @@ protected:
 	int mpriority;
 	bool mautofree;
 	bool running;
+	bool hasmsg;
 };
 
 class MTProcess : public MTThread{
@@ -294,14 +303,17 @@ public:
 	void *data;
 	void *guidata;
 	float progress;
-
-	MTProcess(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc);
-	virtual ~MTProcess() = 0;
-	virtual void MTCT setprogress(float p) = 0;
+        ProcessProc mpproc;
+        
+        void MTCT start();
+        MTProcess(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,char *name);
+	virtual ~MTProcess();
+	virtual void MTCT setprogress(float p);
+        
+private:
+	static int MTCT syncprocessproc(MTSync *s);
 };
 
-class MTFile;
-class MTFolder;
 
 class MTFileHook{
 public:
@@ -341,17 +353,31 @@ public:
 	virtual bool MTCT next() = 0;
 };
 
-class MTTimer;
+
 
 typedef void (MTCT *TimerProc)(MTTimer *timer,int param);
+typedef void (MTCT *ItemProc)(void *item,void *param);
+typedef int (MTCT *SortProc)(void *item1,void *item2);
 
 class MTTimer{
 public:
-	virtual ~MTTimer() = 0;
+	MTTimer(int interval,int resolution,bool periodic,int param,TimerProc proc);
+	MTTimer(int interval,int resolution,bool periodic,MTEvent *event,bool pulse = false);
+	virtual ~MTTimer();
+private:
+#ifdef _WIN32
+	static void CALLBACK WinTimerProc(UINT,UINT,DWORD,DWORD,DWORD);
+#else
+	static void LinuxTimerProc(sigval);
+#endif
+	MTEvent *event;
+	int id;
+	int res;
+	int mparam;
+	TimerProc mproc;
 };
 
-typedef void (MTCT *ItemProc)(void *item,void *param);
-typedef int (MTCT *SortProc)(void *item1,void *item2);
+
 
 class MTArray{
 public:
@@ -473,17 +499,21 @@ private:
 class MTCPUMonitor{
 public:
 	int flushid;
-	virtual ~MTCPUMonitor() = 0;
-	virtual void MTCT startslice(int id) = 0;
-	virtual void MTCT endslice(int id) = 0;
-	virtual void MTCT flushcpu(int id) = 0;
-	virtual void MTCT startadd(int id) = 0;
-	virtual void MTCT endadd(int id) = 0;
-	virtual double MTCT getcpu(int id) = 0;
-	virtual void* MTCT getcpustate(int id) = 0;
-	virtual int MTCT getcpustateid(void *s) = 0;
-	virtual int MTCT addcpustate() = 0;
-	virtual void MTCT delcpustate(int id) = 0;
+	MTCPUMonitor(int ncounters);
+	virtual ~MTCPUMonitor();
+	virtual void MTCT startslice(int id);
+	virtual void MTCT endslice(int id);
+	virtual void MTCT flushcpu(int id);
+	virtual void MTCT startadd(int id);
+	virtual void MTCT endadd(int id);
+	virtual double MTCT getcpu(int id);
+	virtual void* MTCT getcpustate(int id);
+	virtual int MTCT getcpustateid(void *s);
+	virtual int MTCT addcpustate();
+	virtual void MTCT delcpustate(int id);
+private:
+	int n;
+	MTCPUState *state;
 };
 
 class MTSystemInterface : public MTXInterface{
