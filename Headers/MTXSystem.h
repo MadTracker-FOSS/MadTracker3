@@ -235,9 +235,16 @@ protected:
 	int d1;
 #ifdef _WIN32
 	void *d2;
+        HANDLE event;
 #else
 	bool d2,d3,d4;
 	void *d5,*d6,*d7;
+        static void LinuxEventProc(sigval);
+	bool signaled,needreset,needpulse;
+	pthread_mutex_t *e_mutex;
+	_le *start,*end;
+	void _add(_le *list);
+	void _del(_le *list);
 #endif
 };
 

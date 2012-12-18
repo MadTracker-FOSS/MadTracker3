@@ -64,18 +64,6 @@ struct _le{
 };
 #endif
 
-#ifdef _WIN32
-	HANDLE event;
-#else
-	static void LinuxEventProc(sigval);
-	bool signaled,needreset,needpulse;
-	pthread_mutex_t *e_mutex;
-	_le *start,*end;
-	void _add(_le *list);
-	void _del(_le *list);
-#endif
-};
-
 class MTThread : public MTEvent{
 public:
 	mt_uint32 id;
