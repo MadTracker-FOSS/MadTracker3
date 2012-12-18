@@ -64,19 +64,6 @@ struct _le{
 };
 #endif
 
-class MTEvent{
-public:
-	MTEvent(bool autoreset,int interval = 0,int resolution = 0,bool periodic = true,bool pulse = false);
-	MTEvent();
-	virtual ~MTEvent();
-	virtual bool MTCT pulse();
-	virtual bool MTCT set();
-	virtual bool MTCT reset();
-	virtual bool MTCT wait(int timeout = -1);
-protected:
-	friend int MTCT mtsyswaitmultiple(int count,MTEvent **events,bool all,int timeout);
-	friend class MTTimer;
-	int timer;
 #ifdef _WIN32
 	HANDLE event;
 #else

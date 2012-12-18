@@ -222,12 +222,16 @@ private:
 
 class MTEvent{
 public:
-	virtual ~MTEvent() = 0;
-	virtual bool MTCT pulse() = 0;
-	virtual bool MTCT set() = 0;
-	virtual bool MTCT reset() = 0;
-	virtual bool MTCT wait(int timeout = -1) = 0;
+        MTEvent(bool autoreset,int interval = 0,int resolution = 0,bool periodic = true,bool pulse = false);
+	virtual ~MTEvent();
+	virtual bool MTCT pulse();
+	virtual bool MTCT set();
+	virtual bool MTCT reset();
+	virtual bool MTCT wait(int timeout = -1);
 protected:
+        friend int MTCT mtsyswaitmultiple(int count,MTEvent **events,bool all,int timeout);
+	friend class MTTimer;
+	int timer;
 	int d1;
 #ifdef _WIN32
 	void *d2;
@@ -342,19 +346,19 @@ public:
 
 	inline void* operator[](unsigned int i){ return (a)?a[i]:((d)?(char*)d+_is*i:0); };
         MTArray(int allocby,int itemsize = 0);
-	virtual ~MTArray() = 0;
-	virtual int MTCT additem(int at,void *item) = 0;
-	virtual int MTCT additems(int at,int count) = 0;
-	virtual void MTCT delitems(int from,int count) = 0;
-	virtual int MTCT setitem(int at,void *item) = 0;
-	virtual int MTCT push(void *item) = 0;
-	virtual void* MTCT pop() = 0;
-	virtual int MTCT getitemid(void *item) = 0;
-	virtual void MTCT remove(void *item) = 0;
-	virtual void MTCT clear(bool deldata = false,ItemProc = 0,void *param = 0) = 0;
-	virtual void MTCT reset() = 0;
-	virtual void* MTCT next() = 0;
-	virtual void MTCT sort(SortProc proc) = 0;
+	virtual ~MTArray();
+	virtual int MTCT additem(int at,void *item);
+	virtual int MTCT additems(int at,int count);
+	virtual void MTCT delitems(int from,int count);
+	virtual int MTCT setitem(int at,void *item);
+	virtual int MTCT push(void *item);
+	virtual void* MTCT pop();
+	virtual int MTCT getitemid(void *item);
+	virtual void MTCT remove(void *item);
+	virtual void MTCT clear(bool deldata = false,ItemProc = 0,void *param = 0);
+	virtual void MTCT reset();
+	virtual void* MTCT next();
+	virtual void MTCT sort(SortProc proc);
 private:
 	int mallocby;
 	int na;
