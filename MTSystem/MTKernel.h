@@ -50,19 +50,10 @@ typedef void (MTCT *TimerProc)(MTTimer *timer,int param);
 #	include <signal.h>
 #endif
 #include "MTXGUI.h"
+#include "MTXSystem.h"
 //---------------------------------------------------------------------------
 
-#ifndef _WIN32
-struct _mutex_cond{
-	pthread_mutex_t i_mutex;
-	pthread_cond_t i_cv;
-};
-struct _le{
-	struct _le *next;
-	struct _le *prev;
-	struct _mutex_cond *i_mutex_cond;
-};
-#endif
+
 
 class MTThread : public MTEvent{
 public:

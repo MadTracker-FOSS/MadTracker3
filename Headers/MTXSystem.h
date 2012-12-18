@@ -19,6 +19,17 @@
 #else
 #	include <setjmp.h>
 #endif
+#ifndef _WIN32
+struct _mutex_cond{
+	pthread_mutex_t i_mutex;
+	pthread_cond_t i_cv;
+};
+struct _le{
+	struct _le *next;
+	struct _le *prev;
+	struct _mutex_cond *i_mutex_cond;
+};
+#endif
 //---------------------------------------------------------------------------
 static const int systemtype = FOURCC('X','S','Y','S');
 
