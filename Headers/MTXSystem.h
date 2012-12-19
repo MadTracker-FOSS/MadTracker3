@@ -528,7 +528,7 @@ class MTMiniConfig{
 public:
 	virtual ~MTMiniConfig();
 	virtual bool MTCT getparameter(const char *paramname,void *value,int desiredtype,int size);
-	virtual bool MTCT setparameter(const char *paramname,void *value,int type,int size);
+	virtual bool MTCT setparameter(const char *paramname,const void *value,int type,int size);
 	virtual int MTCT loadfromstream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER));
 	virtual int MTCT savetostream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER));
 private:
