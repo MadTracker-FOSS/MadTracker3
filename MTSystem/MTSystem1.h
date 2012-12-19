@@ -269,9 +269,10 @@ int MTCT mtsync_inc(int *value);
 int MTCT mtsync_dec(int *value);
 }
 //---------------------------------------------------------------------------
-#ifdef MTSYSTEM_EXPORTS
+// FIXME: flibit commented this #ifdef out
+//#ifdef MTSYSTEM_EXPORTS
 	extern MTSystemInterface *si;
-#endif
+//#endif
 extern MTInterface *mtinterface;
 extern MTGUIInterface *gi;
 extern MTDisplayInterface *di;

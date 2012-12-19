@@ -60,12 +60,12 @@ MTMiniConfig::~MTMiniConfig()
 
 bool MTMiniConfig::getparameter(const char *paramname,void *value,int desiredtype,int size)
 {
-	char *e;
+	const char *e;
 	int l;
 	MP *cp;
 	char buf[256];
 
-	e = strchr(paramname,'.');
+	e = strchr(paramname, '.');
 	if (e){
 		l = e-paramname;
 		if (l>255) return false;
@@ -81,6 +81,7 @@ bool MTMiniConfig::getparameter(const char *paramname,void *value,int desiredtyp
 	if (cp->type!=desiredtype) return false;
 	if (cp->size>size) return false;
 	mtmemzero(value,size);
+	// FIXME: Uhhh could this all just be a memcpy with some checks? -flibit
 	switch (cp->type){
 	case MTCT_CONFIG:
 		*(MTMiniConfig**)value = (MTMiniConfig*)cp->value;

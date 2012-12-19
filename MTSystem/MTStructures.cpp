@@ -11,10 +11,11 @@
 //
 //---------------------------------------------------------------------------
 #include <string.h>
+#include "MTXSystem.h"
+#include "MTXSystem2.h"
 #include "MTStructures.h"
 #include "MTSystem1.h"
 #include "MTMD5.h"
-#include "../Headers/MTXSystem2.h"
 //---------------------------------------------------------------------------
 MTArray* mtarraycreate(int allocby,int itemsize)
 {

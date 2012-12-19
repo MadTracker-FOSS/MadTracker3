@@ -248,9 +248,10 @@ struct MTCPUState{
 
 class MTLock{
 public:
-	virtual ~MTLock() = 0;
-	virtual bool MTCT lock(int timeout = -1) = 0;
-	virtual void MTCT unlock() = 0;
+	MTLock();
+	virtual ~MTLock();
+	virtual bool MTCT lock(int timeout = -1);
+	virtual void MTCT unlock();
 private:
         #ifdef _WIN32
         	CRITICAL_SECTION critical;
@@ -261,6 +262,7 @@ private:
 
 class MTEvent{
 public:
+	MTEvent();
         MTEvent(bool autoreset,int interval = 0,int resolution = 0,bool periodic = true,bool pulse = false);
 	virtual ~MTEvent();
 	virtual bool MTCT pulse();
@@ -300,7 +302,9 @@ public:
 	bool MTCT set();
 	bool MTCT reset();
 
+	MTThread();
         MTThread(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,char *name);
+	~MTThread();
         virtual void MTCT start();
 	virtual void MTCT terminate();
 	virtual bool MTCT getmessage(int &msg,int &param1,int &param2,bool wait = false);
@@ -450,6 +454,7 @@ class MTHash{
 public:
 	int nitems;
 
+	MTHash(int allocby);
 	virtual ~MTHash();
 	virtual int MTCT additem(const char *key,void *data);
 	virtual int MTCT additem(int key,void *data);
@@ -473,19 +478,20 @@ private:
 
 class MTResources{
 public:
-	virtual ~MTResources() = 0;
-	virtual int MTCT getnumresources() = 0;
-	virtual bool MTCT getresourceinfo(int id,int *type,int *uid,int *size) = 0;
-	virtual int MTCT loadresource(int type,int uid,void *buffer,int size) = 0;
-	virtual int MTCT loadstring(int uid,char *buffer,int size) = 0;
-	virtual int MTCT loadstringf(int uid,char *buffer,int size,...) = 0;
-	virtual void* MTCT getresource(int type,int uid,int *size) = 0;
-	virtual void MTCT releaseresource(void *res) = 0;
-	virtual MTFile* MTCT getresourcefile(int type,int uid,int *size) = 0;
-	virtual void MTCT releaseresourcefile(MTFile *f) = 0;
-	virtual bool MTCT addresource(int type,int uid,void *res,int size) = 0;
-	virtual bool MTCT addfile(int type,int uid,MTFile *f) = 0;
-	virtual const char* MTCT getresourceurl() = 0;
+	MTResources(MTFile *f,bool ownfile);
+	virtual ~MTResources();
+	virtual int MTCT getnumresources();
+	virtual bool MTCT getresourceinfo(int id,int *type,int *uid,int *size);
+	virtual int MTCT loadresource(int type,int uid,void *buffer,int size);
+	virtual int MTCT loadstring(int uid,char *buffer,int size);
+	virtual int MTCT loadstringf(int uid,char *buffer,int size,...);
+	virtual void* MTCT getresource(int type,int uid,int *size);
+	virtual void MTCT releaseresource(void *res);
+	virtual MTFile* MTCT getresourcefile(int type,int uid,int *size);
+	virtual void MTCT releaseresourcefile(MTFile *f);
+	virtual bool MTCT addresource(int type,int uid,void *res,int size);
+	virtual bool MTCT addfile(int type,int uid,MTFile *f);
+	virtual const char* MTCT getresourceurl();
 private:
 	struct MTResTable{
 		int type;
@@ -520,11 +526,11 @@ private:
 
 class MTMiniConfig{
 public:
-	virtual ~MTMiniConfig() = 0;
-	virtual bool MTCT getparameter(const char *paramname,void *value,int desiredtype,int size) = 0;
-	virtual bool MTCT setparameter(const char *paramname,void *value,int type,int size) = 0;
-	virtual int MTCT loadfromstream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER)) = 0;
-	virtual int MTCT savetostream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER)) = 0;
+	virtual ~MTMiniConfig();
+	virtual bool MTCT getparameter(const char *paramname,void *value,int desiredtype,int size);
+	virtual bool MTCT setparameter(const char *paramname,void *value,int type,int size);
+	virtual int MTCT loadfromstream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER));
+	virtual int MTCT savetostream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER));
 private:
 	int np;
 	MTHash *mp;
