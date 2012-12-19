@@ -387,15 +387,15 @@
       <item path="MTDisplay/MTDXBitmap.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -433,15 +433,15 @@
       <item path="MTDisplay/MTGDIBitmap.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -455,15 +455,15 @@
       <item path="MTGUI/MTButton.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -473,15 +473,15 @@
       <item path="MTGUI/MTCheckBox.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -491,15 +491,15 @@
       <item path="MTGUI/MTControl.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -509,15 +509,15 @@
       <item path="MTGUI/MTCustControls.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -527,15 +527,15 @@
       <item path="MTGUI/MTDesktop.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -545,15 +545,15 @@
       <item path="MTGUI/MTEdit.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -567,15 +567,15 @@
       <item path="MTGUI/MTGUI1.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -585,15 +585,15 @@
       <item path="MTGUI/MTGUITools.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -603,15 +603,15 @@
       <item path="MTGUI/MTItems.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -621,15 +621,15 @@
       <item path="MTGUI/MTLabel.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -641,15 +641,15 @@
       <item path="MTGUI/MTOSSkin.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -659,15 +659,15 @@
       <item path="MTGUI/MTOSWindow.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -677,15 +677,15 @@
       <item path="MTGUI/MTPanel.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -695,15 +695,15 @@
       <item path="MTGUI/MTProgress.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -713,15 +713,15 @@
       <item path="MTGUI/MTSign.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -731,15 +731,15 @@
       <item path="MTGUI/MTSkin.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -749,15 +749,15 @@
       <item path="MTGUI/MTSysControls.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -767,15 +767,15 @@
       <item path="MTGUI/MTTabControl.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -785,15 +785,15 @@
       <item path="MTGUI/MTToolBar.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -803,15 +803,15 @@
       <item path="MTGUI/MTVisual.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -821,15 +821,15 @@
       <item path="MTGUI/MTWinControl.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -839,15 +839,15 @@
       <item path="MTGUI/MTWindow.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -881,15 +881,15 @@
       <item path="MTObjects/MTGraphs.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -951,15 +951,15 @@
       <item path="MTObjects/MTPattManager.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -973,15 +973,15 @@
       <item path="MTObjects/MTSeqManager.cpp" ex="false" tool="1" flavor2="4">
         <ccTool>
           <incDir>
-            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
-            <pElem>/usr/include/pango-1.0</pElem>
-            <pElem>/usr/include/freetype2</pElem>
             <pElem>/usr/include/gtk-2.0</pElem>
-            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/glib-2.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
             <pElem>/usr/include/cairo</pElem>
             <pElem>/usr/include/pixman-1</pElem>
+            <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+            <pElem>/usr/include/pango-1.0</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>/usr/include/gio-unix-2.0</pElem>
             <pElem>/usr/include/atk-1.0</pElem>
             <pElem>/usr/lib/x86_64-linux-gnu/gtk-2.0/include</pElem>
             <pElem>/usr/include/libpng12</pElem>
@@ -1069,7 +1069,6 @@
       <folder path="MadTracker3/Headers">
         <ccTool>
           <incDir>
-            <pElem>Headers</pElem>
             <pElem>MTAI</pElem>
             <pElem>Unix</pElem>
             <pElem>MTObjects</pElem>
@@ -1102,13 +1101,10 @@
       <folder path="MadTracker3/MT3">
         <ccTool>
           <incDir>
-            <pElem>Headers</pElem>
+            <pElem>Interface</pElem>
             <pElem>Unix</pElem>
             <pElem>.</pElem>
           </incDir>
-          <preprocessorList>
-            <Elem>MTSYSTEM_EXPORTS</Elem>
-          </preprocessorList>
         </ccTool>
       </folder>
     </conf>

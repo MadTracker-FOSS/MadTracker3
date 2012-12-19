@@ -450,20 +450,20 @@ class MTHash{
 public:
 	int nitems;
 
-	virtual ~MTHash() = 0;
-	virtual int MTCT additem(const char *key,void *data) = 0;
-	virtual int MTCT additem(int key,void *data) = 0;
-	virtual void MTCT delitem(const char *key,bool deldata = false,ItemProc proc = 0,void *param = 0) = 0;
-	virtual void MTCT delitem(int key,bool deldata = false,ItemProc proc = 0,void *param = 0) = 0;
-	virtual void MTCT delitemfromid(int id,bool deldata = false,ItemProc proc = 0,void *param = 0) = 0;
-	virtual void* MTCT getitem(const char *key) = 0;
-	virtual void* MTCT getitem(int key) = 0;
-	virtual void* MTCT getitemfromid(int id) = 0;
-	virtual int MTCT getitemid(void *item) = 0;
-	virtual const char* MTCT getitemkey(void *item) = 0;
-	virtual void MTCT clear(bool deldata = false,ItemProc proc = 0,void *param = 0) = 0;
-	virtual void MTCT reset() = 0;
-	virtual void* MTCT next() = 0;
+	virtual ~MTHash();
+	virtual int MTCT additem(const char *key,void *data);
+	virtual int MTCT additem(int key,void *data);
+	virtual void MTCT delitem(const char *key,bool deldata = false,ItemProc proc = 0,void *param = 0);
+	virtual void MTCT delitem(int key,bool deldata = false,ItemProc proc = 0,void *param = 0);
+	virtual void MTCT delitemfromid(int id,bool deldata = false,ItemProc proc = 0,void *param = 0);
+	virtual void* MTCT getitem(const char *key);
+	virtual void* MTCT getitem(int key);
+	virtual void* MTCT getitemfromid(int id);
+	virtual int MTCT getitemid(void *item);
+	virtual const char* MTCT getitemkey(void *item);
+	virtual void MTCT clear(bool deldata = false,ItemProc proc = 0,void *param = 0);
+	virtual void MTCT reset();
+	virtual void* MTCT next();
 private:
 	MTHashData *hash;
 	int mallocby;
@@ -503,6 +503,7 @@ private:
 class MTConfigFile{
 public:
 	// FIXME: These were pure, should this class be extended? -flibit
+        MTConfigFile(const char *filename);
 	virtual ~MTConfigFile();
 	virtual void MTCT clear();
 	virtual bool MTCT setsection(const char *name);
@@ -510,6 +511,11 @@ public:
 	virtual bool MTCT createsection(const char *name);
 	virtual bool MTCT setparameter(const char *paramname,void *value,int type,int size);
 	virtual const char* MTCT getfilename();
+	bool loaded();
+private:
+	MTFile *f;
+	int sectionpos,sectionline,sectionnp,cpos,cline,cnp;
+	MTArray *np;
 };
 
 class MTMiniConfig{
