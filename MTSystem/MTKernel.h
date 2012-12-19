@@ -52,19 +52,6 @@ typedef void (MTCT *TimerProc)(MTTimer *timer,int param);
 #include "MTXGUI.h"
 #include "MTXSystem.h"
 //---------------------------------------------------------------------------
-
-struct MTCPUState{
-	double starttime;
-	double lasttime;
-	double start;
-	double count;
-	double divider;
-	double cpu;
-	bool counting;
-	bool used;
-};
-
-//---------------------------------------------------------------------------
 extern "C"
 {
 void initKernel();

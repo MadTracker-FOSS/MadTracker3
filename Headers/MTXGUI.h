@@ -108,16 +108,6 @@ struct MTShortcut{
 	char *description;
 };
 
-struct MTSync;
-
-typedef int (MTCT *SyncProc)(MTSync*);
-
-struct MTSync{
-	SyncProc proc;
-	int result;
-	int param[4];
-};
-
 class MTGUIInterface : public MTXInterface{
 public:
 	bool active;

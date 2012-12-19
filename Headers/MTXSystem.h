@@ -215,9 +215,36 @@ enum MTConfigType{
 #	define MTCATCH }catch(...){
 #	define MTEND };
 #endif
-//---------------------------------------------------------------------------
 class MTThread;
 class MTProcess;
+class MTTimer;
+class MTFile;
+class MTFolder;
+
+//---------------------------------------------------------------------------
+
+struct MTSync;
+
+typedef int (MTCT *SyncProc)(MTSync*);
+
+struct MTSync{
+	SyncProc proc;
+	int result;
+	int param[4];
+};
+
+struct MTCPUState{
+	double starttime;
+	double lasttime;
+	double start;
+	double count;
+	double divider;
+	double cpu;
+	bool counting;
+	bool used;
+};
+
+//---------------------------------------------------------------------------
 
 class MTLock{
 public:
@@ -275,6 +302,7 @@ public:
 
         MTThread(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,char *name);
         virtual void MTCT start();
+	virtual void MTCT terminate();
 	virtual bool MTCT getmessage(int &msg,int &param1,int &param2,bool wait = false);
 	virtual void MTCT postmessage(int msg,int param1,int param2);
 protected:
