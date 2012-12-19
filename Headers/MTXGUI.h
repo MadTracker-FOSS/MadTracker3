@@ -161,9 +161,6 @@ public:
 	virtual bool MTCT isdragged(MTPoint &p1,MTPoint &p2) = 0;
 	virtual int MTCT getmetric(int metric) = 0;
 	virtual void MTCT setcontrolname(MTControl *ctrl,const char *prefix) = 0;
-        
-	bool active;
-	bool visible;
 
 /*	MTGUIInterface();
 	bool MTCT init();
@@ -221,9 +218,6 @@ public:
 	virtual bool MTCT isdragged(MTPoint &p1,MTPoint &p2);
 	virtual int MTCT getmetric(int metric);
 	virtual void MTCT setcontrolname(MTControl *ctrl,const char *prefix);
- * 
- * Need to merge. List in comments above.
- */
 private:
 	struct _MTTimer{
 		int flags;
@@ -243,6 +237,9 @@ private:
 	static void MTCT TimerProc2(MTTimer *timer,int param);
 	static int MTCT TimerSync(MTSync *s);
 	static void MTCT TimerDelete(void *item,void *param);
+ * 
+ * Need to merge. List in comments above.
+ */
 };
 //---------------------------------------------------------------------------
 #endif
