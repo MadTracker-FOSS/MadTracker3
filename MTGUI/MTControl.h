@@ -1,3 +1,4 @@
+
 //---------------------------------------------------------------------------
 #ifndef MTCONTROL_INCLUDED
 #define MTCONTROL_INCLUDED
@@ -99,28 +100,6 @@
 #define MTCF_CANTDRAW    0x00002040
 #define MTCF_CANTTOUCH   0x00040040
 
-enum{
-	MTCA_TOPLEFT = 0x0,
-	MTCA_TOPRIGHT,
-	MTCA_BOTTOMLEFT,
-	MTCA_BOTTOMRIGHT,
-	MTCA_LEFT,
-	MTCA_RIGHT,
-	MTCA_TOP = 0x8,
-	MTCA_BOTTOM = 0xA,
-	MTCA_CLIENT = 0xC
-};
-
-enum{
-	MTP_INT = 0,
-	MTP_BOOL,
-	MTP_TEXT,
-	MTP_FLAGS,
-	MTP_LIST,
-	MTP_ACTION,
-	MTP_ITEMS
-};
-
 #define NORECT *(MTRect*)0
 
 #define ControlNP 9
@@ -133,87 +112,11 @@ class MTMenu;
 //---------------------------------------------------------------------------
 #include "MTGUI1.h"
 #include "MTGUITools.h"
-#include "../Headers/MTXExtension.h"
-#include "../Headers/MTXSystem.h"
-#include "../Headers/MTXDisplay.h"
-//---------------------------------------------------------------------------
-struct MTCMessage{
-	int msg;
-	int result;
-	MTControl *ctrl;
-	union{
-		struct{
-			union{
-				int x;
-				int key;
-				int param1;
-			};
-			union{
-				int y;
-				int scancode;
-				int param2;
-			};
-			union{
-				int w;
-				int button;
-				int repeat;
-				int param3;
-			};
-			union{
-				int h;
-				int buttons;
-				void* param4;
-			};
-		};
-		MTRect dr;
-		MTPoint p;
-	};
-	MTShortcut *s;
-};
-
-class MTControl{
-public:
-	MTWinControl *parent;
-	MTWindow *window;
-	int guiid;
-	int uid;
-	char *name;
-	int tag;
-	int flags;
-	int left,top;
-	int width,height;
-	int align;
-	bool direct;
-	int timercount;
-	MTMenu *popup;
-	bool autopopup;
-	void *skindata;
-	
-	MTControl(int id,int tg,MTWinControl *p,int l,int t,int w,int h);
-	virtual ~MTControl();
-	virtual int MTCT loadfromstream(MTFile *f,int size,int flags);
-	virtual int MTCT savetostream(MTFile *f,int flags);
-	virtual int MTCT getnumproperties(int id);
-	virtual bool MTCT getpropertytype(int id,char **name,int &flags);
-	virtual bool MTCT getproperty(int id,void *value);
-	virtual bool MTCT setproperty(int id,void *value);
-	virtual void MTCT setbounds(int l,int t,int w,int h);
-	virtual bool MTCT checkbounds(int &l,int &t,int &w,int &h);
-	virtual void MTCT getrect(MTRect &r,int client);
-	virtual void MTCT switchflags(int f,bool set);
-	virtual void MTCT draw(MTRect &rect);
-	virtual bool MTCT message(MTCMessage &msg);
-	virtual void MTCT preparedraw(MTBitmap **b,int &ox,int &oy);
-	virtual void MTCT setparent(MTWinControl *newparent);
-	bool MTCT designmessage(MTCMessage &msg);
-protected:
-	friend class MTWinControl;
-	int cborder;
-	int mox,moy,mow,moh;
-	bool moving,sizing,triggered;
-};
-//---------------------------------------------------------------------------
+#include "MTXExtension.h"
+#include "MTXSystem.h"
+#include "MTXDisplay.h"
 #include "MTWinControl.h"
+#include "MTXControls.h"
 //---------------------------------------------------------------------------
 extern MTControl *overctrl,*btnctrl;
 extern MTCMessage leavemsg,entermsg,btnupmsg;

@@ -2,7 +2,7 @@
 //
 //	MadTracker 3 Public Extension Header
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	http://www.madtracker.org/
 //	info@madtracker.org
@@ -240,6 +240,7 @@ public:
 	bool autopopup;
 	void *skindata;
 
+        MTControl(int id,int tg,MTWinControl *p,int l,int t,int w,int h);
 	virtual ~MTControl() = 0;
 	virtual int MTCT loadfromstream(MTFile *f,int size,int flags) = 0;
 	virtual int MTCT savetostream(MTFile *f,int flags) = 0;
@@ -255,7 +256,9 @@ public:
 	virtual bool MTCT message(MTCMessage &msg) = 0;
 	virtual void MTCT preparedraw(MTBitmap **b,int &ox,int &oy) = 0;
 	virtual void MTCT setparent(MTWinControl *newparent) = 0;
+        bool MTCT designmessage(MTCMessage &msg);
 protected:
+	friend class MTWinControl;
 	int cborder;
 	int mox,moy,mow,moh;
 	bool moving,sizing,triggered;
