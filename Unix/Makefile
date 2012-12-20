@@ -70,8 +70,7 @@ MT3SRC = \
 	$(MT3SRCDIR)/MTWC_Main.cpp \
 	$(MT3SRCDIR)/MTWC_Main2.cpp
 MTAISRC = \
-	$(MTAISRCDIR)/MTAI.cpp \
-	$(MTAISRCDIR)/MTAI1.cpp
+	$(MTAISRCDIR)/MTAI.cpp
 MTAUDIOSRC = \
 	$(MTAUDIOSRCDIR)/MTAudio.cpp \
 	$(MTAUDIOSRCDIR)/MTAudio1.cpp \
@@ -83,7 +82,6 @@ MTDSPSRC = \
 	$(MTDSPSRCDIR)/MTBufferASM.cpp \
 	$(MTDSPSRCDIR)/MTCatmullASM.cpp \
 	$(MTDSPSRCDIR)/MTDSP.cpp \
-	$(MTDSPSRCDIR)/MTDSP1.cpp \
 	$(MTDSPSRCDIR)/MTFilterASM.cpp \
 	$(MTDSPSRCDIR)/MTResamplingASM.cpp \
 	$(MTDSPSRCDIR)/MTShaper.cpp

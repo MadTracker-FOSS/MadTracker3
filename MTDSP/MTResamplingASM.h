@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors:	x86
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTResamplingASM.h 101 2005-11-30 20:19:50Z Yannick $
 //
@@ -13,7 +13,7 @@
 #ifndef MTRESAMPLINGASM_INCLUDED
 #define MTRESAMPLINGASM_INCLUDED
 
-#include "MTDSP1.h"
+#include "MTDSP.h"
 //---------------------------------------------------------------------------
 extern "C"
 {
