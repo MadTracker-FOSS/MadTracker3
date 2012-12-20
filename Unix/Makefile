@@ -160,7 +160,6 @@ MTSYSTEMSRC = \
 	$(MTSYSTEMSRCDIR)/MTSocket.cpp \
 	$(MTSYSTEMSRCDIR)/MTStructures.cpp \
 	$(MTSYSTEMSRCDIR)/MTSystem.cpp \
-	$(MTSYSTEMSRCDIR)/MTSystem1.cpp \
 	$(MTSYSTEMSRCDIR)/strnatcmp.cpp
 
 # Object code lists

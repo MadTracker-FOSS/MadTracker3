@@ -5,7 +5,7 @@
 //		Platforms:	Win32,Linux
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTSocket.h 82 2005-08-30 15:52:57Z Yannick $
 //
@@ -54,7 +54,7 @@ class MTClient;
 #	define mtsocket socket
 #	define wsgetlasterror() errno;
 #endif
-#include "MTSystem1.h"
+#include "MTSystem.h"
 //---------------------------------------------------------------------------
 class MTSocket{
 public:

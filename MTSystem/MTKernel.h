@@ -42,7 +42,7 @@ typedef int (MTCT *ThreadProc)(MTThread *thread,void *param);
 typedef void (MTCT *ProcessProc)(MTProcess *process,void *param,float p);
 typedef void (MTCT *TimerProc)(MTTimer *timer,int param);
 //---------------------------------------------------------------------------
-#include "MTSystem1.h"
+#include "MTSystem.h"
 #ifdef _WIN32
 #	include <windows.h>
 #else

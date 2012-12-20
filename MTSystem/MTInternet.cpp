@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTInternet.cpp 68 2005-08-26 22:19:12Z Yannick $
 //
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include "MTSocket.h"
 #include "MTInternet.h"
-#include "MTSystem1.h"
+#include "MTSystem.h"
 #include "../Headers/MTXSystem2.h"
 #include "MTBase64.h"
 //---------------------------------------------------------------------------
