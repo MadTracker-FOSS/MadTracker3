@@ -70,6 +70,7 @@ MT3SRC = \
 	$(MT3SRCDIR)/MTWC_Main.cpp \
 	$(MT3SRCDIR)/MTWC_Main2.cpp
 MTAISRC = \
+	$(MTAISRCDIR)/MTAI_main.cpp \
 	$(MTAISRCDIR)/MTAI.cpp
 MTAUDIOSRC = \
 	$(MTAUDIOSRCDIR)/MTAudio.cpp \
@@ -79,6 +80,7 @@ MTAUDIOSRC = \
 	$(MTAUDIOSRCDIR)/MTDirectSound.cpp \
 	$(MTAUDIOSRCDIR)/MTWaveOut.cpp
 MTDSPSRC = \
+	$(MTDSPSRCDIR)/MTDSP_main.cpp \
 	$(MTDSPSRCDIR)/MTBufferASM.cpp \
 	$(MTDSPSRCDIR)/MTCatmullASM.cpp \
 	$(MTDSPSRCDIR)/MTDSP.cpp \
@@ -144,6 +146,7 @@ MTOBJECTSSRC = \
 	$(MTOBJECTSSRCDIR)/MTTrack.cpp \
 	$(MTOBJECTSSRCDIR)/MTXMCommands.cpp
 MTSYSTEMSRC = \
+	$(MTSYSTEMSRCDIR)/MTSystem_main.cpp \
 	$(MTSYSTEMSRCDIR)/MTBase64.cpp \
 	$(MTSYSTEMSRCDIR)/MTConfig.cpp \
 	$(MTSYSTEMSRCDIR)/MTFile.cpp \
