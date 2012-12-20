@@ -526,6 +526,7 @@ private:
 
 class MTMiniConfig{
 public:
+	MTMiniConfig();
 	virtual ~MTMiniConfig();
 	virtual bool MTCT getparameter(const char *paramname,void *value,int desiredtype,int size);
 	virtual bool MTCT setparameter(const char *paramname,const void *value,int type,int size);

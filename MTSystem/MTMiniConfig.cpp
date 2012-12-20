@@ -81,36 +81,46 @@ bool MTMiniConfig::getparameter(const char *paramname,void *value,int desiredtyp
 	if (cp->type!=desiredtype) return false;
 	if (cp->size>size) return false;
 	mtmemzero(value,size);
-	// FIXME: Uhhh could this all just be a memcpy with some checks? -flibit
 	switch (cp->type){
 	case MTCT_CONFIG:
-		*(MTMiniConfig**)value = (MTMiniConfig*)cp->value;
+		*(MTMiniConfig**) value = (MTMiniConfig*) cp->value;
 		break;
 	case MTCT_SINTEGER:
-		if (cp->size==sizeof(char)) *(char*)value = (char)cp->value;
-		else if (cp->size==sizeof(short)) *(short*)value = (short)cp->value;
-		else if (cp->size==sizeof(int)) *(int*)value = (int)cp->value;
-		else return false;
+		if (cp->size == sizeof(char))
+			memcpy(value, &cp->value, sizeof(char));
+		else if (cp->size == sizeof(short))
+			memcpy(value, &cp->value, sizeof(short));
+		else if (cp->size == sizeof(int))
+			memcpy(value, &cp->value, sizeof(int));
+		else
+			return false;
 		break;
 	case MTCT_UINTEGER:
-		if (cp->size==sizeof(unsigned char)) *(unsigned char*)value = (unsigned char)cp->value;
-		else if (cp->size==sizeof(unsigned short)) *(unsigned short*)value = (unsigned short)cp->value;
-		else if (cp->size==sizeof(unsigned int)) *(unsigned int*)value = (unsigned int)cp->value;
-		else return false;
+		if (cp->size == sizeof(unsigned char))
+			memcpy(value, &cp->value, sizeof(unsigned char));
+		else if (cp->size == sizeof(unsigned short))
+			memcpy(value, &cp->value, sizeof(unsigned short));
+		else if (cp->size == sizeof(unsigned int))
+			memcpy(value, &cp->value, sizeof(unsigned int));
+		else
+			return false;
 		break;
 	case MTCT_FLOAT:
-		if (cp->size==sizeof(float)) *(float*)value = *(float*)&cp->value;
-		else if (cp->size==sizeof(double)) *(double*)value = *(double*)cp->value;
-		else return false;
+		if (cp->size == sizeof(float))
+			memcpy(value, &cp->value, sizeof(float));
+		else if (cp->size == sizeof(double))
+			memcpy(value, &cp->value, sizeof(double));
+		else
+			return false;
 		break;
 	case MTCT_BOOLEAN:
-		*(bool*)value = ((int)cp->value!=0);
+		*(bool*)value = ((int) cp->value != 0);
 		break;
 	case MTCT_STRING:
-		strncpy((char*)value,(char*)cp->value,size);
+		strncpy((char*) value, (char*) cp->value, size);
 		break;
 	case MTCT_BINARY:
-		memcpy(value,cp->value,cp->size);
+		memcpy(value, cp->value, cp->size);
 		break;
 	default:
 		return false;
@@ -120,7 +130,7 @@ bool MTMiniConfig::getparameter(const char *paramname,void *value,int desiredtyp
 
 bool MTMiniConfig::setparameter(const char *paramname,const void *value,int type,int size)
 {
-	char *e;
+	const char *e;
 	int l;
 	MP *cp;
 	char buf[256];
