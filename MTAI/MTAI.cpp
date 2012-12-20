@@ -5,24 +5,87 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
-//	$Id: MTAI.cpp 99 2005-11-30 20:16:40Z Yannick $
+//	$Id: MTAI1.cpp 99 2005-11-30 20:16:40Z Yannick $
 //
 //---------------------------------------------------------------------------
-#ifdef _WIN32
-#	include <windows.h>
-#endif
+#include "MTAI.h"
 //---------------------------------------------------------------------------
-#ifdef _WIN32
-BOOL APIENTRY DllMain(HANDLE hModule,DWORD ul_reason_for_call,LPVOID lpReserved)
+static const char *ainame = {"MadTracker Artificial Intelligence System"};
+static const int aiversion = 0x30000;
+static const MTXKey aikey = {0,0,0,0};
+MTXInterfaces i;
+MTAIInterface *ai;
+MTInterface *mtinterface;
+MTSystemInterface *si;
+//---------------------------------------------------------------------------
+MTAIInterface::MTAIInterface()
 {
-	return TRUE;
+	type = aitype;
+	key = &aikey;
+	name = ainame;
+	version = aiversion;
+	status = 0;
 }
-#else
-int main(int argc,const char* argv[])
+
+bool MTAIInterface::init()
+{
+	si = (MTSystemInterface*)mtinterface->getinterface(systemtype);
+	if (!si) return false;
+	ENTER("MTAIInterface::init");
+	LOGD("%s - [AI] Initializing..."NL);
+	status |= MTX_INITIALIZED;
+	LEAVE();
+	return true;
+}
+
+void MTAIInterface::uninit()
+{
+	ENTER("MTAIInterface::uninit");
+	LOGD("%s - [AI] Uninitializing..."NL);
+	status &= (~MTX_INITIALIZED);
+	LEAVE();
+}
+
+void MTAIInterface::start()
+{
+
+}
+
+void MTAIInterface::stop()
+{
+
+}
+
+void MTAIInterface::processcmdline(void *params)
+{
+
+}
+
+void MTAIInterface::showusage(void *out)
+{
+
+}
+
+int MTAIInterface::config(int command,int param)
 {
 	return 0;
 }
-#endif
+
 //---------------------------------------------------------------------------
+extern "C"
+{
+
+MTXInterfaces* MTCT MTXMain(MTInterface *mti)
+{
+	mtinterface = mti;
+	if (!ai) ai = new MTAIInterface();
+	i.ninterfaces = 1;
+	i.interfaces[0] = (MTXInterface*)ai;
+	return &i;
+}
+
+}
+//---------------------------------------------------------------------------
+//Apparently, this file needs some SERIOUS work done to it.
