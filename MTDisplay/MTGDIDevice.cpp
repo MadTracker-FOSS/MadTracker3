@@ -8,7 +8,7 @@
 //	Copyright © 1999-2003 Yannick Delwiche. All rights reserved.
 //
 //---------------------------------------------------------------------------
-#include "MTDisplay1.h"
+#include "MTDisplay.h"
 #include "MTGDIDevice.h"
 //---------------------------------------------------------------------------
 bool MTGDIDevice::init(bool &fullscreen)

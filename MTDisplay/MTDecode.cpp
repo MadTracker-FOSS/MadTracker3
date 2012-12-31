@@ -9,7 +9,7 @@
 //
 //---------------------------------------------------------------------------
 #include <windows.h>
-#include "MTDisplay1.h"
+#include "MTDisplay.h"
 #include "MTDecode.h"
 #include "../Headers/MTXSystem.h"
 #include "../Headers/MTXSystem2.h"

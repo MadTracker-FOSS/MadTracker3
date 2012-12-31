@@ -88,9 +88,8 @@ MTDSPSRC = \
 	$(MTDSPSRCDIR)/MTResamplingASM.cpp \
 	$(MTDSPSRCDIR)/MTShaper.cpp
 MTDISPLAYSRC = \
-	$(MTDISPLAYSRCDIR)/MTDecode.cpp \
+	$(MTDISPLAYSRCDIR)/MTDisplay_main.cpp \
 	$(MTDISPLAYSRCDIR)/MTDisplay.cpp \
-	$(MTDISPLAYSRCDIR)/MTDisplay1.cpp \
 	$(MTDISPLAYSRCDIR)/MTDisplayDevice.cpp \
 	$(MTDISPLAYSRCDIR)/MTSDLBitmap.cpp \
 	$(MTDISPLAYSRCDIR)/MTSDLDevice.cpp

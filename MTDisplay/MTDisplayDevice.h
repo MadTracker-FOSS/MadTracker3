@@ -7,7 +7,7 @@ class MTDisplayDeviceManager;
 //---------------------------------------------------------------------------
 #include "MTBitmap.h"
 #include "../Headers/MTXSystem.h"
-#include "MTDisplay1.h"
+#include "MTDisplay.h"
 //---------------------------------------------------------------------------
 class MTDisplayDevice{
 public:

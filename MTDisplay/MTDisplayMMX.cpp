@@ -9,7 +9,7 @@
 //
 //---------------------------------------------------------------------------
 #include "MTDisplayMMX.h"
-#include "MTDisplay1.h"
+#include "MTDisplay.h"
 //---------------------------------------------------------------------------
 void MTCT mmx_shade(void *surface,void *mask,int spitch,int mpitch,int w,int h,int bits)
 {

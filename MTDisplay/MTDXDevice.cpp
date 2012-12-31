@@ -11,7 +11,7 @@
 //---------------------------------------------------------------------------
 #include <windows.h>
 #include <stdio.h>
-#include "MTDisplay1.h"
+#include "MTDisplay.h"
 #include "MTDXDevice.h"
 #include "../Headers/MTXSystem2.h"
 //---------------------------------------------------------------------------

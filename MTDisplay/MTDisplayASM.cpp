@@ -10,7 +10,7 @@
 //---------------------------------------------------------------------------
 #include <windows.h>
 #include "MTDisplayASM.h"
-#include "MTDisplay1.h"
+#include "MTDisplay.h"
 //---------------------------------------------------------------------------
 void extractmask(void *source,void *mask,int color,int *pal,unsigned char **buf)
 {

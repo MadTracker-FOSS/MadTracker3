@@ -10,7 +10,7 @@
 //
 //---------------------------------------------------------------------------
 #include <stdio.h>
-#include "MTDisplay1.h"
+#include "MTDisplay.h"
 #include "MTDXBitmap.h"
 #include "../MTGUI/MTGUITools.h"
 #include "../Headers/MTXSystem2.h"
