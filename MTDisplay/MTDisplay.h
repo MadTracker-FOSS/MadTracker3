@@ -3,17 +3,13 @@
 #define MTDISPLAY1_INCLUDED
 //---------------------------------------------------------------------------
 #include "MTXExtension.h"
+#include "MTXDisplay.h"
+#include "MTXGUI.h"
+#include "MTXSkin.h"
 //---------------------------------------------------------------------------
-static const int displaytype = FOURCC('X','D','I','S');
-
-#define MAX_DISPLAYDEVICES 16
 
 class MTWinControl;
 
-#include "MTDisplayDevice.h"
-#include "MTXExtension.h"
-#include "MTXGUI.h"
-#include "MTXSkin.h"
 //---------------------------------------------------------------------------
 struct MTDisplayPreferences{
 	int device;
@@ -28,40 +24,6 @@ struct MTDevice{
 	char *devicename;
 	MTDisplayDeviceManager *manager;
 	int id;
-};
-
-class MTDisplayInterface : public MTXInterface{
-public:
-	bool fullscreen;
-
-	MTDisplayInterface();
-	bool MTCT init();
-	void MTCT uninit();
-	void MTCT start();
-	void MTCT stop();
-	void MTCT processcmdline(void *params);
-	void MTCT showusage(void *out);
-	int MTCT config(int command,int param);
-	virtual int MTCT getnumdevices();
-	virtual const char* MTCT getdevicename(int id);
-	virtual void MTCT setdevice(int id,bool silent = false);
-	virtual bool MTCT adddevicemanager(MTDisplayDeviceManager *manager);
-	virtual void MTCT deldevicemanager(MTDisplayDeviceManager *manager);
-	virtual MTBitmap* MTCT newbitmap(int flags,int w,int h);
-	virtual MTBitmap* MTCT newresbitmap(int flags,MTResources *res,int resid,int colorkey = -1);
-	virtual MTBitmap* MTCT newfilebitmap(int flags,const char *filename,int colorkey = -1);
-	virtual MTBitmap* MTCT newbmpbitmap(int flags,MTBitmap &orig,int colorkey = -1);
-	virtual void MTCT setskinbitmap(int bmpid,MTBitmap *newskin);
-	virtual MTMask* MTCT newmask(int w,int h);
-	virtual void MTCT delbitmap(MTBitmap *bmp);
-	virtual void MTCT delmask(MTMask *mask);
-	virtual void MTCT adddesktop(MTWinControl *dsk);
-	virtual void MTCT deldesktop(MTWinControl *dsk);
-	virtual MTWinControl* MTCT getdefaultdesktop();
-	virtual void MTCT checkbitmaps();
-	virtual MTBitmap* MTCT getscreen();
-	virtual void MTCT setfocus(bool focused);
-	virtual void MTCT sync();
 };
 //---------------------------------------------------------------------------
 inline int swapcolor(int color)

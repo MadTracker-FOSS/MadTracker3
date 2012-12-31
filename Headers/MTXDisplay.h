@@ -30,6 +30,8 @@ static const int displaytype = FOURCC('X','D','I','S');
 #define DTXT_PREFIX    16
 #define DTXT_MULTILINE 32
 
+#define MAX_DISPLAYDEVICES 16
+
 enum{
 	MTBM_COPY = 0,
 	MTBM_PAINT,
@@ -127,6 +129,19 @@ public:
 	virtual void MTCT setwindow(MTWinControl *window) = 0;
 	virtual void MTCT setmodified(void *w) = 0;
 	virtual void MTCT toscreen(MTPoint &p) = 0;
+
+// FIXME: Are these needed? -flibit
+public:
+	int id;
+	MTResources *mres;
+	int mresid;
+	char *mfilename;
+	MTBitmap *morig;
+	int mck;
+	int mox,moy;
+	bool modified;
+	void *mwnd;
+	virtual void MTCT initialize() = 0;
 };
 
 class MTMask{
@@ -143,7 +158,8 @@ public:
 
 class MTDisplayDevice{
 public:
-	virtual bool MTCT init(bool fullscreen) = 0;
+	MTDisplayDevice();
+	virtual bool MTCT init(bool &fullscreen) = 0;
 	virtual void MTCT uninit() = 0;
 	virtual MTBitmap* MTCT newbitmap(int flags,int width,int height) = 0;
 	virtual MTBitmap* MTCT newresbitmap(int flags,MTResources *res,int id,int colorkey) = 0;
@@ -152,19 +168,29 @@ public:
 	virtual void MTCT delbitmap(MTBitmap *bitmap) = 0;
 	virtual MTMask* MTCT newmask(int w,int h) = 0;
 	virtual void MTCT delmask(MTMask *mask) = 0;
-	virtual bool MTCT setfullscreen(bool fullscreen) = 0;
-	virtual bool MTCT switchto(MTDisplayDevice *newdevice) = 0;
-	virtual void MTCT add(MTBitmap *bmp) = 0;
-	virtual void MTCT remove(MTBitmap *bmp) = 0;
-	virtual void MTCT checkbitmaps() = 0;
-	virtual void MTCT setfocus(bool focused) = 0;
-	virtual void MTCT sync() = 0;
+	virtual bool MTCT setfullscreen(bool &fullscreen) = 0;
+	virtual bool MTCT switchto(MTDisplayDevice *newdevice);
+	virtual void MTCT add(MTBitmap *bmp);
+	virtual void MTCT remove(MTBitmap *bmp);
+	virtual void MTCT add(MTMask *bmp);
+	virtual void MTCT remove(MTMask *bmp);
+	virtual void MTCT checkbitmaps();
+	virtual void MTCT setfocus(bool focused);
+	virtual void MTCT sync();
+
+// FIXME: Are these needed? -flibit
+protected:
+	MTBitmap *bitmaps[32];
+	int nbitmaps;
+	MTMask *masks[32];
+	int nmasks;
 };
 
 class MTDisplayDeviceManager{
 public:
-	char *devicename[16];
+	char *devicename[MAX_DISPLAYDEVICES];
 
+	MTDisplayDeviceManager();
 	virtual MTDisplayDevice* MTCT newdevice(int id) = 0;
 	virtual void MTCT deldevice(MTDisplayDevice *device) = 0;
 };
@@ -173,26 +199,34 @@ class MTDisplayInterface : public MTXInterface{
 public:
 	bool fullscreen;
 
-	virtual int MTCT getnumdevices() = 0;
-	virtual const char* MTCT getdevicename(int id) = 0;
-	virtual void MTCT setdevice(int id,bool silent = false) = 0;
-	virtual bool MTCT adddevicemanager(MTDisplayDeviceManager *manager) = 0;
-	virtual void MTCT deldevicemanager(MTDisplayDeviceManager *manager) = 0;
-	virtual MTBitmap* MTCT newbitmap(int flags,int w,int h) = 0;
-	virtual MTBitmap* MTCT newresbitmap(int flags,MTResources *res,int resid,int colorkey = -1) = 0;
-	virtual MTBitmap* MTCT newfilebitmap(int flags,const char *filename,int colorkey = -1) = 0;
-	virtual MTBitmap* MTCT newbmpbitmap(int flags,MTBitmap &orig,int colorkey = -1) = 0;
-	virtual void MTCT setskinbitmap(int bmpid,MTBitmap *newskin) = 0;
-	virtual MTMask* MTCT newmask(int w,int h) = 0;
-	virtual void MTCT delbitmap(MTBitmap *bmp) = 0;
-	virtual void MTCT delmask(MTMask *mask) = 0;
-	virtual void MTCT adddesktop(MTWinControl *dsk) = 0;
-	virtual void MTCT deldesktop(MTWinControl *dsk) = 0;
-	virtual MTWinControl* MTCT getdefaultdesktop() = 0;
-	virtual void MTCT checkbitmaps() = 0;
-	virtual MTBitmap* MTCT getscreen() = 0;
-	virtual void MTCT setfocus(bool focused) = 0;
-	virtual void MTCT sync() = 0;
+	MTDisplayInterface();
+	bool MTCT init();
+	void MTCT uninit();
+	void MTCT start();
+	void MTCT stop();
+	void MTCT processcmdline(void *params);
+	void MTCT showusage(void *out);
+	int MTCT config(int command,int param);
+	virtual int MTCT getnumdevices();
+	virtual const char* MTCT getdevicename(int id);
+	virtual void MTCT setdevice(int id,bool silent = false);
+	virtual bool MTCT adddevicemanager(MTDisplayDeviceManager *manager);
+	virtual void MTCT deldevicemanager(MTDisplayDeviceManager *manager);
+	virtual MTBitmap* MTCT newbitmap(int flags,int w,int h);
+	virtual MTBitmap* MTCT newresbitmap(int flags,MTResources *res,int resid,int colorkey = -1);
+	virtual MTBitmap* MTCT newfilebitmap(int flags,const char *filename,int colorkey = -1);
+	virtual MTBitmap* MTCT newbmpbitmap(int flags,MTBitmap &orig,int colorkey = -1);
+	virtual void MTCT setskinbitmap(int bmpid,MTBitmap *newskin);
+	virtual MTMask* MTCT newmask(int w,int h);
+	virtual void MTCT delbitmap(MTBitmap *bmp);
+	virtual void MTCT delmask(MTMask *mask);
+	virtual void MTCT adddesktop(MTWinControl *dsk);
+	virtual void MTCT deldesktop(MTWinControl *dsk);
+	virtual MTWinControl* MTCT getdefaultdesktop();
+	virtual void MTCT checkbitmaps();
+	virtual MTBitmap* MTCT getscreen();
+	virtual void MTCT setfocus(bool focused);
+	virtual void MTCT sync();
 };
 //---------------------------------------------------------------------------
 #endif

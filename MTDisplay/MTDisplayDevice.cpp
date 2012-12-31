@@ -9,7 +9,6 @@
 //
 //---------------------------------------------------------------------------
 #include "MTDisplay.h"
-#include "MTDisplayDevice.h"
 #include "../Headers/MTXSystem2.h"
 //---------------------------------------------------------------------------
 MTDisplayDevice::MTDisplayDevice():
