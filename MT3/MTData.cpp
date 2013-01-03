@@ -20,7 +20,7 @@
 #	include <unistd.h>
 #endif
 #include <string.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
 #include "MTData.h"
