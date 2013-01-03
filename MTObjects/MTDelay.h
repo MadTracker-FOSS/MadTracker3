@@ -26,7 +26,7 @@ class MTDelayInstance;
 #define DF_DELAYF  0x0F
 //---------------------------------------------------------------------------
 #include "MTEffect.h"
-#include "MTXDSP.h"
+#include <MTXAPI/MTXDSP.h>
 //---------------------------------------------------------------------------
 class DelayType : public ObjectType{
 public:

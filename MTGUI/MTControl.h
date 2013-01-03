@@ -112,11 +112,11 @@ class MTMenu;
 //---------------------------------------------------------------------------
 #include "MTGUI1.h"
 #include "MTGUITools.h"
-#include "MTXExtension.h"
-#include "MTXSystem.h"
-#include "MTXDisplay.h"
+#include <MTXAPI/MTXExtension.h>
+#include <MTXAPI/MTXSystem.h>
+#include <MTXAPI/MTXDisplay.h>
 #include "MTWinControl.h"
-#include "MTXControls.h"
+#include <MTXAPI/MTXControls.h>
 //---------------------------------------------------------------------------
 extern MTControl *overctrl,*btnctrl;
 extern MTCMessage leavemsg,entermsg,btnupmsg;

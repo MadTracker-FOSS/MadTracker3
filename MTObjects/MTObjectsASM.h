@@ -14,7 +14,7 @@
 #define MTOBJECTSASM_INCLUDED
 //---------------------------------------------------------------------------
 #include <math.h>
-#include "MTXExtension.h"
+#include <MTXAPI/MTXExtension.h>
 //---------------------------------------------------------------------------
 bool MTCT a_floattofixed(double f,int &i,unsigned int &d);
 void MTCT a_changesign(char *buffer,int count);

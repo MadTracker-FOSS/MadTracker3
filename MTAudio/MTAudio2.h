@@ -13,7 +13,7 @@
 #ifndef MTAUDIO2_INCLUDED
 #define MTAUDIO2_INCLUDED
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
+#include <MTXAPI/MTXExtension.h>
 //---------------------------------------------------------------------------
 typedef void (MTCT *RenderProc)(sample *source,void *dest,int count,int nchannels,int channel);
 //---------------------------------------------------------------------------

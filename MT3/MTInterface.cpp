@@ -23,9 +23,9 @@
 #include "MTWC_Main.h"
 #include "MTWC_Main2.h"
 #include "../MTGUI/MTGUITools.h"
-#include "MTXSystem.h"
-#include "MTXInput.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem.h>
+#include <MTXAPI/MTXInput.h>
+#include <MTXAPI/MTXSystem2.h>
 #include "../Interface/MT3RES.h"
 //---------------------------------------------------------------------------
 void MTCT designmode(MTShortcut*,MTControl*,MTUndo*);

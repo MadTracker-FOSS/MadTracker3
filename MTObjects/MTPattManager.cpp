@@ -13,10 +13,10 @@
 #include "MTPattEditor.h"
 #include "MTPattManager.h"
 #include "../MTGUI/MTGUITools.h"
-#include "MTXSkin.h"
-#include "MTXInput.h"
+#include <MTXAPI/MTXSkin.h>
+#include <MTXAPI/MTXInput.h>
 #include "../Interface/MTObjectsRES.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 MTPattManager::MTPattManager(MTCustomWinControl *control):
 MTCustomWinBehaviours(control),

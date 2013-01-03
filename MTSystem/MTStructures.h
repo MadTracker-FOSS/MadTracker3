@@ -13,7 +13,7 @@
 #ifndef MTSTRUCTURES_INCLUDED
 #define MTSTRUCTURES_INCLUDED
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
+#include <MTXAPI/MTXExtension.h>
 //---------------------------------------------------------------------------
 typedef void (MTCT *ItemProc)(void *item,void *param);
 typedef int (MTCT *SortProc)(void *item1,void *item2);

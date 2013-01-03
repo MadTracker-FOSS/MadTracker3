@@ -13,7 +13,7 @@
 #ifndef MTGRAPHS_INCLUDED
 #define MTGRAPHS_INCLUDED
 //---------------------------------------------------------------------------
-#include "MTXControls.h"
+#include <MTXAPI/MTXControls.h>
 //---------------------------------------------------------------------------
 class MTCPUGraph : public MTCustomBehaviours{
 public:

@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include "MTMiniConfig.h"
 #include "MTMD5.h"
-#include "../Headers/MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 struct MP{
 	char *key;

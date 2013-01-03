@@ -13,7 +13,7 @@
 #include <time.h>
 #include "MTHTTPFile.h"
 #include "MTMD5.h"
-#include "../Headers/MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 MTHTTPHook httphook;
 char http_version[8] = "1.1";

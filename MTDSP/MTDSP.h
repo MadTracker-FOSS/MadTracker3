@@ -13,7 +13,7 @@
 #ifndef MTDSP1_INCLUDED
 #define MTDSP1_INCLUDED
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
+#include <MTXAPI/MTXExtension.h>
 //---------------------------------------------------------------------------
 static const int dsptype = FOURCC('X','D','S','P');
 
@@ -37,7 +37,7 @@ struct FilterStatus;
 struct DSPFunctions;
 class MTDSPInterface;
 //---------------------------------------------------------------------------
-#include "MTXSystem.h"
+#include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
 struct ChannelStatus{
 	int posi;

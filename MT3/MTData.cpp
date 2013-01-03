@@ -24,7 +24,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "MTData.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 MTPreferences prefs;
 MTModule *module[16];

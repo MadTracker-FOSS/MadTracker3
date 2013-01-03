@@ -12,10 +12,10 @@
 //---------------------------------------------------------------------------
 #include "MTAudio1.h"
 #include "MTAudio2.h"
-#include "MTXObject.h"
-#include "MTXModule.h"
-#include "MTXTrack.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXObject.h>
+#include <MTXAPI/MTXModule.h>
+#include <MTXAPI/MTXTrack.h>
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 void MTCT ri8(sample *source,void *dest,int count,int nchannels,int channel)
 {

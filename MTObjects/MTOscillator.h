@@ -23,7 +23,7 @@ class OscillatorInstance;
 #include "MTInstrument.h"
 #include "MTObjectsASM.h"
 #include "MTObjects1.h"
-#include "MTXDSP.h"
+#include <MTXAPI/MTXDSP.h>
 //---------------------------------------------------------------------------
 class Oscillator : public MTObject{
 public:

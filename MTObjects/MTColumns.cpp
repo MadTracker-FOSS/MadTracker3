@@ -13,9 +13,9 @@
 #include "MTColumns.h"
 #include "MTObjects1.h"
 #include "MTXMCommands.h"
-#include "MTXSkin.h"
-#include "MTXInput.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSkin.h>
+#include <MTXAPI/MTXInput.h>
+#include <MTXAPI/MTXSystem2.h>
 #include "../Interface/MTObjectsRES.h"
 //---------------------------------------------------------------------------
 NoteColumn notecolumn;

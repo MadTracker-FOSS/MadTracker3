@@ -11,8 +11,8 @@
 #include <math.h>
 #include "MTVisual.h"
 #include "MTGUI1.h"
-#include "../Headers/MTXModule.h"
-#include "../Headers/MTXSystem2.h"
+#include <MTXAPI/MTXModule.h>
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 // MTControl
 //   MTWinControl

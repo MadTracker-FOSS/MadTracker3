@@ -10,7 +10,7 @@
 //---------------------------------------------------------------------------
 #include "MTDesktop.h"
 #include "MTGUI1.h"
-#include "../Headers/MTXSkin.h"
+#include <MTXAPI/MTXSkin.h>
 //---------------------------------------------------------------------------
 extern MTDesktop *desktops[32];
 extern int ndesktops;

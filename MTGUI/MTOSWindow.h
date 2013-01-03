@@ -3,8 +3,8 @@
 #define MTOSWINDOW_INCLUDED
 //---------------------------------------------------------------------------
 #include "MTControl.h"
-#include "../Headers/MTXDisplay.h"
-#include "../Headers/MTXSystem.h"
+#include <MTXAPI/MTXDisplay.h>
+#include <MTXAPI/MTXSystem.h>
 #include <windows.h>
 //---------------------------------------------------------------------------
 class MTOSWindow : public MTControl{

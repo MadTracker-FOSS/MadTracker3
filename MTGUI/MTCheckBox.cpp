@@ -10,10 +10,10 @@
 //---------------------------------------------------------------------------
 #include <stdio.h>
 #include "MTGUI1.h"
-#include "../Headers/MTXSkin.h"
+#include <MTXAPI/MTXSkin.h>
 #include "MTCheckBox.h"
 #include "MTWindow.h"
-#include "../Headers/MTXInput.h"
+#include <MTXAPI/MTXInput.h>
 //---------------------------------------------------------------------------
 // MTControl
 //   MTCheckBox

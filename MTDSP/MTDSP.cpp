@@ -17,7 +17,7 @@
 #include "MTFilterASM.h"
 #include "MTResamplingASM.h"
 #include "MTCatmullASM.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 static const char *dspname = {"MadTracker DSP"};
 static const int dspversion = 0x30000;

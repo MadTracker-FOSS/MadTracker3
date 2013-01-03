@@ -13,8 +13,8 @@
 #ifndef MTRESOURCES_INCLUDED
 #define MTRESOURCES_INCLUDED
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
-#include "MTXSystem.h"
+#include <MTXAPI/MTXExtension.h>
+#include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
 #define MTR_WINDOW   FOURCC('M','T','W','N')
 #define MTR_SKIN     FOURCC('M','T','S','K')

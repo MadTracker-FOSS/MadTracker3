@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include "MTDirectSound.h"
 #include "MTAudio1.h"
-#include "MTXGUI.h"
+#include <MTXAPI/MTXGUI.h>
 //---------------------------------------------------------------------------
 MTGUIInterface *gi;
 HMODULE hdsound;

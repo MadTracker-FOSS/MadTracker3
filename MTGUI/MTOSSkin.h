@@ -2,7 +2,7 @@
 #ifndef MTOSSKIN_INCLUDED
 #define MTOSSKIN_INCLUDED
 //---------------------------------------------------------------------------
-#include "../Headers/MTXSkin.h"
+#include <MTXAPI/MTXSkin.h>
 //---------------------------------------------------------------------------
 class MTOSSkin : public Skin{
 public:

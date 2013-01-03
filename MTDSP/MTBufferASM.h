@@ -13,7 +13,7 @@
 #ifndef MTBUFFERASM_INCLUDED
 #define MTBUFFERASM_INCLUDED
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
+#include <MTXAPI/MTXExtension.h>
 //---------------------------------------------------------------------------
 extern "C"
 {

@@ -29,8 +29,8 @@
 
 #define MAX_STACK 1024
 //---------------------------------------------------------------------------
-#include "MTXSystem.h"
-#include "MTXExtension.h"
+#include <MTXAPI/MTXSystem.h>
+#include <MTXAPI/MTXExtension.h>
 //---------------------------------------------------------------------------
 class MTLock;
 class MTEvent;
@@ -49,8 +49,8 @@ typedef void (MTCT *TimerProc)(MTTimer *timer,int param);
 #	include <pthread.h>
 #	include <signal.h>
 #endif
-#include "MTXGUI.h"
-#include "MTXSystem.h"
+#include <MTXAPI/MTXGUI.h>
+#include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
 extern "C"
 {

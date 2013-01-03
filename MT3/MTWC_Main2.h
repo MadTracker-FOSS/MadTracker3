@@ -4,7 +4,7 @@
 #ifndef MTWC_MAIN2_INCLUDED
 #define MTWC_MAIN2_INCLUDED
 //---------------------------------------------------------------------------
-#include "../Headers/MTXWrapper.h"
+#include <MTXAPI/MTXWrapper.h>
 //---------------------------------------------------------------------------
 class MTWC_main2 : public MTWrapper{
 public:

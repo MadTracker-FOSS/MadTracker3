@@ -6,7 +6,7 @@ class MTControl;
 class MTWinControl;
 class MTUserList;
 //---------------------------------------------------------------------------
-#include "../Headers/MTXSkin.h"
+#include <MTXAPI/MTXSkin.h>
 //---------------------------------------------------------------------------
 #ifdef __BORLANDC__
 #define sk_back 'BACK'

@@ -112,9 +112,9 @@ class MTResources;
 class MTArray;
 class MTHash;
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
-#include "MTXGUI.h"
-#include "MTXDisplay.h"
+#include <MTXAPI/MTXExtension.h>
+#include <MTXAPI/MTXGUI.h>
+#include <MTXAPI/MTXDisplay.h>
 #ifdef MTSYSTEM_INTERNET
 #	include "MTSocket.h"
 #endif
@@ -128,7 +128,7 @@ class MTHash;
 #include "MTKernel.h"
 #include "MTResources.h"
 #include "MTStructures.h"
-#include "MTXSystem.h"
+#include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
 #ifdef _WIN32
 #	include <windows.h>

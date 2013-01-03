@@ -2,10 +2,10 @@
 #ifndef MTDISPLAY1_INCLUDED
 #define MTDISPLAY1_INCLUDED
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
-#include "MTXDisplay.h"
-#include "MTXGUI.h"
-#include "MTXSkin.h"
+#include <MTXAPI/MTXExtension.h>
+#include <MTXAPI/MTXDisplay.h>
+#include <MTXAPI/MTXGUI.h>
+#include <MTXAPI/MTXSkin.h>
 //---------------------------------------------------------------------------
 
 class MTWinControl;

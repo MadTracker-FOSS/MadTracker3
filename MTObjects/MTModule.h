@@ -53,7 +53,7 @@ class InstrumentInstance;
 class Track;
 
 #include "MTObject.h"
-#include "MTXAudio.h"
+#include <MTXAPI/MTXAudio.h>
 //---------------------------------------------------------------------------
 // Sequence
 struct Sequence{

@@ -2,8 +2,8 @@
 #ifndef MTGUI1_INCLUDED
 #define MTGUI1_INCLUDED
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
-#include "MTXGUI.h"
+#include <MTXAPI/MTXExtension.h>
+#include <MTXAPI/MTXGUI.h>
 //---------------------------------------------------------------------------
 static const int guietype = FOURCC('G','U','I','E');
 
@@ -34,9 +34,9 @@ class MTDesktop;
 typedef void (MTCT *MTCommand)(MTShortcut*,MTControl*,MTUndo*);
 //---------------------------------------------------------------------------
 #include "MTGUITools.h"
-#include "MTXSystem.h"
-#include "MTXDisplay.h"
-#include "MTXSkin.h"
+#include <MTXAPI/MTXSystem.h>
+#include <MTXAPI/MTXDisplay.h>
+#include <MTXAPI/MTXSkin.h>
 //---------------------------------------------------------------------------
 struct MTGUIPreferences{
 	char skin[256];

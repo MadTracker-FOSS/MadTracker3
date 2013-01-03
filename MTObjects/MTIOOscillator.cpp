@@ -14,7 +14,7 @@
 #include "MTOscillator.h"
 #include "MTObjects1.h"
 #include "MTRiff.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 // Sample Load Functions
 //---------------------------------------------------------------------------

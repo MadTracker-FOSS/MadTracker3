@@ -15,7 +15,7 @@
 #include "MTAutomation.h"
 #include "MTDelay.h"
 #include "MTObjects1.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 // MadTracker 2 Module
 //---------------------------------------------------------------------------

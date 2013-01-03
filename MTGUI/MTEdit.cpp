@@ -10,11 +10,11 @@
 //---------------------------------------------------------------------------
 #include <stdio.h>
 #include "MTGUI1.h"
-#include "../Headers/MTXSkin.h"
+#include <MTXAPI/MTXSkin.h>
 #include "MTEdit.h"
 #include "MTSysControls.h"
 #include "MTWindow.h"
-#include "../Headers/MTXInput.h"
+#include <MTXAPI/MTXInput.h>
 //---------------------------------------------------------------------------
 void MTCT edit_undo(MTShortcut *s,MTControl *c,MTUndo*)
 {

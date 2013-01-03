@@ -9,7 +9,7 @@
 //
 //---------------------------------------------------------------------------
 #include <math.h>
-#include "../Headers/MTXSystem.h"
+#include <MTXAPI/MTXSystem.h>
 #include "MTGUI1.h"
 #include "MTOSSkin.h"
 #include "MTSysControls.h"

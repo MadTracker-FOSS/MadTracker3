@@ -15,15 +15,15 @@
 #include <string.h>
 #include <time.h>
 #include "MTSystem.h"
-#include "MTXExtension.h"
-#include "MTXSystem2.h"
-#include "MTXDisplay.h"
-#include "MTXGUI.h"
-#include "MTXControls.h"
+#include <MTXAPI/MTXExtension.h>
+#include <MTXAPI/MTXSystem2.h>
+#include <MTXAPI/MTXDisplay.h>
+#include <MTXAPI/MTXGUI.h>
+#include <MTXAPI/MTXControls.h>
 #ifdef MTSYSTEM_INTERNET
 #	include "MTInternet.h"
 #endif
-#include "MTSystemRES.h"
+#include "../Interface/MTSystemRES.h"
 #ifdef _WIN32
 #	include <shellapi.h>
 #	include <mmsystem.h>

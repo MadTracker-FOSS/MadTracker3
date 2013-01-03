@@ -15,10 +15,10 @@
 //---------------------------------------------------------------------------
 class MTConfigFile;
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
+#include <MTXAPI/MTXExtension.h>
 #include "MTFile.h"
 #include "MTStructures.h"
-#include "MTXSystem.h"
+#include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
 extern "C"
 {

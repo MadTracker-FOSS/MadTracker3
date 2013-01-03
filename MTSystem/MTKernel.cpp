@@ -12,8 +12,8 @@
 //---------------------------------------------------------------------------
 #include <stdio.h>
 #include "MTKernel.h"
-#include "MTXSystem2.h"
-#include "MTSystemRES.h"
+#include <MTXAPI/MTXSystem2.h>
+#include "../Interface/MTSystemRES.h"
 #ifdef _WIN32
 #	include <mmsystem.h>
 #else

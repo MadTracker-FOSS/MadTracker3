@@ -19,8 +19,8 @@
 #else
 	#include <gdk/gdk.h>
 #endif
-#include "MTXSystem.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem.h>
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 static char buffer[4096];
 #ifdef _WIN32

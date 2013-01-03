@@ -4,8 +4,8 @@
 #ifndef MTCONSOLE_INCLUDED
 #define MTCONSOLE_INCLUDED
 
-#include "MTXExtension.h"
-#include "MTXSystem.h"
+#include <MTXAPI/MTXExtension.h>
+#include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
 class MTConsole : public MTFile{
 public:

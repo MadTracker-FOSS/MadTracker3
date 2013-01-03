@@ -17,10 +17,10 @@
 #ifndef NODIRECTX
 #include "MTDXDevice.h"
 #endif
-#include "../Headers/MTXSystem.h"
-#include "../Headers/MTXSkin.h"
-#include "../Headers/MTXControls.h"
-#include "../Headers/MTXSystem2.h"
+#include <MTXAPI/MTXSystem.h>
+#include <MTXAPI/MTXSkin.h>
+#include <MTXAPI/MTXControls.h>
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 static const char *disname = {"MadTracker Display Core"};
 static const int displayversion = 0x30000;

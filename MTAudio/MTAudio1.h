@@ -13,8 +13,8 @@
 #ifndef MTAUDIO1_INCLUDED
 #define MTAUDIO1_INCLUDED
 //---------------------------------------------------------------------------
-#include "MTXAudio.h"
-#include "MTXObjects.h"
+#include <MTXAPI/MTXAudio.h>
+#include <MTXAPI/MTXObjects.h>
 #include "MTAudioDevice.h"
 //---------------------------------------------------------------------------
 

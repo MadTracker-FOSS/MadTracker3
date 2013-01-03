@@ -21,7 +21,7 @@
 #		include "MTHTTPFile.h"
 #	endif
 #endif
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 int tmpid = 0;
 MTHash *hooks;

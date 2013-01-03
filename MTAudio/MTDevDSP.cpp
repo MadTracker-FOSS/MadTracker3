@@ -11,7 +11,7 @@
 //
 //---------------------------------------------------------------------------
 #ifndef _WIN32
-#include "MTXSystem.h"
+#include <MTXAPI/MTXSystem.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>

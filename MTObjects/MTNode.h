@@ -19,8 +19,8 @@ struct Pin;
 class Node;
 //---------------------------------------------------------------------------
 #include "MTObject.h"
-#include "MTXSystem.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem.h>
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 extern MTSystemInterface *si;
 //---------------------------------------------------------------------------

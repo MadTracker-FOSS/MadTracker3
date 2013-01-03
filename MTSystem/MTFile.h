@@ -37,9 +37,9 @@
 class MTFile;
 class MTFolder;
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
+#include <MTXAPI/MTXExtension.h>
 #include "MTKernel.h"
-#include "MTXSystem.h"
+#include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
 extern "C"
 {

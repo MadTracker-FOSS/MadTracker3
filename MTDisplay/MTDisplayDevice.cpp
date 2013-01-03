@@ -9,7 +9,7 @@
 //
 //---------------------------------------------------------------------------
 #include "MTDisplay.h"
-#include "../Headers/MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 MTDisplayDevice::MTDisplayDevice():
 nbitmaps(0),

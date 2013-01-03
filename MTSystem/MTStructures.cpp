@@ -11,8 +11,8 @@
 //
 //---------------------------------------------------------------------------
 #include <string.h>
-#include "MTXSystem.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem.h>
+#include <MTXAPI/MTXSystem2.h>
 #include "MTStructures.h"
 #include "MTSystem.h"
 #include "MTMD5.h"

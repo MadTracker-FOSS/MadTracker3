@@ -70,6 +70,6 @@ private:
 	void MTCT updateborders();
 };
 //---------------------------------------------------------------------------
-#include "../Headers/MTXWrapper.h"
+#include <MTXAPI/MTXWrapper.h>
 //---------------------------------------------------------------------------
 #endif

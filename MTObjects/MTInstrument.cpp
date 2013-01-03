@@ -15,7 +15,7 @@
 #include "MTObjects1.h"
 #include "MTObjectsASM.h"
 #include "../Interface/MTObjectsRES.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 InstrumentType *instrumenttype;
 //---------------------------------------------------------------------------

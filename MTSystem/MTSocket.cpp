@@ -11,7 +11,7 @@
 //
 //---------------------------------------------------------------------------
 #include "MTSocket.h"
-#include "../Headers/MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 #include "MTBase64.h"
 #include <string.h>
 //---------------------------------------------------------------------------

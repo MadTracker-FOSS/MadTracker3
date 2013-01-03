@@ -17,7 +17,7 @@ class MTSocket;
 class MTServer;
 class MTClient;
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
+#include <MTXAPI/MTXExtension.h>
 #ifdef _WIN32
 #	include <winsock2.h>
 #else

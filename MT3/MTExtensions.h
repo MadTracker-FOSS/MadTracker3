@@ -4,19 +4,19 @@
 #ifndef MTEXTENSIONS_INCLUDED
 #define MTEXTENSIONS_INCLUDED
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
+#include <MTXAPI/MTXExtension.h>
 //---------------------------------------------------------------------------
 static const int mt3type = FOURCC('X','M','T','3');
 
 #define MAX_EXTENSIONS 256
 
-#include "MTXSystem.h"
-#include "MTXObjects.h"
-#include "MTXDisplay.h"
-#include "MTXGUI.h"
-#include "MTXControls.h"
-#include "MTXAudio.h"
-#include "MTXDSP.h"
+#include <MTXAPI/MTXSystem.h>
+#include <MTXAPI/MTXObjects.h>
+#include <MTXAPI/MTXDisplay.h>
+#include <MTXAPI/MTXGUI.h>
+#include <MTXAPI/MTXControls.h>
+#include <MTXAPI/MTXAudio.h>
+#include <MTXAPI/MTXDSP.h>
 //---------------------------------------------------------------------------
 struct MTExtension{
 	int id;

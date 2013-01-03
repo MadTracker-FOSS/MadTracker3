@@ -29,7 +29,7 @@
 #include "MTVisual.h"
 #include "MTOSWindow.h"
 #include "MTToolBar.h"
-#include "../Headers/MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 
 #define SPLITRGB(c,r,g,b) {r=c & 0xFF;g=(c>>8) & 0xFF;b=(c>>16) && 0xFF;}
 //---------------------------------------------------------------------------

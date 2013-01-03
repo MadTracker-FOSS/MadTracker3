@@ -17,7 +17,7 @@ class MTFilter;
 class MTFilterInstance;
 //---------------------------------------------------------------------------
 #include "MTEffect.h"
-#include "MTXDSP.h"
+#include <MTXAPI/MTXDSP.h>
 //---------------------------------------------------------------------------
 class MTFilter : public Effect{
 public:

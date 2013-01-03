@@ -13,11 +13,11 @@
 #ifndef MTAI1_INCLUDED
 #define MTAI1_INCLUDED
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
+#include <MTXAPI/MTXExtension.h>
 //---------------------------------------------------------------------------
 static const int aitype = FOURCC('X','A','I','S');
 //---------------------------------------------------------------------------
-#include "MTXSystem.h"
+#include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
 class MTAIInterface : public MTXInterface{
 public:

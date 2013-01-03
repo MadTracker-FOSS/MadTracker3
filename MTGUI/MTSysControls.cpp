@@ -16,7 +16,7 @@
 //---------------------------------------------------------------------------
 #include "MTSysControls.h"
 #include "MTGUI1.h"
-#include "../Headers/MTXSkin.h"
+#include <MTXAPI/MTXSkin.h>
 #include "MTWindow.h"
 //---------------------------------------------------------------------------
 MTImageList sysimages;

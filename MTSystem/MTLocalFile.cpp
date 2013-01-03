@@ -16,7 +16,7 @@
 #	include <sys/mman.h>
 #endif
 #include "MTLocalFile.h"
-#include "../Headers/MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 MTLocalHook localhook;
 int allocalign = 0;

@@ -13,11 +13,11 @@
 #include <stdio.h>
 #include "MTAudio1.h"
 #include "MTAudio2.h"
-#include "MTXGUI.h"
-#include "MTXAudio.h"
-#include "MTXControls.h"
-#include "MTXModule.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXGUI.h>
+#include <MTXAPI/MTXAudio.h>
+#include <MTXAPI/MTXControls.h>
+#include <MTXAPI/MTXModule.h>
+#include <MTXAPI/MTXSystem2.h>
 #ifdef _WIN32
 #	include "MTWaveOut.h"
 #	include "MTDirectSound.h"

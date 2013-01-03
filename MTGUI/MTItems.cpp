@@ -23,9 +23,9 @@
 #include "MTItems.h"
 #include "MTSysControls.h"
 #include "MTWindow.h"
-#include "../Headers/MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 #include "../MTSystem/strnatcmp.h"
-#include "../Headers/MTXInput.h"
+#include <MTXAPI/MTXInput.h>
 //---------------------------------------------------------------------------
 // MTControl
 //   MTWinControl

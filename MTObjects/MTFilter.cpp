@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include "MTObject.h"
 #include "MTFilter.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 #include "../Interface/MTObjectsRES.h"
 //---------------------------------------------------------------------------
 MTFilter::MTFilter(MTObject *parent,mt_int32 i):

@@ -15,7 +15,7 @@
 //---------------------------------------------------------------------------
 #include "../MT3Config.h"
 //---------------------------------------------------------------------------
-#include "MTXExtension.h"
+#include <MTXAPI/MTXExtension.h>
 //---------------------------------------------------------------------------
 static const int objectstype = FOURCC('X','O','B','J');
 //---------------------------------------------------------------------------
@@ -30,10 +30,10 @@ public:
 };
 //---------------------------------------------------------------------------
 #include "MTObject.h"
-#include "MTXAudio.h"
-#include "MTXDSP.h"
-#include "MTXGUI.h"
-#include "MTXSkin.h"
+#include <MTXAPI/MTXAudio.h>
+#include <MTXAPI/MTXDSP.h>
+#include <MTXAPI/MTXGUI.h>
+#include <MTXAPI/MTXSkin.h>
 //---------------------------------------------------------------------------
 struct MTObjectsPreferences{
 	bool hexadecimal;

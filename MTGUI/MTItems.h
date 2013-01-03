@@ -12,7 +12,7 @@ class MTMenuItem;
 class MTMenu;
 //---------------------------------------------------------------------------
 #include "MTWinControl.h"
-#include "../Headers/MTXSystem.h"
+#include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
 typedef void (MTCT *MTCItemDraw)(MTItem *item,const MTRect &rect,MTBitmap *b);
 typedef void (MTCT *MTCUserItemDraw)(MTUserList *list,int id,const MTRect &rect,MTBitmap *b);

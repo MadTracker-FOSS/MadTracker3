@@ -85,8 +85,8 @@ enum MTObjectParamType{
 class MTObject;
 class MTModule;
 
-#include "MTXExtension.h"
-#include "MTXSystem.h"
+#include <MTXAPI/MTXExtension.h>
+#include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
 struct EnvPoint{
 	mt_uint32 flags;

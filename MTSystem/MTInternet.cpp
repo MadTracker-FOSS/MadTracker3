@@ -15,7 +15,7 @@
 #include "MTSocket.h"
 #include "MTInternet.h"
 #include "MTSystem.h"
-#include "../Headers/MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 #include "MTBase64.h"
 //---------------------------------------------------------------------------
 struct MTCredentials{

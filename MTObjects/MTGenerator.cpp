@@ -15,7 +15,7 @@
 #include "MTGenerator.h"
 #include "MTObjects1.h"
 #include "../Interface/MTObjectsRES.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 GeneratorType *generatortype;
 //---------------------------------------------------------------------------

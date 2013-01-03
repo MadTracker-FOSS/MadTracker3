@@ -11,7 +11,7 @@
 //
 //---------------------------------------------------------------------------
 #include "MTInstrEditor.h"
-#include "MTXInput.h"
+#include <MTXAPI/MTXInput.h>
 #include "../Interface/MTObjectsRES.h"
 //---------------------------------------------------------------------------
 MTShortcut ienav[2] = {

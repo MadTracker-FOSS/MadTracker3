@@ -9,7 +9,7 @@
 //
 //---------------------------------------------------------------------------
 #include "MTOSWindow.h"
-#include "../Headers/MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 extern HINSTANCE instance;
 struct OS_PROCS{

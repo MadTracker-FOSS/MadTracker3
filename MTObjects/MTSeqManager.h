@@ -14,7 +14,7 @@
 #define MTSEQMANAGER_INCLUDED
 //---------------------------------------------------------------------------
 #include "MTModule.h"
-#include "MTXControls.h"
+#include <MTXAPI/MTXControls.h>
 //---------------------------------------------------------------------------
 class MTSeqManager : public MTCustomWinBehaviours{
 public:

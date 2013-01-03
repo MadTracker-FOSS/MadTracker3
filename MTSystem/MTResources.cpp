@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include "MTResources.h"
-#include "../Headers/MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 MTResources* mtresfind(const char *filename,bool write)
 {

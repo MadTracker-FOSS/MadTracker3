@@ -11,9 +11,9 @@
 #include <math.h>
 #include <stdio.h>
 #include "MTControl.h"
-#include "../Headers/MTXSkin.h"
+#include <MTXAPI/MTXSkin.h>
 #include "MTWindow.h"
-#include "../Headers/MTXInput.h"
+#include <MTXAPI/MTXInput.h>
 //---------------------------------------------------------------------------
 MTControl *overctrl,*btnctrl;
 MTCMessage leavemsg = {MTCM_LEAVE};

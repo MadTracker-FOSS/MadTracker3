@@ -37,7 +37,7 @@ endif
 CFLAGS = -g -Wno-write-strings -m32
 
 # Includes/Defines
-INCLUDES = -I.. -I../Headers -I../Interface
+INCLUDES = -I.. -I../include
 
 # Dependencies
 ifeq ($(UNAME), Darwin)

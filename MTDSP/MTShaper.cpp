@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include "MTShaper.h"
 #include "MTDSP.h"
-#include "MTXSystem2.h"
+#include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 MTShaper::MTShaper()
 {
