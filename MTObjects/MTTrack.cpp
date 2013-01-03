@@ -15,7 +15,7 @@
 #include "MTTrack.h"
 #include "MTModule.h"
 #include "MTObjects1.h"
-#include "../Interface/MTObjectsRES.h"
+#include <MTXAPI/RES/MTObjectsRES.h>
 //---------------------------------------------------------------------------
 // Track functions
 //---------------------------------------------------------------------------

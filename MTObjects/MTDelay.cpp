@@ -15,7 +15,7 @@
 #include "MTObjects1.h"
 #include "MTDelay.h"
 #include <MTXAPI/MTXSystem2.h>
-#include "../Interface/MTObjectsRES.h"
+#include <MTXAPI/RES/MTObjectsRES.h>
 //---------------------------------------------------------------------------
 DelayType *delaytype;
 //---------------------------------------------------------------------------

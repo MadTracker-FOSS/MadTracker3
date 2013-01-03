@@ -13,7 +13,7 @@
 #ifndef MTSYSTEM1_INCLUDED
 #define MTSYSTEM1_INCLUDED
 //---------------------------------------------------------------------------
-#include "../MT3Config.h"
+#include <MTXAPI/config/MT3Config.h>
 //---------------------------------------------------------------------------
 #define MTS_WINNT    0x00001
 #define MTS_MMX      0x00002

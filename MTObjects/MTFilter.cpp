@@ -14,7 +14,7 @@
 #include "MTObject.h"
 #include "MTFilter.h"
 #include <MTXAPI/MTXSystem2.h>
-#include "../Interface/MTObjectsRES.h"
+#include <MTXAPI/RES/MTObjectsRES.h>
 //---------------------------------------------------------------------------
 MTFilter::MTFilter(MTObject *parent,mt_int32 i):
 Effect(parent,MTO_MTFILTER,i),

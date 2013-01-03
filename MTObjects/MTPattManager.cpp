@@ -15,7 +15,7 @@
 #include "../MTGUI/MTGUITools.h"
 #include <MTXAPI/MTXSkin.h>
 #include <MTXAPI/MTXInput.h>
-#include "../Interface/MTObjectsRES.h"
+#include <MTXAPI/RES/MTObjectsRES.h>
 #include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 MTPattManager::MTPattManager(MTCustomWinControl *control):

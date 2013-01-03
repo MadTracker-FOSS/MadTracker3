@@ -23,7 +23,7 @@
 #ifdef MTSYSTEM_INTERNET
 #	include "MTInternet.h"
 #endif
-#include "../Interface/MTSystemRES.h"
+#include <MTXAPI/RES/MTSystemRES.h>
 #ifdef _WIN32
 #	include <shellapi.h>
 #	include <mmsystem.h>

@@ -13,7 +13,7 @@
 #include "MTModule.h"
 #include "MTObjects1.h"
 #include "MTAutomation.h"
-#include "../Interface/MTObjectsRES.h"
+#include <MTXAPI/RES/MTObjectsRES.h>
 #include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 // Automation functions

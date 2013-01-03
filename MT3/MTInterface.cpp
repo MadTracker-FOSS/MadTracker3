@@ -26,7 +26,7 @@
 #include <MTXAPI/MTXSystem.h>
 #include <MTXAPI/MTXInput.h>
 #include <MTXAPI/MTXSystem2.h>
-#include "../Interface/MT3RES.h"
+#include <MTXAPI/RES/MT3RES.h>
 //---------------------------------------------------------------------------
 void MTCT designmode(MTShortcut*,MTControl*,MTUndo*);
 //---------------------------------------------------------------------------

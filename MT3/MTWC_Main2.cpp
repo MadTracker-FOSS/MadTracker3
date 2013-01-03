@@ -15,7 +15,7 @@
 #include "MTWC_Main2.h"
 #include <MTXAPI/MTXGUI.h>
 #include <MTXAPI/MTXSkin.h>
-#include "../Interface/MT3RES.h"
+#include <MTXAPI/RES/MT3RES.h>
 //---------------------------------------------------------------------------
 extern MTGUIInterface *gi;
 MTWC_main2 *w_main2;

@@ -17,7 +17,7 @@
 #include "MTPattEditor.h"
 #include "MTColumns.h"
 #include "MTObjectsASM.h"
-#include "../Interface/MTObjectsRES.h"
+#include <MTXAPI/RES/MTObjectsRES.h>
 #include <MTXAPI/MTXSystem2.h>
 //---------------------------------------------------------------------------
 PatternType *patterntype;

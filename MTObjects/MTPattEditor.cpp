@@ -13,7 +13,7 @@
 #include "MTPattEditor.h"
 #include "MTPattManager.h"
 #include <MTXAPI/MTXInput.h>
-#include "../Interface/MTObjectsRES.h"
+#include <MTXAPI/RES/MTObjectsRES.h>
 //---------------------------------------------------------------------------
 MTShortcut penav[16] = {
 	{0,KB_DOWN,MTT_nextline,0,0},

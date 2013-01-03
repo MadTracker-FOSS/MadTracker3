@@ -16,7 +16,7 @@
 #include <MTXAPI/MTXSkin.h>
 #include <MTXAPI/MTXInput.h>
 #include <MTXAPI/MTXSystem2.h>
-#include "../Interface/MTObjectsRES.h"
+#include <MTXAPI/RES/MTObjectsRES.h>
 //---------------------------------------------------------------------------
 NoteColumn notecolumn;
 DrumsColumn drumscolumn;
