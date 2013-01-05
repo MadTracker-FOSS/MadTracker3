@@ -1,14 +1,28 @@
+# MadTracker3 CMake File
+# Written by Ethan "flibitijibibo" Lee
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(MadTracker3)
 
+# Build optjons
+option(MT_DEBUG "Build debug version of MadTracker" ON)
+
+# Compiler flags
 SET(CMAKE_CXX_FLAGS "-m32 -g -Wno-write-strings")
 
+# Include directories
 include_directories(
 	include
 )
 
+# Defines
+if (MT_DEBUG)
+	add_definitions(
+		-D_DEBUG
+	)
+endif (MT_DEBUG)
+
+# Source directories
 SET(MT3SRCDIR MT3)
-SET(MTAISRCDIR MTAI)
 SET(MTAUDIOSRCDIR MTAudio)
 SET(MTDSPSRCDIR MTDSP)
 SET(MTDISPLAYSRCDIR MTDisplay)
@@ -16,6 +30,7 @@ SET(MTGUISRCDIR MTGUI)
 SET(MTOBJECTSSRCDIR MTObjects)
 SET(MTSYSTEMSRCDIR MTSystem)
 
+# Source lists
 SET(MT3SRC
 	${MT3SRCDIR}/MT3.cpp
 	${MT3SRCDIR}/MTConsole.cpp
@@ -24,10 +39,6 @@ SET(MT3SRC
 	${MT3SRCDIR}/MTInterface.cpp
 	${MT3SRCDIR}/MTWC_Main.cpp
 	${MT3SRCDIR}/MTWC_Main2.cpp
-)
-SET(MTAISRC
-	${MTAISRCDIR}/MTAI_main.cpp
-	${MTAISRCDIR}/MTAI.cpp
 )
 SET(MTAUDIOSRC
 	${MTAUDIOSRCDIR}/MTAudio.cpp
@@ -123,11 +134,10 @@ SET(MTSYSTEMSRC
 	${MTSYSTEMSRCDIR}/strnatcmp.cpp
 )
 
+# Targets
+
 ADD_EXECUTABLE(madtracker3 ${MT3SRC})
 TARGET_LINK_LIBRARIES(madtracker3 dl)
-
-ADD_LIBRARY(mtai SHARED ${MTAISRC})
-SET_TARGET_PROPERTIES(mtai PROPERTIES PREFIX "")
 
 ADD_LIBRARY(mtaudio SHARED ${MTAUDIOSRC})
 SET_TARGET_PROPERTIES(mtaudio PROPERTIES PREFIX "")
