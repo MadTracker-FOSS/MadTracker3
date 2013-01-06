@@ -333,6 +333,7 @@ void MTCT a_delta_decode_16(short *buffer,int count)
 //---------------------------------------------------------------------------
 void MTCT a_deinterleave_8(char **dest,char *source,int channels,int count)
 {
+#if 0 // FIXME: We need to port this to C; it's broken in GCC anyway -flibit
 #	ifndef __GNUC__
 		_asm{
 			push	esi
@@ -390,10 +391,12 @@ void MTCT a_deinterleave_8(char **dest,char *source,int channels,int count)
 			:"eax","ebx","ecx","esi","edi"
 			);
 #	endif
+#endif
 }
 //---------------------------------------------------------------------------
 void MTCT a_deinterleave_16(short **dest,short *source,int channels,int count)
 {
+#if 0 // FIXME: We need to port this to C; it's broken in GCC anyway -flibit
 #	ifndef __GNUC__
 		_asm{
 			push	esi
@@ -453,10 +456,12 @@ void MTCT a_deinterleave_16(short **dest,short *source,int channels,int count)
 			:"eax","ebx","ecx","esi","edi"
 			);
 #	endif
+#endif
 }
 //---------------------------------------------------------------------------
 void MTCT a_calcposition(int &posi,unsigned int &posd,int pitch,unsigned int pitchd,int count,bool reverse)
 {
+#if 0 // FIXME: We need to port this to C; it's broken in GCC anyway -flibit
 #	ifndef __GNUC__
 		_asm{
 			push	ebx
@@ -511,5 +516,6 @@ void MTCT a_calcposition(int &posi,unsigned int &posd,int pitch,unsigned int pit
 			:"edx"
 			);
 #	endif
+#endif
 }
 //---------------------------------------------------------------------------

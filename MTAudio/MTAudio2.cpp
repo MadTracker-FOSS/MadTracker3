@@ -20,7 +20,9 @@
 void MTCT ri8(sample *source,void *dest,int count,int nchannels,int channel)
 {
 	static const sample f127 = 127.0;
-
+#if 1
+#warning WE ARE SKIPPING ASM HERE! PORT IT TO PURE C! FOR THE LOVE-A PETE!
+#else
 #	ifndef __GNUC__
 		__asm{
 			push	esi
@@ -96,12 +98,15 @@ void MTCT ri8(sample *source,void *dest,int count,int nchannels,int channel)
 			:"eax"
 			);
 #	endif
+#endif
 }
 
 void MTCT ri16(sample *source,void *dest,int count,int nchannels,int channel)
 {
 	static const sample f32767 = 32767.0;
-
+#if 1
+#warning WE ARE SKIPPING ASM HERE! PORT IT TO PURE C! FOR THE LOVE-A PETE!
+#else
 #	ifndef __GNUC__
 		__asm{
 			push	esi
@@ -183,6 +188,7 @@ void MTCT ri16(sample *source,void *dest,int count,int nchannels,int channel)
 			:"eax"
 			);
 #	endif
+#endif
 }
 //---------------------------------------------------------------------------
 void generateoutput()

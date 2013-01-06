@@ -50,54 +50,6 @@
 #define MTDR_NULL       -1
 #define MTDR_CANCEL     -2
 #define MTDR_TIMEOUT    -4
-
-#if defined (_DEBUG) && defined (MTSYSTEM_EXPORTS)
-#	define LOG(T)												si->log(T,0)
-#	define LOGD(T)												si->log(T,1)
-#	define FLOG1(T,P1)										si->flog(T,0,P1)
-#	define FLOG2(T,P1,P2)								si->flog(T,0,P1,P2)
-#	define FLOG3(T,P1,P2,P3)							si->flog(T,0,P1,P2,P3)
-#	define FLOG4(T,P1,P2,P3,P4)					si->flog(T,0,P1,P2,P3,P4)
-#	define FLOG5(T,P1,P2,P3,P4,P5)				si->flog(T,0,P1,P2,P3,P4,P5)
-#	define FLOGD1(T,P1)									si->flog(T,1,P1)
-#	define FLOGD2(T,P1,P2)								si->flog(T,1,P1,P2)
-#	define FLOGD3(T,P1,P2,P3)						si->flog(T,1,P1,P2,P3)
-#	define FLOGD4(T,P1,P2,P3,P4)					si->flog(T,1,P1,P2,P3,P4)
-#	define FLOGD5(T,P1,P2,P3,P4,P5)			si->flog(T,1,P1,P2,P3,P4,P5)
-#	define DUMP(V,L,O)										si->dump((unsigned char*)V,L,O)
-#	define ENTER(F)											si->enter(F)
-#	define FENTER1(F,P1)									si->fenter(F,P1)
-#	define FENTER2(F,P1,P2)							si->fenter(F,P1,P2)
-#	define FENTER3(F,P1,P2,P3)						si->fenter(F,P1,P2,P3)
-#	define FENTER4(F,P1,P2,P3,P4)				si->fenter(F,P1,P2,P3,P4)
-#	define FENTER5(F,P1,P2,P3,P4,P5)			si->fenter(F,P1,P2,P3,P4,P5)
-#	define FENTER6(F,P1,P2,P3,P4,P5,P6)	si->fenter(F,P1,P2,P3,P4,P5,P6)
-#	define LEAVE()												si->leave()
-#	define CALLSTACK											si->getcallstack()
-#else
-#	define LOG(T)
-#	define LOGD(T)
-#	define FLOG1(T,P1)
-#	define FLOG2(T,P1,P2)
-#	define FLOG3(T,P1,P2,P3)
-#	define FLOG4(T,P1,P2,P3,P4)
-#	define FLOGD1(T,P1)
-#	define FLOGD2(T,P1,P2)
-#	define FLOGD3(T,P1,P2,P3)
-#	define FLOGD4(T,P1,P2,P3,P4)
-#	define DUMP(V,L,O)
-#	define ENTER(F)
-#	define FENTER1(F,P1)
-#	define FENTER2(F,P1,P2)
-#	define FENTER3(F,P1,P2,P3)
-#	define FENTER4(F,P1,P2,P3,P4)
-#	define FENTER5(F,P1,P2,P3,P4,P5)
-#	define LEAVE()
-#	define CALLSTACK
-#endif
-#define A(_A,_T) ((_T**)_A->a)
-#define D(_A,_T) ((_T*)_A->d)
-
 //---------------------------------------------------------------------------
 class MTConfigFile;
 class MTFileHook;

@@ -1230,18 +1230,8 @@ int mtsync_inc(int *value)
 #	ifdef _WIN32
 		return InterlockedIncrement((long*)value);
 #	else
-		int r;
-		asm ("\
-			movl %[value],%%ecx\n\
-			movl $1,%%eax\n\
-			lock xaddl %%eax,(%%ecx)\n\
-			incl %%eax\n\
-			"
-			:"=a"(r)
-			:[value]"m"(value)
-			:"ecx"
-			);
-		return r;
+		// FIXME: Architecture compatibility? -flibit
+		__sync_add_and_fetch((long*)value, 1);
 #	endif
 }
 
@@ -1250,18 +1240,8 @@ int mtsync_dec(int *value)
 #	ifdef _WIN32
 		return InterlockedDecrement((long*)value);
 #	else
-		int r;
-		asm ("\
-			movl %[value],%%ecx\n\
-			mov $-1,%%eax\n\
-			lock xaddl %%eax,(%%ecx)\n\
-			dec %%eax\n\
-			"
-			:"=a"(r)
-			:[value]"m"(value)
-			:"ecx"
-			);
-		return r;
+		// FIXME: Architecture compatibility? -flibit
+		__sync_sub_and_fetch((long*)value, 1);
 #	endif
 }
 //---------------------------------------------------------------------------
