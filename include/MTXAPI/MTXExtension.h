@@ -354,11 +354,19 @@ typedef MTXInterfaces* MTCT MTXMainCall(MTInterface *mti);
 #endif
 
 #if defined(__GNUC__)
-#define FASTCALL __attribute__((fastcall))
+	#if defined(__i386__)
+		#define FASTCALL __attribute__((fastcall))
+	#else
+		#define FASTCALL
+	#endif
 #elif defined(_MSC_VER)
-#define FASTCALL __fastcall
+	#if defined(_WIN64) // FIXME: What about other architectures? -flibit
+		#define FASTCALL
+	#else
+		#define FASTCALL __fastcall
+	#endif
 #else
-#error Need a fastcall macro for this compiler!
+	#error Need a fastcall macro for this compiler!
 #endif
 
 inline short FASTCALL swap_word(short a)
