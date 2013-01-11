@@ -10,7 +10,7 @@
 //	$Id: MTDevDSP.cpp 107 2005-11-30 21:30:55Z Yannick $
 //
 //---------------------------------------------------------------------------
-#ifndef _WIN32
+#ifdef __linux__
 #include <MTXAPI/MTXSystem.h>
 #include <unistd.h>
 #include <fcntl.h>
