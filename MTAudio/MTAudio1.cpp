@@ -366,7 +366,7 @@ bool MTAudioInterface::adddevicemanager(MTAudioDeviceManager *manager)
 	if (ndevices==MAX_AUDIODEVICES) return false;
 	FENTER1("MTAudioInterface::adddevicemanager(%.8X)",manager);
 	y = ndevices;
-	for (x=0;x<MAX_AUDIODEVICES,y<MAX_AUDIODEVICES;x++){
+	for (x = 0; (x < MAX_AUDIODEVICES && y < MAX_AUDIODEVICES); x++){
 		if (!manager->devicename[x]) break;
 		MTDevice *cdevice = mtnew(MTDevice);
 		cdevice->devicename = manager->devicename[x];
@@ -475,7 +475,7 @@ void menurecord(MTShortcut *s,MTControl *c,MTUndo*)
 				recf->write(&tmp,4);
 				ai->_dp->reset();
 				x = 1;
-				while (cdp = (_DP*)ai->_dp->next()){
+				while ((cdp = (_DP*) ai->_dp->next()) != NULL){
 					recf->write(&x,4);
 					recf->write(&cdp->offset,4);
 					tmp = FOURCC('d','a','t','a');
@@ -500,7 +500,7 @@ void menurecord(MTShortcut *s,MTControl *c,MTUndo*)
 				recf->write(&tmp,4);
 				ai->_dp->reset();
 				x = 1;
-				while (cdp = (_DP*)ai->_dp->next()){
+				while ((cdp = (_DP*) ai->_dp->next()) != NULL){
 					tmp = FOURCC('l','a','b','l');
 					recf->write(&tmp,4);
 					tmp = strlen(cdp->label)+1+4;
