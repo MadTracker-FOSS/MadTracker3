@@ -37,7 +37,6 @@
 #	include <termios.h>
 #	include <execinfo.h>
 #	include <sys/utsname.h>
-#	include <sys/sysinfo.h>
 #endif
 //---------------------------------------------------------------------------
 static const char *sysname = {"MadTracker System Core"};
