@@ -75,10 +75,16 @@ double MTFilter::getparam(int cat,int id,char *display)
 	if (cat!=0) return 0.0;
 	switch (id){
 	case 0:
-		if (display) sprintf(display,"%.0f Hz",frequency);
-		return frequency/44100.0;
+		if (display)
+		{
+			sprintf(display, "%.0f Hz", frequency);
+		}
+		return frequency / 44100.0;
 	case 1:
-		if (display) sprintf(display,"%.2f%",resonance*100);
+		if (display)
+		{
+			sprintf(display, "%.2f%%", resonance * 100);
+		}
 		return resonance;
 	case 2:
 		return 0.0;

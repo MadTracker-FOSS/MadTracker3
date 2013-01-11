@@ -108,15 +108,17 @@ void MTCPUGraph::ondraw(MTRect &rect)
 			h = width-5-from;
 			b->setpen(skin->getcolor(SC_EDIT_NORMAL));
 			b->moveto(bx+from+2,by+height-2-(history[1][h--]*(height-4))/scale);
-			for (x=from+1;x<to,h>=0;x++,h--){
+			for (x = from + 1; (x < to && h >= 0); x++, h--)
+			{
 				b->lineto(bx+x+2,by+height-2-(history[1][h]*(height-4))/scale);
-			};
+			}
 			h = width-5-from;
 			b->setpen(skin->getcolor(SC_EDIT_FOCUSED));
 			b->moveto(bx+from+2,by+height-2-(history[0][h--]*(height-4))/scale);
-			for (x=from+1;x<to,h>=0;x++,h--){
+			for ( x = from + 1; (x < to && h >= 0); x++, h--)
+			{
 				b->lineto(bx+x+2,by+height-2-(history[0][h]*(height-4))/scale);
-			};
+			}
 			b->close(0);
 		};
 	};
@@ -252,15 +254,17 @@ void MTChannelsGraph::ondraw(MTRect &rect)
 			h = width-5-from;
 			b->setpen(skin->getcolor(SC_EDIT_NORMAL));
 			b->moveto(bx+from+2,by+height-2-(history[1][h--]*(height-4))/scale);
-			for (x=from+1;x<to,h>=0;x++,h--){
+			for (x = from + 1; (x < to && h >= 0); x++, h--)
+			{
 				b->lineto(bx+x+2,by+height-2-(history[1][h]*(height-4))/scale);
-			};
+			}
 			h = width-5-from;
 			b->setpen(skin->getcolor(SC_EDIT_FOCUSED));
 			b->moveto(bx+from+2,by+height-2-(history[0][h--]*(height-4))/scale);
-			for (x=from+1;x<to,h>=0;x++,h--){
+			for (x = from + 1; (x < to && h >= 0); x++, h--)
+			{
 				b->lineto(bx+x+2,by+height-2-(history[0][h]*(height-4))/scale);
-			};
+			}
 			b->close(0);
 		};
 	};

@@ -100,6 +100,8 @@ bool MTCT a_floattofixed(double f,int &i,unsigned int &d)
 			:"eax","ecx","edx"
 			);
 #	endif
+	// FIXME: There was no return value... what? -flibit
+	return true; // Since I guess it didn't fail?
 }
 //---------------------------------------------------------------------------
 void MTCT a_changesign(char *buffer,int count)
