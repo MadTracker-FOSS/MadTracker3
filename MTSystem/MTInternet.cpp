@@ -103,8 +103,11 @@ bool getkey(const char *buffer,const char *key,char *value,int max)
 	s = (char*)strstr(buffer,key);
 	if (!s) return false;
 	s += strlen(key);
-	while (*s!=' ') *s++;
-	while (*s==' ') *s++;
+	if (*s != ' ')
+	{
+		while (++*s != ' ');
+	}
+	while (++*s == ' ');
 	e = strstr(s,"\r\n");
 	l = e-s;
 	if (l>max-1) l = max-1;

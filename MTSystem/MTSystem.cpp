@@ -1231,7 +1231,7 @@ int mtsync_inc(int *value)
 		return InterlockedIncrement((long*)value);
 #	else
 		// FIXME: Architecture compatibility? -flibit
-		__sync_add_and_fetch((long*)value, 1);
+		return __sync_add_and_fetch((long*)value, 1);
 #	endif
 }
 
@@ -1241,7 +1241,7 @@ int mtsync_dec(int *value)
 		return InterlockedDecrement((long*)value);
 #	else
 		// FIXME: Architecture compatibility? -flibit
-		__sync_sub_and_fetch((long*)value, 1);
+		return __sync_sub_and_fetch((long*)value, 1);
 #	endif
 }
 //---------------------------------------------------------------------------

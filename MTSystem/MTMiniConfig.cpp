@@ -213,9 +213,8 @@ int MTMiniConfig::loadfromstream(MTFile *f,int flags)
 	char key[256];
 
 	if (flags & MTMC_HEADER){
-		if (f->read(&id,4)!=4) return -1;
-		id[5] = 0;
-		if (strcmp(id,"MTMC")!=0) return -1;
+		if (!(f->read(&id, 4) == 4 && strcmp(id, "MTMC") == 0))
+			return -1;
 	};
 	if (flags & MTMC_STRUCTURE){
 		if (f->read(&np,4)!=4) return -1;
