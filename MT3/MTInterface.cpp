@@ -150,7 +150,8 @@ void loadmodule(const char *filename)
 #ifdef _DEBUG
 void MTCT openresources(MTShortcut *s,MTControl *c,MTUndo*)
 {
-#	ifdef __linux
+#	if defined(__linux__) || defined(__APPLE__)
+		#warning Unimplemented function: void MTCT openresources(MTShortcut*, MTControl*, MTUndo*)
 		return;
 #	else
 		MTFile *f;
@@ -201,7 +202,8 @@ void MTCT openresources(MTShortcut *s,MTControl *c,MTUndo*)
 
 void MTCT openskin(MTShortcut *s,MTControl *c,MTUndo*)
 {
-#	ifdef __linux
+#	if defined(__linux__) || defined(__APPLE__)
+		#warning Unimplemented function: void MTCT openskin(MTShortcut*, MTControl*, MTUndo*)
 		return;
 #	else
 		MTFile *sf;
@@ -239,7 +241,8 @@ void MTCT openskin(MTShortcut *s,MTControl *c,MTUndo*)
 
 void MTCT playmodule(MTShortcut *s,MTControl *c,MTUndo*)
 {
-#	ifdef __linux
+#	if defined(__linux__) || defined(__APPLE__)
+		#warning Unimplemented function: void MTCT playmodule(MTShortcut*, MTControl*, MTUndo*)
 		return;
 #	else
 		OPENFILENAME open;
@@ -282,7 +285,8 @@ void MTCT showall(MTShortcut *s,MTControl *c,MTUndo*)
 
 void MTCT setresolution(MTShortcut *s,MTControl *c,MTUndo*)
 {
-#	ifdef __linux
+#	if defined(__linux__) || defined(__APPLE__)
+		#warning Unimplemented function: void MTCT setresolution(MTShortut*, MTControl*, MTUndo*)
 		return;
 #	else
 		MTMenuItem *item = (MTMenuItem*)c;
