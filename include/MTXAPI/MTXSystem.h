@@ -294,7 +294,11 @@ typedef void (MTCT *ProcessProc)(MTProcess *process,void *param,float p);
 
 class MTThread : public MTEvent{
 public:
-	mt_uint32 id;
+#if defined(_WIN32)
+	DWORD id;
+#else
+	pthread_t id;
+#endif
 	int type;
 	int result;
 	bool terminated;
