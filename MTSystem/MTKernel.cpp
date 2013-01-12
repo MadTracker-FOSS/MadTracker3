@@ -826,7 +826,7 @@ hasmsg(false)
 		event = GetCurrentThread();
 		id = GetCurrentThreadId();
 #	else
-		id = (mt_uint32)pthread_self();
+		id = pthread_self();
 		attr = (pthread_attr_t*)malloc(sizeof(pthread_attr_t));
 		pthread_attr_init(attr);
 		pipe(_p);
