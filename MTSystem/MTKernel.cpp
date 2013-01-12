@@ -1260,12 +1260,16 @@ res(resolution)
 
 MTTimer::~MTTimer()
 {
-#	ifdef _WIN32
-		timeKillEvent(id);
-		timeEndPeriod(res);
-#	else
-		timer_delete((timer_t)id);
-#	endif
+#if defined(_WIN32)
+	timeKillEvent(id);
+	timeEndPeriod(res);
+#elif defined(__linux__)
+	timer_delete((timer_t)id);
+#elif defined(__APPLE__)
+	#error Need to implement `MTTimer::~MTTimer()` for this platform!
+#else
+	#error Need to implement `MTTimer::~MTTimer()` for this platform!
+#endif
 }
 
 #ifdef _WIN32
