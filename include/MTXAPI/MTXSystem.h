@@ -400,7 +400,7 @@ private:
 #ifdef _WIN32
 	static void CALLBACK WinTimerProc(UINT,UINT,DWORD,DWORD,DWORD);
 #else
-	static void LinuxTimerProc(sigval);
+	static void UnixTimerProc(sigval);
 #endif
 	MTEvent *event;
 	int id;

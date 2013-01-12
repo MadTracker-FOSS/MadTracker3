@@ -155,149 +155,172 @@ MTCPUMonitor* mtcpumonitorcreate(int ncounters)
 
 int mtsyscounter()
 {
-#	ifdef _WIN32
-		return GetTickCount();
-#	else
-		struct timespec ts;
-		clock_gettime(CLOCK_MONOTONIC,&ts);
-		return (ts.tv_sec*1000)+(ts.tv_nsec/1000000);
-#	endif
+#if defined(_WIN32)
+	return GetTickCount();
+#elif defined(__linux__)
+	struct timespec ts;
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+	return (ts.tv_sec * 1000) + (ts.tv_nsec / 1000000);
+#elif defined(__APPLE__)
+	#error Need to implement `int mtsyscounter()` for this platform!
+#else
+	#error Need to implement `int mtsyscounter()` for this platform!
+#endif
 }
 
 bool mtsyscounterex(double *count)
 {
-#	ifdef _WIN32
-		__int64 c;
-		bool ok;
+#if defined(_WIN32)
+	__int64 c;
+	bool ok;
 		
-		if (pf){
-			ok = QueryPerformanceCounter((LARGE_INTEGER*)&c)!=0;
-			if (ok) *count = (double)c/sysfrequency;
-			return ok;
+	if (pf)
+	{
+		ok = QueryPerformanceCounter((LARGE_INTEGER*) &c) != 0;
+		if (ok)
+		{
+			*count = (double) c / sysfrequency;
 		}
-		else{
-			*count = (double)GetTickCount()/1000;
-			return true;
-		};
-#	else
-		struct timespec ts;
-
-		clock_gettime(CLOCK_MONOTONIC,&ts);
-		*count = double(ts.tv_sec)+double(ts.tv_nsec)/1000000000.0;
+		return ok;
+	}
+	else
+	{
+		*count = (double) GetTickCount() / 1000;
 		return true;
-#	endif
+	};
+#elif defined(__linux__)
+		struct timespec ts;
+		clock_gettime(CLOCK_MONOTONIC,&ts);
+		*count = (double) ts.tv_sec + (double) ts.tv_nsec / 1000000000.0;
+		return true;
+#elif defined(__APPLE__)
+	#error Need to implement `bool mtsyscounterex()` for this platform!
+#else
+	#error Need to implement `bool mtsyscounterex()` for this platform!
+#endif
 }
 
 void mtsyswait(int ms)
 {
-#	ifdef _WIN32
+#if defined(_WIN32)
 		Sleep(ms);
-#	else
-		struct timespec ts = {ms/1000,(ms%1000)*1000};
-		nanosleep(&ts,0);
-#	endif
+#else
+		struct timespec ts =
+		{
+			ms / 1000,
+			(ms % 1000) *1000
+		};
+		nanosleep(&ts, 0);
+#endif
 }
 
 int mtsyswaitmultiple(int count,MTEvent **events,bool all,int timeout)
 {
-	int x,res;
+	int x, res;
 
-	if (count<=0) return -1;
-#	ifdef _WIN32
-		HANDLE *h = (HANDLE*)mtmemalloc(sizeof(HANDLE)*count);
-		for (x=0;x<count;x++) h[x] = events[x]->event;
-		x = WaitForMultipleObjects(count,h,all,timeout);
-		if (x==WAIT_TIMEOUT) res = -1;
-		else res = x-WAIT_OBJECT_0;
-		mtmemfree(h);
-#	else
-		struct timespec to_time;
-		_mutex_cond *p,*common_mutex_cond;
-		_le *q;
-		_mutex_cond **mutex_cond;
-		_le **le;
+	if (count <= 0)
+		return -1;
 
-		mutex_cond = (_mutex_cond**)malloc(sizeof(_mutex_cond*)*count);
-		le = (_le**)malloc(sizeof(_le*)*count);
-		if (timeout!=-1){
-			clock_gettime(CLOCK_REALTIME,&to_time);
-			to_time.tv_sec += timeout/1000;
-			to_time.tv_nsec += (timeout%1000)*1000000;
-			if (to_time.tv_nsec>1000000000){
-				to_time.tv_nsec -= 1000000000;
-				to_time.tv_sec++;
-			};
+#if defined(_WIN32)
+	HANDLE *h = (HANDLE*)mtmemalloc(sizeof(HANDLE)*count);
+	for (x=0;x<count;x++) h[x] = events[x]->event;
+	x = WaitForMultipleObjects(count,h,all,timeout);
+	if (x==WAIT_TIMEOUT) res = -1;
+	else res = x-WAIT_OBJECT_0;
+	mtmemfree(h);
+#elif defined(__linux__)
+	struct timespec to_time;
+	_mutex_cond *p,*common_mutex_cond;
+	_le *q;
+	_mutex_cond **mutex_cond;
+	_le **le;
+
+	mutex_cond = (_mutex_cond**)malloc(sizeof(_mutex_cond*)*count);
+	le = (_le**)malloc(sizeof(_le*)*count);
+	if (timeout!=-1){
+		clock_gettime(CLOCK_REALTIME,&to_time);
+		to_time.tv_sec += timeout/1000;
+		to_time.tv_nsec += (timeout%1000)*1000000;
+		if (to_time.tv_nsec>1000000000){
+			to_time.tv_nsec -= 1000000000;
+			to_time.tv_sec++;
 		};
-		if (all){
-			res = 0;
-			for (x=0;x<count;x++){
-				p = (_mutex_cond*)malloc(sizeof(_mutex_cond));
-				pthread_mutex_init(&p->i_mutex,0);
-				pthread_cond_init(&p->i_cv,0);
-				q = (_le*)malloc(sizeof(_le));
-				mutex_cond[x] = p;
-				q->i_mutex_cond = p;
-				le[x] = q;
-				events[x]->_add(q);
-			};
-			for (x=0;x<count;x++){
-				pthread_mutex_lock(&mutex_cond[x]->i_mutex);
-//				while (!events[x]->signaled){
-				if (!events[x]->signaled){
-					if (timeout!=-1){
-						if (pthread_cond_timedwait(&mutex_cond[x]->i_cv,&mutex_cond[x]->i_mutex,&to_time)==ETIMEDOUT){
-							res = -1;
-							break;
-						};
-					}
-					else{
-						pthread_cond_wait(&mutex_cond[x]->i_cv,&mutex_cond[x]->i_mutex);
-					};
-				};
-				pthread_mutex_unlock(&mutex_cond[x]->i_mutex);
-				if (res==-1) break;
-			};
-			for (x=0;x<count;x++){
-				events[x]->_del(le[x]);
-			};
-		}
-		else{
-			res = -1;
-			common_mutex_cond = (_mutex_cond*)malloc(sizeof(_mutex_cond));
-			pthread_mutex_init(&common_mutex_cond->i_mutex,0);
-			pthread_cond_init(&common_mutex_cond->i_cv,0);
-			for (x=0;x<count;x++){
-				q = (_le*)malloc(sizeof(_le));
-				q->i_mutex_cond = common_mutex_cond;
-				le[x] = q;
-				events[x]->_add(q);
-			};
-			pthread_mutex_lock(&common_mutex_cond->i_mutex);
-			for (x=0;x<count;x++){
-				if (events[x]->signaled){
-					res = 0;
-					break;
-				};
-			};
-			if (res==-1){
+	};
+	if (all){
+		res = 0;
+		for (x=0;x<count;x++){
+			p = (_mutex_cond*)malloc(sizeof(_mutex_cond));
+			pthread_mutex_init(&p->i_mutex,0);
+			pthread_cond_init(&p->i_cv,0);
+			q = (_le*)malloc(sizeof(_le));
+			mutex_cond[x] = p;
+			q->i_mutex_cond = p;
+			le[x] = q;
+			events[x]->_add(q);
+		};
+		for (x=0;x<count;x++){
+			pthread_mutex_lock(&mutex_cond[x]->i_mutex);
+//			while (!events[x]->signaled){
+			if (!events[x]->signaled){
 				if (timeout!=-1){
-					if (pthread_cond_timedwait(&common_mutex_cond->i_cv,&common_mutex_cond->i_mutex,&to_time)!=ETIMEDOUT){
-						res = 0;
+					if (pthread_cond_timedwait(&mutex_cond[x]->i_cv,&mutex_cond[x]->i_mutex,&to_time)==ETIMEDOUT){
+						res = -1;
+						break;
 					};
 				}
 				else{
-					pthread_cond_wait(&common_mutex_cond->i_cv,&common_mutex_cond->i_mutex);
-					res = 0;
+					pthread_cond_wait(&mutex_cond[x]->i_cv,&mutex_cond[x]->i_mutex);
 				};
 			};
 			pthread_mutex_unlock(&mutex_cond[x]->i_mutex);
-			for (x=0;x<count;x++){
-				events[x]->_del(le[x]);
+			if (res==-1) break;
+		};
+		for (x=0;x<count;x++){
+			events[x]->_del(le[x]);
+		};
+	}
+	else{
+		res = -1;
+		common_mutex_cond = (_mutex_cond*)malloc(sizeof(_mutex_cond));
+		pthread_mutex_init(&common_mutex_cond->i_mutex,0);
+		pthread_cond_init(&common_mutex_cond->i_cv,0);
+		for (x=0;x<count;x++){
+			q = (_le*)malloc(sizeof(_le));
+			q->i_mutex_cond = common_mutex_cond;
+			le[x] = q;
+			events[x]->_add(q);
+		};
+		pthread_mutex_lock(&common_mutex_cond->i_mutex);
+		for (x=0;x<count;x++){
+			if (events[x]->signaled){
+				res = 0;
+				break;
 			};
 		};
-		free(mutex_cond);
-		free(le);
-#	endif
+		if (res==-1){
+			if (timeout!=-1){
+				if (pthread_cond_timedwait(&common_mutex_cond->i_cv,&common_mutex_cond->i_mutex,&to_time)!=ETIMEDOUT){
+					res = 0;
+				};
+			}
+			else{
+				pthread_cond_wait(&common_mutex_cond->i_cv,&common_mutex_cond->i_mutex);
+				res = 0;
+			};
+		};
+		pthread_mutex_unlock(&mutex_cond[x]->i_mutex);
+		for (x=0;x<count;x++){
+			events[x]->_del(le[x]);
+		};
+	};
+	free(mutex_cond);
+	free(le);
+#elif defined(__APPLE__)
+	#error Need to implement `int mtsyswaitmultiple()` for this platform!
+#else
+	#error Need to implement `int mtsyswaitmultiple()` for this platform!
+#endif
+
 	return res;
 }
 
@@ -526,36 +549,40 @@ void MTLock::unlock()
 //---------------------------------------------------------------------------
 MTEvent::MTEvent(bool autoreset,int interval,int resolution,bool periodic,bool pulse)
 {
-#	ifdef _WIN32
-		event = CreateEvent(0,!autoreset,false,0);
-		if (interval){
-			timer = timeSetEvent(interval,resolution,(LPTIMECALLBACK)event,(int)this,((periodic)?TIME_PERIODIC:TIME_ONESHOT)|((pulse)?TIME_CALLBACK_EVENT_PULSE:TIME_CALLBACK_EVENT_SET));
-		}
-		else timer = 0;
-#	else
-		signaled = false;
-		needpulse = pulse;
-		needreset = autoreset;
-		e_mutex = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
-		pthread_mutex_init(e_mutex,0);
-		start = end = 0;
-		if (interval){
-			struct sigevent se;
-			struct itimerspec ts;
-			se.sigev_notify = SIGEV_THREAD;
-			se.sigev_signo = SIGRTMAX;
-			se.sigev_value.sival_ptr = this;
-			se.sigev_notify_function = LinuxEventProc;
-			se.sigev_notify_attributes = 0;
-			timer_create(CLOCK_REALTIME,&se,(timer_t*)&timer);
-			mtmemzero(&ts,sizeof(ts));
-			ts.it_value.tv_sec = interval/1000;
-			ts.it_value.tv_nsec = (interval%1000)*1000000;
-			if (periodic) ts.it_interval = ts.it_value;
-			timer_settime((timer_t)timer,0,&ts,0);
-		}
-		else timer = 0;
-#	endif
+#if defined(_WIN32)
+	event = CreateEvent(0,!autoreset,false,0);
+	if (interval){
+		timer = timeSetEvent(interval,resolution,(LPTIMECALLBACK)event,(int)this,((periodic)?TIME_PERIODIC:TIME_ONESHOT)|((pulse)?TIME_CALLBACK_EVENT_PULSE:TIME_CALLBACK_EVENT_SET));
+	}
+	else timer = 0;
+#elif defined(__linux__)
+	signaled = false;
+	needpulse = pulse;
+	needreset = autoreset;
+	e_mutex = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(e_mutex,0);
+	start = end = 0;
+	if (interval){
+		struct sigevent se;
+		struct itimerspec ts;
+		se.sigev_notify = SIGEV_THREAD;
+		se.sigev_signo = SIGRTMAX;
+		se.sigev_value.sival_ptr = this;
+		se.sigev_notify_function = LinuxEventProc;
+		se.sigev_notify_attributes = 0;
+		timer_create(CLOCK_REALTIME,&se,(timer_t*)&timer);
+		mtmemzero(&ts,sizeof(ts));
+		ts.it_value.tv_sec = interval/1000;
+		ts.it_value.tv_nsec = (interval%1000)*1000000;
+		if (periodic) ts.it_interval = ts.it_value;
+		timer_settime((timer_t)timer,0,&ts,0);
+	}
+	else timer = 0;
+#elif defined(__APPLE__)
+	#error Need to implement `MTEvent::MTEvent()` for this platform!
+#else
+	#error Need to implement `MTEvent::MTEvent()` for this platform!
+#endif
 }
 
 MTEvent::MTEvent():
@@ -567,27 +594,31 @@ signaled(false),
 needreset(false)
 #endif
 {
-#	ifndef _WIN32
-		e_mutex = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
-		pthread_mutex_init(e_mutex,0);
-		start = end = 0;
-#	endif
+#ifndef _WIN32
+	e_mutex = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(e_mutex,0);
+	start = end = 0;
+#endif
 }
 
 MTEvent::~MTEvent()
 {
-#	ifdef _WIN32
-		if (timer){
-			timeKillEvent(timer);
-		};
-		if (event){
-			CloseHandle(event);
-		};
-#	else
-		if (timer) timer_delete((timer_t)timer);
-		pthread_mutex_destroy(e_mutex);
-		free(e_mutex);
-#	endif
+#if defined(_WIN32)
+	if (timer){
+		timeKillEvent(timer);
+	};
+	if (event){
+		CloseHandle(event);
+	};
+#elif defined(__linux__)
+	if (timer) timer_delete((timer_t)timer);
+	pthread_mutex_destroy(e_mutex);
+	free(e_mutex);
+#elif defined(__APPLE__)
+	#error Need to implement `MTEvent::~MTEvent()` for this platform!
+#else
+	#error Need to implement `MTEvent::~MTEvent()` for this platform!
+#endif
 }
 
 bool MTEvent::pulse()
@@ -1180,16 +1211,16 @@ res(resolution),
 mparam(param),
 mproc(proc)
 {
-#	ifdef _WIN32
-		timeBeginPeriod(res);
-		id = timeSetEvent(interval,res,WinTimerProc,(DWORD)this,(periodic)?TIME_PERIODIC:TIME_ONESHOT);
-#	else
+#if defined(_WIN32)
+	timeBeginPeriod(res);
+	id = timeSetEvent(interval,res,WinTimerProc,(DWORD)this,(periodic)?TIME_PERIODIC:TIME_ONESHOT);
+#elif defined(__linux__)
 		struct sigevent se;
 		struct itimerspec ts;
 		se.sigev_notify = SIGEV_THREAD;
 		se.sigev_signo = SIGRTMAX;
 		se.sigev_value.sival_ptr = this;
-		se.sigev_notify_function = LinuxTimerProc;
+		se.sigev_notify_function = UnixTimerProc;
 		se.sigev_notify_attributes = 0;
 		timer_create(CLOCK_REALTIME,&se,(timer_t*)&id);
 		mtmemzero(&ts,sizeof(ts));
@@ -1197,25 +1228,34 @@ mproc(proc)
 		ts.it_value.tv_nsec = (interval%1000)*1000000;
 		if (periodic) ts.it_interval = ts.it_value;
 		timer_settime((timer_t)id,0,&ts,0);
-#	endif
+#elif defined(__APPLE__)
+	#error Need to implement `MTTimer::MTTimer()` for this platform!
+#else
+	#error Need to implement `MTTimer::MTTimer()` for this platform!
+#endif
 }
 
 MTTimer::MTTimer(int interval,int resolution,bool periodic,MTEvent *event,bool pulse):
 res(resolution)
 {
 	this->event = event;
-#	ifdef _WIN32
-		timeBeginPeriod(res);
-		id = timeSetEvent(interval,res,(LPTIMECALLBACK)event->event,0,((periodic)?TIME_PERIODIC:TIME_ONESHOT)|((pulse)?TIME_CALLBACK_EVENT_PULSE:TIME_CALLBACK_EVENT_SET));
-#	else
-		struct sigevent se;
-		se.sigev_notify = SIGEV_SIGNAL;
-		se.sigev_signo = SIGALRM;
-		se.sigev_value.sival_ptr = this;
-		se.sigev_notify_function = LinuxTimerProc;
-		se.sigev_notify_attributes = 0;
-		timer_create(CLOCK_REALTIME,&se,(timer_t*)&id);
-#	endif
+
+#if defined(_WIN32)
+	timeBeginPeriod(res);
+	id = timeSetEvent(interval,res,(LPTIMECALLBACK)event->event,0,((periodic)?TIME_PERIODIC:TIME_ONESHOT)|((pulse)?TIME_CALLBACK_EVENT_PULSE:TIME_CALLBACK_EVENT_SET));
+#elif defined(__linux__)
+	struct sigevent se;
+	se.sigev_notify = SIGEV_SIGNAL;
+	se.sigev_signo = SIGALRM;
+	se.sigev_value.sival_ptr = this;
+	se.sigev_notify_function = UnixTimerProc;
+	se.sigev_notify_attributes = 0;
+	timer_create(CLOCK_REALTIME,&se,(timer_t*)&id);
+#elif defined(__APPLE__)
+	#error Need to implement `MTTimer::MTTimer()` for this platform!
+#else
+	#error Need to implement `MTTimer::MTTimer()` for this platform!
+#endif
 }
 
 MTTimer::~MTTimer()
@@ -1235,7 +1275,7 @@ void CALLBACK MTTimer::WinTimerProc(UINT uID,UINT uMsg,DWORD dwUser,DWORD dw1,DW
 	ctimer.mproc(&ctimer,ctimer.mparam);
 }
 #else
-void MTTimer::LinuxTimerProc(sigval timer)
+void MTTimer::UnixTimerProc(sigval timer)
 {
 	MTTimer &ctimer = *(MTTimer*)timer.sival_ptr;
 	if (ctimer.event) ctimer.event->pulse();
