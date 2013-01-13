@@ -30,7 +30,7 @@ void initInstrEditor()
 	ieksgroup = gi->registershortcutgroup();
 	for (x=0;x<sizeof(ienav)/sizeof(MTShortcut);x++){
 		if (!ienav[x].user) break;
-		ienav[x].description = (char*)res->getresource(MTR_TEXT,ienav[x].user,0);
+		ienav[x].description = (const char*) res->getresource(MTR_TEXT,ienav[x].user,0);
 		gi->registershortcut(&ienav[x]);
 	};
 }
@@ -43,7 +43,7 @@ void uninitInstrEditor()
 	for (x=0;x<sizeof(ienav)/sizeof(MTShortcut);x++){
 		if (!ienav[x].user) break;
 		gi->unregistershortcut(&ienav[x]);
-		res->releaseresource(ienav[x].description);
+		res->releaseresource((char*) ienav[x].description);
 		ienav[x].description = 0;
 	};
 }

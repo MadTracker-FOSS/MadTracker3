@@ -7,18 +7,14 @@ PROJECT(MadTracker3)
 option(MT_DEBUG "Build debug version of MadTracker" ON)
 
 # Compiler flags
-SET(CMAKE_CXX_FLAGS "-m32 -g -Wno-write-strings")
+SET(CMAKE_CXX_FLAGS "-m32 -g")
 
 # Include directories
-include_directories(
-	include
-)
+include_directories(include)
 
 # Defines
 if (MT_DEBUG)
-	add_definitions(
-		-D_DEBUG
-	)
+	add_definitions(-D_DEBUG)
 endif (MT_DEBUG)
 
 # Source directories

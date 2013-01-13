@@ -107,7 +107,7 @@ struct ColumnDrawState{
 class Column{
 public:
 	int id;
-	char *description;
+	const char *description;
 	unsigned char type,nbytes,ndata,ncpos;
 	virtual void MTCT init(MTPatternInstance*,ColumnStatus &status) = 0;
 	virtual void MTCT firstpass(MTPatternInstance*,unsigned char *celldata,FirstPass &pass,ColumnStatus &status,int tick,int nticks) = 0;
@@ -169,7 +169,7 @@ public:
 	int MTCT loadfromstream(MTFile *f,int size,void *params);
 	int MTCT savetostream(MTFile *f,void *params);
 	PatternInstance* MTCT createinstance(int layer,Sequence *sequ,PatternInstance *previous);
-	void MTCT change(int nlines,int ntracks,int ncols,char **columns,bool preserve);
+	void MTCT change(int nlines,int ntracks,int ncols,const char **columns,bool preserve);
 	void MTCT setcolumns(int track,char **columns,bool preserve);
 };
 

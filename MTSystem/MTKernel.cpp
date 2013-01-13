@@ -103,12 +103,12 @@ void* mtlocalget(int id)
 #	endif
 }
 
-MTThread* mtthreadcreate(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,char *name)
+MTThread* mtthreadcreate(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,const char *name)
 {
 	return new MTThread(proc,autofree,autostart,param,priority,name);
 }
 
-MTProcess* mtprocesscreate(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,char *name)
+MTProcess* mtprocesscreate(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,const char *name)
 {
 	return new MTProcess(tproc,param,type,priority,data,pproc,silent,name);
 }
@@ -756,7 +756,7 @@ void MTEvent::LinuxEventProc(sigval timer)
 }
 #endif
 //---------------------------------------------------------------------------
-MTThread::MTThread(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,char *name):
+MTThread::MTThread(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,const char *name):
 MTEvent(),
 type(0),
 result(0),
@@ -1088,7 +1088,7 @@ void* MTThread::SysThread(void* param)
 }
 #endif
 //---------------------------------------------------------------------------
-MTProcess::MTProcess(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,char *name):
+MTProcess::MTProcess(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,const char *name):
 status(MTPS_INIT),
 MTThread(tproc,true,false,param,priority,name),
 guidata(0),

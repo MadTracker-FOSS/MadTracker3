@@ -307,7 +307,7 @@ public:
 	bool MTCT reset();
 
 	MTThread();
-        MTThread(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,char *name);
+        MTThread(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,const char *name);
 	~MTThread();
         virtual void MTCT start();
 	virtual void MTCT terminate();
@@ -324,7 +324,7 @@ protected:
 	void *d3;
 #endif
 	ThreadProc mproc;
-	char *mname;
+	const char *mname;
 	void *mparam;
 	int mpriority;
 	bool mautofree;
@@ -342,7 +342,7 @@ public:
         ProcessProc mpproc;
         
         void MTCT start();
-        MTProcess(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,char *name);
+        MTProcess(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,const char *name);
 	virtual ~MTProcess();
 	virtual void MTCT setprogress(float p);
         
@@ -353,7 +353,7 @@ private:
 
 class MTFileHook{
 public:
-	virtual MTFile* MTCT fileopen(char *url,int flags) = 0;
+	virtual MTFile* MTCT fileopen(const char *url,int flags) = 0;
 	virtual MTFolder* MTCT folderopen(char *url) = 0;
 	virtual bool MTCT filecopy(char *source,char *dest) = 0;
 	virtual bool MTCT filerename(char *source,char *dest) = 0;
@@ -589,9 +589,9 @@ public:
 	bool (MTCT *localfree)(int id);
 	bool (MTCT *localset)(int id,void *value);
 	void* (MTCT localget)(int id);
-	MTThread* (MTCT *threadcreate)(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,char *name);
-	MTProcess* (MTCT *processcreate)(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,char *name);
-	MTFile* (MTCT *fileopen)(char *url,int flags);
+	MTThread* (MTCT *threadcreate)(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,const char *name);
+	MTProcess* (MTCT *processcreate)(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,const char *name);
+	MTFile* (MTCT *fileopen)(const char *url,int flags);
 	void (MTCT *fileclose)(MTFile *file);
 	bool (MTCT *fileexists)(char *filename);
 	bool (MTCT *filecopy)(char *filename,char *destination);
@@ -625,8 +625,8 @@ public:
 	bool (MTCT *syscounterex)(double *count);
 	void (MTCT *syswait)(int ms);
 	int (MTCT *syswaitmultiple)(int count,MTEvent **events,bool all,int timeout);
-	int (MTCT *dialog)(char *message,char *caption,char *buttons,int flags,int timeout);
-	int (MTCT *resdialog)(MTResources *res,int id,char *caption,char *buttons,int timeout,int flags,...);
+	int (MTCT *dialog)(const char *message,const char *caption,const char *buttons,int flags,int timeout);
+	int (MTCT *resdialog)(MTResources *res,int id,const char *caption,char *buttons,int timeout,int flags,...);
 	int (MTCT *authdialog)(char *message,char *login,char *password);
 	void (MTCT *showoserror)(int error);
 	void (MTCT *showlastoserror)();

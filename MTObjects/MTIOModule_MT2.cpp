@@ -170,7 +170,7 @@ void loadMT2pattern(MTPattern *p,void *buffer,int size,bool compressed)
 	register unsigned short r;
 	bool ok = true;
 	int o = 0;
-	static char *columns[] = {"Note","Volume","Panning","Effect"};
+	static const char *columns[] = {"Note","Volume","Panning","Effect"};
 	
 	p->change(p->nlines,p->ntracks,4,columns,false);
 	if ((p->data==0) || (p->tracks[0].colsize!=7)) return;
@@ -231,7 +231,7 @@ void loadMT2drums(MTPattern *p,void *buffer,int size)
 	register int track,line;
 	bool ok = true;
 	int o = 0;
-	static char *columns[] = {"Drums","Volume","Panning"};
+	static const char *columns[] = {"Drums","Volume","Panning"};
 	
 	p->change(p->nlines,p->ntracks,3,columns,false);
 	if ((p->data==0) || (p->tracks[0].colsize!=4)) return;

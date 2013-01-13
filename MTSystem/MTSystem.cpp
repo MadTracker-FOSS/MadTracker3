@@ -891,7 +891,7 @@ char mtgetchar()
 }
 #endif
 
-int mtdialog(char *message,char *caption,char *buttons,int flags,int timeout)
+int mtdialog(const char *message,const char *caption,const char *buttons,int flags,int timeout)
 {
 #ifdef MTSYSTEM_RESOURCES
 	char *e;
@@ -1146,7 +1146,7 @@ int mtdialog(char *message,char *caption,char *buttons,int flags,int timeout)
 }
 
 #ifdef MTSYSTEM_RESOURCES
-int mtresdialog(MTResources *res,int id,char *caption,char *buttons,int flags,int timeout,...)
+int mtresdialog(MTResources *res,int id,const char *caption,char *buttons,int flags,int timeout,...)
 {
 	int ret;
 	va_list l;

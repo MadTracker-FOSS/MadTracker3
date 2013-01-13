@@ -397,7 +397,7 @@ bool MT3Interface::editobject(void *object,bool newwindow)
 	};
 }
 
-void* MT3Interface::getconf(char *name,bool user)
+void* MT3Interface::getconf(const char *name,bool user)
 {
 	_MTConf *cconf = 0;
 	char buf[1024];

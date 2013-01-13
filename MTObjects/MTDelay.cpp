@@ -97,7 +97,7 @@ int MTDelay::getnumparams(int cat)
 
 const char* MTDelay::getparamname(int cat,int id)
 {
-	static char *pname[16] = {"Flags","Delay","Volume","Feedback","X Panning","X Amplitude","X Frequency","X Phase","Y Panning","Y Amplitude","Y Frequency","Y Phase","Z Panning","Z Amplitude","Z Frequency","Z Phase"};
+	static const char *pname[16] = {"Flags","Delay","Volume","Feedback","X Panning","X Amplitude","X Frequency","X Phase","Y Panning","Y Amplitude","Y Frequency","Y Phase","Z Panning","Z Amplitude","Z Frequency","Z Phase"};
 	if (cat==0){
 		if (id==0) return "Number of taps";
 		if (id==1) return "Merge taps to mono";

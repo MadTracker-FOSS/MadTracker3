@@ -45,7 +45,7 @@ void initPattEditor()
 	peksgroup = gi->registershortcutgroup();
 	for (x=0;x<sizeof(penav)/sizeof(MTShortcut);x++){
 		if (!penav[x].user) break;
-		penav[x].description = (char*)res->getresource(MTR_TEXT,penav[x].user,0);
+		penav[x].description = (const char*) res->getresource(MTR_TEXT,penav[x].user,0);
 		gi->registershortcut(&penav[x]);
 	};
 }
@@ -58,7 +58,7 @@ void uninitPattEditor()
 	for (x=0;x<sizeof(penav)/sizeof(MTShortcut);x++){
 		if (!penav[x].user) break;
 		gi->unregistershortcut(&penav[x]);
-		res->releaseresource(penav[x].description);
+		res->releaseresource((char*) penav[x].description);
 		penav[x].description = 0;
 	};
 }

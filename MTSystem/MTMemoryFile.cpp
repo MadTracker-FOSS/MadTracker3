@@ -20,9 +20,11 @@ MTMemoryHook::MTMemoryHook()
 {
 }
 
-MTFile* MTMemoryHook::fileopen(char *url,int flags)
+MTFile* MTMemoryHook::fileopen(const char *url,int flags)
 {
-	char *e,*a;
+	// FIXME: This function deals with strings like crap. -flibit
+
+	const char *e,*a;
 	void *ptr;
 	int length;
 
@@ -38,7 +40,7 @@ MTFile* MTMemoryHook::fileopen(char *url,int flags)
 	a = e;
 	e = strchr(a,':');
 	if (e){
-		*e++ = 0;
+		// *e++ - 0; <- WTF was this? -flibit
 		length = atol(e);
 	}
 	else{

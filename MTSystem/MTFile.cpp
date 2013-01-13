@@ -70,7 +70,7 @@ MTFileHook* gethook(const char *url)
 	return h;
 }
 
-MTFile *mtfileopen(char *url,int flags)
+MTFile *mtfileopen(const char *url,int flags)
 {
 	MTFile *f;
 	int error;

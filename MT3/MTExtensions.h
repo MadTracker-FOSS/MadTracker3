@@ -43,7 +43,7 @@ public:
 	bool MTCT addchannel();
 	void MTCT notify(void *object,int notify,int param);
 	bool MTCT editobject(void *object,bool newwindow);
-	void* MTCT getconf(char *name,bool user);
+	void* MTCT getconf(const char *name,bool user);
 	void MTCT releaseconf(void *conf);
 	int MTCT addrefreshproc(RefreshProc proc,void *param);
 	void MTCT delrefreshproc(int id);

@@ -57,7 +57,7 @@ MTHTTPHook::MTHTTPHook()
 {
 }
 
-MTFile* MTHTTPHook::fileopen(char *url,int flags)
+MTFile* MTHTTPHook::fileopen(const char *url,int flags)
 {
 	return new MTHTTPFile(url,flags);
 }
@@ -102,7 +102,7 @@ int MTCT HTTPThread(MTThread *thread,void *param)
 	return 0;
 }
 //---------------------------------------------------------------------------
-MTHTTPFile::MTHTTPFile(char *path,int access):
+MTHTTPFile::MTHTTPFile(const char *path,int access):
 maccess(access),
 cpos(0),
 from(0),

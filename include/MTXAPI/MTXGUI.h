@@ -105,7 +105,7 @@ struct MTShortcut{
 		MTControl *control;
 		int group;
 	};
-	char *description;
+	const char *description;
 };
 
 class MTGUIInterface : public MTXInterface{
@@ -134,7 +134,7 @@ public:
 	virtual int MTCT synchronize(MTSync*) = 0;
 	virtual void* MTCT getimagelist(int id) = 0;
 	virtual Skin* MTCT getskin();
-	virtual void* MTCT createwindow(int l,int t,int w,int h,char *caption,int flags,void *parent) = 0;
+	virtual void* MTCT createwindow(int l,int t,int w,int h,const char *caption,int flags,void *parent) = 0;
 	virtual void MTCT deletewindow(void *wnd) = 0;
 	virtual void* MTCT getwindowproc() = 0;
 	virtual void* MTCT getappwindow() = 0;
@@ -191,7 +191,7 @@ public:
 	virtual int MTCT synchronize(MTSync*);
 	virtual void* MTCT getimagelist(int id);
 	virtual Skin* MTCT getskin();
-	virtual void* MTCT createwindow(int l,int t,int w,int h,char *caption,int flags,void *parent);
+	virtual void* MTCT createwindow(int l,int t,int w,int h,const char *caption,int flags,void *parent);
 	virtual void MTCT deletewindow(void *wnd);
 	virtual void* MTCT getwindowproc();
 	virtual void* MTCT getappwindow();

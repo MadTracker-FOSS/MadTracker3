@@ -23,7 +23,7 @@ class MTHTTPFolder;
 class MTHTTPHook : public MTFileHook{
 public:
 	MTHTTPHook();
-	MTFile* MTCT fileopen(char *url,int flags);
+	MTFile* MTCT fileopen(const char *url,int flags);
 	MTFolder* MTCT folderopen(char *url);
 	bool MTCT filecopy(char *source,char *dest);
 	bool MTCT filerename(char *source,char *dest);
@@ -33,7 +33,7 @@ public:
 
 class MTHTTPFile : public MTFile{
 public:
-	MTHTTPFile(char *path,int access);
+	MTHTTPFile(const char *path,int access);
 	MTHTTPFile(MTFile *parent,int start,int end,int access);
 	~MTHTTPFile();
 	int MTCT read(void *buffer,int size);

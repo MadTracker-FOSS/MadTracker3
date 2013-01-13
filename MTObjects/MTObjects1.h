@@ -25,7 +25,7 @@ class MTModule;
 class ObjectType{
 public:
 	mt_uint32 type;
-	char *description;
+	const char *description;
 	virtual MTObject* MTCT create(MTObject *parent,mt_int32 id,void *param) = 0;
 };
 //---------------------------------------------------------------------------

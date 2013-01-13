@@ -821,7 +821,7 @@ Skin* MTGUIInterface::getskin()
 	return skin;
 }
 
-void* MTGUIInterface::createwindow(int l,int t,int w,int h,char *caption,int flags,void *parent)
+void* MTGUIInterface::createwindow(int l,int t,int w,int h,const char *caption,int flags,void *parent)
 {
 	int stflags,exflags;
 	HWND wnd;

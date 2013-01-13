@@ -58,7 +58,7 @@ Otherwise, click on \"Cancel\" to exit gracefully.","MadTracker - Fatal Error",M
 #else
 #include "MTConsole.h"
 const char *argv0;
-char *cmdline = "";
+char *cmdline;
 bool running = true;
 
 int main(int argc,const char* argv[])

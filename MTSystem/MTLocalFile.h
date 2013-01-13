@@ -33,7 +33,7 @@ class MTLocalFolder;
 class MTLocalHook : public MTFileHook{
 public:
 	MTLocalHook();
-	MTFile* MTCT fileopen(char *url,int flags);
+	MTFile* MTCT fileopen(const char *url,int flags);
 	MTFolder* MTCT folderopen(char *url);
 	bool MTCT filecopy(char *source,char *dest);
 	bool MTCT filerename(char *source,char *dest);
@@ -43,7 +43,7 @@ public:
 
 class MTLocalFile : public MTFile{
 public:
-	MTLocalFile(char *path,int access);
+	MTLocalFile(const char *path,int access);
 	MTLocalFile(MTFile *parent,int start,int end,int access);
 	~MTLocalFile();
 	int MTCT read(void *buffer,int size);

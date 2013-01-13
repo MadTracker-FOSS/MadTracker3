@@ -334,7 +334,7 @@ public:
 	virtual bool MTCT addchannel() = 0;
 	virtual void MTCT notify(void *object,int notify,int param) = 0;
 	virtual bool MTCT editobject(void *object,bool newwindow) = 0;
-	virtual void* MTCT getconf(char *name,bool user) = 0;
+	virtual void* MTCT getconf(const char *name,bool user) = 0;
 	virtual void MTCT releaseconf(void *conf) = 0;
 	virtual int MTCT addrefreshproc(RefreshProc proc,void *param) = 0;
 	virtual void MTCT delrefreshproc(int id) = 0;

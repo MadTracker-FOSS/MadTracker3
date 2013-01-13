@@ -26,7 +26,7 @@ MTLocalHook::MTLocalHook()
 {
 }
 
-MTFile* MTLocalHook::fileopen(char *url,int flags)
+MTFile* MTLocalHook::fileopen(const char *url,int flags)
 {
 	return new MTLocalFile(url,flags);
 }
@@ -93,7 +93,7 @@ void MTLocalHook::filetype(const char *url,char *type,int length)
 	};
 }
 //---------------------------------------------------------------------------
-MTLocalFile::MTLocalFile(char *path,int access):
+MTLocalFile::MTLocalFile(const char *path,int access):
 maccess(access),
 stdhandle(true),
 cpos(0),
@@ -104,11 +104,12 @@ maph(0),
 #endif
 mmap(0)
 {
-	char *e;
+	// FIXME: This function deals with strings like crap. -flibit
 
 	mtsetlasterror(0);
-	e = strstr(path,"://");
-	if (e) path = e+3;
+	const char *e = strstr(path,"://");
+	if (e)
+		path = e + 3;
 	e = path;
 	if (strcmp(path,"stdin")==0){
 #		ifdef _WIN32
@@ -147,7 +148,7 @@ mmap(0)
 			if (access & MTF_TEMP) wattr |= FILE_ATTRIBUTE_TEMPORARY|FILE_FLAG_DELETE_ON_CLOSE;
 			h = CreateFile(e,waccess,wshare,0,wcreate,wattr,0);
 #		else
-			char *laccess = "r";
+			const char *laccess;
 			switch (access & (MTF_READ|MTF_WRITE|MTF_CREATE)){
 			case MTF_READ|MTF_WRITE:
 				laccess = "r+";
@@ -158,6 +159,9 @@ mmap(0)
 				break;
 			case MTF_READ|MTF_WRITE|MTF_CREATE:
 				laccess = "a+";
+				break;
+			default:
+				laccess = "r";
 				break;
 			};
 			fs = fopen(e,laccess);
@@ -236,7 +240,7 @@ stdhandle(((MTLocalFile*)parent)->stdhandle)
 		};
 		SetFilePointer(h,start,0,FILE_BEGIN);
 #	else
-		char *laccess = "r";
+		const char *laccess;
 		switch (access & (MTF_READ|MTF_WRITE|MTF_CREATE)){
 		case MTF_READ|MTF_WRITE:
 			laccess = "r+";
@@ -247,6 +251,9 @@ stdhandle(((MTLocalFile*)parent)->stdhandle)
 			break;
 		case MTF_READ|MTF_WRITE|MTF_CREATE:
 			laccess = "w+";
+			break;
+		default:
+			laccess = "r";
 			break;
 		};
 		fs = fdopen(dup(fileno(((MTLocalFile*)parent)->fs)),laccess);

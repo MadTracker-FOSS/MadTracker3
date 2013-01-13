@@ -22,7 +22,7 @@ class MTLocalFolder;
 class MTMemoryHook : public MTFileHook{
 public:
 	MTMemoryHook();
-	MTFile* MTCT fileopen(char *url,int flags);
+	MTFile* MTCT fileopen(const char *url,int flags);
 	MTFolder* MTCT folderopen(char *url);
 	bool MTCT filecopy(char *source,char *dest);
 	bool MTCT filerename(char *source,char *dest);

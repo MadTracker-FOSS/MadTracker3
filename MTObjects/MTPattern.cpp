@@ -110,7 +110,7 @@ linesize(0)
 	Column *c;
 	char parameter[16];
 	char value[256];
-	static char *columns[] = {"Note","Volume","Panning","Effect"};
+	static const char *columns[] = {"Note","Volume","Panning","Effect"};
 
 	mtmemzero(tracks,sizeof(tracks));
 #	ifdef MTSYSTEM_CONFIG
@@ -185,7 +185,7 @@ PatternInstance* MTPattern::createinstance(int layer,Sequence *sequ,PatternInsta
 	return new MTPatternInstance(this,sequ,layer,previous);
 }
 
-void MTPattern::change(int nlines,int ntracks,int ncols,char **columns,bool preserve)
+void MTPattern::change(int nlines,int ntracks,int ncols,const char **columns,bool preserve)
 {
 	int x,y;
 	Column *c;

@@ -46,7 +46,7 @@ extern "C"
 void initFiles();
 void uninitFiles();
 //---------------------------------------------------------------------------
-MTFile* MTCT mtfileopen(char *url,int flags);
+MTFile* MTCT mtfileopen(const char *url,int flags);
 void MTCT mtfileclose(MTFile *file);
 MTFolder* MTCT mtfolderopen(char *url);
 void MTCT mtfolderclose(MTFolder *folder);
