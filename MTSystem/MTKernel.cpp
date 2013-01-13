@@ -162,7 +162,7 @@ int mtsyscounter()
 	clock_gettime(CLOCK_MONOTONIC, &ts);
 	return (ts.tv_sec * 1000) + (ts.tv_nsec / 1000000);
 #elif defined(__APPLE__)
-	#error Need to implement `int mtsyscounter()` for this platform!
+	#warning Need to implement `int mtsyscounter()` for this platform!
 #else
 	#error Need to implement `int mtsyscounter()` for this platform!
 #endif
@@ -194,7 +194,7 @@ bool mtsyscounterex(double *count)
 		*count = (double) ts.tv_sec + (double) ts.tv_nsec / 1000000000.0;
 		return true;
 #elif defined(__APPLE__)
-	#error Need to implement `bool mtsyscounterex()` for this platform!
+	#warning Need to implement `bool mtsyscounterex()` for this platform!
 #else
 	#error Need to implement `bool mtsyscounterex()` for this platform!
 #endif
@@ -316,7 +316,7 @@ int mtsyswaitmultiple(int count,MTEvent **events,bool all,int timeout)
 	free(mutex_cond);
 	free(le);
 #elif defined(__APPLE__)
-	#error Need to implement `int mtsyswaitmultiple()` for this platform!
+	#warning Need to implement `int mtsyswaitmultiple()` for this platform!
 #else
 	#error Need to implement `int mtsyswaitmultiple()` for this platform!
 #endif
@@ -579,7 +579,7 @@ MTEvent::MTEvent(bool autoreset,int interval,int resolution,bool periodic,bool p
 	}
 	else timer = 0;
 #elif defined(__APPLE__)
-	#error Need to implement `MTEvent::MTEvent()` for this platform!
+	#warning Need to implement `MTEvent::MTEvent()` for this platform!
 #else
 	#error Need to implement `MTEvent::MTEvent()` for this platform!
 #endif
@@ -615,7 +615,7 @@ MTEvent::~MTEvent()
 	pthread_mutex_destroy(e_mutex);
 	free(e_mutex);
 #elif defined(__APPLE__)
-	#error Need to implement `MTEvent::~MTEvent()` for this platform!
+	#warning Need to implement `MTEvent::~MTEvent()` for this platform!
 #else
 	#error Need to implement `MTEvent::~MTEvent()` for this platform!
 #endif
@@ -1229,7 +1229,7 @@ mproc(proc)
 		if (periodic) ts.it_interval = ts.it_value;
 		timer_settime((timer_t)id,0,&ts,0);
 #elif defined(__APPLE__)
-	#error Need to implement `MTTimer::MTTimer()` for this platform!
+	#warning Need to implement `MTTimer::MTTimer()` for this platform!
 #else
 	#error Need to implement `MTTimer::MTTimer()` for this platform!
 #endif
@@ -1252,7 +1252,7 @@ res(resolution)
 	se.sigev_notify_attributes = 0;
 	timer_create(CLOCK_REALTIME,&se,(timer_t*)&id);
 #elif defined(__APPLE__)
-	#error Need to implement `MTTimer::MTTimer()` for this platform!
+	#warning Need to implement `MTTimer::MTTimer()` for this platform!
 #else
 	#error Need to implement `MTTimer::MTTimer()` for this platform!
 #endif
@@ -1266,7 +1266,7 @@ MTTimer::~MTTimer()
 #elif defined(__linux__)
 	timer_delete((timer_t)id);
 #elif defined(__APPLE__)
-	#error Need to implement `MTTimer::~MTTimer()` for this platform!
+	#warning Need to implement `MTTimer::~MTTimer()` for this platform!
 #else
 	#error Need to implement `MTTimer::~MTTimer()` for this platform!
 #endif

@@ -18,11 +18,15 @@
 #include <MTXAPI/MTXControls.h>
 #include <MTXAPI/MTXModule.h>
 #include <MTXAPI/MTXSystem2.h>
-#ifdef _WIN32
+#if defined(_WIN32)
 #	include "MTWaveOut.h"
 #	include "MTDirectSound.h"
-#else
+#elif defined(__linux__)
 #	include "MTDevDSP.h"
+#elif defined(__APPLE__)
+#	warning No OSX device... need MTOpenAL!
+#else
+#	error No audio devices for this platform!
 #endif
 //---------------------------------------------------------------------------
 static const char *audioname = {"MadTracker Audio Core"};
@@ -34,10 +38,10 @@ MTInterface *mtinterface;
 MTSystemInterface *si;
 MTObjectsInterface *oi;
 WaveOutput output;
-#ifdef _WIN32
+#if defined(_WIN32)
 	MTWaveOutDeviceManager *womanager;
 	MTDirectSoundDeviceManager *dsmanager;
-#else
+#elif defined(__linux__)
 	MTDevDSPDeviceManager *devdspmanager;
 #endif
 MTDevice *devices[32];
@@ -115,12 +119,12 @@ bool MTAudioInterface::init()
 	output.interval = 50.0;
 	output.mincpu = 0.0;
 	output.maxcpu = 0.75;
-#	ifdef _WIN32
+#	if defined(_WIN32)
 		womanager = new MTWaveOutDeviceManager();
 		dsmanager = new MTDirectSoundDeviceManager();
 		adddevicemanager(womanager);
 		adddevicemanager(dsmanager);
-#	else
+#	elif defined(__linux__)
 		devdspmanager = new MTDevDSPDeviceManager();
 		adddevicemanager(devdspmanager);
 #	endif
@@ -177,12 +181,12 @@ void MTAudioInterface::uninit()
 	};
 	LOGD("%s - [Audio] Freeing all devices..."NL);
 	deactivatedevices();
-#	ifdef _WIN32
+#	if defined(_WIN32)
 		deldevicemanager(womanager);
 		deldevicemanager(dsmanager);
 		delete womanager;
 		delete dsmanager;
-#	else
+#	elif defined(__linux__)
 		deldevicemanager(devdspmanager);
 		delete devdspmanager;
 #	endif
@@ -217,6 +221,11 @@ void MTAudioInterface::stop()
 void MTAudioInterface::processcmdline(void *params)
 {
 
+}
+
+int MTAudioInterface::processinput(const char* input)
+{
+	return 0;
 }
 
 void MTAudioInterface::showusage(void *out)
