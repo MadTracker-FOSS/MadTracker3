@@ -12,7 +12,7 @@
 //---------------------------------------------------------------------------
 #ifdef _WIN32
 #	include <windows.h>
-#	include <iostream.h>
+#	include <iostream>
 #	include <shlobj.h>
 #else
 #	include <sys/stat.h>
