@@ -10,6 +10,11 @@ option(MT_DEBUG "Build debug version of MadTracker" ON)
 # TODO: -pedantic
 SET(CMAKE_CXX_FLAGS "-m32 -g -Wall")
 
+# Linker flags
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+	SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
 # Include directories
 include_directories(include)
 
