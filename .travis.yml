@@ -1,0 +1,16 @@
+# Hello, MT3... Let's see if we can revive you, and make you easier to build...
+# It's been a long time. Hope this works....
+
+language: cpp
+compiler:
+ - gcc
+# - clang # Once someone
+
+#before_install:
+# What do we need here, if anything?
+
+#install:
+# -
+# -
+# Dagnabbit, I've forgotten how to make CMAKE work... @flibitijibibo.... anybody???
+# -make
