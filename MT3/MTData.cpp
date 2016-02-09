@@ -281,6 +281,7 @@ bool init()
 		};
 		strcpy(e,"MadTracker/");
 #	else
+        // So that's why they're global? Are you shitting me?
 		extern const char *argv0;
 		extern char *cmdline;
 		const char *binpath = getenv("_");
@@ -372,13 +373,13 @@ void uninit()
 	int x;
 	MTModule *del[16];
 	
-	if (!si) return;
+	if (!si) return; // TODO Can this pointer ever be null? Does it have to be global?
 	LOGD("%s - Uninitializing..."NL);
-	mtmemzero(del,sizeof(del));
+	mtmemzero(del,sizeof(del)); // A custom nulling routine? Smells bad. Update: Actually this just calls memset.
 	uninitConsole();
 	si->stop();
 	stopExtensions();
-	MTTRY
+	MTTRY // Most worthless macro ever. It's just "try{"
 		if (output) output->lock->lock();
 		for (x=0;x<16;x++){
 			if (module[x]){
@@ -386,8 +387,8 @@ void uninit()
 				module[x] = 0;
 			};
 		};
-	MTCATCH
-	MTEND
+	MTCATCH // and this is "} catch(...) {"
+	MTEND // and this is "}". Why anyone would rather type MTEND than } is beyond me.
 	if (output) output->lock->unlock();
 	MTTRY
 		for (x=0;x<16;x++){
@@ -403,11 +404,14 @@ void uninit()
 	if (confs){
 		confs->clear(true,ConfDelete);
 		si->hashdelete(confs);
-		confs = 0;
+		confs = nullptr; // This is a pointer, not an int, so I changed 0 to nullptr.
 	};
-	globalconf = userconf = 0;
+	globalconf = userconf = nullptr; // these are pointers, not ints, so I changed 0 to nullptr
 	uninitSystem();
 	unloadExtensions();
+
+	// Wild guess: All of the following is pointless if boost::filesystem is used;
+    // or, in a future C++ standard, std::filesystem.
 	free(prefs.syspath[SP_ROOT]);
 	free(prefs.syspath[SP_USER]);
 	free(prefs.syspath[SP_CONFIG]);
