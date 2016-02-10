@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTMD5.h 49 2005-08-21 10:00:44Z Yannick $
 //
@@ -34,6 +34,12 @@
 #ifndef MTMD5_INCLUDED
 #define MTMD5_INCLUDED
 //---------------------------------------------------------------------------
+
+// I guess this isn't too bad, altough I'd like to have a C++ interface to it
+// instead of a char* destination buffer. What's kind of annoying about it is
+// that there's two versions for signed and unsigned char.
+// Also, password is an unused parameter in both versions.
+
 struct MD5_CTX{
 	unsigned int state[4];
 	unsigned int count[2];
