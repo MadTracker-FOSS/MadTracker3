@@ -13,6 +13,12 @@
 
 
 // There are no comments. Nowhere. None. TODO Add them. Everywhere.
+// TODO Fix/redesign ALL errors caused by precision loss, until mt3 compiles without -fpermissive.
+// TODO Fix all, yes all, warnings thrown by -Wall, -Wextra and -pedantic under C++11 compilation.
+
+// Example: The NL macro that's used in lots of const char* literal strings is interpreted as a
+// user-defined literal suffix under C++11. Using std::string and plain old \n instead and then
+// using an output stream to get the proper linebreak character would fix these warnings.
 
 #ifdef _WIN32
 #	include <windows.h>

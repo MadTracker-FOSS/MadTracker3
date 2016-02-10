@@ -18,6 +18,7 @@
 //
 
 #include <stdint.h>
+#include <gen_minmax.h>
 
 //TODO This entire call convention bit may be useless as soon as the inline assembly is gone.
 #ifdef __GNUC__
@@ -288,22 +289,81 @@ const MTUserID MTUID_MTSTAFF    = {0,0x00000004};
 // Color representation struct.
 // TODO Use constexpr constructor and a constexpr function to calculate RGBA.
 // This should be trivial.
+//struct MTColor{
+//	union{
+//		struct{
+//			mt_uint8 R,G,B,A;
+//		};
+//		mt_uint32 RGBA;
+//	};
+//	MTColor(mt_uint32 rgba = 0){ RGBA = rgba; }
+//	MTColor(mt_uint8 r,mt_uint8 g,mt_uint8 b,mt_uint8 a){ R = r; G = g; B = b; A = a; }
+//	inline bool operator == (MTColor &c){ return (RGBA==c.RGBA); }
+//	inline bool operator = (mt_uint32 i){ RGBA = i; return true; }
+//	inline MTColor operator + (MTColor &c){ return MTColor(MIN(255,(int)R+c.R),MIN(255,(int)G+c.G),MIN(255,(int)B+c.B),MIN(255,(int)A+c.A)); }
+//	inline MTColor operator * (MTColor &c){ return MTColor((int)R*c.R/255,(int)G*c.G/255,(int)B*c.B/255,(int)A*c.A/255); }
+//	inline bool operator += (MTColor &c){ R = MIN(255,(int)R+c.R); G = MIN(255,(int)G+c.G); B = MIN(255,(int)B+c.B); A = MIN(255,(int)A+c.A); return true; }
+//	inline bool operator *= (MTColor &c){ R = (int)R*c.R/255; G = (int)G*c.G/255; B = (int)B*c.B; A = (int)A*c.A/255; return true; }
+//};
+
+// Replacement version with free operator+ and operator*.
+// Everything declared constexpr can potentially be evaluated at compile time.
 struct MTColor{
-	union{
-		struct{
-			mt_uint8 R,G,B,A;
-		};
-		mt_uint32 RGBA;
-	};
-	MTColor(mt_uint32 rgba = 0){ RGBA = rgba; }
-	MTColor(mt_uint8 r,mt_uint8 g,mt_uint8 b,mt_uint8 a){ R = r; G = g; B = b; A = a; }
-	inline bool operator == (MTColor &c){ return (RGBA==c.RGBA); }
-	inline bool operator = (mt_uint32 i){ RGBA = i; return true; }
-	inline MTColor operator + (MTColor &c){ return MTColor(MIN(255,(int)R+c.R),MIN(255,(int)G+c.G),MIN(255,(int)B+c.B),MIN(255,(int)A+c.A)); }
-	inline MTColor operator * (MTColor &c){ return MTColor((int)R*c.R/255,(int)G*c.G/255,(int)B*c.B/255,(int)A*c.A/255); }
-	inline bool operator += (MTColor &c){ R = MIN(255,(int)R+c.R); G = MIN(255,(int)G+c.G); B = MIN(255,(int)B+c.B); A = MIN(255,(int)A+c.A); return true; }
-	inline bool operator *= (MTColor &c){ R = (int)R*c.R/255; G = (int)G*c.G/255; B = (int)B*c.B; A = (int)A*c.A/255; return true; }
+    mt_uint8 R,G,B,A;
+
+    constexpr mt_uint32 getRGBA() const{
+        return (R<<24)+(G<<16)+(B<<8)+(A<<0);
+    }
+
+    constexpr MTColor(mt_uint8 r,mt_uint8 g,mt_uint8 b,mt_uint8 a):
+        R(r), G(g), B(b), A(a)
+    {}
+
+    constexpr MTColor(mt_uint32 rgba):
+        R((rgba&0xFF000000) >> 24),
+        G((rgba&0x00FF0000) >> 16),
+        B((rgba&0x0000FF00) >>  8),
+        A((rgba&0x000000FF) >>  0)
+    {}
+
+    MTColor& operator=(MTColor const& other) = default;
+
+    inline bool operator==(MTColor const& other) const{
+        return (getRGBA() == other.getRGBA());
+    }
+
+    // operators + and * operate via saturation arithmetic.
+    inline MTColor& operator+=(MTColor const& other)
+    {
+        R=util::min(255u,(mt_uint32)(R)+other.R);
+        B=util::min(255u,(mt_uint32)(G)+other.B);
+        G=util::min(255u,(mt_uint32)(B)+other.G);
+        A=util::min(255u,(mt_uint32)(A)+other.A);
+        return *this;
+    }
+
+    inline MTColor& operator*=(MTColor const& other)
+    {
+        R=(mt_uint32)(R)*other.R/0xff;
+        B=(mt_uint32)(B)*other.B/0xff;
+        G=(mt_uint32)(G)*other.G/0xff;
+        A=(mt_uint32)(A)*other.A/0xff;
+        return *this;
+    }
 };
+
+inline MTColor operator+(MTColor const& c1, MTColor const& c2){
+    MTColor ret=c1;
+    ret+=c2;
+    return ret;
+}
+
+inline MTColor operator*(MTColor const& c1, MTColor const& c2){
+    MTColor ret=c1;
+    ret*=c2;
+    return ret;
+}
+
 
 // CL stands for command line. And that pretty much tells us everything.
 // Please let the usage of this be reasonable.
