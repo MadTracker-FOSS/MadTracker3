@@ -7,7 +7,7 @@ PROJECT(MadTracker3)
 option(MT_DEBUG "Build debug version of MadTracker" ON)
 
 # Compiler flags
-SET(CMAKE_CXX_FLAGS "-m32 -g -std=c++11 -Wall -Wextra -pedantic")
+SET(CMAKE_CXX_FLAGS "-g -fpermissive -std=c++11 -Wall -Wextra -pedantic")
 
 # Linker flags
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -23,6 +23,8 @@ if (MT_DEBUG)
 endif (MT_DEBUG)
 
 # Source directories
+FILE(GLOB MTXDIR include/MTXAPI/*.h include/MTXAPI/config/*.h include/MTXAPI/RES/*.h)
+
 SET(MT3SRCDIR MT3)
 SET(MTAUDIOSRCDIR MTAudio)
 SET(MTDSPSRCDIR MTDSP)
@@ -33,6 +35,7 @@ SET(MTSYSTEMSRCDIR MTSystem)
 
 # Source lists
 SET(MT3SRC
+	${MTXDIR}
 	${MT3SRCDIR}/MT3.cpp
 	${MT3SRCDIR}/MTConsole.cpp
 	${MT3SRCDIR}/MTData.cpp

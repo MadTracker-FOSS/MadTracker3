@@ -61,13 +61,14 @@ public:
 	int datasamples;
 
 	// FIXME: These were pure, should this class be extended? -flibit
-	virtual bool MTCT init(float frequency,int nchannels,int bits,double latency);
-	virtual void MTCT uninit();
-	virtual bool MTCT play();
-	virtual bool MTCT stop();
+	// ...but making them non-pure without imlpementing them breaks the build, so I made them pure again for now. -ih3
+	virtual bool MTCT init(float frequency,int nchannels,int bits,double latency)=0;
+	virtual void MTCT uninit()=0;
+	virtual bool MTCT play()=0;
+	virtual bool MTCT stop()=0;
 	virtual int MTCT getposition(bool playback = false) = 0;
-	virtual bool MTCT getdata(int position,int length,void **ptr1,void **ptr2,unsigned long *lng1,unsigned long *lng2);
-	virtual bool MTCT writedata(void *ptr1,void *ptr2,unsigned long lng1,unsigned long lng2);
+	virtual bool MTCT getdata(int position,int length,void **ptr1,void **ptr2,unsigned long *lng1,unsigned long *lng2)=0;
+	virtual bool MTCT writedata(void *ptr1,void *ptr2,unsigned long lng1,unsigned long lng2)=0;
 };
 
 class MTAudioDeviceManager{

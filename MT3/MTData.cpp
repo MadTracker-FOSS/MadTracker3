@@ -288,7 +288,14 @@ bool init()
 		extern char *cmdline;
 
 		const char *binpath = getenv("_");
-		const char *b1 = strrchr(binpath,'/')+1;
+//		const char *b1 = strrchr(binpath,'/')+1;  //FIXME strrchr segfaults here if binpath is null.
+        // Fix (2016-02-10 irrenhaus3)
+		const char *b1 = nullptr;
+		if (binpath)
+		{
+			b1 = strrchr(binpath,'/')+1;
+		}
+        // End of fix
 		int l;
 		if (!b1) binpath = argv0;
 		else if (!strstr(argv0,b1)) binpath = argv0;

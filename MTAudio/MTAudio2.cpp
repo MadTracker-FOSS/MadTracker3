@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors:	x86
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright ï¿½ 1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTAudio2.cpp 100 2005-11-30 20:19:39Z Yannick $
 //
@@ -46,12 +46,12 @@ void MTCT ri8(sample *source,void *dest,int count,int nchannels,int channel)
 			mov		eax,[esp]
 			add		esi,s_sample
 			cmp		eax,127
-			jle		lsatok
+			jle		lsatok		// jump less-or-equal -> eax<=127
 			mov		eax,127
 			jmp		satok
 		lsatok:
 			cmp		eax,-128
-			jge		satok
+			jge		satok		// jump greater-or-equal -> eax>=-128
 			mov		eax,-128
 		satok:
 			dec		ecx

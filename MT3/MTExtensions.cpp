@@ -306,7 +306,7 @@ void MT3Interface::notify(void *object,int notify,int param)
 			window = lastaw;
 			break;
 		};
-		if ((window) && (window->uid==(int)object)){
+		if ((window) && (window->uid==(int)object)){	//FIXME Ticks off -fpermissive. Which in this case isn't as easy to fix.
 			MTCMessage msg = {MTCM_CLOSE,0,window};
 			window->message(msg);
 		};
@@ -678,6 +678,7 @@ bool loadExtension(const char *file)
 	return false;
 }
 
+//TODO Use platform-independant mechanisms in this function. Maybe boost::filesystem, maybe std::fstream is already enough.
 void loadDirectory(const char *dir)
 {
 	char find[512];
@@ -722,7 +723,7 @@ void loadDirectory(const char *dir)
 			*e = 0;
 		};
 		d = opendir(find);
-		while ((de = readdir(d))){
+		while ((de = readdir(d))){	//FIXME readdir segfaults here if d is null.
 			if (de->d_name[0]!='.'){
 				strcpy(e,de->d_name);
 				stat(find,&s);

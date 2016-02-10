@@ -681,7 +681,8 @@ bool initInterface()
 	for (x=0;x<next;x++){
 		MTExtension &cext = *ext[x];
 		for (y=0;y<cext.i->ninterfaces;y++){
-			cext.i->interfaces[y]->config(0,(int)mtdsk);
+//			cext.i->interfaces[y]->config(0,(int)mtdsk);	//FIXME Ticks off -fpermissive.
+			cext.i->interfaces[y]->config(0,0);	// Let's see what happens if we just make it 0. -ih3
 		};
 	};
 	LEAVE();

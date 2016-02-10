@@ -329,6 +329,9 @@ public:
 	virtual void MTCT stop() = 0;
 	virtual void MTCT processcmdline(void *params){ };
 	virtual void MTCT showusage(void *out){ };
+
+	// FIXME None of the implementations use the "param" parameter, and it comes from an (int) pointer cast.
+	// In fact most subclass overrides just return 0. Only the one in MTDisplayInterface does sth. with command.
 	virtual int MTCT config(int command,int param){ return 0; };
 	virtual int MTCT processinput(const char *input){ return 0; };
 };
