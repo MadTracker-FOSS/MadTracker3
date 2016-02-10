@@ -84,6 +84,9 @@ enum MTProcessType{
 #define MTPS_WORKING  1
 #define MTPS_FINISHED 2
 
+// MTF probably stands for madtracker file, and these constants
+// deal with read/write permissions. Dunno how many of them are
+// actually needed and which ones are just std::fstream attributes.
 #define MTF_READ       0x01
 #define MTF_WRITE      0x02
 #define MTF_CREATE     0x04
@@ -145,12 +148,19 @@ enum MTConfigType{
 	MTCT_BINARY
 };
 
+// MC stands for mini config
+// and these constants are used EXCLUSIVELY in MTMiniConfig
 #define MTMC_STRUCTURE 1
 #define MTMC_DATA      2
-#define MTMC_ALL       3
+#define MTMC_ALL       3 // in fact, this one is never explicitly used.
 #define MTMC_MD5KEYS   4
 #define MTMC_HEADER    8
 
+
+// This logging system REALLY needs to change.
+// TODO Find out where the actual functionality is that does the logging.
+// (si->log is in itself a function pointer)
+// Addendum: Found a possible function, mtlog(const char*, char).
 #ifdef _DEBUG
 #	define LOG(T)												si->log(T,0)
 #	define LOGD(T)												si->log(T,1)
@@ -196,7 +206,12 @@ enum MTConfigType{
 #	define LEAVE()
 #	define CALLSTACK
 #endif
+
+// Somewhat like C++ operator new, but only allocates; no constructor is called.
 #define mtnew(T) (T*)si->memalloc(sizeof(T),MTM_ZERO)
+
+// These two are just... bad. My guess is that they're used to retreive MTArray members.
+// And the worst part is, I think I'm right.
 #define A(_A,_T) ((_T**)_A->a)
 #define D(_A,_T) ((_T*)_A->d)
 
@@ -292,6 +307,7 @@ protected:
 typedef int (MTCT *ThreadProc)(MTThread *thread,void *param);
 typedef void (MTCT *ProcessProc)(MTProcess *process,void *param,float p);
 
+//TODO Is this really neccessary? A simple std::thread wrapper should suffice.
 class MTThread : public MTEvent{
 public:
 #if defined(_WIN32)
@@ -415,22 +431,32 @@ private:
 
 
 
+// This is std::vector implementing std::sort, but without the type safety.
+// Should be easily replacable by those two.
 class MTArray{
 public:
-	int _is;
-	int nitems;
-	union{
-		void **a;
-		void *d;
+	int _is;    // an index counter to be used as iterator
+	int nitems; // size() or capacity(). Looking at "na" in the private section, it's probably the latter.
+	union{      // wat?
+		void **a;   // WAT?
+		void *d;    // WHY?
 	};
 
-	inline void* operator[](unsigned int i){ return (a)?a[i]:((d)?(char*)d+_is*i:0); };
+	inline void* operator[](unsigned int i){ return (a)?a[i]:((d)?(char*)d+_is*i:0); }; // WHYYYYY?
+
+    // Okay, so it seems that these void* / void** shenanigans happen
+    // so that the array can also hold other arrays of a given type.
+    // Again, nothing that std::vector couldn't do, and using a union
+    // here costs us runtime.
+
         MTArray(int allocby,int itemsize = 0);
 	virtual ~MTArray();
 	virtual int MTCT additem(int at,void *item);
 	virtual int MTCT additems(int at,int count);
 	virtual void MTCT delitems(int from,int count);
-	virtual int MTCT setitem(int at,void *item);
+    // Unused function
+    // Commented out by irrenhaus3 on 2016-02-09
+//	virtual int MTCT setitem(int at,void *item);
 	virtual int MTCT push(void *item);
 	virtual void* MTCT pop();
 	virtual int MTCT getitemid(void *item);
@@ -441,8 +467,8 @@ public:
 	virtual void MTCT sort(SortProc proc);
 private:
 	int mallocby;
-	int na;
-	int countid;
+	int na; // my best guess is that this stands for "number actual"
+	int countid; // this one is initialized by a thread-local storage key.
 	void quicksort(int lo,int hi,SortProc proc);
 	void quicksortf(int lo,int hi,SortProc proc);
 };
@@ -454,6 +480,11 @@ struct MTHashData{
 	int reserved;
 };
 
+// So this is not a hash, but a hash table. So it should be replacable
+// by std::unordered_map, which is the same thing. It differs in how you
+// specify the hash function (specialization of std::hash for the value
+// type in the map) but things like getitemfromid are implemented by
+// using standard algorithms like std::find_if.
 class MTHash{
 public:
 	int nitems;
@@ -480,6 +511,13 @@ private:
 	int countid;
 };
 
+// What is a resource? A sample, a module, a chunk of memory, the hard drive, a printer?
+// We don't know, we only stare into the void*.
+// But this class manages them. And it has a getresourceurl() function, so it MIGHT
+// be that a resource is a html- or php object.
+// Correction: getresourceurl() is never used, and the rest of the member function
+// usages pop up in interface init reoutines and places like getdisplayname in
+// MTModule. So yes, a resource can be anything in any savefile.
 class MTResources{
 public:
 	MTResources(MTFile *f,bool ownfile);
@@ -510,6 +548,10 @@ private:
 	void MTCT setmodified();
 };
 
+// This is like an ini-style format; interface design is clunky but looks usable.
+// Almost on the right path, though I don't know what all the virtual functions
+// are for. They are pretty much guaranteed to be either optimized out or slow
+// down the program.
 class MTConfigFile{
 public:
 	// FIXME: These were pure, should this class be extended? -flibit
@@ -528,6 +570,10 @@ private:
 	MTArray *np;
 };
 
+// So there's not only config file, but miniconfig as well. I'm guessing this
+// is the bunch of checkboxes you see in the general options menu?
+// Things like "connect to chat at startup"?
+//TODO look into this further, see what it does.
 class MTMiniConfig{
 public:
 	MTMiniConfig();
@@ -541,6 +587,7 @@ private:
 	MTHash *mp;
 };
 
+// this is probably the data for the little cpu usage bar in the tracker's main window.
 class MTCPUMonitor{
 public:
 	int flushid;
@@ -561,6 +608,9 @@ private:
 	MTCPUState *state;
 };
 
+// The big bad wolf. Function pointer extravaganza.
+// This is the class that global pointer "si" is an instance of.
+// In other words, this is the main construction site for refactors.
 class MTSystemInterface : public MTXInterface{
 public:
 	int sysflags;

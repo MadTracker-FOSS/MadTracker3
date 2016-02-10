@@ -10,6 +10,10 @@
 //	$Id: MT3.cpp 111 2007-02-16 12:58:43Z Yannick $
 //
 //---------------------------------------------------------------------------
+
+
+// There are no comments. Nowhere. None. TODO Add them. Everywhere.
+
 #ifdef _WIN32
 #	include <windows.h>
 #else
@@ -63,24 +67,27 @@ bool running = true;
 
 int main(int argc,const char* argv[])
 {
-	int x,l;                // x is an incremental counter towards argc, l is a string length temporary.
+	// The temporaries x and l were moved to the scopes where they're actually used.
+    // Really no point in declaring them ahead of time and making the code less readable;
+    // C++ int initialization rules take care of everything either way.
+
 	char input[4096];       // standard-fare input buffer
-	MTConsole *console;     // User I/O, actually on console? (it's windows so probably not)
+	MTConsole *console;     // User I/O, actually on console? (it's on windows, so probably not always)
 
 	instance = (void*)getpid(); // this is a unistd.h function. huh. does it exist on windows? No it doesn't.
 
-	argv0 = argv[0];        // program name
+	argv0 = argv[0];        // program name; assigned, but never read
 
 	if (argc>1){            // parse additional commandline arguments
-		l = 0;              // there's that temp again. Its declaration should be moved here; this is not time-expensive
+		int l = 0;
 
-        for (x=1;x<argc;x++)
+        for (int x=1;x<argc;x++)
         {
             l += strlen(argv[x]) + 1; // this counts the terminating \0 too, so it becomes the actual array size.
         }
 
         cmdline = (char*)calloc(1,l); // i hate you. Anyway, this allocates space for the global command line string.
-		for (x=1;x<argc-1;x++){ // now processing all arguments up until the last one.
+		for (int x=1;x<argc-1;x++){ // now processing all arguments up until the last one.
             // so we read out an argument (without the \0) and append it to cmdline, then add a " " at the back
             // where toe \0 was previously.
 			strcat(cmdline,argv[x]);
@@ -91,10 +98,10 @@ int main(int argc,const char* argv[])
 	};
 
 	init(); // I'm gonna guess this thing processes the command line arguments.
-    // TODO: Use. std::. Motherfucking. vector. And pass it to this function.
+    // TODO: Use. std::. Motherfucking. vector. And pass it to this init function.
 
-	if (mi){ // mi, too, is one of these global pointers. It's of the type MT3Interface.
-            //TODO look up what that's responsible for.
+	if (mi){ // mi, too, is one of these global pointers. It's of the type MT3Interface,
+		// which is the primary interface for all important program functions.
 /*
 		LOGD("%s - Start"NL);
 		MTEvent *e[2];

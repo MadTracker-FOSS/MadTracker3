@@ -226,6 +226,8 @@ bool init()
 //	Main initialization
 //
 {
+    // This one is pretty much as bad as it sounds.
+
 	char *cmd,*e;
 	char applpath[512],userpath[512];
 	
@@ -284,6 +286,7 @@ bool init()
         // So that's why they're global? Are you shitting me?
 		extern const char *argv0;
 		extern char *cmdline;
+
 		const char *binpath = getenv("_");
 		const char *b1 = strrchr(binpath,'/')+1;
 		int l;
@@ -373,7 +376,7 @@ void uninit()
 	int x;
 	MTModule *del[16];
 	
-	if (!si) return; // TODO Can this pointer ever be null? Does it have to be global?
+	if (!si) return; // TODO Can this pointer ever be null without fucking everything up? Does it have to be global?
 	LOGD("%s - Uninitializing..."NL);
 	mtmemzero(del,sizeof(del)); // A custom nulling routine? Smells bad. Update: Actually this just calls memset.
 	uninitConsole();

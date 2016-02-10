@@ -65,6 +65,7 @@ void* mtgetprivatedata(int id)
 	return mtlocalget(privateid[id+8]);
 }
 
+// TODO Deprecated as c++11 introduced the thread_local storage duration specifier.
 int mtlocalalloc()
 {
 #	ifdef _WIN32
@@ -76,6 +77,7 @@ int mtlocalalloc()
 #	endif
 }
 
+// TODO Deprecated, see above.
 bool mtlocalfree(int id)
 {
 #	ifdef _WIN32
@@ -85,6 +87,7 @@ bool mtlocalfree(int id)
 #	endif
 }
 
+//TODO Deprecated, see above.
 bool mtlocalset(int id,void *value)
 {
 #	ifdef _WIN32
@@ -94,6 +97,7 @@ bool mtlocalset(int id,void *value)
 #	endif
 }
 
+//TODO Deprecated, see above.
 void* mtlocalget(int id)
 {
 #	ifdef _WIN32
@@ -103,6 +107,7 @@ void* mtlocalget(int id)
 #	endif
 }
 
+//TODO Use the standard-compliant std::thread instead.
 MTThread* mtthreadcreate(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,const char *name)
 {
 	return new MTThread(proc,autofree,autostart,param,priority,name);

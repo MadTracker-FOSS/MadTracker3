@@ -6,6 +6,10 @@
 //---------------------------------------------------------------------------
 #include <MTXAPI/MTXWrapper.h>
 //---------------------------------------------------------------------------
+
+// This is the tracker's control toolbar where the Play, Pause, Stop buttons etc. are.
+// Some of these pointer members have names that don't correlate
+// with the toolbar in MT2, e.g. Oscillator. These are probably MT3 features.
 class MTWC_main2 : public MTWrapper{
 public:
 	MTButton* bconfig;

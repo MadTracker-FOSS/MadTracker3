@@ -16,6 +16,8 @@ struct RefreshStruct{
 	void *param;
 };
 
+// Simple enough, this is the splash screen that appears for a short while whenever the program is
+// run and the splash isn't disabled in the config. Interface design looks pretty solid too.
 class MTSplashLogo : public MTCustomWinBehaviours{
 public:
 	MTSplashLogo(MTCustomWinControl *control);

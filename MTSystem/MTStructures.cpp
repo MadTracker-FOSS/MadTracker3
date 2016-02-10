@@ -17,26 +17,43 @@
 #include "MTSystem.h"
 #include "MTMD5.h"
 //---------------------------------------------------------------------------
+
+// What follows is C++ aspriant irrenhaus3's horrible deconstruction of a class that need not be.
+
+// Simple enough, this is an allocation function for returning a new MTArray as a pointer. This can go away entirely
+// as std::vector<T> foo; foo.reserve(itemsize); does the exact same thing and removes the pointer from
+// application code. vector<T> with prereserved capacity has no execution overhead
+// over T[] or std::array<T,n>.
 MTArray* mtarraycreate(int allocby,int itemsize)
 {
 	return new MTArray(allocby,itemsize);
 }
 
+// Same as above.
 void mtarraydelete(MTArray *array)
 {
 	delete array;
 }
 
+// Factory function for a hash table. As with MTArray, is not needed in C++ as the constructor
+// of std::unordered_map already does this job.
 MTHash* mthashcreate(int allocby)
 {
 	return new MTHash(allocby);
 }
 
+// Nothing too interesting here, same as with MTArray.
 void mthashdelete(MTHash *hash)
 {
 	delete hash;
 }
 //---------------------------------------------------------------------------
+
+// The constructor - it ignores the void* d in the union and only initializes void** a.
+// allocby and itemsize are required because there is no such thing as an allocator abstraction
+// in this code yet, so allocby tells us the memory chunk size of the array element type, and itemsize
+// allows us to reserve space for a few elements in advance. However, as stated above, constructor and
+// reserve() in std::vector already do this job.
 MTArray::MTArray(int allocby,int itemsize):
 nitems(0),
 a(0),
@@ -45,47 +62,78 @@ na(0),
 _is(itemsize)
 {
 	if (mallocby<=0) mallocby = 4;
-	countid = mtlocalalloc();
+	countid = mtlocalalloc(); // very much not useful.
 }
 
+// Dtor releases managed objects and thread-local storage. Is simplified by C++11's thread_local and
+// std::thread.
 MTArray::~MTArray()
 {
 	mtlocalfree(countid);
 	if (a) mtmemfree(a);
 }
 
+// From the interface, this should replace the element at "at" in the array
+// with the ingoing element "item".
+// The implementation is a bit confusing though and it's unclear what the return value represents.
+// I would guess that it's the position of the new item.
+//TODO find out what this code actually does.
 int MTArray::additem(int at,void *item)
 {
 	int cat;
-	int x;
+//	int x;  // Moved to proper scopes.
 
 	cat = nitems;
 	nitems++;
 	if (_is==0){
 		if (nitems>na){
-			while (nitems>na) na += mallocby;
-			if (a) a = (void**)mtmemrealloc(a,4*na);
-			else a = (void**)mtmemalloc(4*na,MTM_ZERO);
+			while (nitems>na)
+            {
+                na += mallocby;
+            }
+			if (a)
+            {
+                a = (void**)mtmemrealloc(a,4*na);
+            }
+			else
+            {
+                a = (void**)mtmemalloc(4*na,MTM_ZERO);
+            }
 		};
 		if ((at>=0) && (at<nitems-1)){
 			cat = at;
-			for (x=nitems-1;x>=cat+1;x--) a[x] = a[x-1];
-			for (x=cat;x<cat+1;x++) a[x] = 0;
+			for (auto x=nitems-1;x>=cat+1;x--)
+            {
+                a[x] = a[x-1];
+            }
+			for (auto x=cat;x<cat+1;x++) // <- why is this a loop? it can be simplified to a[cat]=nullptr.
+            {
+                a[x] = 0; // a[x] is a pointer, not an int.
+            }
 		};
 		a[cat] = item;
 	}
-	else{
+	else{ // <- _is!=0; use void* d instead of void** a.
 		if (nitems>na){
-			while (nitems>na) na += mallocby;
-			if (d) d = mtmemrealloc(d,_is*na);
-			else d = mtmemalloc(_is*na,MTM_ZERO);
+			while (nitems>na)
+            {
+                na += mallocby;
+            }
+			if (d)
+            {
+                d = mtmemrealloc(d,_is*na);
+            }
+			else
+            {
+                d = mtmemalloc(_is*na,MTM_ZERO);
+            }
 		};
 		if ((at>=0) && (at<nitems-1)){
 			char *sp,*dp;
 			cat = at;
 			dp = (char*)d+(nitems-1)*_is;
 			sp = dp-_is;
-			for (x=nitems-1;x>=cat+1;x--){
+			for (auto x=nitems-1;x>=cat+1;x--){
 				memcpy(dp,sp,_is);
 				sp -= _is;
 				dp -= _is;
@@ -96,6 +144,8 @@ int MTArray::additem(int at,void *item)
 	return cat;
 }
 
+// Adds several items, all initialized to zero. Or rather, MTM_ZERO,
+// which is actually defined as 1. I'm sure this has a reason.
 int MTArray::additems(int at,int count)
 {
 	int cat;
@@ -175,13 +225,16 @@ void MTArray::delitems(int from,int count)
 	};
 }
 
-int MTArray::setitem(int at,void *item)
-{
-	if ((_is==0) || (at>=nitems)) return -1;
-	memcpy((char*)d+at*_is,item,_is);
-	return at;
-}
+// Never used!
+// Commented out by irrenhaus3 on 2016-02-09.
+//int MTArray::setitem(int at,void *item)
+//{
+//	if ((_is==0) || (at>=nitems)) return -1;
+//	memcpy((char*)d+at*_is,item,_is);
+//	return at;
+//}
 
+// vector's push_back()
 int MTArray::push(void *item)
 {
 	int at;
@@ -206,6 +259,7 @@ int MTArray::push(void *item)
 	return at;
 }
 
+// vector's pop_back()
 void* MTArray::pop()
 {
 	void *item;
@@ -239,6 +293,7 @@ void* MTArray::pop()
 	return item;
 }
 
+// find(begin(vec),end(vec),item)
 int MTArray::getitemid(void *item)
 {
 	int x;
@@ -250,6 +305,7 @@ int MTArray::getitemid(void *item)
 	return -1;
 }
 
+// vec.remove(begin(vec),end(vec),item))
 void MTArray::remove(void *item)
 {
 	int x;
@@ -273,6 +329,13 @@ void MTArray::remove(void *item)
 	};
 }
 
+// vec.clear() - but with extra parameters. Uh oh...
+// Bah... okay, so it gets a custom deleter function and
+// a pack of parameters enclosed in void*. These deleters
+// are only ever explicitly used with two functions:
+// clearobject and delitem. clearobject is non-trivial,
+// delitem references the global pointer si.
+// This is going to be ugly.
 void MTArray::clear(bool deldata,ItemProc proc,void *param)
 {
 	int x;
@@ -291,11 +354,13 @@ void MTArray::clear(bool deldata,ItemProc proc,void *param)
 	nitems = 0;
 }
 
+// Actual vec.clear().
 void MTArray::reset()
 {
 	mtlocalset(countid,0);
 }
 
+// Iterator increment and item return, it seems.
 void* MTArray::next()
 {
 	int count = (int)mtlocalget(countid);
@@ -305,6 +370,9 @@ void* MTArray::next()
 	else return (char*)d+(count)*_is;
 }
 
+// QS implementation, found in vector via std::sort.
+// SortProc can be replaced by a lambda whereever neccessary,
+// per default it will use operator<.
 void MTArray::quicksort(int lo,int hi,SortProc proc)
 {
 	int pi,lo2,hi2;
@@ -342,6 +410,9 @@ void MTArray::quicksort(int lo,int hi,SortProc proc)
 	};
 }
 
+// If you call sort(), this version is used if _is is not equal to 0;
+// meaning the iterator is not pointing to the first element.
+// I'm assuming the f stands for "fixed size"?
 void MTArray::quicksortf(int lo,int hi,SortProc proc)
 {
 	int lo2,hi2;
@@ -386,6 +457,8 @@ void MTArray::quicksortf(int lo,int hi,SortProc proc)
 	};
 }
 
+// Uses one of the two quicksort implementations, depending on the position
+// of the random access iterator.
 void MTArray::sort(SortProc proc)
 {
 	if (nitems<2) return;
@@ -395,7 +468,7 @@ void MTArray::sort(SortProc proc)
 //---------------------------------------------------------------------------
 MTHash::MTHash(int allocby):
 nitems(0),
-hash(0),
+hash(0), // pointer, not int
 mallocby(allocby),
 na(0)
 {

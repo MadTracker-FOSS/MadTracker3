@@ -7,7 +7,6 @@ PROJECT(MadTracker3)
 option(MT_DEBUG "Build debug version of MadTracker" ON)
 
 # Compiler flags
-# TODO: -pedantic
 SET(CMAKE_CXX_FLAGS "-m32 -g -std=c++11 -Wall -Wextra -pedantic")
 
 # Linker flags
