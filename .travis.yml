@@ -10,5 +10,5 @@ compiler:
 # What do we need here, if anything?
 
 install:
- -cmake .
- -make
+ - cmake .
+ - make
