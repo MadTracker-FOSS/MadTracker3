@@ -11,7 +11,8 @@ addons:
   apt:
     packages:
     - cmake
-    - ibc6-dev-i386
+    - libc6-dev-i386
+    - libc6-dev-amd64
 
 #before_install:
 # What do we need here, if anything?
