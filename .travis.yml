@@ -1,10 +1,17 @@
 # Hello, MT3... Let's see if we can revive you, and make you easier to build...
 # It's been a long time. Hope this works....
 
+  
 language: cpp
 compiler:
  - gcc
 # - clang # Once someone figures this out...
+
+addons:
+  apt:
+    packages:
+    - cmake
+    - ibc6-dev-i386
 
 #before_install:
 # What do we need here, if anything?
