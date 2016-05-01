@@ -2,3 +2,6 @@
 notes
 # files created by jetbrains IDEs
 .idea
+
+#binaries
+build

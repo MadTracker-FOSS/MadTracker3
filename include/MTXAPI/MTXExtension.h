@@ -308,6 +308,7 @@ const MTUserID MTUID_MTSTAFF    = {0,0x00000004};
 
 // Replacement version with free operator+ and operator*.
 // Everything declared constexpr can potentially be evaluated at compile time.
+// TODO put into own header?
 struct MTColor{
     mt_uint8 R,G,B,A;
 
@@ -365,6 +366,7 @@ inline MTColor operator*(MTColor const& c1, MTColor const& c2){
 }
 
 
+
 // CL stands for command line. And that pretty much tells us everything.
 // Please let the usage of this be reasonable.
 struct MTCLParam{
@@ -390,7 +392,7 @@ public:
 	virtual void MTCT processcmdline(void *params){ };
 	virtual void MTCT showusage(void *out){ };
 
-	// FIXME None of the implementations use the "param" parameter, and it comes from an (int) pointer cast.
+	// FIXME None of the implementations use the "param" parameter, and it comes from a pointer-to-int cast.
 	// In fact most subclass overrides just return 0. Only the one in MTDisplayInterface does sth. with command.
 	virtual int MTCT config(int command,int param){ return 0; };
 	virtual int MTCT processinput(const char *input){ return 0; };

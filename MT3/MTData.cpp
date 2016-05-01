@@ -25,6 +25,8 @@
 #include <stdio.h>
 #include "MTData.h"
 #include <MTXAPI/MTXSystem2.h>
+#include <iostream>
+
 //---------------------------------------------------------------------------
 MTPreferences prefs;
 MTModule *module[16];
@@ -288,14 +290,24 @@ bool init()
 		extern char *cmdline;
 
 		const char *binpath = getenv("_");
-//		const char *b1 = strrchr(binpath,'/')+1;  //FIXME strrchr segfaults here if binpath is null.
+//		const char *b1 = strrchr(binpath,'/')+1;  //FIXME strrchr segfaults here if binpath is null, which happens in detatched shells (e.g. in an IDE)
         // Fix (2016-02-10 irrenhaus3)
 		const char *b1 = nullptr;
 		if (binpath)
-		{
-			b1 = strrchr(binpath,'/')+1;
-		}
+        {
+            std::clog << "mt3 Bin. Path: " << binpath << "\n";
+            b1 = strrchr(binpath, '/') + 1;
+        }
+        else
+            std::cerr << "Binpath is null!\n";
         // End of fix
+        //TODO no idea what getenv("_") does on windows, but on linux it's black magic.
+        //See also: https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html
+        //Since the receiving variable is named binpath,
+        //I'm guessing this is an attempt to get the full path of the binary, sth. like /home/bumskopp/madtracker/Mt3.
+        //Which means it fails as soon as you use gdb or a detatched shell (->your IDE), and/or if mt3 was not the command that
+        //invoked the shell in which the actual program runs.
+
 		int l;
 		if (!b1) binpath = argv0;
 		else if (!strstr(argv0,b1)) binpath = argv0;
@@ -311,7 +323,7 @@ bool init()
 			*e++ = '/';
 			*e = 0;
 		};
-		strcpy(e,".MadTracker/"); //This needs to be fixed
+		strcpy(e,".MadTracker/"); //This needs to be fixed  // agreed.
 #	endif
 	strcpy(prefs.syspath[SP_ROOT],applpath);
 	strcpy(prefs.syspath[SP_USER],userpath);
