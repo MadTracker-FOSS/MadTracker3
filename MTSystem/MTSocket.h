@@ -5,7 +5,7 @@
 //		Platforms:	Win32,Linux
 //		Processors: All
 //
-//	Copyright � 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright   1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTSocket.h 82 2005-08-30 15:52:57Z Yannick $
 //

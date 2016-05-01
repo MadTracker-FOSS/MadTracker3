@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright   1999-2006 Yannick Delwiche. All rights reserved.
 //
 //---------------------------------------------------------------------------
 #ifndef MT3CONFIG_INCLUDED

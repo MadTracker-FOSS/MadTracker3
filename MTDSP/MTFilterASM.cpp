@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors:	x86
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright   1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTFilterASM.cpp 110 2006-01-08 20:13:42Z Yannick $
 //

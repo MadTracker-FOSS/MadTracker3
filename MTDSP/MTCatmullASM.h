@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors:	x86
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright   1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTCatmullASM.h 101 2005-11-30 20:19:50Z Yannick $
 //

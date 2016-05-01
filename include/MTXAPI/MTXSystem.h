@@ -2,7 +2,7 @@
 //
 //	MadTracker 3 Public Extension Header
 //
-//	Copyright � 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright   1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	http://www.madtracker.org/
 //	info@madtracker.org
@@ -208,6 +208,7 @@ enum MTConfigType{
 #endif
 
 // Somewhat like C++ operator new, but only allocates; no constructor is called.
+// (Maybe this happens implicitly?)
 #define mtnew(T) (T*)si->memalloc(sizeof(T),MTM_ZERO)
 
 // These two are just... bad. My guess is that they're used to retreive MTArray members.
@@ -215,6 +216,8 @@ enum MTConfigType{
 #define A(_A,_T) ((_T**)_A->a)
 #define D(_A,_T) ((_T*)_A->d)
 
+// I don't know enough about windows programming to get what's happening here.
+// But it sure looks awful.
 #ifdef MTSYSTEM_EXPORTS
 #	ifdef _WIN32
 #		define MTTRY   __try{
@@ -230,6 +233,13 @@ enum MTConfigType{
 #	define MTCATCH }catch(...){
 #	define MTEND };
 #endif
+
+/*
+ *  The following code segments look like a custom threading library. Fuck me, right?
+ *  We can probably throw this out entirely. And I mean ENTIRELY. C++11 has std::thread
+ *  and friends, so all of this stuff should be standardizable.
+ */
+
 class MTThread;
 class MTProcess;
 class MTTimer;
@@ -294,7 +304,7 @@ protected:
         HANDLE event;
 #else
 	bool d2,d3,d4;
-	void *d5,*d6,*d7;
+	void *d5,*d6,*d7; // I hate you.
         static void LinuxEventProc(sigval);
 	bool signaled,needreset,needpulse;
 	pthread_mutex_t *e_mutex;
@@ -307,7 +317,6 @@ protected:
 typedef int (MTCT *ThreadProc)(MTThread *thread,void *param);
 typedef void (MTCT *ProcessProc)(MTProcess *process,void *param,float p);
 
-//TODO Is this really neccessary? A simple std::thread wrapper should suffice.
 class MTThread : public MTEvent{
 public:
 #if defined(_WIN32)
@@ -366,7 +375,17 @@ private:
 	static int MTCT syncprocessproc(MTSync *s);
 };
 
+/**
+ * The threading stuff seems to end here. Maybe there are loose threads somewhere else.
+ * Haha. Got it?
+ */
 
+
+/**
+ * What follows is a custom filesystem library. std::filesystem is on the way but will probably not
+ * make it into the next standard, so for now we're stuck with this.
+ * Maybe bring in a dependency on boost::filesystem?
+ */
 class MTFileHook{
 public:
 	virtual MTFile* MTCT fileopen(const char *url,int flags) = 0;

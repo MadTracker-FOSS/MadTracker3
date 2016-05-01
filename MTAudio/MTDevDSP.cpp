@@ -5,7 +5,7 @@
 //		Platforms:	Linux
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright   1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTDevDSP.cpp 107 2005-11-30 21:30:55Z Yannick $
 //

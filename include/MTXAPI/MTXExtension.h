@@ -228,6 +228,7 @@ using mt_uint64= uint64_t;
 
 // SP stands for system path! Also, I really really hope no parts of this code
 // rely on the actual integer values of this enum.
+// Update: Of COURSE they do. It's used for array indexing. Nice.
 enum{
 	SP_ROOT = 0,
 	SP_USER,
@@ -270,13 +271,14 @@ struct MTXKey{
 	int key1,key2,key3,key4;
 };
 
-// Operator overloading! It almost feels like C++. Except operator= returns bool.
-// Apparently I deserve this.
+// operator= was removed since the compiler's default implementation is enough.
+// NOTE: We might not need this struct at all anymore. All it seems to be used for
+// is access control.
 struct MTUserID{
 	mt_uint32 id1;
 	mt_uint32 id2;
-	inline bool operator == (MTUserID &u){ return ((id1==u.id1) && (id2==u.id2)); }
-	inline bool operator = (MTUserID u){ id1 = u.id1; id2 = u.id2; return true; }
+	inline bool operator==(MTUserID &u){ return ((id1==u.id1) && (id2==u.id2)); }
+//	inline bool operator = (MTUserID u){ id1 = u.id1; id2 = u.id2; return true; }
 };
 
 // Access control. TODO: Remove this; this software is open source now.
@@ -287,8 +289,6 @@ const MTUserID MTUID_BETATESTER = {0,0x00000003};
 const MTUserID MTUID_MTSTAFF    = {0,0x00000004};
 
 // Color representation struct.
-// TODO Use constexpr constructor and a constexpr function to calculate RGBA.
-// This should be trivial.
 //struct MTColor{
 //	union{
 //		struct{
@@ -389,7 +389,8 @@ public:
 	virtual void MTCT uninit() = 0;
 	virtual void MTCT start() = 0;
 	virtual void MTCT stop() = 0;
-	virtual void MTCT processcmdline(void *params){ };
+//	virtual void MTCT processcmdline(void *params){ };
+    virtual void MTCT processcmdline(void*){ }; // removed parameter name to shut up -Wunused-parameter.
 	virtual void MTCT showusage(void *out){ };
 
 	// FIXME None of the implementations use the "param" parameter, and it comes from a pointer-to-int cast.
@@ -414,8 +415,8 @@ typedef void (MTCT *RefreshProc)(void *param);
 // anything that's part of the creative process. Modules, patterns, instruments,
 // samples, etc. etc. etc.
 // and that this type provides the common interface for all of them.
-// However, this class itself appears to be pointless since its only usage
-// is that it's inherited by MTObjectWrapper.
+// However, this class itself appears to be pointless.
+// Only MTObjectWrapper inherits it, so why even have it at all? Just use MTObjectWrapper directly.
 class ObjectWrapper{
 public:
 	virtual void MTCT create(void *object,void *parent,mt_uint32 type,mt_int32 i) = 0;

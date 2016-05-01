@@ -5,7 +5,7 @@
 //		Platforms:	Win32,Linux
 //		Processors: x86
 //
-//	Copyright � 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright   1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTSystem1.cpp 111 2007-02-16 12:58:43Z Yannick $
 //

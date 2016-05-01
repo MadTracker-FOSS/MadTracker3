@@ -5,7 +5,7 @@
 //		Platforms:	All
 //		Processors:	All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright   1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTDSP1.h 101 2005-11-30 20:19:50Z Yannick $
 //

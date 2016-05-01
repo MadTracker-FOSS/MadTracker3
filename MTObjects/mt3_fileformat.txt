@@ -1,18 +1,18 @@
 MadTracker 3 File Format Specifications
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-                                  Copyright © 2005,2006 Yannick Delwiche
+
+                                  Copyright   2005,2006 Yannick Delwiche
                                                      All rights reserved
 
 Conventions
-¯¯¯¯¯¯¯¯¯¯¯
+
   S* = Null-terminated string
   P* = Packed number (most significant bits define the number of bytes)
 
 
 Main Structure
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+
 	Offset	Size	Description
-        ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+
 	+0	32	Identifier
 	
 			"MadTracker 3 Module"
@@ -65,11 +65,11 @@ Main Structure
 
 
 Global Object Structure
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+
 	Part 0 only. Other parts are object-dependent.
 	
 	Offset	Size	Description
-	¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+
 	+0	16	MD5 checksum
 	+16	4	ID
 	+20	4	Flags
@@ -85,9 +85,9 @@ Global Object Structure
 
 
 User Structure (0xF0000001)
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+
 	Offset	Size	Description
-	¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+
 	+0	8	User GUID
 	
 	 +0	4	Timestamp
@@ -106,9 +106,9 @@ User Structure (0xF0000001)
 
 
 Access Control List Structure (0xF0000002)
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+
 	Offset	Size	Description
-	¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+
 	+0	8	User GUID
 	+8	4	Access rights
 	

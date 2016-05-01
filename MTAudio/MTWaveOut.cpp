@@ -5,7 +5,7 @@
 //		Platforms:	Win32
 //		Processors: All
 //
-//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+//	Copyright   1999-2006 Yannick Delwiche. All rights reserved.
 //
 //	$Id: MTWaveOut.cpp 111 2007-02-16 12:58:43Z Yannick $
 //

@@ -5,7 +5,7 @@
 ;//		Platforms:	All
 ;//		Processors:	x86
 ;//
-;//	Copyright © 1999-2006 Yannick Delwiche. All rights reserved.
+;//	Copyright   1999-2006 Yannick Delwiche. All rights reserved.
 ;//
 ;//	$Id: MTBuffer.asm 96 2005-11-30 20:06:47Z Yannick $
 ;//
