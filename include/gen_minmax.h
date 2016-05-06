@@ -5,7 +5,8 @@
 #ifndef MADTRACKER3_GEN_MINMAX_H
 #define MADTRACKER3_GEN_MINMAX_H
 
-namespace util {
+namespace util
+{
 
 template<typename T>
 constexpr T max(T a, T b)

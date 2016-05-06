@@ -31,60 +31,72 @@
 //---------------------------------------------------------------------------
 #include <MTXAPI/MTXSystem.h>
 #include <MTXAPI/MTXExtension.h>
+
 //---------------------------------------------------------------------------
 class MTLock;
+
 class MTEvent;
+
 class MTThread;
+
 class MTProcess;
+
 class MTTimer;
+
 class MTCPUMonitor;
-typedef int (MTCT *ThreadProc)(MTThread *thread,void *param);
-typedef void (MTCT *ProcessProc)(MTProcess *process,void *param,float p);
-typedef void (MTCT *TimerProc)(MTTimer *timer,int param);
+
+typedef int (MTCT *ThreadProc)(MTThread *thread, void *param);
+
+typedef void (MTCT *ProcessProc)(MTProcess *process, void *param, float p);
+
+typedef void (MTCT *TimerProc)(MTTimer *timer, int param);
 //---------------------------------------------------------------------------
 #include "MTSystem.h"
+
 #ifdef _WIN32
 #	include <windows.h>
 #else
+
 #	include <pthread.h>
 #	include <signal.h>
+
 #endif
+
 #include <MTXAPI/MTXGUI.h>
 #include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
-extern "C"
-{
+extern "C" {
 void initKernel();
 void uninitKernel();
 void stopThreads(bool processes);
 #ifndef _WIN32
-	void* mttry(bool pop);
-	void mtsigreturn(int sig);
+void *mttry(bool pop);
+void mtsigreturn(int sig);
 #endif
 //---------------------------------------------------------------------------
-MTThread* MTCT mtgetsysthread();
-MTThread* MTCT mtgetcurrentthread();
+MTThread *MTCT mtgetsysthread();
+MTThread *MTCT mtgetcurrentthread();
 bool MTCT mtissysthread();
-bool MTCT mtsetprivatedata(int id,void *data);
-void* MTCT mtgetprivatedata(int id);
+bool MTCT mtsetprivatedata(int id, void *data);
+void *MTCT mtgetprivatedata(int id);
 int MTCT mtlocalalloc();
 bool MTCT mtlocalfree(int id);
-bool MTCT mtlocalset(int id,void *value);
-void* MTCT mtlocalget(int id);
-MTThread* MTCT mtthreadcreate(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,const char *name);
-MTProcess* MTCT mtprocesscreate(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,const char *name);
-MTLock* MTCT mtlockcreate();
+bool MTCT mtlocalset(int id, void *value);
+void *MTCT mtlocalget(int id);
+MTThread *MTCT mtthreadcreate(ThreadProc proc, bool autofree, bool autostart, void *param, int priority, const char *name);
+MTProcess *MTCT mtprocesscreate(ThreadProc tproc, void *param, int type, int priority, void *data, ProcessProc pproc, bool silent, const char *name);
+MTLock *MTCT mtlockcreate();
 void MTCT mtlockdelete(MTLock *lock);
-MTEvent* MTCT mteventcreate(bool autoreset,int interval,int resolution,bool periodic,bool pulse);
+MTEvent *MTCT mteventcreate(bool autoreset, int interval, int resolution, bool periodic, bool pulse);
 void MTCT mteventdelete(MTEvent *event);
-MTTimer* MTCT mttimercreate(int interval,int resolution,bool periodic,int param,TimerProc proc);
-MTTimer* MTCT mttimerevent(int interval,int resolution,bool periodic,MTEvent *event,bool pulse);
+MTTimer *MTCT mttimercreate(int interval, int resolution, bool periodic, int param, TimerProc proc);
+MTTimer *MTCT mttimerevent(int interval, int resolution, bool periodic, MTEvent *event, bool pulse);
 void MTCT mttimerdelete(MTTimer *timer);
-MTCPUMonitor* MTCT mtcpumonitorcreate(int ncounters);
+MTCPUMonitor *MTCT mtcpumonitorcreate(int ncounters);
 int MTCT mtsyscounter();
 bool MTCT mtsyscounterex(double *count);
 void MTCT mtsyswait(int ms);
-int MTCT mtsyswaitmultiple(int count,void **events,bool all,int timeout);
+int MTCT mtsyswaitmultiple(int count, void **events, bool all, int timeout);
 int MTCT mtgetlasterror();
 void MTCT mtsetlasterror(int error);
 }

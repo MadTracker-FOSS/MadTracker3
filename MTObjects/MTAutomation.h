@@ -16,27 +16,32 @@
 class Automation;
 
 #include "MTModule.h"
+
 //---------------------------------------------------------------------------
 // Automation
 //---------------------------------------------------------------------------
-struct AEnvelope{
-	mt_uint32 npoints;
-	EnvPoint points[64];
+struct AEnvelope
+{
+    mt_uint32 npoints;
+    EnvPoint points[64];
 };
 
-struct TrackAuto{
-	MTObject *target;
-	mt_uint32 param;
-	mt_uint32 flags;
-	AEnvelope env;
+struct TrackAuto
+{
+    MTObject *target;
+    mt_uint32 param;
+    mt_uint32 flags;
+    AEnvelope env;
 };
 
-class Automation : public MTObject{
+class Automation: public MTObject
+{
 public:
-	Automation(MTObject *parent,mt_int32 i);
-	virtual ~Automation();
-	
-	MTArray *envelopes;
+    Automation(MTObject *parent, mt_int32 i);
+
+    virtual ~Automation();
+
+    MTArray *envelopes;
 };
 //---------------------------------------------------------------------------
 #endif

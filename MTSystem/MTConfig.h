@@ -12,6 +12,7 @@
 //---------------------------------------------------------------------------
 #ifndef MTCONFIG_INCLUDED
 #define MTCONFIG_INCLUDED
+
 //---------------------------------------------------------------------------
 class MTConfigFile;
 //---------------------------------------------------------------------------
@@ -20,10 +21,9 @@ class MTConfigFile;
 #include "MTStructures.h"
 #include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
-extern "C"
-{
-MTConfigFile* MTCT mtconfigfind(const char *filename);
-MTConfigFile* MTCT mtconfigopen(const char *filename);
+extern "C" {
+MTConfigFile *MTCT mtconfigfind(const char *filename);
+MTConfigFile *MTCT mtconfigopen(const char *filename);
 void MTCT mtconfigclose(MTConfigFile *file);
 }
 //---------------------------------------------------------------------------

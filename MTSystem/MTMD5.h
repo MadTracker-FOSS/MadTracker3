@@ -40,16 +40,16 @@
 // that there's two versions for signed and unsigned char.
 // Also, password is an unused parameter in both versions.
 
-struct MD5_CTX{
-	unsigned int state[4];
-	unsigned int count[2];
-	unsigned char buffer[64];
+struct MD5_CTX
+{
+    unsigned int state[4];
+    unsigned int count[2];
+    unsigned char buffer[64];
 };
 //---------------------------------------------------------------------------
-extern "C"
-{
-void md5(char *dest,const char *src,int size = 0,char *password = 0);
-void md5b(unsigned char *dest,const char *src,int size = 0,char *password = 0);
+extern "C" {
+void md5(char *dest, const char *src, int size = 0, char *password = 0);
+void md5b(unsigned char *dest, const char *src, int size = 0, char *password = 0);
 }
 //---------------------------------------------------------------------------
 #endif

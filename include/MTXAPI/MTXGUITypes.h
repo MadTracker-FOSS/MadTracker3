@@ -15,30 +15,35 @@
 //---------------------------------------------------------------------------
 #ifndef MTGUITypes
 #define MTGUITypes
-struct MTPoint{
-	int x,y;
+struct MTPoint
+{
+    int x, y;
 };
 
-struct MTRect{
-	int left,top,right,bottom;
+struct MTRect
+{
+    int left, top, right, bottom;
 };
 
-struct MTBounds{
-	unsigned short x;
-	unsigned short y;
-	unsigned short w;
-	unsigned short h;
+struct MTBounds
+{
+    unsigned short x;
+    unsigned short y;
+    unsigned short w;
+    unsigned short h;
 };
 #endif
 
 #ifndef MTSkinTypes
 #define MTSkinTypes
-struct MTSkinPart{
-	unsigned char mode,flags,bmpid,reserved;
-	union{
-		MTBounds b;
-		int color;
-	};
+struct MTSkinPart
+{
+    unsigned char mode, flags, bmpid, reserved;
+    union
+    {
+        MTBounds b;
+        int color;
+    };
 };
 #endif
 //---------------------------------------------------------------------------

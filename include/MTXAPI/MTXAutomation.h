@@ -12,35 +12,42 @@
 //---------------------------------------------------------------------------
 #ifndef MTXAUTOMATION_INCLUDED
 #define MTXAUTOMATION_INCLUDED
+
 //---------------------------------------------------------------------------
 class Automation;
 //---------------------------------------------------------------------------
 #include "MTXObject.h"
 #include "MTXModule.h"
+
 //---------------------------------------------------------------------------
 // Automation
 //---------------------------------------------------------------------------
-struct AEnvelope{
-	mt_uint32 npoints;
-	EnvPoint points[64];
+struct AEnvelope
+{
+    mt_uint32 npoints;
+    EnvPoint points[64];
 };
 
-struct TrackEnvelopes{
-	AEnvelope env[16];
+struct TrackEnvelopes
+{
+    AEnvelope env[16];
 };
 
-struct TrackAuto{
-	int flags;
-	int fx;
-	TrackEnvelopes *trkenv;
+struct TrackAuto
+{
+    int flags;
+    int fx;
+    TrackEnvelopes *trkenv;
 };
 
-class Automation : public MTObject{
+class Automation: public MTObject
+{
 public:
-	Automation(MTObject *parent,mt_int32 i);
-	virtual ~Automation();
+    Automation(MTObject *parent, mt_int32 i);
 
-	TrackAuto trkauto[MAX_TRACKS+MAX_MTRACKS];
+    virtual ~Automation();
+
+    TrackAuto trkauto[MAX_TRACKS + MAX_MTRACKS];
 };
 //---------------------------------------------------------------------------
 #endif

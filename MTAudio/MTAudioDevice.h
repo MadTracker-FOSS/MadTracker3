@@ -1,8 +1,10 @@
 //---------------------------------------------------------------------------
 #ifndef MTAUDIODEVICE_INCLUDED
 #define MTAUDIODEVICE_INCLUDED
+
 //---------------------------------------------------------------------------
 class MTAudioDevice;
+
 class MTAudioDeviceManager;
 //---------------------------------------------------------------------------
 #include <MTXAPI/MTXSystem.h>

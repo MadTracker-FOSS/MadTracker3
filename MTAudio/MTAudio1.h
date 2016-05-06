@@ -18,20 +18,27 @@
 #include "MTAudioDevice.h"
 //---------------------------------------------------------------------------
 
-struct MTDevice{
-	char *devicename;
-	MTAudioDeviceManager *manager;
-	int id;
-	bool selected;
+struct MTDevice
+{
+    char *devicename;
+    MTAudioDeviceManager *manager;
+    int id;
+    bool selected;
 };
 
 //---------------------------------------------------------------------------
 extern MTInterface *mtinterface;
+
 extern MTSystemInterface *si;
+
 extern MTObjectsInterface *oi;
+
 extern WaveOutput output;
+
 #ifdef _DEBUG
-	extern MTFile *recf;
+
+extern MTFile *recf;
+
 #endif
 //---------------------------------------------------------------------------
 #endif

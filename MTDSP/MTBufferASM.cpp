@@ -10,7 +10,6 @@
 //	$Id: MTBufferASM.cpp 101 2005-11-30 20:19:50Z Yannick $
 //
 //---------------------------------------------------------------------------
-#include "MTBufferASM.h"
 //---------------------------------------------------------------------------
 
 //TODO Replace by C code, or comment out - it chokes up the c++ compiler.

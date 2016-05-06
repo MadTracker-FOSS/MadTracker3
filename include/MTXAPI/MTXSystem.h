@@ -14,25 +14,31 @@
 #define MTXSYSTEM_INCLUDED
 //---------------------------------------------------------------------------
 #include "MTXExtension.h"
+
 #ifdef _WIN32
 #	include <windows.h>
 #else
+
 #	include <setjmp.h>
 #       include <signal.h>
+
 #endif
 #ifndef _WIN32
-struct _mutex_cond{
-	pthread_mutex_t i_mutex;
-	pthread_cond_t i_cv;
+struct _mutex_cond
+{
+    pthread_mutex_t i_mutex;
+    pthread_cond_t i_cv;
 };
-struct _le{
-	struct _le *next;
-	struct _le *prev;
-	struct _mutex_cond *i_mutex_cond;
+struct _le
+{
+    struct _le *next;
+    struct _le *prev;
+    struct _mutex_cond *i_mutex_cond;
 };
 #endif
+
 //---------------------------------------------------------------------------
-static const int systemtype = FOURCC('X','S','Y','S');
+static const int systemtype = FOURCC('X', 'S', 'Y', 'S');
 
 #define MTS_WINNT    0x00001
 #define MTS_MMX      0x00002
@@ -63,17 +69,18 @@ static const int systemtype = FOURCC('X','S','Y','S');
 #define MTT_HIGH     2
 #define MTT_REALTIME 15
 
-enum MTProcessType{
-	MTP_LOADMODULE = 0x10000,
-	MTP_SAVEMODULE,
-	MTP_LOADINSTRUMENT,
-	MTP_SAVEINSTRUMENT,
-	MTP_LOADSAMPLE,
-	MTP_SAVESAMPLE,
-	MTP_BUILDPEAKS = 0x20000,
-	MTP_NETWORK = 0x30000,
-	MTP_EXPORT = 0x40000,
-	MTP_INTERNET = 0x50000
+enum MTProcessType
+{
+    MTP_LOADMODULE = 0x10000,
+    MTP_SAVEMODULE,
+    MTP_LOADINSTRUMENT,
+    MTP_SAVEINSTRUMENT,
+    MTP_LOADSAMPLE,
+    MTP_SAVESAMPLE,
+    MTP_BUILDPEAKS = 0x20000,
+    MTP_NETWORK = 0x30000,
+    MTP_EXPORT = 0x40000,
+    MTP_INTERNET = 0x50000
 };
 
 #define MTPF_CANCANCEL   1
@@ -131,21 +138,14 @@ enum MTProcessType{
 #define MTDR_CANCEL     -2
 #define MTDR_TIMEOUT    -4
 
-enum MTMessageBoxButtons{
-	eMTD_OK = 0,
-	eMTD_OKCANCEL,
-	eMTD_YESNO,
-	eMTD_YESNOCANCEL
+enum MTMessageBoxButtons
+{
+    eMTD_OK = 0, eMTD_OKCANCEL, eMTD_YESNO, eMTD_YESNOCANCEL
 };
 
-enum MTConfigType{
-	MTCT_CONFIG = 0,
-	MTCT_SINTEGER,
-	MTCT_UINTEGER,
-	MTCT_FLOAT,
-	MTCT_BOOLEAN,
-	MTCT_STRING,
-	MTCT_BINARY
+enum MTConfigType
+{
+    MTCT_CONFIG = 0, MTCT_SINTEGER, MTCT_UINTEGER, MTCT_FLOAT, MTCT_BOOLEAN, MTCT_STRING, MTCT_BINARY
 };
 
 // MC stands for mini config
@@ -162,28 +162,28 @@ enum MTConfigType{
 // (si->log is in itself a function pointer)
 // Addendum: Found a possible function, mtlog(const char*, char).
 #ifdef _DEBUG
-#	define LOG(T)												si->log(T,0)
-#	define LOGD(T)												si->log(T,1)
-#	define FLOG1(T,P1)										si->flog(T,0,P1)
-#	define FLOG2(T,P1,P2)								si->flog(T,0,P1,P2)
-#	define FLOG3(T,P1,P2,P3)							si->flog(T,0,P1,P2,P3)
-#	define FLOG4(T,P1,P2,P3,P4)					si->flog(T,0,P1,P2,P3,P4)
-#	define FLOG5(T,P1,P2,P3,P4,P5)				si->flog(T,0,P1,P2,P3,P4,P5)
-#	define FLOGD1(T,P1)									si->flog(T,1,P1)
-#	define FLOGD2(T,P1,P2)								si->flog(T,1,P1,P2)
-#	define FLOGD3(T,P1,P2,P3)						si->flog(T,1,P1,P2,P3)
-#	define FLOGD4(T,P1,P2,P3,P4)					si->flog(T,1,P1,P2,P3,P4)
-#	define FLOGD5(T,P1,P2,P3,P4,P5)			si->flog(T,1,P1,P2,P3,P4,P5)
-#	define DUMP(V,L,O)										si->dump((unsigned char*)V,L,O)
-#	define ENTER(F)											si->enter(F)
-#	define FENTER1(F,P1)									si->fenter(F,P1)
-#	define FENTER2(F,P1,P2)							si->fenter(F,P1,P2)
-#	define FENTER3(F,P1,P2,P3)						si->fenter(F,P1,P2,P3)
-#	define FENTER4(F,P1,P2,P3,P4)				si->fenter(F,P1,P2,P3,P4)
-#	define FENTER5(F,P1,P2,P3,P4,P5)			si->fenter(F,P1,P2,P3,P4,P5)
-#	define FENTER6(F,P1,P2,P3,P4,P5,P6)	si->fenter(F,P1,P2,P3,P4,P5,P6)
-#	define LEAVE()												si->leave()
-#	define CALLSTACK											si->getcallstack()
+#	define LOG(T)                                                si->log(T,0)
+#	define LOGD(T)                                                si->log(T,1)
+#	define FLOG1(T, P1)                                        si->flog(T,0,P1)
+#	define FLOG2(T, P1, P2)                                si->flog(T,0,P1,P2)
+#	define FLOG3(T, P1, P2, P3)                            si->flog(T,0,P1,P2,P3)
+#	define FLOG4(T, P1, P2, P3, P4)                    si->flog(T,0,P1,P2,P3,P4)
+#	define FLOG5(T, P1, P2, P3, P4, P5)                si->flog(T,0,P1,P2,P3,P4,P5)
+#	define FLOGD1(T, P1)                                    si->flog(T,1,P1)
+#	define FLOGD2(T, P1, P2)                                si->flog(T,1,P1,P2)
+#	define FLOGD3(T, P1, P2, P3)                        si->flog(T,1,P1,P2,P3)
+#	define FLOGD4(T, P1, P2, P3, P4)                    si->flog(T,1,P1,P2,P3,P4)
+#	define FLOGD5(T, P1, P2, P3, P4, P5)            si->flog(T,1,P1,P2,P3,P4,P5)
+#	define DUMP(V, L, O)                                        si->dump((unsigned char*)V,L,O)
+#	define ENTER(F)                                            si->enter(F)
+#	define FENTER1(F, P1)                                    si->fenter(F,P1)
+#	define FENTER2(F, P1, P2)                            si->fenter(F,P1,P2)
+#	define FENTER3(F, P1, P2, P3)                        si->fenter(F,P1,P2,P3)
+#	define FENTER4(F, P1, P2, P3, P4)                si->fenter(F,P1,P2,P3,P4)
+#	define FENTER5(F, P1, P2, P3, P4, P5)            si->fenter(F,P1,P2,P3,P4,P5)
+#	define FENTER6(F, P1, P2, P3, P4, P5, P6)    si->fenter(F,P1,P2,P3,P4,P5,P6)
+#	define LEAVE()                                                si->leave()
+#	define CALLSTACK                                            si->getcallstack()
 #else
 #	define LOG(T)
 #	define LOGD(T)
@@ -213,8 +213,8 @@ enum MTConfigType{
 
 // These two are just... bad. My guess is that they're used to retreive MTArray members.
 // And the worst part is, I think I'm right.
-#define A(_A,_T) ((_T**)_A->a)
-#define D(_A,_T) ((_T*)_A->d)
+#define A(_A, _T) ((_T**)_A->a)
+#define D(_A, _T) ((_T*)_A->d)
 
 // I don't know enough about windows programming to get what's happening here.
 // But it sure looks awful.
@@ -241,138 +241,181 @@ enum MTConfigType{
  */
 
 class MTThread;
+
 class MTProcess;
+
 class MTTimer;
+
 class MTFile;
+
 class MTFolder;
 
 //---------------------------------------------------------------------------
 
 struct MTSync;
 
-typedef int (MTCT *SyncProc)(MTSync*);
+typedef int (MTCT *SyncProc)(MTSync *);
 
-struct MTSync{
-	SyncProc proc;
-	int result;
-	int param[4];
+struct MTSync
+{
+    SyncProc proc;
+    int result;
+    int param[4];
 };
 
-struct MTCPUState{
-	double starttime;
-	double lasttime;
-	double start;
-	double count;
-	double divider;
-	double cpu;
-	bool counting;
-	bool used;
+struct MTCPUState
+{
+    double starttime;
+    double lasttime;
+    double start;
+    double count;
+    double divider;
+    double cpu;
+    bool counting;
+    bool used;
 };
 
 //---------------------------------------------------------------------------
 
-class MTLock{
+class MTLock
+{
 public:
-	MTLock();
-	virtual ~MTLock();
-	virtual bool MTCT lock(int timeout = -1);
-	virtual void MTCT unlock();
+    MTLock();
+
+    virtual ~MTLock();
+
+    virtual bool MTCT lock(int timeout = -1);
+
+    virtual void MTCT unlock();
+
 private:
-        #ifdef _WIN32
-        	CRITICAL_SECTION critical;
-        #else
-        	pthread_mutex_t mutex;
-        #endif
+#ifdef _WIN32
+    CRITICAL_SECTION critical;
+#else
+    pthread_mutex_t mutex;
+#endif
 };
 
-class MTEvent{
+class MTEvent
+{
 public:
-	MTEvent();
-        MTEvent(bool autoreset,int interval = 0,int resolution = 0,bool periodic = true,bool pulse = false);
-	virtual ~MTEvent();
-	virtual bool MTCT pulse();
-	virtual bool MTCT set();
-	virtual bool MTCT reset();
-	virtual bool MTCT wait(int timeout = -1);
+    MTEvent();
+
+    MTEvent(bool autoreset, int interval = 0, int resolution = 0, bool periodic = true, bool pulse = false);
+
+    virtual ~MTEvent();
+
+    virtual bool MTCT pulse();
+
+    virtual bool MTCT set();
+
+    virtual bool MTCT reset();
+
+    virtual bool MTCT wait(int timeout = -1);
+
 protected:
-        friend int MTCT mtsyswaitmultiple(int count,MTEvent **events,bool all,int timeout);
-	friend class MTTimer;
-	int timer;
-	int d1;
+    friend int MTCT mtsyswaitmultiple(int count, MTEvent **events, bool all, int timeout);
+
+    friend class MTTimer;
+
+    int timer;
+    int d1;
 #ifdef _WIN32
-	void *d2;
+    void *d2;
         HANDLE event;
 #else
-	bool d2,d3,d4;
-	void *d5,*d6,*d7; // I hate you.
-        static void LinuxEventProc(sigval);
-	bool signaled,needreset,needpulse;
-	pthread_mutex_t *e_mutex;
-	_le *start,*end;
-	void _add(_le *list);
-	void _del(_le *list);
+    bool d2, d3, d4;
+    void *d5, *d6, *d7; // I hate you.
+    static void LinuxEventProc(sigval);
+
+    bool signaled, needreset, needpulse;
+    pthread_mutex_t *e_mutex;
+    _le *start, *end;
+
+    void _add(_le *list);
+
+    void _del(_le *list);
+
 #endif
 };
 
-typedef int (MTCT *ThreadProc)(MTThread *thread,void *param);
-typedef void (MTCT *ProcessProc)(MTProcess *process,void *param,float p);
+typedef int (MTCT *ThreadProc)(MTThread *thread, void *param);
 
-class MTThread : public MTEvent{
+typedef void (MTCT *ProcessProc)(MTProcess *process, void *param, float p);
+
+class MTThread: public MTEvent
+{
 public:
 #if defined(_WIN32)
-	DWORD id;
+    DWORD id;
 #else
-	pthread_t id;
+    pthread_t id;
 #endif
-	int type;
-	int result;
-	bool terminated;
-        bool MTCT pulse();
-	bool MTCT set();
-	bool MTCT reset();
+    int type;
+    int result;
+    bool terminated;
 
-	MTThread();
-        MTThread(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,const char *name);
-	~MTThread();
-        virtual void MTCT start();
-	virtual void MTCT terminate();
-	virtual bool MTCT getmessage(int &msg,int &param1,int &param2,bool wait = false);
-	virtual void MTCT postmessage(int msg,int param1,int param2);
+    bool MTCT pulse();
+
+    bool MTCT set();
+
+    bool MTCT reset();
+
+    MTThread();
+
+    MTThread(ThreadProc proc, bool autofree, bool autostart, void *param, int priority, const char *name);
+
+    ~MTThread();
+
+    virtual void MTCT start();
+
+    virtual void MTCT terminate();
+
+    virtual bool MTCT getmessage(int &msg, int &param1, int &param2, bool wait = false);
+
+    virtual void MTCT postmessage(int msg, int param1, int param2);
+
 protected:
 #ifdef _WIN32
-	static DWORD WINAPI SysThread(MTThread*);
+    static DWORD WINAPI SysThread(MTThread*);
 #else
-        static void* SysThread(void*);
-	int _p[2];
-	pthread_attr_t *attr;
-	int d1,d2;
-	void *d3;
+
+    static void *SysThread(void *);
+
+    int _p[2];
+    pthread_attr_t *attr;
+    int d1, d2;
+    void *d3;
 #endif
-	ThreadProc mproc;
-	const char *mname;
-	void *mparam;
-	int mpriority;
-	bool mautofree;
-	bool running;
-	bool hasmsg;
+    ThreadProc mproc;
+    const char *mname;
+    void *mparam;
+    int mpriority;
+    bool mautofree;
+    bool running;
+    bool hasmsg;
 };
 
-class MTProcess : public MTThread{
+class MTProcess: public MTThread
+{
 public:
-	int status;
-	int priority;
-	void *data;
-	void *guidata;
-	float progress;
-        ProcessProc mpproc;
-        
-        void MTCT start();
-        MTProcess(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,const char *name);
-	virtual ~MTProcess();
-	virtual void MTCT setprogress(float p);
-        
+    int status;
+    int priority;
+    void *data;
+    void *guidata;
+    float progress;
+    ProcessProc mpproc;
+
+    void MTCT start();
+
+    MTProcess(ThreadProc tproc, void *param, int type, int priority, void *data, ProcessProc pproc, bool silent, const char *name);
+
+    virtual ~MTProcess();
+
+    virtual void MTCT setprogress(float p);
+
 private:
-	static int MTCT syncprocessproc(MTSync *s);
+    static int MTCT syncprocessproc(MTSync *s);
 };
 
 /**
@@ -386,117 +429,166 @@ private:
  * make it into the next standard, so for now we're stuck with this.
  * Maybe bring in a dependency on boost::filesystem?
  */
-class MTFileHook{
+class MTFileHook
+{
 public:
-	virtual MTFile* MTCT fileopen(const char *url,int flags) = 0;
-	virtual MTFolder* MTCT folderopen(char *url) = 0;
-	virtual bool MTCT filecopy(char *source,char *dest) = 0;
-	virtual bool MTCT filerename(char *source,char *dest) = 0;
-	virtual bool MTCT filedelete(char *url) = 0;
-	virtual void MTCT filetype(const char *url,char *type,int length) = 0;
+    virtual MTFile *MTCT fileopen(const char *url, int flags) = 0;
+
+    virtual MTFolder *MTCT folderopen(char *url) = 0;
+
+    virtual bool MTCT filecopy(char *source, char *dest) = 0;
+
+    virtual bool MTCT filerename(char *source, char *dest) = 0;
+
+    virtual bool MTCT filedelete(char *url) = 0;
+
+    virtual void MTCT filetype(const char *url, char *type, int length) = 0;
 };
 
-class MTFile{
+// Note that MTConsole inherits from this!
+class MTFile
+{
 public:
-	char *url;
+    char *url;
 
-	virtual ~MTFile(){ };
-	virtual int MTCT read(void *buffer,int size) = 0;
-	virtual int MTCT readln(char *buffer,int maxsize) = 0;
+    virtual ~MTFile()
+    { };
+
+    virtual int MTCT read(void *buffer, int size) = 0;
+
+    virtual int MTCT readln(char *buffer, int maxsize) = 0;
+
 //	virtual int MTCT reads(char *buffer,int maxsize) = 0;
-	virtual int MTCT write(const void *buffer,int size) = 0;
-	virtual int MTCT seek(int pos,int origin) = 0;
-	virtual void* MTCT getpointer(int offset,int size) = 0;
-	virtual void MTCT releasepointer(void *mem) = 0;
-	virtual int MTCT length() = 0;
-	virtual int MTCT pos() = 0;
-	virtual bool MTCT eof() = 0;
-	virtual bool MTCT seteof() = 0;
-	virtual bool MTCT gettime(int *modified,int *accessed) = 0;
-	virtual bool MTCT settime(int *modified,int *accessed) = 0;
-	virtual MTFile* MTCT subclass(int start,int length,int access) = 0;
+    virtual int MTCT write(const void *buffer, int size) = 0;
+
+    virtual int MTCT seek(int pos, int origin) = 0;
+
+    virtual void *MTCT getpointer(int offset, int size) = 0;
+
+    virtual void MTCT releasepointer(void *mem) = 0;
+
+    virtual int MTCT length() = 0;
+
+    virtual int MTCT pos() = 0;
+
+    virtual bool MTCT eof() = 0;
+
+    virtual bool MTCT seteof() = 0;
+
+    virtual bool MTCT gettime(int *modified, int *accessed) = 0;
+
+    virtual bool MTCT settime(int *modified, int *accessed) = 0;
+
+    virtual MTFile *MTCT subclass(int start, int length, int access) = 0;
 };
 
-class MTFolder{
+class MTFolder
+{
 public:
-	virtual ~MTFolder() = 0;
-	virtual bool MTCT getfile(const char **name,int *attrib,double *size) = 0;
-	virtual bool MTCT next() = 0;
+    virtual ~MTFolder() = 0;
+
+    virtual bool MTCT getfile(const char **name, int *attrib, double *size) = 0;
+
+    virtual bool MTCT next() = 0;
 };
 
 
+typedef void (MTCT *TimerProc)(MTTimer *timer, int param);
 
-typedef void (MTCT *TimerProc)(MTTimer *timer,int param);
-typedef void (MTCT *ItemProc)(void *item,void *param);
-typedef int (MTCT *SortProc)(void *item1,void *item2);
+typedef void (MTCT *ItemProc)(void *item, void *param);
 
-class MTTimer{
+typedef int (MTCT *SortProc)(void *item1, void *item2);
+
+class MTTimer
+{
 public:
-	MTTimer(int interval,int resolution,bool periodic,int param,TimerProc proc);
-	MTTimer(int interval,int resolution,bool periodic,MTEvent *event,bool pulse = false);
-	virtual ~MTTimer();
+    MTTimer(int interval, int resolution, bool periodic, int param, TimerProc proc);
+
+    MTTimer(int interval, int resolution, bool periodic, MTEvent *event, bool pulse = false);
+
+    virtual ~MTTimer();
+
 private:
 #ifdef _WIN32
-	static void CALLBACK WinTimerProc(UINT,UINT,DWORD,DWORD,DWORD);
+    static void CALLBACK WinTimerProc(UINT,UINT,DWORD,DWORD,DWORD);
 #else
-	static void UnixTimerProc(sigval);
-#endif
-	MTEvent *event;
-	int id;
-	int res;
-	int mparam;
-	TimerProc mproc;
-};
 
+    static void UnixTimerProc(sigval);
+
+#endif
+    MTEvent *event;
+    int id;
+    int res;
+    int mparam;
+    TimerProc mproc;
+};
 
 
 // This is std::vector implementing std::sort, but without the type safety.
 // Should be easily replacable by those two.
-class MTArray{
+class MTArray
+{
 public:
-	int _is;    // an index counter to be used as iterator
-	int nitems; // size() or capacity(). Looking at "na" in the private section, it's probably the latter.
-	union{      // wat?
-		void **a;   // WAT?
-		void *d;    // WHY?
-	};
+    int _is;    // an index counter to be used as iterator
+    int nitems; // size() or capacity(). Looking at "na" in the private section, it's probably the latter.
+    union
+    {      // wat?
+        void **a;   // WAT?
+        void *d;    // WHY?
+    };
 
-	inline void* operator[](unsigned int i){ return (a)?a[i]:((d)?(char*)d+_is*i:0); }; // WHYYYYY?
+    inline void *operator[](unsigned int i)
+    { return (a) ? a[i] : ((d) ? (char *) d + _is * i : 0); }; // WHYYYYY?
 
     // Okay, so it seems that these void* / void** shenanigans happen
     // so that the array can also hold other arrays of a given type.
     // Again, nothing that std::vector couldn't do, and using a union
     // here costs us runtime.
 
-        MTArray(int allocby,int itemsize = 0);
-	virtual ~MTArray();
-	virtual int MTCT additem(int at,void *item);
-	virtual int MTCT additems(int at,int count);
-	virtual void MTCT delitems(int from,int count);
+    MTArray(int allocby, int itemsize = 0);
+
+    virtual ~MTArray();
+
+    virtual int MTCT additem(int at, void *item);
+
+    virtual int MTCT additems(int at, int count);
+
+    virtual void MTCT delitems(int from, int count);
+
     // Unused function
     // Commented out by irrenhaus3 on 2016-02-09
 //	virtual int MTCT setitem(int at,void *item);
-	virtual int MTCT push(void *item);
-	virtual void* MTCT pop();
-	virtual int MTCT getitemid(void *item);
-	virtual void MTCT remove(void *item);
-	virtual void MTCT clear(bool deldata = false,ItemProc = 0,void *param = 0);
-	virtual void MTCT reset();
-	virtual void* MTCT next();
-	virtual void MTCT sort(SortProc proc);
+    virtual int MTCT push(void *item);
+
+    virtual void *MTCT pop();
+
+    virtual int MTCT getitemid(void *item);
+
+    virtual void MTCT remove(void *item);
+
+    virtual void MTCT clear(bool deldata = false, ItemProc = 0, void *param = 0);
+
+    virtual void MTCT reset();
+
+    virtual void *MTCT next();
+
+    virtual void MTCT sort(SortProc proc);
+
 private:
-	int mallocby;
-	int na; // my best guess is that this stands for "number actual"
-	int countid; // this one is initialized by a thread-local storage key.
-	void quicksort(int lo,int hi,SortProc proc);
-	void quicksortf(int lo,int hi,SortProc proc);
+    int mallocby;
+    int na; // my best guess is that this stands for "number actual"
+    int countid; // this one is initialized by a thread-local storage key.
+    void quicksort(int lo, int hi, SortProc proc);
+
+    void quicksortf(int lo, int hi, SortProc proc);
 };
 
-struct MTHashData{
-	unsigned int key;
-	char *ckey;
-	void *data;
-	int reserved;
+struct MTHashData
+{
+    unsigned int key;
+    char *ckey;
+    void *data;
+    int reserved;
 };
 
 // So this is not a hash, but a hash table. So it should be replacable
@@ -504,30 +596,46 @@ struct MTHashData{
 // specify the hash function (specialization of std::hash for the value
 // type in the map) but things like getitemfromid are implemented by
 // using standard algorithms like std::find_if.
-class MTHash{
+class MTHash
+{
 public:
-	int nitems;
+    int nitems;
 
-	MTHash(int allocby);
-	virtual ~MTHash();
-	virtual int MTCT additem(const char *key,void *data);
-	virtual int MTCT additem(int key,void *data);
-	virtual void MTCT delitem(const char *key,bool deldata = false,ItemProc proc = 0,void *param = 0);
-	virtual void MTCT delitem(int key,bool deldata = false,ItemProc proc = 0,void *param = 0);
-	virtual void MTCT delitemfromid(int id,bool deldata = false,ItemProc proc = 0,void *param = 0);
-	virtual void* MTCT getitem(const char *key);
-	virtual void* MTCT getitem(int key);
-	virtual void* MTCT getitemfromid(int id);
-	virtual int MTCT getitemid(void *item);
-	virtual const char* MTCT getitemkey(void *item);
-	virtual void MTCT clear(bool deldata = false,ItemProc proc = 0,void *param = 0);
-	virtual void MTCT reset();
-	virtual void* MTCT next();
+    MTHash(int allocby);
+
+    virtual ~MTHash();
+
+    virtual int MTCT additem(const char *key, void *data);
+
+    virtual int MTCT additem(int key, void *data);
+
+    virtual void MTCT delitem(const char *key, bool deldata = false, ItemProc proc = 0, void *param = 0);
+
+    virtual void MTCT delitem(int key, bool deldata = false, ItemProc proc = 0, void *param = 0);
+
+    virtual void MTCT delitemfromid(int id, bool deldata = false, ItemProc proc = 0, void *param = 0);
+
+    virtual void *MTCT getitem(const char *key);
+
+    virtual void *MTCT getitem(int key);
+
+    virtual void *MTCT getitemfromid(int id);
+
+    virtual int MTCT getitemid(void *item);
+
+    virtual const char *MTCT getitemkey(void *item);
+
+    virtual void MTCT clear(bool deldata = false, ItemProc proc = 0, void *param = 0);
+
+    virtual void MTCT reset();
+
+    virtual void *MTCT next();
+
 private:
-	MTHashData *hash;
-	int mallocby;
-	int na;
-	int countid;
+    MTHashData *hash;
+    int mallocby;
+    int na;
+    int countid;
 };
 
 // What is a resource? A sample, a module, a chunk of memory, the hard drive, a printer?
@@ -537,178 +645,292 @@ private:
 // Correction: getresourceurl() is never used, and the rest of the member function
 // usages pop up in interface init reoutines and places like getdisplayname in
 // MTModule. So yes, a resource can be anything in any savefile.
-class MTResources{
+class MTResources
+{
 public:
-	MTResources(MTFile *f,bool ownfile);
-	virtual ~MTResources();
-	virtual int MTCT getnumresources();
-	virtual bool MTCT getresourceinfo(int id,int *type,int *uid,int *size);
-	virtual int MTCT loadresource(int type,int uid,void *buffer,int size);
-	virtual int MTCT loadstring(int uid,char *buffer,int size);
-	virtual int MTCT loadstringf(int uid,char *buffer,int size,...);
-	virtual void* MTCT getresource(int type,int uid,int *size);
-	virtual void MTCT releaseresource(void *res);
-	virtual MTFile* MTCT getresourcefile(int type,int uid,int *size);
-	virtual void MTCT releaseresourcefile(MTFile *f);
-	virtual bool MTCT addresource(int type,int uid,void *res,int size);
-	virtual bool MTCT addfile(int type,int uid,MTFile *f);
-	virtual const char* MTCT getresourceurl();
+    MTResources(MTFile *f, bool ownfile);
+
+    virtual ~MTResources();
+
+    virtual int MTCT getnumresources();
+
+    virtual bool MTCT getresourceinfo(int id, int *type, int *uid, int *size);
+
+    virtual int MTCT loadresource(int type, int uid, void *buffer, int size);
+
+    virtual int MTCT loadstring(int uid, char *buffer, int size);
+
+    virtual int MTCT loadstringf(int uid, char *buffer, int size, ...);
+
+    virtual void *MTCT getresource(int type, int uid, int *size);
+
+    virtual void MTCT releaseresource(void *res);
+
+    virtual MTFile *MTCT getresourcefile(int type, int uid, int *size);
+
+    virtual void MTCT releaseresourcefile(MTFile *f);
+
+    virtual bool MTCT addresource(int type, int uid, void *res, int size);
+
+    virtual bool MTCT addfile(int type, int uid, MTFile *f);
+
+    virtual const char *MTCT getresourceurl();
+
 private:
-	struct MTResTable{
-		int type;
-		int uid;
-		int offset;
-		int size;
-	} *table;
-	MTFile *mf;
-	int nres,onres,nares;
-	bool modified;
-	bool mownfile;
-	void MTCT setmodified();
+    struct MTResTable
+    {
+        int type;
+        int uid;
+        int offset;
+        int size;
+    } *table;
+    MTFile *mf;
+    int nres, onres, nares;
+    bool modified;
+    bool mownfile;
+
+    void MTCT setmodified();
 };
 
 // This is like an ini-style format; interface design is clunky but looks usable.
 // Almost on the right path, though I don't know what all the virtual functions
 // are for. They are pretty much guaranteed to be either optimized out or slow
 // down the program.
-class MTConfigFile{
+class MTConfigFile
+{
 public:
-	// FIXME: These were pure, should this class be extended? -flibit
-        MTConfigFile(const char *filename);
-	virtual ~MTConfigFile();
-	virtual void MTCT clear();
-	virtual bool MTCT setsection(const char *name);
-	virtual bool MTCT getparameter(const char *paramname,void *value,int desiredtype,int size);
-	virtual bool MTCT createsection(const char *name);
-	virtual bool MTCT setparameter(const char *paramname,void *value,int type,int size);
-	virtual const char* MTCT getfilename();
-	bool loaded();
+    // FIXME: These were pure, should this class be extended? -flibit
+    MTConfigFile(const char *filename);
+
+    virtual ~MTConfigFile();
+
+    virtual void MTCT clear();
+
+    virtual bool MTCT setsection(const char *name);
+
+    virtual bool MTCT getparameter(const char *paramname, void *value, int desiredtype, int size);
+
+    virtual bool MTCT createsection(const char *name);
+
+    virtual bool MTCT setparameter(const char *paramname, void *value, int type, int size);
+
+    virtual const char *MTCT getfilename();
+
+    bool loaded();
+
 private:
-	MTFile *f;
-	int sectionpos,sectionline,sectionnp,cpos,cline,cnp;
-	MTArray *np;
+    MTFile *f;
+    int sectionpos, sectionline, sectionnp, cpos, cline, cnp;
+    MTArray *np;
 };
 
 // So there's not only config file, but miniconfig as well. I'm guessing this
 // is the bunch of checkboxes you see in the general options menu?
 // Things like "connect to chat at startup"?
 //TODO look into this further, see what it does.
-class MTMiniConfig{
+class MTMiniConfig
+{
 public:
-	MTMiniConfig();
-	virtual ~MTMiniConfig();
-	virtual bool MTCT getparameter(const char *paramname,void *value,int desiredtype,int size);
-	virtual bool MTCT setparameter(const char *paramname,const void *value,int type,int size);
-	virtual int MTCT loadfromstream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER));
-	virtual int MTCT savetostream(MTFile *f,int flags = (MTMC_ALL|MTMC_HEADER));
+    MTMiniConfig();
+
+    virtual ~MTMiniConfig();
+
+    virtual bool MTCT getparameter(const char *paramname, void *value, int desiredtype, int size);
+
+    virtual bool MTCT setparameter(const char *paramname, const void *value, int type, int size);
+
+    virtual int MTCT loadfromstream(MTFile *f, int flags = (MTMC_ALL | MTMC_HEADER));
+
+    virtual int MTCT savetostream(MTFile *f, int flags = (MTMC_ALL | MTMC_HEADER));
+
 private:
-	int np;
-	MTHash *mp;
+    int np;
+    MTHash *mp;
 };
 
 // this is probably the data for the little cpu usage bar in the tracker's main window.
-class MTCPUMonitor{
+class MTCPUMonitor
+{
 public:
-	int flushid;
-	MTCPUMonitor(int ncounters);
-	virtual ~MTCPUMonitor();
-	virtual void MTCT startslice(int id);
-	virtual void MTCT endslice(int id);
-	virtual void MTCT flushcpu(int id);
-	virtual void MTCT startadd(int id);
-	virtual void MTCT endadd(int id);
-	virtual double MTCT getcpu(int id);
-	virtual void* MTCT getcpustate(int id);
-	virtual int MTCT getcpustateid(void *s);
-	virtual int MTCT addcpustate();
-	virtual void MTCT delcpustate(int id);
+    int flushid;
+
+    MTCPUMonitor(int ncounters);
+
+    virtual ~MTCPUMonitor();
+
+    virtual void MTCT startslice(int id);
+
+    virtual void MTCT endslice(int id);
+
+    virtual void MTCT flushcpu(int id);
+
+    virtual void MTCT startadd(int id);
+
+    virtual void MTCT endadd(int id);
+
+    virtual double MTCT getcpu(int id);
+
+    virtual void *MTCT getcpustate(int id);
+
+    virtual int MTCT getcpustateid(void *s);
+
+    virtual int MTCT addcpustate();
+
+    virtual void MTCT delcpustate(int id);
+
 private:
-	int n;
-	MTCPUState *state;
+    int n;
+    MTCPUState *state;
 };
 
 // The big bad wolf. Function pointer extravaganza.
 // This is the class that global pointer "si" is an instance of.
 // In other words, this is the main construction site for refactors.
-class MTSystemInterface : public MTXInterface{
+class MTSystemInterface: public MTXInterface
+{
 public:
-	int sysflags;
-	char *platform;
-	char *build;
-	char *processor;
-	char *hostname;
-	int ncpu;
-	int cpufrequ;
-	void *onerror;
+    int sysflags;
+    char *platform;
+    char *build;
+    char *processor;
+    char *hostname;
+    int ncpu;
+    int cpufrequ;
+    void *onerror;
 
-	virtual int MTCT getlasterror() = 0;
-	virtual void MTCT setlasterror(int error) = 0;
-	virtual void MTCT addfilehook(char *type,MTFileHook *hook) = 0;
-	virtual void MTCT delfilehook(char *type,MTFileHook *hook) = 0;
+    virtual int MTCT getlasterror() = 0;
 
-	void* (MTCT *memalloc)(int size,int flags);
-	bool (MTCT *memfree)(void *mem);
-	void* (MTCT *memrealloc)(void *mem,int size);
-	MTThread* (MTCT *getsysthread)();
-	MTThread* (MTCT *getcurrentthread)();
-	bool (MTCT *issysthread)();
-	bool (MTCT *setprivatedata)(int id,void *data);
-	void* (MTCT *getprivatedata)(int id);
-	int (MTCT *localalloc)();
-	bool (MTCT *localfree)(int id);
-	bool (MTCT *localset)(int id,void *value);
-	void* (MTCT localget)(int id);
-	MTThread* (MTCT *threadcreate)(ThreadProc proc,bool autofree,bool autostart,void *param,int priority,const char *name);
-	MTProcess* (MTCT *processcreate)(ThreadProc tproc,void *param,int type,int priority,void *data,ProcessProc pproc,bool silent,const char *name);
-	MTFile* (MTCT *fileopen)(const char *url,int flags);
-	void (MTCT *fileclose)(MTFile *file);
-	bool (MTCT *fileexists)(char *filename);
-	bool (MTCT *filecopy)(char *filename,char *destination);
-	bool (MTCT *filedelete)(char *filename);
-	bool (MTCT *filerename)(char *filename,char *newname);
-	void (MTCT *filetype)(const char *filename,char *filetype,int length);
-	void (MTCT *filemaketemp)(char *filename,int length);
-	MTFolder* (MTCT *folderopen)(char *path);
-	void (MTCT *folderclose)(MTFolder *folder);
-	MTArray* (MTCT *arraycreate)(int nallocby,int itemsize);
-	void (MTCT *arraydelete)(MTArray *array);
-	MTHash* (MTCT *hashcreate)(int nallocby);
-	void (MTCT *hashdelete)(MTHash *array);
-	MTResources* (MTCT *resfind)(const char *filename,bool write);
-	MTResources* (MTCT *resopen)(MTFile *f,bool ownfile);
-	void (MTCT *resclose)(MTResources *res);
-	MTConfigFile* (MTCT *configfind)(const char *filename);
-	MTConfigFile* (MTCT *configopen)(const char *filename);
-	void (MTCT* configclose)(MTConfigFile* file);
-	MTMiniConfig* (MTCT *miniconfigcreate)();
-	void (MTCT *miniconfigdelete)(MTMiniConfig *cfg);
-	MTLock* (MTCT *lockcreate)();
-	void (MTCT *lockdelete)(MTLock *lock);
-	MTEvent* (MTCT *eventcreate)(bool autoreset,int interval,int resolution,bool periodic,bool pulse);
-	void (MTCT *eventdelete)(MTEvent *event);
-	MTTimer* (MTCT *timercreate)(int interval,int resolution,bool periodic,int param,TimerProc proc);
-	MTTimer* (MTCT *timerevent)(int interval,int resolution,bool periodic,MTEvent *event,bool pulse);
-	void (MTCT *timerdelete)(MTTimer *timer);
-	MTCPUMonitor *(MTCT *cpumonitorcreate)(int ncounters);
-	int (MTCT *syscounter)();
-	bool (MTCT *syscounterex)(double *count);
-	void (MTCT *syswait)(int ms);
-	int (MTCT *syswaitmultiple)(int count,MTEvent **events,bool all,int timeout);
-	int (MTCT *dialog)(const char *message,const char *caption,const char *buttons,int flags,int timeout);
-	int (MTCT *resdialog)(MTResources *res,int id,const char *caption,char *buttons,int timeout,int flags,...);
-	int (MTCT *authdialog)(char *message,char *login,char *password);
-	void (MTCT *showoserror)(int error);
-	void (MTCT *showlastoserror)();
-	void (MTCT *log)(const char *log,char date);
-	void (MTCT *flog)(const char *log,char date,...);
-	void (MTCT *dump)(unsigned char *address,int length,int offset);
-	void (MTCT *enter)(const char *func);
-	void (MTCT *fenter)(const char *func,...);
-	void (MTCT *leave)();
-	const char* (MTCT *getcallstack)();
-	void (MTCT *getlibmemoryrange)(void *lib,int flags,void **start,int *length);
-	int (MTCT *sync_inc)(int *value);
-	int (MTCT *sync_dec)(int *value);
+    virtual void MTCT setlasterror(int error) = 0;
+
+    virtual void MTCT addfilehook(char *type, MTFileHook *hook) = 0;
+
+    virtual void MTCT delfilehook(char *type, MTFileHook *hook) = 0;
+
+    void *(MTCT *memalloc)(int size, int flags);
+
+    bool (MTCT *memfree)(void *mem);
+
+    void *(MTCT *memrealloc)(void *mem, int size);
+
+    MTThread *(MTCT *getsysthread)();
+
+    MTThread *(MTCT *getcurrentthread)();
+
+    bool (MTCT *issysthread)();
+
+    bool (MTCT *setprivatedata)(int id, void *data);
+
+    void *(MTCT *getprivatedata)(int id);
+
+    int (MTCT *localalloc)();
+
+    bool (MTCT *localfree)(int id);
+
+    bool (MTCT *localset)(int id, void *value);
+
+    void *(MTCT localget)(int id);
+
+    MTThread *(MTCT *threadcreate)(ThreadProc proc, bool autofree, bool autostart, void *param, int priority, const char *name);
+
+    MTProcess *(MTCT *processcreate)(ThreadProc tproc, void *param, int type, int priority, void *data, ProcessProc pproc, bool silent, const char *name);
+
+    MTFile *(MTCT *fileopen)(const char *url, int flags);
+
+    void (MTCT *fileclose)(MTFile *file);
+
+    bool (MTCT *fileexists)(char *filename);
+
+    bool (MTCT *filecopy)(char *filename, char *destination);
+
+    bool (MTCT *filedelete)(char *filename);
+
+    bool (MTCT *filerename)(char *filename, char *newname);
+
+    void (MTCT *filetype)(const char *filename, char *filetype, int length);
+
+    void (MTCT *filemaketemp)(char *filename, int length);
+
+    MTFolder *(MTCT *folderopen)(char *path);
+
+    void (MTCT *folderclose)(MTFolder *folder);
+
+    MTArray *(MTCT *arraycreate)(int nallocby, int itemsize);
+
+    void (MTCT *arraydelete)(MTArray *array);
+
+    MTHash *(MTCT *hashcreate)(int nallocby);
+
+    void (MTCT *hashdelete)(MTHash *array);
+
+    MTResources *(MTCT *resfind)(const char *filename, bool write);
+
+    MTResources *(MTCT *resopen)(MTFile *f, bool ownfile);
+
+    void (MTCT *resclose)(MTResources *res);
+
+    MTConfigFile *(MTCT *configfind)(const char *filename);
+
+    MTConfigFile *(MTCT *configopen)(const char *filename);
+
+    void (MTCT *configclose)(MTConfigFile *file);
+
+    MTMiniConfig *(MTCT *miniconfigcreate)();
+
+    void (MTCT *miniconfigdelete)(MTMiniConfig *cfg);
+
+    MTLock *(MTCT *lockcreate)();
+
+    void (MTCT *lockdelete)(MTLock *lock);
+
+    MTEvent *(MTCT *eventcreate)(bool autoreset, int interval, int resolution, bool periodic, bool pulse);
+
+    void (MTCT *eventdelete)(MTEvent *event);
+
+    MTTimer *(MTCT *timercreate)(int interval, int resolution, bool periodic, int param, TimerProc proc);
+
+    MTTimer *(MTCT *timerevent)(int interval, int resolution, bool periodic, MTEvent *event, bool pulse);
+
+    void (MTCT *timerdelete)(MTTimer *timer);
+
+    MTCPUMonitor *(MTCT *cpumonitorcreate)(int ncounters);
+
+    int (MTCT *syscounter)();
+
+    bool (MTCT *syscounterex)(double *count);
+
+    void (MTCT *syswait)(int ms);
+
+    int (MTCT *syswaitmultiple)(int count, MTEvent **events, bool all, int timeout);
+
+    int (MTCT *dialog)(const char *message, const char *caption, const char *buttons, int flags, int timeout);
+
+    int (MTCT *resdialog)(MTResources *res, int id, const char *caption, char *buttons, int timeout, int flags, ...);
+
+    int (MTCT *authdialog)(char *message, char *login, char *password);
+
+    void (MTCT *showoserror)(int error);
+
+    void (MTCT *showlastoserror)();
+
+    void (MTCT *log)(const char *log, char date);
+
+    void (MTCT *flog)(const char *log, char date, ...);
+
+    void (MTCT *dump)(unsigned char *address, int length, int offset);
+
+    void (MTCT *enter)(const char *func);
+
+    void (MTCT *fenter)(const char *func, ...);
+
+    void (MTCT *leave)();
+
+    const char *(MTCT *getcallstack)();
+
+    void (MTCT *getlibmemoryrange)(void *lib, int flags, void **start, int *length);
+
+    int (MTCT *sync_inc)(int *value);
+
+    int (MTCT *sync_dec)(int *value);
 };
 //---------------------------------------------------------------------------
 #endif

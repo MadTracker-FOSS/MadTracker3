@@ -18,7 +18,8 @@
 #define IS_DENORMAL(f) (((*(unsigned int *)&f)&0x7f800000)==0)
 //---------------------------------------------------------------------------
 #include "MTDSP.h"
+
 //---------------------------------------------------------------------------
-void MTCT a_filter_(sample *dest,sample *source,FilterStatus &status,int count,int frequency);
+void MTCT a_filter_(sample *dest, sample *source, FilterStatus &status, int count, int frequency);
 //---------------------------------------------------------------------------
 #endif

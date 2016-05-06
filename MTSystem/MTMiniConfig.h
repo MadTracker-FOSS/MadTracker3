@@ -18,6 +18,7 @@
 #define MTMC_ALL       3
 #define MTMC_MD5KEYS   4
 #define MTMC_HEADER    8
+
 //---------------------------------------------------------------------------
 class MTMiniConfig;
 //---------------------------------------------------------------------------
@@ -26,9 +27,8 @@ class MTMiniConfig;
 //---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
-extern "C"
-{
-MTMiniConfig* MTCT mtminiconfigcreate();
+extern "C" {
+MTMiniConfig *MTCT mtminiconfigcreate();
 void MTCT mtminiconfigdelete(MTMiniConfig *cfg);
 }
 //---------------------------------------------------------------------------

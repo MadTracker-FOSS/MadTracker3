@@ -27,32 +27,41 @@
 //---------------------------------------------------------------------------
 struct MTShape
 {
-	int type;
-	sample *data;
-	int x1;
-	sample y1;
-	int x2;
-	sample y2;
-	int x3;
-	sample y3;
-	int x4;
-	sample y4;
+    int type;
+    sample *data;
+    int x1;
+    sample y1;
+    int x2;
+    sample y2;
+    int x3;
+    sample y3;
+    int x4;
+    sample y4;
 };
 
-class MTShaper{
+class MTShaper
+{
 public:
-	MTShaper();
-	virtual ~MTShaper();
+    MTShaper();
 
-	virtual void MTCT add(int layer,int x1,int x2,sample y);
-	virtual void MTCT add(int layer,int x1,sample y1,int x2,sample y2);
-	virtual void MTCT add(int layer,int x1,sample y1,int x2,sample y2,int x3,sample y3,int x4,sample y4);
-	virtual void MTCT add(int layer,int x1,int x2,sample *data);
-	virtual MTShape* MTCT get(int from,int to,int accept);
-	virtual void MTCT del(MTShape *s);
-	virtual void MTCT flush(int to);
+    virtual ~MTShaper();
+
+    virtual void MTCT add(int layer, int x1, int x2, sample y);
+
+    virtual void MTCT add(int layer, int x1, sample y1, int x2, sample y2);
+
+    virtual void MTCT add(int layer, int x1, sample y1, int x2, sample y2, int x3, sample y3, int x4, sample y4);
+
+    virtual void MTCT add(int layer, int x1, int x2, sample *data);
+
+    virtual MTShape *MTCT get(int from, int to, int accept);
+
+    virtual void MTCT del(MTShape *s);
+
+    virtual void MTCT flush(int to);
+
 private:
-	MTShape l[SHAPER_LAYERS];
+    MTShape l[SHAPER_LAYERS];
 };
 //---------------------------------------------------------------------------
 #endif

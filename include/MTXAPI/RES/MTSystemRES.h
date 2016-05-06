@@ -7,28 +7,28 @@
 // Windows IDs
 //---------------------------------------------------------------------------
 #define MTW_dialog                 0
-#define  MTC_b1                    2	// MTButton
-#define  MTC_ltext                 1	// MTLabel
-#define  MTC_icon                  0	// MTIcon
+#define  MTC_b1                    2    // MTButton
+#define  MTC_ltext                 1    // MTLabel
+#define  MTC_icon                  0    // MTIcon
 #define MTW_tasks                  1
-#define  MTC_progress              2	// MTProgress
-#define  MTC_work                  1	// MTLabel
-#define  MTC_anim                  0	// MTAnimation
+#define  MTC_progress              2    // MTProgress
+#define  MTC_work                  1    // MTLabel
+#define  MTC_anim                  0    // MTAnimation
 #define MTW_auth                   2
-#define  MTC_bcancel               7	// MTButton
-#define  MTC_bok                   6	// MTButton
-#define  MTC_epassword             5	// MTEdit
-#define  MTC_elogin                3	// MTEdit
-#define  MTC_lpassword             4	// MTLabel
-#define  MTC_lname                 2	// MTLabel
-#define  MTC_lcaption              1	// MTLabel
-#define  MTC_animation             0	// MTAnimation
+#define  MTC_bcancel               7    // MTButton
+#define  MTC_bok                   6    // MTButton
+#define  MTC_epassword             5    // MTEdit
+#define  MTC_elogin                3    // MTEdit
+#define  MTC_lpassword             4    // MTLabel
+#define  MTC_lname                 2    // MTLabel
+#define  MTC_lcaption              1    // MTLabel
+#define  MTC_animation             0    // MTAnimation
 #define MTW_file                   3
-#define  MTC_button                0	// MTButton
-#define  MTC_cfilter               0	// MTItemComboBox
-#define  MTC_efilter               2	// MTEdit
-#define  MTC_lfilter               0	// MTLabel
-#define  MTC_button                0	// MTButton
+#define  MTC_button                0    // MTButton
+#define  MTC_cfilter               0    // MTItemComboBox
+#define  MTC_efilter               2    // MTEdit
+#define  MTC_lfilter               0    // MTLabel
+#define  MTC_button                0    // MTButton
 //---------------------------------------------------------------------------
 // Texts IDs
 //---------------------------------------------------------------------------

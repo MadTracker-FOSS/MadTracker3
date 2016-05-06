@@ -10,7 +10,6 @@
 //	$Id: MTResamplingASM.cpp 101 2005-11-30 20:19:50Z Yannick $
 //
 //---------------------------------------------------------------------------
-#include "MTResamplingASM.h"
 //---------------------------------------------------------------------------
 /*
 void MTACT a_resample_none_8(char *dest,char *source,int count,ChannelStatus &status,int pitchi,unsigned int pitchd)

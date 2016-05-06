@@ -15,14 +15,13 @@
 
 #include "MTDSP.h"
 //---------------------------------------------------------------------------
-extern "C"
-{
-extern void MTCT a_resample_none_8(char *dest,char *source,int count,ChannelStatus &status);
-extern void MTCT a_resample_none_16(char *dest,char *source,int count,ChannelStatus &status);
-extern void MTCT a_resample_none_32(char *dest,char *source,int count,ChannelStatus &status);
-extern void MTCT a_resample_linear_8(char *dest,char *source,int count,ChannelStatus &status);
-extern void MTCT a_resample_linear_16(char *dest,char *source,int count,ChannelStatus &status);
-extern void MTCT a_resample_linear_32(char *dest,char *source,int count,ChannelStatus &status);
+extern "C" {
+extern void MTCT a_resample_none_8(char *dest, char *source, int count, ChannelStatus &status);
+extern void MTCT a_resample_none_16(char *dest, char *source, int count, ChannelStatus &status);
+extern void MTCT a_resample_none_32(char *dest, char *source, int count, ChannelStatus &status);
+extern void MTCT a_resample_linear_8(char *dest, char *source, int count, ChannelStatus &status);
+extern void MTCT a_resample_linear_16(char *dest, char *source, int count, ChannelStatus &status);
+extern void MTCT a_resample_linear_32(char *dest, char *source, int count, ChannelStatus &status);
 }
 //---------------------------------------------------------------------------
 #endif

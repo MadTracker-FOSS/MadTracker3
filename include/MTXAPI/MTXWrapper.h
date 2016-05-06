@@ -14,17 +14,26 @@
 #define MTXWRAPPER_INCLUDED
 //---------------------------------------------------------------------------
 #include "MTXExtension.h"
+
 //---------------------------------------------------------------------------
 class MTWrapper;
 //---------------------------------------------------------------------------
 #include "MTXControls.h"
+
 //---------------------------------------------------------------------------
-class MTWrapper{
+class MTWrapper
+{
 public:
-	MTWindow *wthis;
-	MTWrapper(MTWindow *w){ wthis = w; };
-	virtual ~MTWrapper(){ };
-	virtual bool MTCT onmessage(MTCMessage &msg){ return false; };
+    MTWindow *wthis;
+
+    MTWrapper(MTWindow *w)
+    { wthis = w; };
+
+    virtual ~MTWrapper()
+    { };
+
+    virtual bool MTCT onmessage(MTCMessage &msg)
+    { return false; };
 };
 //---------------------------------------------------------------------------
 #endif

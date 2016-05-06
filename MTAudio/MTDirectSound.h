@@ -17,40 +17,56 @@
 #include <windows.h>
 #include <mmsystem.h>
 #include <dsound.h>
+
 //---------------------------------------------------------------------------
-struct DSDevice{
-	GUID *guid;
-	char *name;
-	DSCAPS caps;
-	DSBCAPS bcaps;
+struct DSDevice
+{
+    GUID *guid;
+    char *name;
+    DSCAPS caps;
+    DSBCAPS bcaps;
 };
 
-class MTDirectSoundDevice : public MTAudioDevice{
+class MTDirectSoundDevice: public MTAudioDevice
+{
 public:
-	MTDirectSoundDevice(DSDevice *dev);
-	~MTDirectSoundDevice();
-	bool MTCT init(float frequency,int nchannels,int bits,double latency);
-	void MTCT uninit();
-	bool MTCT play();
-	bool MTCT stop();
-	int MTCT getposition(bool playback = false);
-	bool MTCT getdata(int position,int length,void **ptr1,void **ptr2,unsigned long *lng1,unsigned long *lng2);
-	bool MTCT writedata(void *ptr1,void *ptr2,unsigned long lng1,unsigned long lng2);
+    MTDirectSoundDevice(DSDevice *dev);
+
+    ~MTDirectSoundDevice();
+
+    bool MTCT init(float frequency, int nchannels, int bits, double latency);
+
+    void MTCT uninit();
+
+    bool MTCT play();
+
+    bool MTCT stop();
+
+    int MTCT getposition(bool playback = false);
+
+    bool MTCT getdata(int position, int length, void **ptr1, void **ptr2, unsigned long *lng1, unsigned long *lng2);
+
+    bool MTCT writedata(void *ptr1, void *ptr2, unsigned long lng1, unsigned long lng2);
+
 private:
-	int delay;
-	DSDevice *device;
-	WAVEFORMATEX format;
-	DSBUFFERDESC bufferdesc;
-	IDirectSound* ids;
-	IDirectSoundBuffer *idsb;
+    int delay;
+    DSDevice *device;
+    WAVEFORMATEX format;
+    DSBUFFERDESC bufferdesc;
+    IDirectSound *ids;
+    IDirectSoundBuffer *idsb;
 };
 
-class MTDirectSoundDeviceManager : public MTAudioDeviceManager{
+class MTDirectSoundDeviceManager: public MTAudioDeviceManager
+{
 public:
-	MTDirectSoundDeviceManager();
-	~MTDirectSoundDeviceManager();
-	MTAudioDevice* MTCT newdevice(int id);
-	void MTCT deldevice(MTAudioDevice *device);
+    MTDirectSoundDeviceManager();
+
+    ~MTDirectSoundDeviceManager();
+
+    MTAudioDevice *MTCT newdevice(int id);
+
+    void MTCT deldevice(MTAudioDevice *device);
 };
 //---------------------------------------------------------------------------
 #endif

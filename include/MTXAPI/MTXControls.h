@@ -112,45 +112,42 @@
 #define MTCF_CANTDRAW    0x00002040
 #define MTCF_CANTTOUCH   0x00040040
 
-enum{
-	MTCA_TOPLEFT = 0x0,
-	MTCA_TOPRIGHT,
-	MTCA_BOTTOMLEFT,
-	MTCA_BOTTOMRIGHT,
-	MTCA_LEFT,
-	MTCA_RIGHT,
-	MTCA_TOP = 0x8,
-	MTCA_BOTTOM = 0xA,
-	MTCA_CLIENT = 0xC
+enum
+{
+    MTCA_TOPLEFT = 0x0,
+    MTCA_TOPRIGHT,
+    MTCA_BOTTOMLEFT,
+    MTCA_BOTTOMRIGHT,
+    MTCA_LEFT,
+    MTCA_RIGHT,
+    MTCA_TOP = 0x8,
+    MTCA_BOTTOM = 0xA,
+    MTCA_CLIENT = 0xC
 };
 
-enum{
-	MTWS_FIXED = 0,
-	MTWS_FIXEDCAP,
-	MTWS_SIZABLE,
-	MTWS_SIZABLECAP,
-	MTWS_DIALOG,
-	MTWS_TABBED,
-	MTWS_DOCK,
-	MTWS_MAIN,
-	MTWS_CLOSE = 256,
-	MTWS_MAXIMIZE = 512,
-	MTWS_MINIMIZE = 1024,
-	MTWS_HELP = 2048,
-	MTWS_STAYONTOP = 4096
+enum
+{
+    MTWS_FIXED = 0,
+    MTWS_FIXEDCAP,
+    MTWS_SIZABLE,
+    MTWS_SIZABLECAP,
+    MTWS_DIALOG,
+    MTWS_TABBED,
+    MTWS_DOCK,
+    MTWS_MAIN,
+    MTWS_CLOSE = 256,
+    MTWS_MAXIMIZE = 512,
+    MTWS_MINIMIZE = 1024,
+    MTWS_HELP = 2048,
+    MTWS_STAYONTOP = 4096
 };
 
 #define MTST_HBAR 0
 #define MTST_VBAR 1
 
-enum{
-	MTP_INT = 0,
-	MTP_BOOL,
-	MTP_TEXT,
-	MTP_FLAGS,
-	MTP_LIST,
-	MTP_ACTION,
-	MTP_ITEMS
+enum
+{
+    MTP_INT = 0, MTP_BOOL, MTP_TEXT, MTP_FLAGS, MTP_LIST, MTP_ACTION, MTP_ITEMS
 };
 
 #define MTVF_IMAGES   1
@@ -160,567 +157,813 @@ enum{
 #define NORECT *(MTRect*)0
 //---------------------------------------------------------------------------
 struct MTCMessage;
+
 class MTControl;
+
 class MTWinControl;
+
 class MTScroller;
+
 class MTCustomBehaviours;
+
 class MTCustomControl;
+
 class MTCustomWinBehaviours;
+
 class MTCustomWinControl;
+
 class MTList;
+
 class MTUserList;
+
 class MTItem;
+
 class MTItemView;
+
 class MTListItem;
+
 class MTListBox;
+
 class MTMenuItem;
+
 class MTMenu;
+
 class MTFileListBox;
+
 class MTSlider;
+
 class MTDesktop;
+
 class MTWindow;
+
 class MTPanel;
+
 class MTOSWindow;
+
 class MTTabControl;
 //---------------------------------------------------------------------------
 #include "MTXGUI.h"
 #include "MTXDisplay.h"
 #include "MTXSystem.h"
 #include "MTXWrapper.h"
+
 //---------------------------------------------------------------------------
-struct MTCMessage{
-	int msg;
-	int result;
-	MTControl *ctrl;
-	union{
-		struct{
-			union{
-				int x;
-				int key;
-				int param1;
-			};
-			union{
-				int y;
-				int scancode;
-				int param2;
-			};
-			union{
-				int w;
-				int button;
-				int repeat;
-				int param3;
-			};
-			union{
-				int h;
-				int buttons;
-				void* param4;
-			};
-		};
-		MTRect dr;
-		MTPoint p;
-	};
-	MTShortcut *s;
+struct MTCMessage
+{
+    int msg;
+    int result;
+    MTControl *ctrl;
+    union
+    {
+        struct
+        {
+            union
+            {
+                int x;
+                int key;
+                int param1;
+            };
+            union
+            {
+                int y;
+                int scancode;
+                int param2;
+            };
+            union
+            {
+                int w;
+                int button;
+                int repeat;
+                int param3;
+            };
+            union
+            {
+                int h;
+                int buttons;
+                void *param4;
+            };
+        };
+        MTRect dr;
+        MTPoint p;
+    };
+    MTShortcut *s;
 };
 
-class MTControl{
+class MTControl
+{
 public:
-	MTWinControl *parent;
-	MTWindow *window;
-	int guiid;
-	int uid;
-	char *name;
-	int tag;
-	int flags;
-	int left,top;
-	int width,height;
-	int align;
-	bool direct;
-	int timercount;
-	MTMenu *popup;
-	bool autopopup;
-	void *skindata;
+    MTWinControl *parent;
+    MTWindow *window;
+    int guiid;
+    int uid;
+    char *name;
+    int tag;
+    int flags;
+    int left, top;
+    int width, height;
+    int align;
+    bool direct;
+    int timercount;
+    MTMenu *popup;
+    bool autopopup;
+    void *skindata;
 
-        MTControl(int id,int tg,MTWinControl *p,int l,int t,int w,int h);
-	virtual ~MTControl() = 0;
-	virtual int MTCT loadfromstream(MTFile *f,int size,int flags) = 0;
-	virtual int MTCT savetostream(MTFile *f,int flags) = 0;
-	virtual int MTCT getnumproperties(int id) = 0;
-	virtual bool MTCT getpropertytype(int id,char **name,int &flags) = 0;
-	virtual bool MTCT getproperty(int id,void *value) = 0;
-	virtual bool MTCT setproperty(int id,void *value) = 0;
-	virtual void MTCT setbounds(int l,int t,int w,int h) = 0;
-	virtual bool MTCT checkbounds(int &l,int &t,int &w,int &h) = 0;
-	virtual void MTCT getrect(MTRect &rect,int client) = 0;
-	virtual void MTCT switchflags(int f,bool set) = 0;
-	virtual void MTCT draw(MTRect &rect) = 0;
-	virtual bool MTCT message(MTCMessage &msg) = 0;
-	virtual void MTCT preparedraw(MTBitmap **b,int &ox,int &oy) = 0;
-	virtual void MTCT setparent(MTWinControl *newparent) = 0;
-        bool MTCT designmessage(MTCMessage &msg);
+    MTControl(int id, int tg, MTWinControl *p, int l, int t, int w, int h);
+
+    virtual ~MTControl() = 0;
+
+    virtual int MTCT loadfromstream(MTFile *f, int size, int flags) = 0;
+
+    virtual int MTCT savetostream(MTFile *f, int flags) = 0;
+
+    virtual int MTCT getnumproperties(int id) = 0;
+
+    virtual bool MTCT getpropertytype(int id, char **name, int &flags) = 0;
+
+    virtual bool MTCT getproperty(int id, void *value) = 0;
+
+    virtual bool MTCT setproperty(int id, void *value) = 0;
+
+    virtual void MTCT setbounds(int l, int t, int w, int h) = 0;
+
+    virtual bool MTCT checkbounds(int &l, int &t, int &w, int &h) = 0;
+
+    virtual void MTCT getrect(MTRect &rect, int client) = 0;
+
+    virtual void MTCT switchflags(int f, bool set) = 0;
+
+    virtual void MTCT draw(MTRect &rect) = 0;
+
+    virtual bool MTCT message(MTCMessage &msg) = 0;
+
+    virtual void MTCT preparedraw(MTBitmap **b, int &ox, int &oy) = 0;
+
+    virtual void MTCT setparent(MTWinControl *newparent) = 0;
+
+    bool MTCT designmessage(MTCMessage &msg);
+
 protected:
-	friend class MTWinControl;
-	int cborder;
-	int mox,moy,mow,moh;
-	bool moving,sizing,triggered;
+    friend class MTWinControl;
+
+    int cborder;
+    int mox, moy, mow, moh;
+    bool moving, sizing, triggered;
 };
 
-typedef bool (MTCT *MTCMessageProc)(MTWinControl *window,MTCMessage &msg);
+typedef bool (MTCT *MTCMessageProc)(MTWinControl *window, MTCMessage &msg);
 
-class MTWinControl : public MTControl{
+class MTWinControl: public MTControl
+{
 public:
-	MTDesktop *dsk;
-	int box,boy;
-	MTBitmap *mb;
-	int ncontrols;
-	MTControl **controls;
-	MTControl *focused;
-	MTScroller *hs,*vs;
-	MTCMessageProc messageproc;
-	void *oprgn,*trrgn;
-	int *modalparent;
-	int modalresult;
-	
-	virtual ~MTWinControl() = 0;
-	virtual int MTCT loadfromstream(MTFile *f,int size,int flags) = 0;
-	virtual int MTCT savetostream(MTFile *f,int flags) = 0;
-	virtual void MTCT setbounds(int l,int t,int w,int h) = 0;
-	virtual bool MTCT checkbounds(int &l,int &t,int &w,int &h) = 0;
-	virtual void MTCT getrect(MTRect &rect,int client) = 0;
-	virtual void* MTCT getemptyrgn() = 0;
-	virtual void* MTCT getvisiblergn(bool client,MTControl *control = 0) = 0;
-	virtual void* MTCT getfixedrgn() = 0;
-	virtual void MTCT switchflags(int f,bool set) = 0;
-	virtual void MTCT draw(MTRect &rect) = 0;
-	virtual bool MTCT message(MTCMessage &msg) = 0;
-	virtual void MTCT addcontrol(MTControl *control) = 0;
-	virtual void MTCT delcontrol(MTControl *control) = 0;
-	virtual void MTCT delcontrols(bool del = false) = 0;
-	virtual int MTCT getnumcontrols() = 0;
-	virtual MTControl* MTCT getcontrol(int id) = 0;
-	virtual int MTCT getcontrolid(MTControl *ctrl) = 0;
-	virtual MTControl* MTCT getcontrolfromuid(int uid) = 0;
-	virtual MTControl* MTCT getcontrolfrompoint(MTPoint &p) = 0;
-	virtual void MTCT nextcontrol(MTControl *start,bool reverse) = 0;
-	virtual void* MTCT getoffsetrgn(int type) = 0;
-	virtual void MTCT offset(int ox,int oy) = 0;
-	virtual void MTCT createbitmap() = 0;
-	virtual void MTCT deletebitmap() = 0;
-	virtual bool MTCT flush() = 0;
-	virtual bool MTCT flush(MTRect &rect) = 0;
-	virtual bool MTCT flush(int x,int y,int w,int h) = 0;
-	virtual int MTCT show(MTWinControl *w,int modal) = 0;
-	virtual void MTCT focus(MTControl *ctrl) = 0;
-	virtual void MTCT showcontrol(MTControl *ctrl) = 0;
-	virtual void MTCT showrect(MTRect &rect) = 0;
-	virtual void MTCT bringtofront(MTControl *c) = 0;
-	virtual void MTCT puttoback(MTControl *c) = 0;
-	virtual void MTCT updateregions() = 0;
-	virtual void* MTCT open(int type) = 0;
-	virtual void MTCT close(void *o) = 0;
-	virtual void MTCT clip(MTRect &rect) = 0;
-	virtual void MTCT cliprgn(void *rgn) = 0;
-	virtual void MTCT unclip() = 0;
-	virtual bool MTCT bmpblt(MTBitmap *src,int x,int y,int w,int h,int ox,int oy,int mode = MTBM_COPY) = 0;
-	virtual bool MTCT bltbmp(MTBitmap *dest,int x,int y,int w,int h,int ox,int oy,int mode = MTBM_COPY) = 0;
-	virtual bool MTCT sbmpblt(MTBitmap *src,int x,int y,int w,int h,int ox,int oy,int ow,int oh,int mode = MTBM_COPY) = 0;
-	virtual bool MTCT sbltbmp(MTBitmap *dest,int x,int y,int w,int h,int ox,int oy,int ow,int oh,int mode = MTBM_COPY) = 0;
-	virtual bool MTCT blt(int x,int y,int w,int h,int ox,int oy,int mode = MTBM_COPY) = 0;
-	virtual void MTCT setpen(int color) = 0;
-	virtual void MTCT setbrush(int color) = 0;
-	virtual bool MTCT fillcolor(int x,int y,int w,int h,int color,int opacity = 255) = 0;
-	virtual bool MTCT fillrect(int x,int y,int w,int h,int mode = MTBM_COPY) = 0;
-	virtual void MTCT point(int x,int y,int color) = 0;
-	virtual void MTCT moveto(int x,int y) = 0;
-	virtual void MTCT lineto(int x,int y) = 0;
-	virtual void MTCT polygon(const MTPoint *pt,int np) = 0;
-	virtual void MTCT polyline(const MTPoint *pt,int np) = 0;
-	virtual void MTCT rectangle(int x,int y,int w,int h) = 0;
-	virtual void MTCT ellipse(int x,int y,int w,int h) = 0;
-	virtual void MTCT settextcolor(int color) = 0;
-	virtual void MTCT setfont(void *font) = 0;
-	virtual void MTCT drawtext(const char *text,int length,MTRect &rect,int flags) = 0;
-	virtual bool MTCT gettextsize(const char *text,int length,MTPoint *size,int maxwidth = -1) = 0;
-	virtual int MTCT gettextextent(const char *text,int length,int maxextent) = 0;
-	virtual int MTCT gettextheight() = 0;
-	virtual int MTCT getcharwidth(char c) = 0;
-	virtual void MTCT toscreen(MTPoint &p) = 0;
+    MTDesktop *dsk;
+    int box, boy;
+    MTBitmap *mb;
+    int ncontrols;
+    MTControl **controls;
+    MTControl *focused;
+    MTScroller *hs, *vs;
+    MTCMessageProc messageproc;
+    void *oprgn, *trrgn;
+    int *modalparent;
+    int modalresult;
+
+    virtual ~MTWinControl() = 0;
+
+    virtual int MTCT loadfromstream(MTFile *f, int size, int flags) = 0;
+
+    virtual int MTCT savetostream(MTFile *f, int flags) = 0;
+
+    virtual void MTCT setbounds(int l, int t, int w, int h) = 0;
+
+    virtual bool MTCT checkbounds(int &l, int &t, int &w, int &h) = 0;
+
+    virtual void MTCT getrect(MTRect &rect, int client) = 0;
+
+    virtual void *MTCT getemptyrgn() = 0;
+
+    virtual void *MTCT getvisiblergn(bool client, MTControl *control = 0) = 0;
+
+    virtual void *MTCT getfixedrgn() = 0;
+
+    virtual void MTCT switchflags(int f, bool set) = 0;
+
+    virtual void MTCT draw(MTRect &rect) = 0;
+
+    virtual bool MTCT message(MTCMessage &msg) = 0;
+
+    virtual void MTCT addcontrol(MTControl *control) = 0;
+
+    virtual void MTCT delcontrol(MTControl *control) = 0;
+
+    virtual void MTCT delcontrols(bool del = false) = 0;
+
+    virtual int MTCT getnumcontrols() = 0;
+
+    virtual MTControl *MTCT getcontrol(int id) = 0;
+
+    virtual int MTCT getcontrolid(MTControl *ctrl) = 0;
+
+    virtual MTControl *MTCT getcontrolfromuid(int uid) = 0;
+
+    virtual MTControl *MTCT getcontrolfrompoint(MTPoint &p) = 0;
+
+    virtual void MTCT nextcontrol(MTControl *start, bool reverse) = 0;
+
+    virtual void *MTCT getoffsetrgn(int type) = 0;
+
+    virtual void MTCT offset(int ox, int oy) = 0;
+
+    virtual void MTCT createbitmap() = 0;
+
+    virtual void MTCT deletebitmap() = 0;
+
+    virtual bool MTCT flush() = 0;
+
+    virtual bool MTCT flush(MTRect &rect) = 0;
+
+    virtual bool MTCT flush(int x, int y, int w, int h) = 0;
+
+    virtual int MTCT show(MTWinControl *w, int modal) = 0;
+
+    virtual void MTCT focus(MTControl *ctrl) = 0;
+
+    virtual void MTCT showcontrol(MTControl *ctrl) = 0;
+
+    virtual void MTCT showrect(MTRect &rect) = 0;
+
+    virtual void MTCT bringtofront(MTControl *c) = 0;
+
+    virtual void MTCT puttoback(MTControl *c) = 0;
+
+    virtual void MTCT updateregions() = 0;
+
+    virtual void *MTCT open(int type) = 0;
+
+    virtual void MTCT close(void *o) = 0;
+
+    virtual void MTCT clip(MTRect &rect) = 0;
+
+    virtual void MTCT cliprgn(void *rgn) = 0;
+
+    virtual void MTCT unclip() = 0;
+
+    virtual bool MTCT bmpblt(MTBitmap *src, int x, int y, int w, int h, int ox, int oy, int mode = MTBM_COPY) = 0;
+
+    virtual bool MTCT bltbmp(MTBitmap *dest, int x, int y, int w, int h, int ox, int oy, int mode = MTBM_COPY) = 0;
+
+    virtual bool MTCT sbmpblt(MTBitmap *src, int x, int y, int w, int h, int ox, int oy, int ow, int oh, int mode = MTBM_COPY) = 0;
+
+    virtual bool MTCT sbltbmp(MTBitmap *dest, int x, int y, int w, int h, int ox, int oy, int ow, int oh, int mode = MTBM_COPY) = 0;
+
+    virtual bool MTCT blt(int x, int y, int w, int h, int ox, int oy, int mode = MTBM_COPY) = 0;
+
+    virtual void MTCT setpen(int color) = 0;
+
+    virtual void MTCT setbrush(int color) = 0;
+
+    virtual bool MTCT fillcolor(int x, int y, int w, int h, int color, int opacity = 255) = 0;
+
+    virtual bool MTCT fillrect(int x, int y, int w, int h, int mode = MTBM_COPY) = 0;
+
+    virtual void MTCT point(int x, int y, int color) = 0;
+
+    virtual void MTCT moveto(int x, int y) = 0;
+
+    virtual void MTCT lineto(int x, int y) = 0;
+
+    virtual void MTCT polygon(const MTPoint *pt, int np) = 0;
+
+    virtual void MTCT polyline(const MTPoint *pt, int np) = 0;
+
+    virtual void MTCT rectangle(int x, int y, int w, int h) = 0;
+
+    virtual void MTCT ellipse(int x, int y, int w, int h) = 0;
+
+    virtual void MTCT settextcolor(int color) = 0;
+
+    virtual void MTCT setfont(void *font) = 0;
+
+    virtual void MTCT drawtext(const char *text, int length, MTRect &rect, int flags) = 0;
+
+    virtual bool MTCT gettextsize(const char *text, int length, MTPoint *size, int maxwidth = -1) = 0;
+
+    virtual int MTCT gettextextent(const char *text, int length, int maxextent) = 0;
+
+    virtual int MTCT gettextheight() = 0;
+
+    virtual int MTCT getcharwidth(char c) = 0;
+
+    virtual void MTCT toscreen(MTPoint &p) = 0;
+
 private:
-	int cmox,cmoy;
-	bool cmoving;
-	void *frgn;
-	int notifycount;
+    int cmox, cmoy;
+    bool cmoving;
+    void *frgn;
+    int notifycount;
 };
 
-class MTLabel : public MTControl{
+class MTLabel: public MTControl
+{
 public:
-	char *caption;
-	bool autosize;
-	
-	virtual void MTCT setcaption(const char *c) = 0;
+    char *caption;
+    bool autosize;
+
+    virtual void MTCT setcaption(const char *c) = 0;
 };
 
-class MTButton : public MTControl{
+class MTButton: public MTControl
+{
 public:
-	char *caption;
-	int imageindex;
-	int modalresult;
-	MTShortcut *shortcut;
-	char hotkey;
-	int hotkeyoffset;
-	
-	virtual void MTCT setcaption(const char *c) = 0;
-	virtual void MTCT setimage(int index) = 0;
-	virtual void MTCT setautosize(bool autosize) = 0;
+    char *caption;
+    int imageindex;
+    int modalresult;
+    MTShortcut *shortcut;
+    char hotkey;
+    int hotkeyoffset;
+
+    virtual void MTCT setcaption(const char *c) = 0;
+
+    virtual void MTCT setimage(int index) = 0;
+
+    virtual void MTCT setautosize(bool autosize) = 0;
 };
 
-class MTIcon : public MTControl{
+class MTIcon: public MTControl
+{
 public:
-	int icon;
+    int icon;
 };
 
-class MTCheckBox : public MTControl{
+class MTCheckBox: public MTControl
+{
 public:
-	char *caption;
-	bool radio;
-	int state;
-	
-	virtual void MTCT setstate(int c,bool touched = false) = 0;
+    char *caption;
+    bool radio;
+    int state;
+
+    virtual void MTCT setstate(int c, bool touched = false) = 0;
 };
 
-class MTEdit : public MTControl{
+class MTEdit: public MTControl
+{
 public:
-	char *text;
-	int maxlength;
-	bool password;
-	
-	virtual int MTCT getnumproperties(int id) = 0;
-	virtual bool MTCT getpropertytype(int id,char **name,int &flags) = 0;
-	virtual bool MTCT getproperty(int id,void *value) = 0;
-	virtual bool MTCT setproperty(int id,void *value) = 0;
-	virtual void MTCT draw(MTRect &rect) = 0;
-	virtual bool MTCT message(MTCMessage &msg) = 0;
-	virtual void MTCT settext(const char *t) = 0;
-	virtual void MTCT setselstart(int ss) = 0;
-	virtual void MTCT setselend(int se) = 0;
-	virtual void MTCT setcursor(int c) = 0;
-	virtual void MTCT undo() = 0;
+    char *text;
+    int maxlength;
+    bool password;
+
+    virtual int MTCT getnumproperties(int id) = 0;
+
+    virtual bool MTCT getpropertytype(int id, char **name, int &flags) = 0;
+
+    virtual bool MTCT getproperty(int id, void *value) = 0;
+
+    virtual bool MTCT setproperty(int id, void *value) = 0;
+
+    virtual void MTCT draw(MTRect &rect) = 0;
+
+    virtual bool MTCT message(MTCMessage &msg) = 0;
+
+    virtual void MTCT settext(const char *t) = 0;
+
+    virtual void MTCT setselstart(int ss) = 0;
+
+    virtual void MTCT setselend(int se) = 0;
+
+    virtual void MTCT setcursor(int c) = 0;
+
+    virtual void MTCT undo() = 0;
+
 protected:
-	int lblank,rblank;
-	bool md,focused,isnew;
-	int cursor,offset;
-	int selstart,selend;
-	int mss,mse;
-	char *oldtext;
-	int oldselstart,oldselend;
+    int lblank, rblank;
+    bool md, focused, isnew;
+    int cursor, offset;
+    int selstart, selend;
+    int mss, mse;
+    char *oldtext;
+    int oldselstart, oldselend;
 };
 
-class MTComboBox : public MTEdit{
+class MTComboBox: public MTEdit
+{
 public:
-	int dropcount;
+    int dropcount;
 
-	virtual void MTCT pulldown() = 0;
-	virtual int MTCT getselected() = 0;
-	virtual bool MTCT getiteminfo(int id,char **caption,int *imageindex,int *flags,bool *editable) = 0;
-	virtual void MTCT setitem(int id) = 0;
-	virtual int MTCT searchitem(const char *search,char **caption) = 0;
+    virtual void MTCT pulldown() = 0;
+
+    virtual int MTCT getselected() = 0;
+
+    virtual bool MTCT getiteminfo(int id, char **caption, int *imageindex, int *flags, bool *editable) = 0;
+
+    virtual void MTCT setitem(int id) = 0;
+
+    virtual int MTCT searchitem(const char *search, char **caption) = 0;
+
 protected:
-	friend class MTDesktop;
-	MTList *mlb;
-	bool modified;
+    friend class MTDesktop;
+
+    MTList *mlb;
+    bool modified;
 };
 
-class MTUserComboBox : public MTComboBox{
+class MTUserComboBox: public MTComboBox
+{
 public:
-	virtual void MTCT setnumitems(int n) = 0;
+    virtual void MTCT setnumitems(int n) = 0;
 };
 
-class MTItemComboBox : public MTComboBox{
+class MTItemComboBox: public MTComboBox
+{
 public:
-	virtual MTItem* MTCT additem(const char *caption,int image,int flags,bool editable,void *data) = 0;
-	virtual void MTCT removeitem(MTItem *item) = 0;
-	virtual void MTCT clearitems() = 0;
-	virtual void MTCT beginupdate() = 0;
-	virtual void MTCT endupdate() = 0;
-	virtual void MTCT sort(int f) = 0;
-	virtual MTItem* MTCT getitem(int id) = 0;
-	virtual MTItem* MTCT getitemfromtag(int tag) = 0;
+    virtual MTItem *MTCT additem(const char *caption, int image, int flags, bool editable, void *data) = 0;
+
+    virtual void MTCT removeitem(MTItem *item) = 0;
+
+    virtual void MTCT clearitems() = 0;
+
+    virtual void MTCT beginupdate() = 0;
+
+    virtual void MTCT endupdate() = 0;
+
+    virtual void MTCT sort(int f) = 0;
+
+    virtual MTItem *MTCT getitem(int id) = 0;
+
+    virtual MTItem *MTCT getitemfromtag(int tag) = 0;
 };
 
-class MTProgress : public MTControl{
+class MTProgress: public MTControl
+{
 public:
-	int pos;
-	int maxpos;
-	int step;
-	
-	virtual void MTCT setposition(int p) = 0;
-	virtual void MTCT stepit() = 0;
+    int pos;
+    int maxpos;
+    int step;
+
+    virtual void MTCT setposition(int p) = 0;
+
+    virtual void MTCT stepit() = 0;
 };
 
-class MTSign : public MTControl{
+class MTSign: public MTControl
+{
 public:
-	int sign;
-	
-	virtual void MTCT setsign(int s) = 0;
+    int sign;
+
+    virtual void MTCT setsign(int s) = 0;
 };
 
-class MTCustomBehaviours{
+class MTCustomBehaviours
+{
 public:
-	MTCustomControl *parent;
-	int customid;
+    MTCustomControl *parent;
+    int customid;
 
-	MTCustomBehaviours(MTCustomControl *control){
-		parent = control; customid = 0;
-	};
-	virtual void MTCT ondestroy(){
-	};
-	virtual int MTCT onload(MTFile*,int,int){
-		return 0;
-	};
-	virtual int MTCT onsave(MTFile*,int){
-		return 0;
-	};
-	virtual void MTCT onsetbounds(int,int,int,int){
-	};
-	virtual bool MTCT oncheckbounds(int&,int&,int&,int&){
-		return true;
-	};
-	virtual void MTCT onswitchflags(int,bool){
-	};
-	virtual void MTCT ondraw(MTRect&){
-	};
-	virtual bool MTCT onmessage(MTCMessage&){
-		return false;
-	};
+    MTCustomBehaviours(MTCustomControl *control)
+    {
+        parent = control;
+        customid = 0;
+    };
+
+    virtual void MTCT ondestroy()
+    {
+    };
+
+    virtual int MTCT onload(MTFile *, int, int)
+    {
+        return 0;
+    };
+
+    virtual int MTCT onsave(MTFile *, int)
+    {
+        return 0;
+    };
+
+    virtual void MTCT onsetbounds(int, int, int, int)
+    {
+    };
+
+    virtual bool MTCT oncheckbounds(int &, int &, int &, int &)
+    {
+        return true;
+    };
+
+    virtual void MTCT onswitchflags(int, bool)
+    {
+    };
+
+    virtual void MTCT ondraw(MTRect &)
+    {
+    };
+
+    virtual bool MTCT onmessage(MTCMessage &)
+    {
+        return false;
+    };
 };
 
-class MTCustomControl : public MTControl{
+class MTCustomControl: public MTControl
+{
 public:
-	MTCustomBehaviours *behaviours;
+    MTCustomBehaviours *behaviours;
 
-	virtual bool MTCT processmessage(MTCMessage &msg) = 0;
+    virtual bool MTCT processmessage(MTCMessage &msg) = 0;
 };
 
-class MTCustomWinBehaviours{
+class MTCustomWinBehaviours
+{
 public:
-	MTCustomWinControl *parent;
-	int customid;
+    MTCustomWinControl *parent;
+    int customid;
 
-	MTCustomWinBehaviours(MTCustomWinControl *control){
-		parent = control; customid = 0;
-	};
-	virtual void MTCT ondestroy(){
-	};
-	virtual int MTCT onload(MTFile*,int,int){
-		return 0;
-	};
-	virtual int MTCT onsave(MTFile*,int){
-		return 0;
-	};
-	virtual void MTCT onsetbounds(int,int,int,int){
-	};
-	virtual bool MTCT oncheckbounds(int&,int&,int&,int&){
-		return true;
-	};
-	virtual void MTCT onswitchflags(int,bool){
-	};
-	virtual void MTCT ondraw(MTRect&){
-	};
-	virtual bool MTCT onmessage(MTCMessage&){
-		return false;
-	};
-	virtual void* MTCT ongetoffsetrgn(int){
-		return 0;
-	};
-	virtual void MTCT onoffset(int,int){
-	};
+    MTCustomWinBehaviours(MTCustomWinControl *control)
+    {
+        parent = control;
+        customid = 0;
+    };
+
+    virtual void MTCT ondestroy()
+    {
+    };
+
+    virtual int MTCT onload(MTFile *, int, int)
+    {
+        return 0;
+    };
+
+    virtual int MTCT onsave(MTFile *, int)
+    {
+        return 0;
+    };
+
+    virtual void MTCT onsetbounds(int, int, int, int)
+    {
+    };
+
+    virtual bool MTCT oncheckbounds(int &, int &, int &, int &)
+    {
+        return true;
+    };
+
+    virtual void MTCT onswitchflags(int, bool)
+    {
+    };
+
+    virtual void MTCT ondraw(MTRect &)
+    {
+    };
+
+    virtual bool MTCT onmessage(MTCMessage &)
+    {
+        return false;
+    };
+
+    virtual void *MTCT ongetoffsetrgn(int)
+    {
+        return 0;
+    };
+
+    virtual void MTCT onoffset(int, int)
+    {
+    };
 };
 
-class MTCustomWinControl : public MTWinControl{
+class MTCustomWinControl: public MTWinControl
+{
 public:
-	MTCustomWinBehaviours *behaviours;
+    MTCustomWinBehaviours *behaviours;
 
-	virtual bool MTCT processmessage(MTCMessage &msg) = 0;
+    virtual bool MTCT processmessage(MTCMessage &msg) = 0;
 };
 
-typedef void (MTCT *MTCItemDraw)(MTItem *item,const MTRect &rect,MTBitmap *b);
-typedef void (MTCT *MTCUserItemDraw)(MTUserList *list,int id,const MTRect &rect,MTBitmap *b);
-typedef int (MTCT *MTCGetItemInfo)(MTUserList *list,int id,char **caption,int *imageindex,int *flags,bool *editable);
-typedef void (MTCT *MTCItemMessage)(MTUserList *list,int id,MTCMessage &msg);
+typedef void (MTCT *MTCItemDraw)(MTItem *item, const MTRect &rect, MTBitmap *b);
 
-class MTList : public MTWinControl{
+typedef void (MTCT *MTCUserItemDraw)(MTUserList *list, int id, const MTRect &rect, MTBitmap *b);
+
+typedef int (MTCT *MTCGetItemInfo)(MTUserList *list, int id, char **caption, int *imageindex, int *flags, bool *editable);
+
+typedef void (MTCT *MTCItemMessage)(MTUserList *list, int id, MTCMessage &msg);
+
+class MTList: public MTWinControl
+{
 public:
-	MTControl *owner;
-	int viewflags;
-	int selected;
-	int numitems;
-	int itemheight;
-	
-	virtual bool MTCT message(MTCMessage &msg) = 0;
-	virtual bool MTCT getiteminfo(int id,char **caption,int *imageindex,int *flags,bool *editable) = 0;
-	virtual int MTCT searchitem(const char *search,char **caption) = 0;
-	virtual void MTCT setitem(int id) = 0;
+    MTControl *owner;
+    int viewflags;
+    int selected;
+    int numitems;
+    int itemheight;
+
+    virtual bool MTCT message(MTCMessage &msg) = 0;
+
+    virtual bool MTCT getiteminfo(int id, char **caption, int *imageindex, int *flags, bool *editable) = 0;
+
+    virtual int MTCT searchitem(const char *search, char **caption) = 0;
+
+    virtual void MTCT setitem(int id) = 0;
 };
 
-class MTUserList : public MTList{
+class MTUserList: public MTList
+{
 public:
-	int over;
-	MTCUserItemDraw userdrawproc;
-	MTCGetItemInfo getiteminfoproc;
-	MTCItemMessage itemmessageproc;
-	
-	virtual void MTCT setnumitems(int n) = 0;
+    int over;
+    MTCUserItemDraw userdrawproc;
+    MTCGetItemInfo getiteminfoproc;
+    MTCItemMessage itemmessageproc;
+
+    virtual void MTCT setnumitems(int n) = 0;
 };
 
-class MTItem : public MTControl{
+class MTItem: public MTControl
+{
 public:
-	int index;
-	char *caption;
-	int imageindex;
-	int itemflags;
-	void *data;
-	bool editable;
-	bool autosize;
-	
-	virtual bool MTCT message(MTCMessage &msg) = 0;
-	virtual void MTCT setcaption(const char *c) = 0;
+    int index;
+    char *caption;
+    int imageindex;
+    int itemflags;
+    void *data;
+    bool editable;
+    bool autosize;
+
+    virtual bool MTCT message(MTCMessage &msg) = 0;
+
+    virtual void MTCT setcaption(const char *c) = 0;
 };
 
-class MTItemView : public MTList{
+class MTItemView: public MTList
+{
 public:
-	MTItem *selecteditem;
-	MTCItemDraw userdrawproc;
-	
-	virtual bool MTCT message(MTCMessage &msg) = 0;
-	virtual MTItem* MTCT additem(const char *caption,int image,int flags,bool editable,void *data) = 0;
-	virtual void MTCT clearitems() = 0;
-	virtual void MTCT beginupdate() = 0;
-	virtual void MTCT endupdate() = 0;
-	virtual void MTCT sort(int f) = 0;
-	virtual MTItem* MTCT getitem(int id) = 0;
-	virtual MTItem* MTCT getitemfromtag(int tag) = 0;
-	virtual void MTCT removeitem(MTItem *item) = 0;
+    MTItem *selecteditem;
+    MTCItemDraw userdrawproc;
+
+    virtual bool MTCT message(MTCMessage &msg) = 0;
+
+    virtual MTItem *MTCT additem(const char *caption, int image, int flags, bool editable, void *data) = 0;
+
+    virtual void MTCT clearitems() = 0;
+
+    virtual void MTCT beginupdate() = 0;
+
+    virtual void MTCT endupdate() = 0;
+
+    virtual void MTCT sort(int f) = 0;
+
+    virtual MTItem *MTCT getitem(int id) = 0;
+
+    virtual MTItem *MTCT getitemfromtag(int tag) = 0;
+
+    virtual void MTCT removeitem(MTItem *item) = 0;
+
 protected:
-	bool updating;
+    bool updating;
 };
 
-class MTListItem : public MTItem{
+class MTListItem: public MTItem
+{
 public:
-	MTListItem(int tg,MTWinControl *p,int l,int t,int w,int h);
-	void MTCT draw(MTRect &rect) = 0;
+    MTListItem(int tg, MTWinControl *p, int l, int t, int w, int h);
+
+    void MTCT draw(MTRect &rect) = 0;
 };
 
-class MTListBox : public MTItemView{
-public:
-};
-
-class MTMenuItem : public MTItem{
-public:
-	MTCommand command;
-	MTMenu *submenu;
-	MTShortcut *shortcut;
-	char hotkey;
-	int hotkeyoffset;
-};
-
-class MTMenu : public MTItemView{
-public:
-	MTControl *caller;
-	union{
-		MTPoint mouse;
-		MTRect area;
-	};
-
-	virtual void MTCT popup(MTControl *newcaller,MTPoint pos) = 0;
-	virtual void MTCT popup(MTControl *newcaller,MTRect area) = 0;
-};
-
-class MTFileListBox : public MTUserList{
-public:
-	char *path;
-	
-	virtual void MTCT setpath(const char *p) = 0;
-	virtual void MTCT setfilter(int f) = 0;
-};
-
-class MTImageList{
-public:
-	int iw,ih;
-	
-	virtual void MTCT setmetrics(void* *m) = 0;
-	virtual void MTCT drawimage(int id,MTBitmap *dest,int x,int y,int opacity = 255) = 0;
-};
-
-class MTSlider : public MTControl{
-public:
-	int type,orientation;
-	int minpos,maxpos,value;
-	
-	virtual void MTCT setminmax(int newmin,int newmax) = 0;
-	virtual void MTCT setvalue(int newvalue) = 0;
-};
-
-class MTScroller : public MTControl{
-public:
-	int type;
-	int pos;
-	int maxpos;
-	int incr,page;
-	float os;
-	bool slide;
-	
-	virtual void MTCT setposition(int p) = 0;
-};
-
-class MTDesktop : public MTWinControl{
-public:
-	void *mwnd;
-};
-
-class MTWindow : public MTWinControl{
-public:
-	int style;
-	char *caption;
-	int imageindex;
-	MTWrapper *wrapper;
-	bool modified;
-	MTRect br;
-	int btnx,btny,btnw,btnh,btno,btnd;
-	
-	virtual void MTCT setstyle(int s) = 0;
-	virtual void MTCT setcaption(const char *c) = 0;
-	virtual void MTCT addhotkey(MTControl *ctrl,char hotkey) = 0;
-	virtual void MTCT delhotkey(MTControl *ctrl) = 0;
-	virtual void MTCT setminsize(int width,int height) = 0;
-	virtual void MTCT setmaxsize(int width,int height) = 0;
-};
-
-class MTTabControl : public MTWinControl{
-public:
-	int style,cstyle;
-	MTWindow *page;
-	int btnx,btny,btnw,btnh,btno,btnd;
-	
-	virtual void MTCT setpage(MTWindow *p) = 0;
-	virtual void MTCT setpageid(int id) = 0;
-	virtual int MTCT getpageid(MTWindow *p) = 0;
-	virtual MTWindow* MTCT loadpage(MTResources *res,int id,bool autosave) = 0;
-	virtual void MTCT setautohidetabs(bool autohide) = 0;
-};
-
-class MTPanel : public MTWinControl{
-public:
-	int style;
-};
-
-class MTToolBar : public MTWinControl{
+class MTListBox: public MTItemView
+{
 public:
 };
 
-class MTOSWindow : public MTControl{
+class MTMenuItem: public MTItem
+{
 public:
-	virtual void MTCT setcompatible(bool compatible) = 0;
-	virtual void* MTCT getoshandle() = 0;
-	virtual bool MTCT patchoscode(void *lib) = 0;
+    MTCommand command;
+    MTMenu *submenu;
+    MTShortcut *shortcut;
+    char hotkey;
+    int hotkeyoffset;
+};
+
+class MTMenu: public MTItemView
+{
+public:
+    MTControl *caller;
+    union
+    {
+        MTPoint mouse;
+        MTRect area;
+    };
+
+    virtual void MTCT popup(MTControl *newcaller, MTPoint pos) = 0;
+
+    virtual void MTCT popup(MTControl *newcaller, MTRect area) = 0;
+};
+
+class MTFileListBox: public MTUserList
+{
+public:
+    char *path;
+
+    virtual void MTCT setpath(const char *p) = 0;
+
+    virtual void MTCT setfilter(int f) = 0;
+};
+
+class MTImageList
+{
+public:
+    int iw, ih;
+
+    virtual void MTCT setmetrics(void **m) = 0;
+
+    virtual void MTCT drawimage(int id, MTBitmap *dest, int x, int y, int opacity = 255) = 0;
+};
+
+class MTSlider: public MTControl
+{
+public:
+    int type, orientation;
+    int minpos, maxpos, value;
+
+    virtual void MTCT setminmax(int newmin, int newmax) = 0;
+
+    virtual void MTCT setvalue(int newvalue) = 0;
+};
+
+class MTScroller: public MTControl
+{
+public:
+    int type;
+    int pos;
+    int maxpos;
+    int incr, page;
+    float os;
+    bool slide;
+
+    virtual void MTCT setposition(int p) = 0;
+};
+
+class MTDesktop: public MTWinControl
+{
+public:
+    void *mwnd;
+};
+
+class MTWindow: public MTWinControl
+{
+public:
+    int style;
+    char *caption;
+    int imageindex;
+    MTWrapper *wrapper;
+    bool modified;
+    MTRect br;
+    int btnx, btny, btnw, btnh, btno, btnd;
+
+    virtual void MTCT setstyle(int s) = 0;
+
+    virtual void MTCT setcaption(const char *c) = 0;
+
+    virtual void MTCT addhotkey(MTControl *ctrl, char hotkey) = 0;
+
+    virtual void MTCT delhotkey(MTControl *ctrl) = 0;
+
+    virtual void MTCT setminsize(int width, int height) = 0;
+
+    virtual void MTCT setmaxsize(int width, int height) = 0;
+};
+
+class MTTabControl: public MTWinControl
+{
+public:
+    int style, cstyle;
+    MTWindow *page;
+    int btnx, btny, btnw, btnh, btno, btnd;
+
+    virtual void MTCT setpage(MTWindow *p) = 0;
+
+    virtual void MTCT setpageid(int id) = 0;
+
+    virtual int MTCT getpageid(MTWindow *p) = 0;
+
+    virtual MTWindow *MTCT loadpage(MTResources *res, int id, bool autosave) = 0;
+
+    virtual void MTCT setautohidetabs(bool autohide) = 0;
+};
+
+class MTPanel: public MTWinControl
+{
+public:
+    int style;
+};
+
+class MTToolBar: public MTWinControl
+{
+public:
+};
+
+class MTOSWindow: public MTControl
+{
+public:
+    virtual void MTCT setcompatible(bool compatible) = 0;
+
+    virtual void *MTCT getoshandle() = 0;
+
+    virtual bool MTCT patchoscode(void *lib) = 0;
 };
 //---------------------------------------------------------------------------
 #endif

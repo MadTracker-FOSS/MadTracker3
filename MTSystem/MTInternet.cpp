@@ -11,112 +11,119 @@
 //
 //---------------------------------------------------------------------------
 #include <stdio.h>
-#include <stdlib.h>
 #include "MTSocket.h"
 #include "MTInternet.h"
-#include "MTSystem.h"
 #include <MTXAPI/MTXSystem2.h>
 #include "MTBase64.h"
+
 //---------------------------------------------------------------------------
-struct MTCredentials{
-	int id;
-	char *server;
-	char *path;
-	char *domain;
-	char *authkey;
+struct MTCredentials
+{
+    int id;
+    char *server;
+    char *path;
+    char *domain;
+    char *authkey;
 };
 
 MTHash *creds;
+
 //---------------------------------------------------------------------------
 void initInternet()
 {
-	creds = new MTHash(4);
+    creds = new MTHash(4);
 }
 
-void MTCT delproc(void *data,void*)
+void MTCT delproc(void *data, void *)
 {
-	MTCredentials *ccred = (MTCredentials*)data;
-	mtmemfree(ccred->server);
-	mtmemfree(ccred->path);
-	mtmemfree(ccred->domain);
-	mtmemfree(ccred->authkey);
+    MTCredentials *ccred = (MTCredentials *) data;
+    mtmemfree(ccred->server);
+    mtmemfree(ccred->path);
+    mtmemfree(ccred->domain);
+    mtmemfree(ccred->authkey);
 }
 
 void uninitInternet()
 {
-	if (creds){
-		creds->clear(true,delproc);
-		delete creds;
-	};
+    if (creds)
+    {
+        creds->clear(true, delproc);
+        delete creds;
+    };
 }
+
 //---------------------------------------------------------------------------
-MTCredentials *newcredential(const char *server,const char *path,const char *domain,const char *key)
+MTCredentials *newcredential(const char *server, const char *path, const char *domain, const char *key)
 {
-	MTCredentials *cred = mtnew(MTCredentials);
-	char ckey[1024];
-	
-	if (creds->nitems==MAX_CREDENTIALS){
-		creds->delitemfromid(0,true,delproc);
-	};
-	cred->server = (char*)mtmemalloc(strlen(server)+1);
-	cred->path = (char*)mtmemalloc(strlen(path)+1);
-	cred->domain = (char*)mtmemalloc(strlen(domain)+1);
-	strcpy(cred->server,server);
-	strcpy(cred->domain,domain);
-	cred->authkey = (char*)mtmemalloc(mtbase64encode_len(strlen(key)));
-	mtbase64encode(cred->authkey,key,strlen(key));
-	strcpy(ckey,server);
-	strcat(ckey,domain);
-	cred->id = creds->additem(ckey,cred);
-	return cred;
+    MTCredentials *cred = mtnew(MTCredentials);
+    char ckey[1024];
+
+    if (creds->nitems == MAX_CREDENTIALS)
+    {
+        creds->delitemfromid(0, true, delproc);
+    };
+    cred->server = (char *) mtmemalloc(strlen(server) + 1);
+    cred->path = (char *) mtmemalloc(strlen(path) + 1);
+    cred->domain = (char *) mtmemalloc(strlen(domain) + 1);
+    strcpy(cred->server, server);
+    strcpy(cred->domain, domain);
+    cred->authkey = (char *) mtmemalloc(mtbase64encode_len(strlen(key)));
+    mtbase64encode(cred->authkey, key, strlen(key));
+    strcpy(ckey, server);
+    strcat(ckey, domain);
+    cred->id = creds->additem(ckey, cred);
+    return cred;
 }
 
 void deletecredentials(MTCredentials *cred)
 {
-	creds->delitemfromid(cred->id,true,delproc);
+    creds->delitemfromid(cred->id, true, delproc);
 }
 
 void newrequest(char *buffer)
 {
-	buffer[0] = 0;
+    buffer[0] = 0;
 }
 
 void endrequest(char *buffer)
 {
-	strcat(buffer,"\r\n");
+    strcat(buffer, "\r\n");
 }
 
-void addkey(char *buffer,const char *key,char *value)
+void addkey(char *buffer, const char *key, char *value)
 {
-	strcat(buffer,key);
-	strcat(buffer," ");
-	strcat(buffer,value);
-	if (strcmp(key,"GET")==0) strcat(buffer," HTTP/1.0");
-	strcat(buffer,"\r\n");
+    strcat(buffer, key);
+    strcat(buffer, " ");
+    strcat(buffer, value);
+    if (strcmp(key, "GET") == 0)
+    { strcat(buffer, " HTTP/1.0"); }
+    strcat(buffer, "\r\n");
 }
 
-bool getkey(const char *buffer,const char *key,char *value,int max)
+bool getkey(const char *buffer, const char *key, char *value, int max)
 {
-	char *s,*e;
-	int l;
-	
-	s = (char*)strstr(buffer,key);
-	if (!s) return false;
-	s += strlen(key);
-	if (*s != ' ')
-	{
-		while (++*s != ' ');
-	}
-	while (++*s == ' ');
-	e = strstr(s,"\r\n");
-	l = e-s;
-	if (l>max-1) l = max-1;
-	memcpy(value,s,l);
-	value[l] = 0;
-	return true;
+    char *s, *e;
+    int l;
+
+    s = (char *) strstr(buffer, key);
+    if (!s)
+    { return false; }
+    s += strlen(key);
+    if (*s != ' ')
+    {
+        while(++*s != ' ');
+    }
+    while(++*s == ' ');
+    e = strstr(s, "\r\n");
+    l = e - s;
+    if (l > max - 1)
+    { l = max - 1; }
+    memcpy(value, s, l);
+    value[l] = 0;
+    return true;
 }
 
-int ClientThread(MTThread *thread,void *f)
+int ClientThread(MTThread *thread, void *f)
 {
 /*	MTFile &cf = *(MTFile*)f;
 	char *request,*header,*status,*e,*e2;
@@ -292,6 +299,6 @@ ftpexit:
 	};
 	if (cf.e) cf.e->set();
 	cf.ct = 0;*/
-	return 0;
+    return 0;
 }
 //---------------------------------------------------------------------------

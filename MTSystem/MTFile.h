@@ -33,31 +33,33 @@
 #define MTFA_FILE     4
 #define MTFA_HIDDEN   8
 #define MTFA_READONLY 16
+
 //---------------------------------------------------------------------------
 class MTFile;
+
 class MTFolder;
 //---------------------------------------------------------------------------
 #include <MTXAPI/MTXExtension.h>
 #include "MTKernel.h"
 #include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
-extern "C"
-{
+extern "C" {
 void initFiles();
 void uninitFiles();
 //---------------------------------------------------------------------------
-MTFile* MTCT mtfileopen(const char *url,int flags);
+MTFile *MTCT mtfileopen(const char *url, int flags);
 void MTCT mtfileclose(MTFile *file);
-MTFolder* MTCT mtfolderopen(char *url);
+MTFolder *MTCT mtfolderopen(char *url);
 void MTCT mtfolderclose(MTFolder *folder);
 bool MTCT mtfileexists(char *url);
-bool MTCT mtfilecopy(char *source,char *destination);
+bool MTCT mtfilecopy(char *source, char *destination);
 bool MTCT mtfiledelete(char *filename);
-bool MTCT mtfilerename(char *filename,char *newname);
-void MTCT mtfiletype(const char *filename,char *filetype,int length);
-void MTCT mtfilemaketemp(char *filename,int length);
-MTFile* MTCT mttempfile(int access);
+bool MTCT mtfilerename(char *filename, char *newname);
+void MTCT mtfiletype(const char *filename, char *filetype, int length);
+void MTCT mtfilemaketemp(char *filename, int length);
+MTFile *MTCT mttempfile(int access);
 }
+
 //---------------------------------------------------------------------------
 extern MTHash *hooks;
 //---------------------------------------------------------------------------

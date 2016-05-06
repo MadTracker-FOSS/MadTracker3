@@ -14,8 +14,10 @@
 #define MTIOMODULE_MT2_INCLUDED
 //---------------------------------------------------------------------------
 #include "MTObject.h"
+
 //---------------------------------------------------------------------------
-bool loadMT2(MTObject *object,char *filename,void *process);
-bool infoMT2(MTMiniConfig *data,char *filename,void *process);
+bool loadMT2(MTObject *object, char *filename, void *process);
+
+bool infoMT2(MTMiniConfig *data, char *filename, void *process);
 //---------------------------------------------------------------------------
 #endif

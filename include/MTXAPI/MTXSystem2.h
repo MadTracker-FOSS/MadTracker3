@@ -17,12 +17,12 @@
 
 inline void mtmemzero(void *mem, int count) // Pretty pointless function, but okay.
 {
-	memset(mem,0,count);
+    memset(mem, 0, count);
 }
 
 inline void mtmemzero64(void *mem, int count)
 {
-	memset(mem, 0, count * 8);
+    memset(mem, 0, count * 8);
 }
 //---------------------------------------------------------------------------
 #endif // MTXSYSTEM2_INCLUDED

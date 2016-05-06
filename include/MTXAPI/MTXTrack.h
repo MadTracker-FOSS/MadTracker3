@@ -12,26 +12,33 @@
 //---------------------------------------------------------------------------
 #ifndef MTXTRACK_INCLUDED
 #define MTXTRACK_INCLUDED
+
 //---------------------------------------------------------------------------
 class Track;
 //---------------------------------------------------------------------------
 #include "MTXNode.h"
+
 //---------------------------------------------------------------------------
 // Track class
-class Track : public Node{
+class Track: public Node
+{
 public:
-	Track(MTObject *parent,mt_int32 i,int sub = 0);
-	virtual ~Track();
-	bool muted;
-	bool solo;
-	bool empty;
-	double vol;
-	float panx,pany,panz;
-	sample *buffer[8];
-	int nsamples;
-	int offset;
-	virtual void MTCT alloc() = 0;
-	virtual void MTCT free() = 0;
+    Track(MTObject *parent, mt_int32 i, int sub = 0);
+
+    virtual ~Track();
+
+    bool muted;
+    bool solo;
+    bool empty;
+    double vol;
+    float panx, pany, panz;
+    sample *buffer[8];
+    int nsamples;
+    int offset;
+
+    virtual void MTCT alloc() = 0;
+
+    virtual void MTCT free() = 0;
 };
 //---------------------------------------------------------------------------
 #endif

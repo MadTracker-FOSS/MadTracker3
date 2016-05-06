@@ -7,26 +7,26 @@
 // Windows IDs
 //---------------------------------------------------------------------------
 #define MTW_monitor                0
-#define  MTC_chanmonitor           2	// MTCustomControl
-#define  MTC_channels              0	// MTWindow
-#define  MTC_cpumonitor            1	// MTCustomControl
-#define  MTC_cpu                   0	// MTWindow
-#define  MTC_tc                    0	// MTTabControl
+#define  MTC_chanmonitor           2    // MTCustomControl
+#define  MTC_channels              0    // MTWindow
+#define  MTC_cpumonitor            1    // MTCustomControl
+#define  MTC_cpu                   0    // MTWindow
+#define  MTC_tc                    0    // MTTabControl
 #define MTW_pattern                1
-#define  MTC_label                 0	// MTLabel
-#define  MTC_data                100	// MTCustomWincontrol
+#define  MTC_label                 0    // MTLabel
+#define  MTC_data                100    // MTCustomWincontrol
 #define MTW_instrument             2
-#define  MTC_lvibrato              0	// MTLabel
-#define  MTC_epanz                 0	// MTEdit
-#define  MTC_epany                 0	// MTEdit
-#define  MTC_ppanz                 0	// MTSlider
-#define  MTC_ppany                 0	// MTSlider
-#define  MTC_epanx                 0	// MTEdit
-#define  MTC_ppanx                 0	// MTSlider
-#define  MTC_lpan                  0	// MTLabel
-#define  MTC_evolume               0	// MTEdit
-#define  MTC_lvolume               0	// MTLabel
-#define  MTC_pvolume               0	// MTSlider
+#define  MTC_lvibrato              0    // MTLabel
+#define  MTC_epanz                 0    // MTEdit
+#define  MTC_epany                 0    // MTEdit
+#define  MTC_ppanz                 0    // MTSlider
+#define  MTC_ppany                 0    // MTSlider
+#define  MTC_epanx                 0    // MTEdit
+#define  MTC_ppanx                 0    // MTSlider
+#define  MTC_lpan                  0    // MTLabel
+#define  MTC_evolume               0    // MTEdit
+#define  MTC_lvolume               0    // MTLabel
+#define  MTC_pvolume               0    // MTSlider
 //---------------------------------------------------------------------------
 // Texts IDs
 //---------------------------------------------------------------------------

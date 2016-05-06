@@ -14,30 +14,45 @@
 #define MTDEVDSP_INCLUDED
 //---------------------------------------------------------------------------
 #include "MTAudioDevice.h"
+
 //---------------------------------------------------------------------------
-class MTDevDSPDevice : public MTAudioDevice{
+class MTDevDSPDevice: public MTAudioDevice
+{
 public:
-	MTDevDSPDevice(const char *dev);
-	~MTDevDSPDevice();
-	bool MTCT init(float frequency,int nchannels,int bits,double latency);
-	void MTCT uninit();
-	bool MTCT play();
-	bool MTCT stop();
-	int MTCT getposition(bool playback = false);
-	bool MTCT getdata(int position,int length,void **ptr1,void **ptr2,unsigned long *lng1,unsigned long *lng2);
-	bool MTCT writedata(void *ptr1,void *ptr2,unsigned long lng1,unsigned long lng2);
+    MTDevDSPDevice(const char *dev);
+
+    ~MTDevDSPDevice();
+
+    bool MTCT init(float frequency, int nchannels, int bits, double latency);
+
+    void MTCT uninit();
+
+    bool MTCT play();
+
+    bool MTCT stop();
+
+    int MTCT getposition(bool playback = false);
+
+    bool MTCT getdata(int position, int length, void **ptr1, void **ptr2, unsigned long *lng1, unsigned long *lng2);
+
+    bool MTCT writedata(void *ptr1, void *ptr2, unsigned long lng1, unsigned long lng2);
+
 private:
-	int f;
-	void *buffer;
-	int bsize,dbits,dchannels,drate;
+    int f;
+    void *buffer;
+    int bsize, dbits, dchannels, drate;
 };
 
-class MTDevDSPDeviceManager : public MTAudioDeviceManager{
+class MTDevDSPDeviceManager: public MTAudioDeviceManager
+{
 public:
-	MTDevDSPDeviceManager();
-	~MTDevDSPDeviceManager();
-	MTAudioDevice* MTCT newdevice(int id);
-	void MTCT deldevice(MTAudioDevice *device);
+    MTDevDSPDeviceManager();
+
+    ~MTDevDSPDeviceManager();
+
+    MTAudioDevice *MTCT newdevice(int id);
+
+    void MTCT deldevice(MTAudioDevice *device);
 };
 //---------------------------------------------------------------------------
 #endif

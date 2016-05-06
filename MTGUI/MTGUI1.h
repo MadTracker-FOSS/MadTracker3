@@ -4,8 +4,9 @@
 //---------------------------------------------------------------------------
 #include <MTXAPI/MTXExtension.h>
 #include <MTXAPI/MTXGUI.h>
+
 //---------------------------------------------------------------------------
-static const int guietype = FOURCC('G','U','I','E');
+static const int guietype = FOURCC('G', 'U', 'I', 'E');
 
 #define NICE_RATIO 2.5
 #define MTW_CAPTION     1
@@ -26,55 +27,79 @@ static const int guietype = FOURCC('G','U','I','E');
 
 struct MTUndo;
 struct MTShortcut;
+
 class MTControl;
+
 class MTWinControl;
+
 class MTWindow;
+
 class MTDesktop;
+
 //---------------------------------------------------------------------------
-typedef void (MTCT *MTCommand)(MTShortcut*,MTControl*,MTUndo*);
+typedef void (MTCT *MTCommand)(MTShortcut *, MTControl *, MTUndo *);
 //---------------------------------------------------------------------------
 #include "MTGUITools.h"
 #include <MTXAPI/MTXSystem.h>
 #include <MTXAPI/MTXDisplay.h>
 #include <MTXAPI/MTXSkin.h>
+
 //---------------------------------------------------------------------------
-struct MTGUIPreferences{
-	char skin[256];
-	unsigned char cursorspeed;
-	bool shadows;
-	bool dialogshadows;
-	char shadowx,shadowy;
-	unsigned char shadowop,shadowblur;
-	unsigned char scroll1,scroll2;
-	bool fadeout;
-	bool transpmenus;
-	bool animctrl;
-	int fadeouttime;
-	int fadeoutinterval;
-	int animtime;
-	int animinterval;
+struct MTGUIPreferences
+{
+    char skin[256];
+    unsigned char cursorspeed;
+    bool shadows;
+    bool dialogshadows;
+    char shadowx, shadowy;
+    unsigned char shadowop, shadowblur;
+    unsigned char scroll1, scroll2;
+    bool fadeout;
+    bool transpmenus;
+    bool animctrl;
+    int fadeouttime;
+    int fadeoutinterval;
+    int animtime;
+    int animinterval;
 };
 
 
 //---------------------------------------------------------------------------
 #ifdef _DEBUG
-void tracergn(void *rgn,MTBitmap *bmp);
-void tracerect(MTRect &r,MTBitmap *bmp);
+
+void tracergn(void *rgn, MTBitmap *bmp);
+
+void tracerect(MTRect &r, MTBitmap *bmp);
+
 #endif
+
 //---------------------------------------------------------------------------
 extern bool candesign;
+
 extern bool design;
+
 extern bool blockinput;
+
 extern void *hinst;
+
 extern MTInterface *mtinterface;
+
 extern MTSystemInterface *si;
+
 extern MTDisplayInterface *di;
+
 extern MTGUIInterface *gi;
+
 extern MTGUIPreferences guiprefs;
+
 extern MTBitmap *screen;
-extern int doubleclick,dragx,dragy,gridx,gridy;
+
+extern int doubleclick, dragx, dragy, gridx, gridy;
+
 extern int guitick;
-extern int lastwparam,lastlparam;
+
+extern int lastwparam, lastlparam;
+
 extern Skin *skin;
 //---------------------------------------------------------------------------
 #endif

@@ -23,16 +23,16 @@
 #define MTR_BITMAP   FOURCC('M','T','B','M')
 #define MTR_HTML     FOURCC('M','T','H','T')
 #define MTR_SAMPLE   FOURCC('M','T','S','P')
+
 //---------------------------------------------------------------------------
 class MTResources;
 //---------------------------------------------------------------------------
 #include "MTFile.h"
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-extern "C"
-{
-MTResources* MTCT mtresfind(const char *filename,bool write);
-MTResources* MTCT mtresopen(MTFile *f,bool ownfile);
+extern "C" {
+MTResources *MTCT mtresfind(const char *filename, bool write);
+MTResources *MTCT mtresopen(MTFile *f, bool ownfile);
 void MTCT mtresclose(MTResources *res);
 }
 //---------------------------------------------------------------------------

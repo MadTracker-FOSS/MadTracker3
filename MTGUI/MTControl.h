@@ -1,4 +1,3 @@
-
 //---------------------------------------------------------------------------
 #ifndef MTCONTROL_INCLUDED
 #define MTCONTROL_INCLUDED
@@ -105,9 +104,13 @@
 #define ControlNP 9
 //---------------------------------------------------------------------------
 struct MTCMessage;
+
 class MTControl;
+
 class MTWinControl;
+
 class MTWindow;
+
 class MTMenu;
 //---------------------------------------------------------------------------
 #include "MTGUI1.h"
@@ -117,8 +120,10 @@ class MTMenu;
 #include <MTXAPI/MTXDisplay.h>
 #include "MTWinControl.h"
 #include <MTXAPI/MTXControls.h>
+
 //---------------------------------------------------------------------------
-extern MTControl *overctrl,*btnctrl;
-extern MTCMessage leavemsg,entermsg,btnupmsg;
+extern MTControl *overctrl, *btnctrl;
+
+extern MTCMessage leavemsg, entermsg, btnupmsg;
 //---------------------------------------------------------------------------
 #endif
