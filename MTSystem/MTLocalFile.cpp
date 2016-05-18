@@ -704,9 +704,7 @@ MTFile *MTLocalFile::subclass(int start, int length, int access)
 //---------------------------------------------------------------------------
 MTLocalFolder::MTLocalFolder(char *path):
 
-#
-
-ifdef _WIN32
+#ifdef _WIN32
 
 search(INVALID_HANDLE_VALUE),
 #endif

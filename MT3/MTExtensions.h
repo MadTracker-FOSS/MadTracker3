@@ -36,7 +36,7 @@ class MT3Interface: public MTInterface
 public:
     MT3Interface();
 
-    ~MT3Interface();
+    virtual ~MT3Interface(); // made virtual, because unloadExtensions() "delete"s an instance of this type.
 
     MTXInterface *MTCT getinterface(int id);
 

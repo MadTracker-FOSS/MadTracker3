@@ -19,6 +19,8 @@
 #define MTMC_MD5KEYS   4
 #define MTMC_HEADER    8
 
+//TODO Should be a simple refactor, this is just a class with weird factory functions.
+
 //---------------------------------------------------------------------------
 class MTMiniConfig;
 //---------------------------------------------------------------------------

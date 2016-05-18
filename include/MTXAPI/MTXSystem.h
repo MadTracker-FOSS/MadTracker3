@@ -643,7 +643,7 @@ private:
 // But this class manages them. And it has a getresourceurl() function, so it MIGHT
 // be that a resource is a html- or php object.
 // Correction: getresourceurl() is never used, and the rest of the member function
-// usages pop up in interface init reoutines and places like getdisplayname in
+// usages pop up in interface init routines and places like getdisplayname in
 // MTModule. So yes, a resource can be anything in any savefile.
 class MTResources
 {
@@ -786,6 +786,7 @@ private:
 // The big bad wolf. Function pointer extravaganza.
 // This is the class that global pointer "si" is an instance of.
 // In other words, this is the main construction site for refactors.
+// TODO It is a HUGE problem that all of these are function pointers. Makes code analysis a bitch and a half.
 class MTSystemInterface: public MTXInterface
 {
 public:
@@ -802,16 +803,25 @@ public:
 
     virtual void MTCT setlasterror(int error) = 0;
 
+    /**
+     * File hooks, probably part of debugging functionality?
+     */
     virtual void MTCT addfilehook(char *type, MTFileHook *hook) = 0;
 
     virtual void MTCT delfilehook(char *type, MTFileHook *hook) = 0;
 
+    /**
+     * Memory handling
+     */
     void *(MTCT *memalloc)(int size, int flags);
 
     bool (MTCT *memfree)(void *mem);
 
     void *(MTCT *memrealloc)(void *mem, int size);
 
+    /**
+     * Threading and Thread-local memory
+     */
     MTThread *(MTCT *getsysthread)();
 
     MTThread *(MTCT *getcurrentthread)();
@@ -834,6 +844,9 @@ public:
 
     MTProcess *(MTCT *processcreate)(ThreadProc tproc, void *param, int type, int priority, void *data, ProcessProc pproc, bool silent, const char *name);
 
+    /**
+     * FS Utilities
+     */
     MTFile *(MTCT *fileopen)(const char *url, int flags);
 
     void (MTCT *fileclose)(MTFile *file);
@@ -854,6 +867,9 @@ public:
 
     void (MTCT *folderclose)(MTFolder *folder);
 
+    /**
+     * Data structures
+     */
     MTArray *(MTCT *arraycreate)(int nallocby, int itemsize);
 
     void (MTCT *arraydelete)(MTArray *array);
@@ -862,6 +878,9 @@ public:
 
     void (MTCT *hashdelete)(MTHash *array);
 
+    /**
+     * Resource and config files used by MT
+     */
     MTResources *(MTCT *resfind)(const char *filename, bool write);
 
     MTResources *(MTCT *resopen)(MTFile *f, bool ownfile);
@@ -878,6 +897,9 @@ public:
 
     void (MTCT *miniconfigdelete)(MTMiniConfig *cfg);
 
+    /**
+     * More threading
+     */
     MTLock *(MTCT *lockcreate)();
 
     void (MTCT *lockdelete)(MTLock *lock);

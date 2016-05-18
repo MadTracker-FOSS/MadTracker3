@@ -11,6 +11,12 @@
 //
 //---------------------------------------------------------------------------
 
+/**
+ * Extremely important reading for this piece of candy:
+ * https://en.wikipedia.org/wiki/C_POSIX_library
+ *
+ * and C standard lib, obviously.
+ */
 
 // There are no comments. Nowhere. None. TODO Add them. Everywhere.
 // TODO Fix/redesign ALL errors caused by precision loss, until mt3 compiles without -fpermissive.
@@ -73,6 +79,8 @@ Otherwise, click on \"Cancel\" to exit gracefully.","MadTracker - Fatal Error",M
 
 #include "MTConsole.h"
 
+// Let's see if anything at all breaks from this being no longer a global variable.
+// Update: Yup. Linker errors in MTData.cpp. They have been marked with FIXMEs.
 const char *argv0;
 
 char *cmdline;
@@ -91,7 +99,7 @@ int main(int argc, const char *argv[])
 
     instance = (void *) getpid(); // this is a unistd.h function. huh. does it exist on windows? No it doesn't.
 
-    argv0 = argv[0];        // program name; assigned, but never read
+    argv0 = argv[0];        // program name; actually read from some other places. IDE has lots of trouble tracking this.
 
     if (argc > 1)
     {            // parse additional commandline arguments

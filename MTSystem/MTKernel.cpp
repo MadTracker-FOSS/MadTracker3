@@ -650,9 +650,7 @@ MTEvent::MTEvent(bool autoreset, int interval, int resolution, bool periodic, bo
 
 MTEvent::MTEvent():
 
-#
-
-ifdef _WIN32
+#ifdef _WIN32
 
 event(0),
 timer(0)

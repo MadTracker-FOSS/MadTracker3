@@ -577,7 +577,7 @@ inline char *strlwr(char *str)
     return orig;
 }
 
-#define stricmp strcasecmp
+#define stricmp strcasecmp // POSIX.1-2001 function - NOT C or C++ standard! Replace ASAP.
 #endif
 //---------------------------------------------------------------------------
 #endif // MTXEXTENSION_INCLUDED

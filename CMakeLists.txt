@@ -1,5 +1,6 @@
 # MadTracker3 CMake File
 # Written by Ethan "flibitijibibo" Lee
+# and irrenhaus3
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(MadTracker3)
 
@@ -7,7 +8,11 @@ PROJECT(MadTracker3)
 option(MT_DEBUG "Build debug version of MadTracker" ON)
 
 # Compiler flags
+    # general and pre-v5 gcc
 SET(CMAKE_CXX_FLAGS "-g -fpermissive -std=c++11 -Wall -Wextra -pedantic")
+    # gcc 5+
+#SET(CMAKE_CXX_FLAGS "-g -fpermissive -std=c++14 -Wall -Wextra -pedantic")
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
 
 # Linker flags
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")

@@ -47,7 +47,7 @@ bool wantreset = false;
 bool exitasap = false;
 
 //---------------------------------------------------------------------------
-int newmodule()
+int newmodule() // According to CLion, this function is unused.
 //
 //	Create a new module
 //
@@ -69,7 +69,7 @@ int newmodule()
 }
 
 //---------------------------------------------------------------------------
-void startbackup(char *filename, bool save, int &time)
+void startbackup(char *filename, bool save, int &time) // According to CLion, this function is unused.
 //
 //	First part of a file backuping
 //
@@ -108,7 +108,7 @@ void startbackup(char *filename, bool save, int &time)
     LEAVE();
 }
 
-void finishbackup(char *filename, bool revert, int &time)
+void finishbackup(char *filename, bool revert, int &time) // According to CLion, this function is unused.
 //
 //	Second part of a file backuping
 //
@@ -284,7 +284,8 @@ bool init()
     char *cmd, *e;
     char applpath[512], userpath[512];
 
-    // We start off with using enum constants as array indices.
+    // We start off with using enum constants as array indices. Yikes!
+    //TODO Don't. Use std::map or sth.
     prefs.syspath[SP_ROOT] = (char *) malloc(512);
     prefs.syspath[SP_USER] = (char *) malloc(512);
     prefs.syspath[SP_CONFIG] = (char *) malloc(512);
@@ -337,7 +338,10 @@ bool init()
     };
     strcpy(e,"MadTracker/");
 #	else
+
     // So that's why they're global? Are you shitting me?
+    // Update: There is no reason to keep this the way it is, especially seeing how IDEs have enormeous problems
+    // tracking symbol usage through "extern". This needs refactoring, badly.
     extern const char *argv0;
     extern char *cmdline;
 
@@ -366,10 +370,10 @@ bool init()
     int l;
     if (!b1)
     {
-        binpath = argv0;
+        binpath = argv0; //FIXME This line throws linker errors when argv0 is un-globaled in MT3.cpp
     }
-    else if (!strstr(argv0, b1))
-    { binpath = argv0; }
+    else if (!strstr(argv0, b1)) //FIXME This line throws linker errors when argv0 is un-globaled in MT3.cpp
+    { binpath = argv0; } //FIXME This line throws linker errors when argv0 is un-globaled in MT3.cpp
     l = readlink(binpath, applpath, sizeof(applpath) - 1);
     if (l == -1)
     {

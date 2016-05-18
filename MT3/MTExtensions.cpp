@@ -28,6 +28,7 @@
 #include "MTInterface.h"
 #include "MTConsole.h"
 #include <MTXAPI/RES/MT3RES.h>
+#include <iostream>
 
 //---------------------------------------------------------------------------
 static const char *mt3name = {"MadTracker"};
@@ -724,6 +725,8 @@ bool loadExtension(const char *file)
         mtxmain = (MTXMainCall*)GetProcAddress(hi,"MTXMain");
 #		else
         mtxmain = (MTXMainCall *) dlsym(hi, "MTXMain");
+        // dlsym is from POSIX header dlfcn.h, which deals with dynamic linking.
+        // what the shitnuggets.
 #		endif
         if (mtxmain)
         {
@@ -843,21 +846,22 @@ void loadDirectory(const char *dir)
         *e = 0;
     };
     d = opendir(find);
+    std::clog << "d: " << d << "\n";
     while((de = readdir(d)))
     {    //FIXME readdir segfaults here if d is null.
         if (de->d_name[0] != '.')
         {
             strcpy(e, de->d_name);
-            stat(find, &s);
+            stat(find, &s); // see POSIX header stat.h (that one's documented at least :-) )
             if ((s.st_mode & S_IFMT) == S_IFDIR)
             {
-                chdir(find);
-                loadDirectory(find);
+                chdir(find); // POSIX header unistd.h
+                loadDirectory(find); // fuck.
             }
             else
             {
-                ext = strrchr(de->d_name, '.');
-                if (stricmp(ext, ".mtx") == 0)
+                ext = strrchr(de->d_name, '.'); // find last '.' in d_name
+                if (stricmp(ext, ".mtx") == 0) // defined as strcasecmp.
                 { loadExtension(find); }
             };
         };

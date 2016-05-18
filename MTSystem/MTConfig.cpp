@@ -597,6 +597,7 @@ bool MTConfigFile::setparameter(const char *paramname, void *value, int type, in
     if (rnp)
     {
         mtmemfree(rnp->buf);
+        //TODO Find out how mtmemalloc differs from malloc; eventually use neither of them.
         rnp->buf = (char *) mtmemalloc(strlen(line) + 1);
         strcpy(rnp->buf, line);
     }
