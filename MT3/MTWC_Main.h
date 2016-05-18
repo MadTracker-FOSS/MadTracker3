@@ -10,18 +10,18 @@
 class MTWC_main: public MTWrapper
 {
 public:
-    MTToolBar *toolbar;
-    MTButton *mfile;
-    MTButton *medit;
-    MTButton *mmodule;
-    MTButton *mwindow;
-    MTButton *mhelp;
+    MTToolBar* toolbar;
+    MTButton* mfile;
+    MTButton* medit;
+    MTButton* mmodule;
+    MTButton* mwindow;
+    MTButton* mhelp;
 
-    MTWC_main(MTWindow *w);
+    MTWC_main(MTWindow* w);
 
     ~MTWC_main();
 
-    bool MTCT onmessage(MTCMessage &msg);
+    bool MTCT onmessage(MTCMessage& msg);
 
 private:
 //	Your private declarations
@@ -31,6 +31,6 @@ private:
 };
 
 //---------------------------------------------------------------------------
-extern MTWC_main *w_main;
+extern MTWC_main* w_main;
 //---------------------------------------------------------------------------
 #endif

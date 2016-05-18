@@ -32,13 +32,13 @@ static char buffer[4096];
 RGNDATA *rgndata = (RGNDATA*)buffer;
 #endif
 
-void *lastrgn;
+void* lastrgn;
 
 //---------------------------------------------------------------------------
-extern MTSystemInterface *si;
+extern MTSystemInterface* si;
 
 //---------------------------------------------------------------------------
-void minmax(int &min, int &max)
+void minmax(int& min, int& max)
 {
     int x;
 
@@ -50,7 +50,7 @@ void minmax(int &min, int &max)
     };
 }
 
-void pminmax(MTPoint &min, MTPoint &max)
+void pminmax(MTPoint& min, MTPoint& max)
 {
     int x;
 
@@ -190,58 +190,58 @@ void deletefont(void *font)
 }
 #else
 
-bool rectinrgn(MTRect &r, void *rgn)
+bool rectinrgn(MTRect& r, void* rgn)
 {
-    return (gdk_region_rect_in((GdkRegion *) rgn, (GdkRectangle * ) & r) == GDK_OVERLAP_RECTANGLE_IN);
+    return (gdk_region_rect_in((GdkRegion*) rgn, (GdkRectangle * ) & r) == GDK_OVERLAP_RECTANGLE_IN);
 }
 
-void *recttorgn(MTRect &r)
+void* recttorgn(MTRect& r)
 {
-    return (void *) gdk_region_rectangle((GdkRectangle * ) & r);
+    return (void*) gdk_region_rectangle((GdkRectangle * ) & r);
 }
 
-void rgntorect(void *rgn, MTRect &r)
+void rgntorect(void* rgn, MTRect& r)
 {
-    gdk_region_get_clipbox((GdkRegion *) rgn, (GdkRectangle * ) & r);
+    gdk_region_get_clipbox((GdkRegion*) rgn, (GdkRectangle * ) & r);
 }
 
-void offsetrgn(void *rgn, int ox, int oy)
+void offsetrgn(void* rgn, int ox, int oy)
 {
-    gdk_region_offset((GdkRegion *) rgn, ox, oy);
+    gdk_region_offset((GdkRegion*) rgn, ox, oy);
     lastrgn = 0;
 }
 
-void *copyrgn(void *rgn)
+void* copyrgn(void* rgn)
 {
-    return (void *) gdk_region_copy((GdkRegion *) rgn);
+    return (void*) gdk_region_copy((GdkRegion*) rgn);
 }
 
-bool isemptyrgn(void *rgn)
+bool isemptyrgn(void* rgn)
 {
-    return (gdk_region_empty((GdkRegion *) rgn) != 0);
+    return (gdk_region_empty((GdkRegion*) rgn) != 0);
 }
 
-void deletergn(void *rgn)
+void deletergn(void* rgn)
 {
-    gdk_region_destroy((GdkRegion *) rgn);
+    gdk_region_destroy((GdkRegion*) rgn);
     lastrgn = 0;
 }
 
-void intersectrgn(void *rgn, void *operand)
+void intersectrgn(void* rgn, void* operand)
 {
-    gdk_region_intersect((GdkRegion *) rgn, (GdkRegion *) operand);
+    gdk_region_intersect((GdkRegion*) rgn, (GdkRegion*) operand);
     lastrgn = 0;
 }
 
-void addrgn(void *rgn, void *operand)
+void addrgn(void* rgn, void* operand)
 {
-    gdk_region_union((GdkRegion *) rgn, (GdkRegion *) operand);
+    gdk_region_union((GdkRegion*) rgn, (GdkRegion*) operand);
     lastrgn = 0;
 }
 
-void subtractrgn(void *rgn, void *operand)
+void subtractrgn(void* rgn, void* operand)
 {
-    gdk_region_subtract((GdkRegion *) rgn, (GdkRegion *) operand);
+    gdk_region_subtract((GdkRegion*) rgn, (GdkRegion*) operand);
     lastrgn = 0;
 }
 
@@ -251,11 +251,17 @@ void subtractrgn(void *rgn, void *operand)
 int calccolor(int source, int dest, float f)
 {
     if (f == 0.0)
-    { return source; }
+    {
+        return source;
+    }
     if (f == 1.0)
-    { return dest; }
+    {
+        return dest;
+    }
     if (source == dest)
-    { return source; }
+    {
+        return source;
+    }
 
     register unsigned long ca1, cb1, ca2, cb2;
     register unsigned long uf = (unsigned long) (f * 256.0);

@@ -16,26 +16,26 @@
 //---------------------------------------------------------------------------
 #ifdef _DEBUG
 
-MTModule *m;
+MTModule* m;
 
 //---------------------------------------------------------------------------
 void _test_start()
 {
-    MTPattern *p;
-    MTDelay *d;
-    MTInstrument *i1, *i2;
-    MTSample *s;
-    MTGenerator *g;
-    unsigned char *patt;
+    MTPattern* p;
+    MTDelay* d;
+    MTInstrument* i1, * i2;
+    MTSample* s;
+    MTGenerator* g;
+    unsigned char* patt;
 
     return;
-    m = (MTModule *) oi->newobject(MTO_MODULE, 0, 0, 0);
-    p = (MTPattern *) oi->newobject(MTO_MTPATTERN, m, 0, 0);
-    d = (MTDelay *) oi->newobject(MTO_MTDELAY, m, 0, 0);
-    i1 = (MTInstrument *) oi->newobject(MTO_MTINSTRUMENT, m, 1, 0);
-    i2 = (MTInstrument *) oi->newobject(MTO_MTINSTRUMENT, m, 2, 0);
-    s = (MTSample *) oi->newobject(MTO_MTSAMPLE, m, 0, 0);
-    g = (MTGenerator *) oi->newobject(MTO_MTGENERATOR, m, 1, 0);
+    m = (MTModule*) oi->newobject(MTO_MODULE, 0, 0, 0);
+    p = (MTPattern*) oi->newobject(MTO_MTPATTERN, m, 0, 0);
+    d = (MTDelay*) oi->newobject(MTO_MTDELAY, m, 0, 0);
+    i1 = (MTInstrument*) oi->newobject(MTO_MTINSTRUMENT, m, 1, 0);
+    i2 = (MTInstrument*) oi->newobject(MTO_MTINSTRUMENT, m, 2, 0);
+    s = (MTSample*) oi->newobject(MTO_MTSAMPLE, m, 0, 0);
+    g = (MTGenerator*) oi->newobject(MTO_MTGENERATOR, m, 1, 0);
 // Module settings
     m->sequ[1][0].patt = 0;
     m->sequ[1][0].pos = 0.0;
@@ -82,7 +82,9 @@ void _test_start()
 void _test_stop()
 {
     if (!m)
-    { return; }
+    {
+        return;
+    }
     mtinterface->delmodule(m);
     oi->deleteobject(m);
 }

@@ -16,15 +16,15 @@
 #include <MTXAPI/MTXExtension.h>
 
 //---------------------------------------------------------------------------
-typedef void (MTCT *ItemProc)(void *item, void *param);
+typedef void (MTCT* ItemProc)(void* item, void* param);
 
-typedef int (MTCT *SortProc)(void *item1, void *item2);
+typedef int (MTCT* SortProc)(void* item1, void* item2);
 //---------------------------------------------------------------------------
 extern "C" {
-MTArray *MTCT mtarraycreate(int allocby, int itemsize);
-void MTCT mtarraydelete(MTArray *array);
-MTHash *MTCT mthashcreate(int allocby);
-void MTCT mthashdelete(MTHash *hash);
+MTArray* MTCT mtarraycreate(int allocby, int itemsize);
+void MTCT mtarraydelete(MTArray* array);
+MTHash* MTCT mthashcreate(int allocby);
+void MTCT mthashdelete(MTHash* hash);
 }
 //---------------------------------------------------------------------------
 #endif

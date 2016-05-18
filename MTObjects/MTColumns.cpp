@@ -25,12 +25,12 @@ PanningColumn panningcolumn;
 
 EffectColumn effectcolumn;
 
-PatternType *pt;
+PatternType* pt;
 
 //---------------------------------------------------------------------------
 void initColumns()
 {
-    pt = (PatternType *) oi->getobjecttype(MTO_MTPATTERN);
+    pt = (PatternType*) oi->getobjecttype(MTO_MTPATTERN);
     if (pt)
     {
         pt->registercolumn(&notecolumn);
@@ -56,10 +56,12 @@ void uninitColumns()
 //---------------------------------------------------------------------------
 static MTINoteEvent event = {0, 0, 0.0, 0, sizeof(MTINoteEvent)};
 
-static MTINoteEvent *cevent = &event;
+static MTINoteEvent* cevent = &event;
 
-unsigned char keymap[2][28] = {{0, 0, 0, 0, 0, 0, 0, 0, 44, 31, 45, 32, 46, 47, 34, 48, 35, 49, 36, 50, 51, 38, 52, 39, 53, 0,  0,  0},
-                               {0, 0, 0, 0, 0, 0, 0, 0, 16, 3,  17, 4,  18, 19, 6,  20, 7,  21, 8,  22, 23, 10, 24, 11, 25, 26, 13, 27}};
+unsigned char keymap[2][28] = {
+    {0, 0, 0, 0, 0, 0, 0, 0, 44, 31, 45, 32, 46, 47, 34, 48, 35, 49, 36, 50, 51, 38, 52, 39, 53, 0,  0,  0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 16, 3,  17, 4,  18, 19, 6,  20, 7,  21, 8,  22, 23, 10, 24, 11, 25, 26, 13, 27}
+};
 
 //---------------------------------------------------------------------------
 NoteColumn::NoteColumn()
@@ -71,19 +73,23 @@ NoteColumn::NoteColumn()
     ncpos = 4;
 }
 
-void NoteColumn::init(MTPatternInstance *, ColumnStatus &status)
+void NoteColumn::init(MTPatternInstance*, ColumnStatus& status)
 {
 }
 
-void NoteColumn::firstpass(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks)
+void NoteColumn::firstpass(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks)
 {
     if ((*celldata > 0) && (*celldata < 97))
-    { pass.flags |= MTFP_ISNOTE; }
+    {
+        pass.flags |= MTFP_ISNOTE;
+    }
     if (*(celldata + 1))
-    { pass.flags |= MTFP_ISINS; }
+    {
+        pass.flags |= MTFP_ISINS;
+    }
 }
 
-void NoteColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks)
+void NoteColumn::columnhandle(MTPatternInstance* pi, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks)
 {
     int x;
     unsigned char note = *celldata;
@@ -98,38 +104,46 @@ void NoteColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, Fi
 */
     if (((note) && (pass.delay > -1.0)) || (ins))
     {
-        NoteData &nd = *(NoteData *) status.data;
-        InstrumentInstance *li = nd.lastinstance[0];
+        NoteData& nd = *(NoteData*) status.data;
+        InstrumentInstance* li = nd.lastinstance[0];
         event.source = pi->parent;
         event.flags = 0;
         if (note)
         {
             nd.lastnote = note;
             if (pass.delay > -1.0)
-            { event.flags |= MTIEF_ISNOTE; }
+            {
+                event.flags |= MTIEF_ISNOTE;
+            }
         }
         else
-        { note = nd.lastnote; }
+        {
+            note = nd.lastnote;
+        }
         if (ins)
         {
             nd.lastins = ins;
             event.flags |= MTIEF_ISINS;
         }
         else
-        { ins = nd.lastins; }
+        {
+            ins = nd.lastins;
+        }
         event.type = MTIE_NOTE;
         switch (note)
         {
             case 97:
                 for(x = 0; x < nd.ninstances; x++)
                 {
-                    InstrumentInstance *ci = nd.lastinstance[x];
+                    InstrumentInstance* ci = nd.lastinstance[x];
                     if ((!ci) || (ci->flags & IIF_BACKGROUND))
-                    { continue; }
+                    {
+                        continue;
+                    }
                     event.note = 0;
                     event.notelength = 0.0;
                     event.noteoffset = 0.0;
-                    ci->sendevents(1, (MTIEvent **) &cevent);
+                    ci->sendevents(1, (MTIEvent**) &cevent);
                 };
                 break;
             case 98:
@@ -159,7 +173,7 @@ void NoteColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, Fi
                 };
                 if (event.flags != (MTIEF_ISNOTE | MTIEF_ISINS))
                 {
-                    if (pi->sendevents(1, (MTIEvent **) &cevent))
+                    if (pi->sendevents(1, (MTIEvent**) &cevent))
                     {
                         break;
                     };
@@ -168,17 +182,21 @@ void NoteColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, Fi
                 {
                     for(x = 0; x < nd.ninstances; x++)
                     {
-                        InstrumentInstance *ci = nd.lastinstance[x];
+                        InstrumentInstance* ci = nd.lastinstance[x];
                         if ((!ci) || (ci->flags & IIF_BACKGROUND))
-                        { continue; }
+                        {
+                            continue;
+                        }
                         event.type = MTIE_KILL;
-                        ci->sendevents(1, (MTIEvent **) &cevent);
+                        ci->sendevents(1, (MTIEvent**) &cevent);
                     };
                     event.type = MTIE_NOTE;
-                    Track *ctrk = (Track *) pi->module->trk->a[((MTPattern *) pi->parent)->tracks[pi->ctrack].id];
+                    Track* ctrk = (Track*) pi->module->trk->a[((MTPattern*) pi->parent)->tracks[pi->ctrack].id];
                     if (ctrk)
                     {
-                        InstrumentInstance *ci = ((Instrument *) pi->module->instr->a[nd.lastins])->createinstance(ctrk, pi, nd.lastinstance[0]);
+                        InstrumentInstance* ci = ((Instrument*) pi->module->instr->a[nd.lastins])->createinstance(
+                            ctrk, pi, nd.lastinstance[0]
+                        );
                         if (ci)
                         {
                             if (!pi->module->addchannel(ci))
@@ -192,10 +210,13 @@ void NoteColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, Fi
                                     nd.lastinstance[MAX_POLYPHONY - 1]->nextevent = -1.0;
                                     nd.ninstances--;
                                 };
-                                for(x = MAX_POLYPHONY - 1; x > 0; x--) nd.lastinstance[x] = nd.lastinstance[x - 1];
+                                for(x = MAX_POLYPHONY - 1; x > 0; x--)
+                                {
+                                    nd.lastinstance[x] = nd.lastinstance[x - 1];
+                                }
                                 nd.lastinstance[0] = ci;
                                 nd.ninstances++;
-                                ci->sendevents(1, (MTIEvent **) &cevent);
+                                ci->sendevents(1, (MTIEvent**) &cevent);
                             };
                         };
                     };
@@ -210,9 +231,9 @@ int NoteColumn::getwidth(int charwidth)
     return (charwidth * 11) / 2;
 }
 
-void NoteColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, ColumnDrawState &state)
+void NoteColumn::drawcolumn(MTBitmap* b, MTRect& r, unsigned char* celldata, ColumnDrawState& state)
 {
-    unsigned char note = *(unsigned char *) celldata;
+    unsigned char note = *(unsigned char*) celldata;
     int x, w, color;
     static unsigned char nt[12][3] = {"C.", "C#", "D.", "D#", "E.", "F.", "F#", "G.", "G#", "A.", "A#", "B."};
 
@@ -221,24 +242,28 @@ void NoteColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, Col
         color = SC_PATT_TEXT3;
     }
     else
-    { color = SC_PATT_TEXT1; }
+    {
+        color = SC_PATT_TEXT1;
+    }
     if (state.flags & CDS_SELECTED)
-    { color++; }
+    {
+        color++;
+    }
     color = skin->getcolor(color);
     x = r.left;
     switch (note)
     {
         case 0:
-            skin->drawtext((unsigned char *) "...", b, x, r.top, color);
+            skin->drawtext((unsigned char*) "...", b, x, r.top, color);
             break;
         case 97:
-            skin->drawtext((unsigned char *) "\x80\x81\x82", b, x, r.top, color);
+            skin->drawtext((unsigned char*) "\x80\x81\x82", b, x, r.top, color);
             break;
         case 98:
-            skin->drawtext((unsigned char *) "\x84\x85\x86", b, x, r.top, color);
+            skin->drawtext((unsigned char*) "\x84\x85\x86", b, x, r.top, color);
             break;
         case 99:
-            skin->drawtext((unsigned char *) "\x88\x89\x8A", b, x, r.top, color);
+            skin->drawtext((unsigned char*) "\x88\x89\x8A", b, x, r.top, color);
             break;
         default:
             skin->drawtext(nt[(note - 1) % 12], b, x, r.top, color);
@@ -246,7 +271,9 @@ void NoteColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, Col
     };
     x += 4;
     if (*(celldata + 1))
-    { skin->drawhex(*(celldata + 1), false, 2, b, x, r.top, color); }
+    {
+        skin->drawhex(*(celldata + 1), false, 2, b, x, r.top, color);
+    }
     if (state.cursor >= 0)
     {
         w = skin->fontwidth;
@@ -270,13 +297,13 @@ void NoteColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, Col
     };
 }
 
-void NoteColumn::onmessage(MTPattManager *pm, MTCMessage &msg, int cursor, unsigned char *celldata)
+void NoteColumn::onmessage(MTPattManager* pm, MTCMessage& msg, int cursor, unsigned char* celldata)
 {
     int x;
     int offset = -1;
     unsigned char data = 0;
-    unsigned char *oct1 = keymap[0];
-    unsigned char *oct2 = keymap[1];
+    unsigned char* oct1 = keymap[0];
+    unsigned char* oct2 = keymap[1];
 
     switch (msg.msg)
     {
@@ -291,7 +318,9 @@ void NoteColumn::onmessage(MTPattManager *pm, MTCMessage &msg, int cursor, unsig
                             offset = 0;
                         }
                         else
-                        { offset = 1; }
+                        {
+                            offset = 1;
+                        }
                         break;
                 };
             };
@@ -333,7 +362,9 @@ void NoteColumn::onmessage(MTPattManager *pm, MTCMessage &msg, int cursor, unsig
                             data = msg.key - '0';
                         }
                         else
-                        { data = msg.key - 'A' + 10; }
+                        {
+                            data = msg.key - 'A' + 10;
+                        }
                         if (cursor == 2)
                         {
                             data = (*(celldata + 1) & 0xF) | (data << 4);
@@ -363,11 +394,11 @@ DrumsColumn::DrumsColumn()
     ncpos = 3;
 }
 
-void DrumsColumn::init(MTPatternInstance *, ColumnStatus &status)
+void DrumsColumn::init(MTPatternInstance*, ColumnStatus& status)
 {
 }
 
-void DrumsColumn::firstpass(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks)
+void DrumsColumn::firstpass(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks)
 {
     unsigned char note = *celldata;
     if (note)
@@ -376,10 +407,12 @@ void DrumsColumn::firstpass(MTPatternInstance *, unsigned char *celldata, FirstP
         pass.delay = (double) (note & 0x1F) / nticks - status.cpos;
     };
     if (*(celldata + 1))
-    { pass.flags |= MTFP_ISINS; }
+    {
+        pass.flags |= MTFP_ISINS;
+    }
 }
 
-void DrumsColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks)
+void DrumsColumn::columnhandle(MTPatternInstance* pi, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks)
 {
     int x;
     unsigned char note = *celldata & 0x80;
@@ -387,25 +420,31 @@ void DrumsColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, F
 
     if (((note) && (pass.delay > -1.0)) || (ins))
     {
-        NoteData &nd = *(NoteData *) status.data;
-        InstrumentInstance *li = nd.lastinstance[0];
+        NoteData& nd = *(NoteData*) status.data;
+        InstrumentInstance* li = nd.lastinstance[0];
         event.source = pi->parent;
         event.flags = 0;
         if (note)
         {
             nd.lastnote = note;
             if (pass.delay > -1.0)
-            { event.flags |= MTIEF_ISNOTE; }
+            {
+                event.flags |= MTIEF_ISNOTE;
+            }
         }
         else
-        { note = nd.lastnote; }
+        {
+            note = nd.lastnote;
+        }
         if (ins)
         {
             nd.lastins = ins;
             event.flags |= MTIEF_ISINS;
         }
         else
-        { ins = nd.lastins; }
+        {
+            ins = nd.lastins;
+        }
         event.type = MTIE_NOTE;
         event.notelength = 0.0;
         event.noteoffset = 0.0;
@@ -429,7 +468,7 @@ void DrumsColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, F
         };
         if (event.flags != (MTIEF_ISNOTE | MTIEF_ISINS))
         {
-            if (pi->sendevents(1, (MTIEvent **) &cevent))
+            if (pi->sendevents(1, (MTIEvent**) &cevent))
             {
                 status.nextevent += 1.0;
                 return;
@@ -439,17 +478,21 @@ void DrumsColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, F
         {
             for(x = 0; x < nd.ninstances; x++)
             {
-                InstrumentInstance *ci = nd.lastinstance[x];
+                InstrumentInstance* ci = nd.lastinstance[x];
                 if ((!ci) || (ci->flags & IIF_BACKGROUND))
-                { continue; }
+                {
+                    continue;
+                }
                 event.type = MTIE_KILL;
-                ci->sendevents(1, (MTIEvent **) &cevent);
+                ci->sendevents(1, (MTIEvent**) &cevent);
             };
             event.type = MTIE_NOTE;
-            Track *ctrk = (Track *) pi->module->trk->a[((MTPattern *) pi->parent)->tracks[pi->ctrack].id];
+            Track* ctrk = (Track*) pi->module->trk->a[((MTPattern*) pi->parent)->tracks[pi->ctrack].id];
             if (ctrk)
             {
-                InstrumentInstance *ci = ((Instrument *) pi->module->instr->a[nd.lastins])->createinstance(ctrk, pi, nd.lastinstance[0]);
+                InstrumentInstance* ci = ((Instrument*) pi->module->instr->a[nd.lastins])->createinstance(
+                    ctrk, pi, nd.lastinstance[0]
+                );
                 if (ci)
                 {
                     if (!pi->module->addchannel(ci))
@@ -463,10 +506,13 @@ void DrumsColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, F
                             nd.lastinstance[MAX_POLYPHONY - 1]->nextevent = -1.0;
                             nd.ninstances--;
                         };
-                        for(x = MAX_POLYPHONY - 1; x > 0; x--) nd.lastinstance[x] = nd.lastinstance[x - 1];
+                        for(x = MAX_POLYPHONY - 1; x > 0; x--)
+                        {
+                            nd.lastinstance[x] = nd.lastinstance[x - 1];
+                        }
                         nd.lastinstance[0] = ci;
                         nd.ninstances++;
-                        ci->sendevents(1, (MTIEvent **) &cevent);
+                        ci->sendevents(1, (MTIEvent**) &cevent);
                     };
                 };
             };
@@ -480,9 +526,9 @@ int DrumsColumn::getwidth(int charwidth)
     return (charwidth * 7) / 2;
 }
 
-void DrumsColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, ColumnDrawState &state)
+void DrumsColumn::drawcolumn(MTBitmap* b, MTRect& r, unsigned char* celldata, ColumnDrawState& state)
 {
-    unsigned char note = *(unsigned char *) celldata;
+    unsigned char note = *(unsigned char*) celldata;
     int x, w, color;
 
     if ((state.line % state.lpb) == 0)
@@ -490,9 +536,13 @@ void DrumsColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, Co
         color = SC_PATT_TEXT3;
     }
     else
-    { color = SC_PATT_TEXT1; }
+    {
+        color = SC_PATT_TEXT1;
+    }
     if (state.flags & CDS_SELECTED)
-    { color++; }
+    {
+        color++;
+    }
     color = skin->getcolor(color);
     x = r.left;
     if (*celldata)
@@ -500,10 +550,14 @@ void DrumsColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, Co
         skin->drawchar('\x90' + (state.line % 8), b, x, r.top, color);
     }
     else
-    { skin->drawchar('.', b, x, r.top, color); }
+    {
+        skin->drawchar('.', b, x, r.top, color);
+    }
     x += 4;
     if (*(celldata + 1))
-    { skin->drawhex(*(celldata + 1), false, 2, b, x, r.top, color); }
+    {
+        skin->drawhex(*(celldata + 1), false, 2, b, x, r.top, color);
+    }
     if (state.cursor >= 0)
     {
         w = skin->fontwidth;
@@ -524,7 +578,7 @@ void DrumsColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, Co
     };
 }
 
-void DrumsColumn::onmessage(MTPattManager *pm, MTCMessage &msg, int cursor, unsigned char *celldata)
+void DrumsColumn::onmessage(MTPattManager* pm, MTCMessage& msg, int cursor, unsigned char* celldata)
 {
 }
 
@@ -538,11 +592,11 @@ VolumeColumn::VolumeColumn()
     ncpos = 2;
 }
 
-void VolumeColumn::init(MTPatternInstance *, ColumnStatus &status)
+void VolumeColumn::init(MTPatternInstance*, ColumnStatus& status)
 {
 }
 
-void VolumeColumn::firstpass(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks)
+void VolumeColumn::firstpass(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks)
 {
     unsigned char vol = *celldata;
 
@@ -552,14 +606,14 @@ void VolumeColumn::firstpass(MTPatternInstance *, unsigned char *celldata, First
     };
 }
 
-void VolumeColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks)
+void VolumeColumn::columnhandle(MTPatternInstance* pi, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks)
 {
     unsigned char vol = *celldata;
 
     if (vol >= 0x10)
     {
         event.type = MTIE_PARAM;
-        MTIParamEvent &pe = *(MTIParamEvent *) &event;
+        MTIParamEvent& pe = *(MTIParamEvent*) &event;
         pe.param = MTIP_VOLUME;
         pe.dvalue1 = -1.0;
         pe.flags = 0;
@@ -580,7 +634,9 @@ void VolumeColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, 
                 status.nextevent += 1.0 / nticks;
             }
             else
-            { status.nextevent += 1.0; }
+            {
+                status.nextevent += 1.0;
+            }
             pe.flags = MTIEF_ADD;
             // Volume down
             if (vol < 0x0B0)
@@ -596,17 +652,23 @@ void VolumeColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, 
             else if (vol < 0x0D0)
             {
                 if (tick == 0)
-                { pe.dvalue1 = -/*pass.volume**/((double) (vol - 0xC0) / 64.0); }
+                {
+                    pe.dvalue1 = -/*pass.volume**/((double) (vol - 0xC0) / 64.0);
+                }
             }
                 // Fine volume up
             else if (vol < 0x0E0)
             {
                 if (tick == 0)
-                { pe.dvalue1 = /*pass.volume**/((double) (vol - 0xD0) / 64.0); }
+                {
+                    pe.dvalue1 = /*pass.volume**/((double) (vol - 0xD0) / 64.0);
+                }
             };
         };
         if (pe.dvalue1 != -1.0)
-        { pi->sendevents(1, (MTIEvent **) &cevent); }
+        {
+            pi->sendevents(1, (MTIEvent**) &cevent);
+        }
     }
     else
     {
@@ -619,7 +681,7 @@ int VolumeColumn::getwidth(int charwidth)
     return charwidth * 2;
 }
 
-void VolumeColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, ColumnDrawState &state)
+void VolumeColumn::drawcolumn(MTBitmap* b, MTRect& r, unsigned char* celldata, ColumnDrawState& state)
 {
     int x = r.left;
     int w, color;
@@ -630,14 +692,18 @@ void VolumeColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, C
         color = SC_PATT_TEXT3;
     }
     else
-    { color = SC_PATT_TEXT1; }
+    {
+        color = SC_PATT_TEXT1;
+    }
     if (state.flags & CDS_SELECTED)
-    { color++; }
+    {
+        color++;
+    }
     color = skin->getcolor(color);
 // Nothing
     if (vol < 0x10)
     {
-        skin->drawtext((unsigned char *) "..", b, x, r.top, color);
+        skin->drawtext((unsigned char*) "..", b, x, r.top, color);
     }
 // Set volume
     else if (vol <= 0x90)
@@ -680,7 +746,7 @@ void VolumeColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, C
     };
 }
 
-void VolumeColumn::onmessage(MTPattManager *pm, MTCMessage &msg, int cursor, unsigned char *celldata)
+void VolumeColumn::onmessage(MTPattManager* pm, MTCMessage& msg, int cursor, unsigned char* celldata)
 {
     int offset = -1;
     unsigned char data = 0;
@@ -707,7 +773,9 @@ void VolumeColumn::onmessage(MTPattManager *pm, MTCMessage &msg, int cursor, uns
                         data = msg.key - '0';
                     }
                     else
-                    { data = msg.key - 'A' + 10; }
+                    {
+                        data = msg.key - 'A' + 10;
+                    }
                     if (cursor == 0)
                     {
                         data++;
@@ -718,7 +786,9 @@ void VolumeColumn::onmessage(MTPattManager *pm, MTCMessage &msg, int cursor, uns
                         data = (*celldata & 0xF0) | (data);
                     };
                     if (data < 0x10)
-                    { data += 0x10; }
+                    {
+                        data += 0x10;
+                    }
                 };
             };
             if (offset >= 0)
@@ -739,11 +809,11 @@ PanningColumn::PanningColumn()
     ncpos = 2;
 }
 
-void PanningColumn::init(MTPatternInstance *, ColumnStatus &status)
+void PanningColumn::init(MTPatternInstance*, ColumnStatus& status)
 {
 }
 
-void PanningColumn::firstpass(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks)
+void PanningColumn::firstpass(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks)
 {
     if ((pass.flags & MTFP_ISNOTE) && (*celldata))
     {
@@ -751,17 +821,17 @@ void PanningColumn::firstpass(MTPatternInstance *, unsigned char *celldata, Firs
     };
 }
 
-void PanningColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks)
+void PanningColumn::columnhandle(MTPatternInstance* pi, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks)
 {
     if ((*celldata) && ((pass.flags & MTFP_ISNOTE) == 0))
     {
         event.type = MTIE_PARAM;
-        MTIParamEvent &pe = *(MTIParamEvent *) &event;
+        MTIParamEvent& pe = *(MTIParamEvent*) &event;
         pe.param = MTIP_PANNING;
         pe.flags = 0;
         pe.fvalue1 = (float) (*celldata - 128) / 127;
         pe.fvalue2 = pe.fvalue3 = 0.0;
-        pi->sendevents(1, (MTIEvent **) &cevent);
+        pi->sendevents(1, (MTIEvent**) &cevent);
     };
     status.nextevent += 1.0;
 }
@@ -771,7 +841,7 @@ int PanningColumn::getwidth(int charwidth)
     return charwidth * 2;
 }
 
-void PanningColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, ColumnDrawState &state)
+void PanningColumn::drawcolumn(MTBitmap* b, MTRect& r, unsigned char* celldata, ColumnDrawState& state)
 {
     int x = r.left;
     int w, color;
@@ -781,9 +851,13 @@ void PanningColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, 
         color = SC_PATT_TEXT3;
     }
     else
-    { color = SC_PATT_TEXT1; }
+    {
+        color = SC_PATT_TEXT1;
+    }
     if (state.flags & CDS_SELECTED)
-    { color++; }
+    {
+        color++;
+    }
     color = skin->getcolor(color);
     if (*celldata)
     {
@@ -791,7 +865,7 @@ void PanningColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, 
     }
     else
     {
-        skin->drawtext((unsigned char *) "..", b, x, r.top, color);
+        skin->drawtext((unsigned char*) "..", b, x, r.top, color);
     };
     if (state.cursor >= 0)
     {
@@ -800,7 +874,7 @@ void PanningColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, 
     };
 }
 
-void PanningColumn::onmessage(MTPattManager *pm, MTCMessage &msg, int cursor, unsigned char *celldata)
+void PanningColumn::onmessage(MTPattManager* pm, MTCMessage& msg, int cursor, unsigned char* celldata)
 {
     int offset = -1;
     unsigned char data = 0;
@@ -827,7 +901,9 @@ void PanningColumn::onmessage(MTPattManager *pm, MTCMessage &msg, int cursor, un
                         data = msg.key - '0';
                     }
                     else
-                    { data = msg.key - 'A' + 10; }
+                    {
+                        data = msg.key - 'A' + 10;
+                    }
                     if (cursor == 0)
                     {
                         data = (*celldata & 0xF) | (data << 4);
@@ -856,18 +932,18 @@ EffectColumn::EffectColumn()
     ncpos = 6;
 }
 
-void EffectColumn::init(MTPatternInstance *, ColumnStatus &status)
+void EffectColumn::init(MTPatternInstance*, ColumnStatus& status)
 {
-    register EffectData &ed = *(EffectData *) &status.data;
+    register EffectData& ed = *(EffectData*) &status.data;
 
     ed.needbreak = false;
     ed.needjump = 0;
 }
 
-void EffectColumn::firstpass(MTPatternInstance *pi, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks)
+void EffectColumn::firstpass(MTPatternInstance* pi, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks)
 {
     unsigned char effect = *celldata++;
-    unsigned short param = *(unsigned short *) celldata;
+    unsigned short param = *(unsigned short*) celldata;
 
     switch (effect)
     {
@@ -882,17 +958,19 @@ void EffectColumn::firstpass(MTPatternInstance *pi, unsigned char *celldata, Fir
     };
 }
 
-void EffectColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks)
+void EffectColumn::columnhandle(MTPatternInstance* pi, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks)
 {
     int x;
-    NoteData *nd = (NoteData *) &pi->getnotestatus()->data;
+    NoteData* nd = (NoteData*) &pi->getnotestatus()->data;
     unsigned char effect = *celldata++;
-    unsigned short param = *(unsigned short *) celldata;
-    register EffectData &ed = *(EffectData *) &status.data;
+    unsigned short param = *(unsigned short*) celldata;
+    register EffectData& ed = *(EffectData*) &status.data;
     double inc = 1.0;
-    static MTIParamEvent pe[2] = {{0, MTIE_PARAM, 0.0, 0, sizeof(MTIParamEvent)},
-                                  {0, MTIE_PARAM, 0.0, 0, sizeof(MTIParamEvent)}};
-    static MTIParamEvent *cpe = pe;
+    static MTIParamEvent pe[2] = {
+        {0, MTIE_PARAM, 0.0, 0, sizeof(MTIParamEvent)},
+        {0, MTIE_PARAM, 0.0, 0, sizeof(MTIParamEvent)}
+    };
+    static MTIParamEvent* cpe = pe;
 
     switch (effect)
     {
@@ -909,11 +987,13 @@ void EffectColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, 
                     param = ed.old[0];
                 }
                 else
-                { ed.old[0] = param; }
+                {
+                    ed.old[0] = param;
+                }
                 pe[0].param = MTIP_NOTE;
                 pe[0].flags = MTIEF_ADD;
                 pe[0].dvalue1 = (double) param / 256;
-                pi->sendevents(1, (MTIEvent **) &cpe);
+                pi->sendevents(1, (MTIEvent**) &cpe);
             };
             inc = 1.0 / nticks;
             break;
@@ -926,11 +1006,13 @@ void EffectColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, 
                     param = ed.old[0];
                 }
                 else
-                { ed.old[0] = param; }
+                {
+                    ed.old[0] = param;
+                }
                 pe[0].param = MTIP_NOTE;
                 pe[0].flags = MTIEF_ADD;
                 pe[0].dvalue1 = -(double) param / 256;
-                pi->sendevents(1, (MTIEvent **) &cpe);
+                pi->sendevents(1, (MTIEvent**) &cpe);
             };
             inc = 1.0 / nticks;
             break;
@@ -943,7 +1025,9 @@ void EffectColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, 
                     param = ed.old[0];
                 }
                 else
-                { ed.old[0] = param; }
+                {
+                    ed.old[0] = param;
+                }
                 pe[0].param = MTIP_NOTE;
                 pe[0].flags = MTIEF_ADD;
                 if (nd->ninstances)
@@ -951,16 +1035,20 @@ void EffectColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, 
                     unsigned char note = *pi->getnotedata();
                     double ref = (double) param / 256;
                     if (note)
-                    { nd->dnote = note + 11; }
+                    {
+                        nd->dnote = note + 11;
+                    }
                     pe[0].dvalue1 = nd->dnote - nd->cnote;
                     if (pe[0].dvalue1 < -ref)
                     {
                         pe[0].dvalue1 = -ref;
                     }
                     else if (pe[0].dvalue1 > ref)
-                    { pe[0].dvalue1 = ref; }
+                    {
+                        pe[0].dvalue1 = ref;
+                    }
                     nd->cnote += pe[0].dvalue1;
-                    pi->sendevents(1, (MTIEvent **) &cpe);
+                    pi->sendevents(1, (MTIEvent**) &cpe);
                 };
             };
             inc = 1.0 / nticks;
@@ -975,12 +1063,16 @@ void EffectColumn::columnhandle(MTPatternInstance *pi, unsigned char *celldata, 
             pe[0].dvalue1 = -1.0;
             for(x = 0; x < nd->ninstances; x++)
             {
-                InstrumentInstance &ci = *nd->lastinstance[x];
+                InstrumentInstance& ci = *nd->lastinstance[x];
                 if (ci.flags & IIF_BACKGROUND)
-                { continue; }
+                {
+                    continue;
+                }
                 if (pass.flags & MTFP_ISNOTE)
-                { ci.seek(0.0, MTIS_END); }
-                ci.sendevents(1, (MTIEvent **) &cpe);
+                {
+                    ci.seek(0.0, MTIS_END);
+                }
+                ci.sendevents(1, (MTIEvent**) &cpe);
             };
             break;
     };
@@ -992,7 +1084,7 @@ int EffectColumn::getwidth(int charwidth)
     return (charwidth * 13) / 2;
 }
 
-void EffectColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, ColumnDrawState &state)
+void EffectColumn::drawcolumn(MTBitmap* b, MTRect& r, unsigned char* celldata, ColumnDrawState& state)
 {
     int x = r.left;
     int w, color;
@@ -1003,35 +1095,45 @@ void EffectColumn::drawcolumn(MTBitmap *b, MTRect &r, unsigned char *celldata, C
         color = SC_PATT_TEXT3;
     }
     else
-    { color = SC_PATT_TEXT1; }
+    {
+        color = SC_PATT_TEXT1;
+    }
     if (state.flags & CDS_SELECTED)
-    { color++; }
+    {
+        color++;
+    }
     color = skin->getcolor(color);
     if (*celldata)
     {
         skin->drawhex(*celldata, false, 2, b, x, r.top, color);
     }
     else
-    { skin->drawtext((unsigned char *) "..", b, x, r.top, color); }
+    {
+        skin->drawtext((unsigned char*) "..", b, x, r.top, color);
+    }
     x += 4;
-    param = *(unsigned short *) (celldata + 1);
+    param = *(unsigned short*) (celldata + 1);
     if (param)
     {
         skin->drawhex(param, false, 4, b, x, r.top, color);
     }
     else
-    { skin->drawtext((unsigned char *) "....", b, x, r.top, color); }
+    {
+        skin->drawtext((unsigned char*) "....", b, x, r.top, color);
+    }
     if (state.cursor >= 0)
     {
         w = skin->fontwidth;
         x = r.left + state.cursor * w;
         if (state.cursor > 1)
-        { x += 4; }
+        {
+            x += 4;
+        }
         b->fill(x, r.bottom - 2, w, 2, skin->getcolor(SC_CURSOR));
     };
 }
 
-void EffectColumn::onmessage(MTPattManager *pm, MTCMessage &msg, int cursor, unsigned char *celldata)
+void EffectColumn::onmessage(MTPattManager* pm, MTCMessage& msg, int cursor, unsigned char* celldata)
 {
     int offset = -1;
     unsigned char data = 0;
@@ -1046,7 +1148,9 @@ void EffectColumn::onmessage(MTPattManager *pm, MTCMessage &msg, int cursor, uns
                     case MTT_delete:
                         offset = cursor / 2;
                         if (offset)
-                        { offset = 3 - offset; }
+                        {
+                            offset = 3 - offset;
+                        }
                         break;
                 };
             };
@@ -1056,13 +1160,17 @@ void EffectColumn::onmessage(MTPattManager *pm, MTCMessage &msg, int cursor, uns
                 {
                     offset = cursor / 2;
                     if (offset)
-                    { offset = 3 - offset; }
+                    {
+                        offset = 3 - offset;
+                    }
                     if (msg.key <= '9')
                     {
                         data = msg.key - '0';
                     }
                     else
-                    { data = msg.key - 'A' + 10; }
+                    {
+                        data = msg.key - 'A' + 10;
+                    }
                     if ((cursor % 2) == 0)
                     {
                         data = (*(celldata + offset) & 0xF) | (data << 4);

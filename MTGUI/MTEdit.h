@@ -21,31 +21,31 @@ class MTItemComboBox;
 class MTEdit: public MTControl
 {
 public:
-    char *text;
+    char* text;
     int maxlength;
     bool password;
 
-    MTEdit(int tg, MTWinControl *p, int l, int t, int w, int h);
+    MTEdit(int tg, MTWinControl* p, int l, int t, int w, int h);
 
     virtual ~MTEdit();
 
-    int MTCT loadfromstream(MTFile *f, int size, int flags);
+    int MTCT loadfromstream(MTFile* f, int size, int flags);
 
-    int MTCT savetostream(MTFile *f, int flags);
+    int MTCT savetostream(MTFile* f, int flags);
 
     virtual int MTCT getnumproperties(int id);
 
-    virtual bool MTCT getpropertytype(int id, char **name, int &flags);
+    virtual bool MTCT getpropertytype(int id, char** name, int& flags);
 
-    virtual bool MTCT getproperty(int id, void *value);
+    virtual bool MTCT getproperty(int id, void* value);
 
-    virtual bool MTCT setproperty(int id, void *value);
+    virtual bool MTCT setproperty(int id, void* value);
 
-    virtual void MTCT draw(MTRect &rect);
+    virtual void MTCT draw(MTRect& rect);
 
-    virtual bool MTCT message(MTCMessage &msg);
+    virtual bool MTCT message(MTCMessage& msg);
 
-    virtual void MTCT settext(const char *t);
+    virtual void MTCT settext(const char* t);
 
     virtual void MTCT setselstart(int ss);
 
@@ -63,7 +63,7 @@ protected:
     int cursor, offset;
     int selstart, selend;
     int mss, mse;
-    char *oldtext;
+    char* oldtext;
     int oldselstart, oldselend;
     int timer;
 
@@ -75,33 +75,33 @@ class MTComboBox: public MTEdit
 public:
     int dropcount;
 
-    MTComboBox(int id, int tg, MTWinControl *p, int l, int t, int w, int h);
+    MTComboBox(int id, int tg, MTWinControl* p, int l, int t, int w, int h);
 
     ~MTComboBox();
 
     int MTCT getnumproperties(int id);
 
-    bool MTCT getpropertytype(int id, char **name, int &flags);
+    bool MTCT getpropertytype(int id, char** name, int& flags);
 
-    bool MTCT getproperty(int id, void *value);
+    bool MTCT getproperty(int id, void* value);
 
-    bool MTCT setproperty(int id, void *value);
+    bool MTCT setproperty(int id, void* value);
 
-    bool MTCT checkbounds(int &l, int &t, int &w, int &h);
+    bool MTCT checkbounds(int& l, int& t, int& w, int& h);
 
-    void MTCT draw(MTRect &rect);
+    void MTCT draw(MTRect& rect);
 
-    bool MTCT message(MTCMessage &msg);
+    bool MTCT message(MTCMessage& msg);
 
     virtual void MTCT pulldown();
 
     virtual int MTCT getselected();
 
-    virtual bool MTCT getiteminfo(int id, char **caption, int *imageindex, int *flags, bool *editable);
+    virtual bool MTCT getiteminfo(int id, char** caption, int* imageindex, int* flags, bool* editable);
 
     virtual void MTCT setitem(int id);
 
-    virtual int MTCT searchitem(const char *search, char **caption);
+    virtual int MTCT searchitem(const char* search, char** caption);
 
 protected:
     friend class MTSkin;
@@ -110,7 +110,7 @@ protected:
 
     friend class MTList;
 
-    MTList *mlb;
+    MTList* mlb;
     bool modified;
     int popuptick;
 };
@@ -118,7 +118,7 @@ protected:
 class MTUserComboBox: public MTComboBox
 {
 public:
-    MTUserComboBox(int tg, MTWinControl *p, int l, int t, int w, int h);
+    MTUserComboBox(int tg, MTWinControl* p, int l, int t, int w, int h);
 
     virtual void MTCT setnumitems(int n);
 };
@@ -126,23 +126,23 @@ public:
 class MTItemComboBox: public MTComboBox
 {
 public:
-    MTItemComboBox(int tg, MTWinControl *p, int l, int t, int w, int h);
+    MTItemComboBox(int tg, MTWinControl* p, int l, int t, int w, int h);
 
-    int MTCT loadfromstream(MTFile *f, int size, int flags);
+    int MTCT loadfromstream(MTFile* f, int size, int flags);
 
-    int MTCT savetostream(MTFile *f, int flags);
+    int MTCT savetostream(MTFile* f, int flags);
 
     int MTCT getnumproperties(int id);
 
-    bool MTCT getpropertytype(int id, char **name, int &flags);
+    bool MTCT getpropertytype(int id, char** name, int& flags);
 
-    bool MTCT getproperty(int id, void *value);
+    bool MTCT getproperty(int id, void* value);
 
-    bool MTCT setproperty(int id, void *value);
+    bool MTCT setproperty(int id, void* value);
 
-    virtual MTItem *MTCT additem(const char *caption, int image, int flags, bool editable, void *data);
+    virtual MTItem* MTCT additem(const char* caption, int image, int flags, bool editable, void* data);
 
-    virtual void MTCT removeitem(MTItem *item);
+    virtual void MTCT removeitem(MTItem* item);
 
     virtual void MTCT clearitems();
 
@@ -152,9 +152,9 @@ public:
 
     virtual void MTCT sort(int f);
 
-    virtual MTItem *MTCT getitem(int id);
+    virtual MTItem* MTCT getitem(int id);
 
-    virtual MTItem *MTCT getitemfromtag(int tag);
+    virtual MTItem* MTCT getitemfromtag(int tag);
 };
 //---------------------------------------------------------------------------
 #include "MTItems.h"

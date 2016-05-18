@@ -29,9 +29,9 @@ class ObjectType
 {
 public:
     mt_uint32 type;
-    const char *description;
+    const char* description;
 
-    virtual MTObject *MTCT create(MTObject *parent, mt_int32 id, void *param) = 0;
+    virtual MTObject* MTCT create(MTObject* parent, mt_int32 id, void* param) = 0;
 };
 //---------------------------------------------------------------------------
 #include "MTObject.h"
@@ -48,33 +48,33 @@ struct MTObjectsPreferences
     double maxsleeptime;
 };
 
-typedef bool (MTCT *ObjectIOFunc)(MTObject *object, char *filename, void *process);
+typedef bool (MTCT* ObjectIOFunc)(MTObject* object, char* filename, void* process);
 
-typedef bool (MTCT *ObjectEditFunc)(MTObject *object, MTWindow *window, int flags, MTUser *user);
+typedef bool (MTCT* ObjectEditFunc)(MTObject* object, MTWindow* window, int flags, MTUser* user);
 
-typedef bool (MTCT *ObjectInfoFunc)(MTMiniConfig *data, char *filename, void *process);
+typedef bool (MTCT* ObjectInfoFunc)(MTMiniConfig* data, char* filename, void* process);
 
 struct ObjectIO
 {
     mt_uint32 type;
     ObjectIOFunc func;
-    char *filetypes;
-    char *description;
+    char* filetypes;
+    char* description;
 };
 
 struct ObjectEdit
 {
     mt_uint32 type;
     ObjectEditFunc func;
-    char *description;
+    char* description;
 };
 
 struct ObjectInfo
 {
     mt_uint32 type;
     ObjectInfoFunc func;
-    char *filetypes;
-    char *description;
+    char* filetypes;
+    char* description;
 };
 
 class MTObjectsInterface: public MTXInterface
@@ -90,49 +90,49 @@ public:
 
     void MTCT stop();
 
-    void MTCT processcmdline(void *params);
+    void MTCT processcmdline(void* params);
 
-    void MTCT showusage(void *out);
+    void MTCT showusage(void* out);
 
     int MTCT config(int command, int param);
 
-    virtual MTObject *MTCT newobject(mt_uint32 type, MTObject *parent, mt_int32 id, void *param = 0, bool locked = false, bool assign = true);
+    virtual MTObject* MTCT newobject(mt_uint32 type, MTObject* parent, mt_int32 id, void* param = 0, bool locked = false, bool assign = true);
 
-    virtual bool MTCT deleteobject(MTObject *object);
+    virtual bool MTCT deleteobject(MTObject* object);
 
-    virtual bool MTCT loadobject(MTObject *object, const char *filename, void *process = 0);
+    virtual bool MTCT loadobject(MTObject* object, const char* filename, void* process = 0);
 
-    virtual bool MTCT saveobject(MTObject *object, const char *filename, void *process = 0);
+    virtual bool MTCT saveobject(MTObject* object, const char* filename, void* process = 0);
 
-    virtual bool MTCT ownobject(MTObject *object, MTUser *user, bool silent = true);
+    virtual bool MTCT ownobject(MTObject* object, MTUser* user, bool silent = true);
 
-    virtual void MTCT freeobject(MTObject *object, MTUser *user);
+    virtual void MTCT freeobject(MTObject* object, MTUser* user);
 
-    virtual bool MTCT editobject(MTObject *object, MTWindow *window, int flags = 0);
+    virtual bool MTCT editobject(MTObject* object, MTWindow* window, int flags = 0);
 
-    virtual void MTCT closeobject(MTObject *object);
+    virtual void MTCT closeobject(MTObject* object);
 
-    virtual bool MTCT infoobject(MTMiniConfig *data, const char *filename, void *process = 0);
+    virtual bool MTCT infoobject(MTMiniConfig* data, const char* filename, void* process = 0);
 
     virtual int MTCT getnumtypes();
 
     virtual mt_uint32 MTCT gettype(int id);
 
-    virtual ObjectType *MTCT getobjecttype(mt_uint32 type);
+    virtual ObjectType* MTCT getobjecttype(mt_uint32 type);
 
-    virtual ObjectType *MTCT getobjecttype(const char *description);
+    virtual ObjectType* MTCT getobjecttype(const char* description);
 
-    virtual mt_uint32 MTCT addobjecttype(ObjectType *type);
+    virtual mt_uint32 MTCT addobjecttype(ObjectType* type);
 
-    virtual bool MTCT addload(mt_uint32 type, ObjectIOFunc loadfunc, const char *filetypes, const char *description);
+    virtual bool MTCT addload(mt_uint32 type, ObjectIOFunc loadfunc, const char* filetypes, const char* description);
 
-    virtual bool MTCT addsave(mt_uint32 type, ObjectIOFunc savefunc, const char *filetypes, const char *description);
+    virtual bool MTCT addsave(mt_uint32 type, ObjectIOFunc savefunc, const char* filetypes, const char* description);
 
-    virtual bool MTCT addedit(mt_uint32 type, ObjectEditFunc editfunc, const char *description);
+    virtual bool MTCT addedit(mt_uint32 type, ObjectEditFunc editfunc, const char* description);
 
-    virtual bool MTCT addinfo(mt_uint32 type, ObjectInfoFunc infofunc, const char *filetypes, const char *description);
+    virtual bool MTCT addinfo(mt_uint32 type, ObjectInfoFunc infofunc, const char* filetypes, const char* description);
 
-    virtual void MTCT delobjecttype(ObjectType *type);
+    virtual void MTCT delobjecttype(ObjectType* type);
 
     virtual void MTCT delload(mt_uint32 type, ObjectIOFunc loadfunc);
 
@@ -144,37 +144,37 @@ public:
 };
 
 //---------------------------------------------------------------------------
-extern MTInterface *mtinterface;
+extern MTInterface* mtinterface;
 
-extern MTObjectsInterface *oi;
+extern MTObjectsInterface* oi;
 
-extern MTSystemInterface *si;
+extern MTSystemInterface* si;
 
-extern MTAudioInterface *ai;
+extern MTAudioInterface* ai;
 
-extern MTDSPInterface *dspi;
+extern MTDSPInterface* dspi;
 
-extern MTGUIInterface *gi;
+extern MTGUIInterface* gi;
 
 extern MTObjectsPreferences objectsprefs;
 
-extern Skin *skin;
+extern Skin* skin;
 
 #ifdef MTSYSTEM_RESOURCES
 
-extern MTResources *res;
+extern MTResources* res;
 
 #endif
 
-extern MTWindow *monitor;
+extern MTWindow* monitor;
 
-extern MTHash *objecttype;
+extern MTHash* objecttype;
 
-extern MTArray *load, *save, *edit, *info;
+extern MTArray* load, * save, * edit, * info;
 
-extern MTLock *objectlock;
+extern MTLock* objectlock;
 
-extern WaveOutput *output;
+extern WaveOutput* output;
 
 #ifdef MTVERSION_PROFESSIONAL
 extern bool smpsupport;

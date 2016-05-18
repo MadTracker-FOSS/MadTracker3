@@ -104,19 +104,19 @@ struct MTUser
 // Access
 struct MTACL
 {
-    MTUser *user;
+    MTUser* user;
     mt_uint32 access;
-    MTACL *next;
+    MTACL* next;
 };
 
 struct MTAccess
 {
     MTUserID creatorid;
     mt_uint32 caccess;
-    MTACL *acl;
+    MTACL* acl;
 };
 
-typedef int (MTCT *MTObjectEnum)(MTObject *object, void *data);
+typedef int (MTCT* MTObjectEnum)(MTObject* object, void* data);
 
 // MadTracker object
 class MTObject
@@ -128,14 +128,14 @@ public:
     int lockread;
     int lockwrite;
     int modifying;
-    MTObject *parent;
-    MTModule *module;
-    MTUser *owner;
-    MTUser *lastowner;
+    MTObject* parent;
+    MTModule* module;
+    MTUser* owner;
+    MTUser* lastowner;
     mt_uint32 objecttype;
     mt_int32 id;
     mt_uint32 flags;
-    char *name;
+    char* name;
     MTColor color;
 
 #	ifdef IMPLEMENT_MTOBJECT
@@ -158,7 +158,7 @@ public:
     virtual void MTCT setparam(int pid,double value){ };
 #	else
 
-    MTObject(MTObject *parent, mt_uint32 type, mt_int32 i);
+    MTObject(MTObject* parent, mt_uint32 type, mt_int32 i);
 
     virtual ~MTObject() = 0;
 
@@ -168,19 +168,19 @@ public:
 
     virtual bool MTCT lock(int flags, bool lock, int timeout = -1) = 0;
 
-    virtual void MTCT setname(char *newname) = 0;
+    virtual void MTCT setname(char* newname) = 0;
 
     virtual void MTCT setmodified(int value, int flags) = 0;
 
-    virtual void MTCT notify(MTObject *source, int message, int param1, void *param2) = 0;
+    virtual void MTCT notify(MTObject* source, int message, int param1, void* param2) = 0;
 
-    virtual void MTCT enumchildren(MTObjectEnum enumproc, void *data) = 0;
+    virtual void MTCT enumchildren(MTObjectEnum enumproc, void* data) = 0;
 
-    virtual int MTCT loadfromstream(MTFile *f, int size, void *params) = 0;
+    virtual int MTCT loadfromstream(MTFile* f, int size, void* params) = 0;
 
-    virtual int MTCT savetostream(MTFile *f, void *params) = 0;
+    virtual int MTCT savetostream(MTFile* f, void* params) = 0;
 
-    virtual MTObject *MTCT duplicate(mt_uint32 targettype) = 0;
+    virtual MTObject* MTCT duplicate(mt_uint32 targettype) = 0;
 
     virtual int MTCT getnumparams() = 0;
 

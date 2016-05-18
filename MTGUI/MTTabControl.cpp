@@ -18,9 +18,19 @@
 //   MTWinControl
 //     MTTabControl
 //---------------------------------------------------------------------------
-MTTabControl::MTTabControl(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTWinControl(MTC_TABCONTROL, tag, p, l, t, w, h), style(5), cstyle(0), page(0), autohidetabs(false), npages(0),
-    btnx(0), btny(0), btnw(16), btnh(16), btno(-1), btnd(-1)
+MTTabControl::MTTabControl(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTWinControl(MTC_TABCONTROL, tag, p, l, t, w, h),
+    style(5),
+    cstyle(0),
+    page(0),
+    autohidetabs(false),
+    npages(0),
+    btnx(0),
+    btny(0),
+    btnw(16),
+    btnh(16),
+    btno(-1),
+    btnd(-1)
 {
     flags &= ~MTCF_BORDER;
     flags |= MTCF_ACCEPTINPUT | MTCF_TRANSPARENT;
@@ -34,22 +44,29 @@ MTTabControl::MTTabControl(int tag, MTWinControl *p, int l, int t, int w, int h)
     {
         gi->setcontrolname(this, "tabcontrol");
         if (design)
-        { gi->newcontrol(MTC_WINDOW, 0, this, br.left, br.top, width - br.left + br.right, height - br.top + br.bottom, 0); }
+        {
+            gi->newcontrol(
+                MTC_WINDOW, 0, this, br.left, br.top, width - br.left + br.right, height - br.top + br.bottom, 0
+            );
+        }
     };
 }
 
-int MTTabControl::loadfromstream(MTFile *f, int size, int flags)
+int MTTabControl::loadfromstream(MTFile* f, int size, int flags)
 {
     int csize;
 
-    while(ncontrols > 0) gi->delcontrol(controls[0]);
+    while(ncontrols > 0)
+    {
+        gi->delcontrol(controls[0]);
+    }
     csize = MTWinControl::loadfromstream(f, size, flags);
     updateborders();
     setpageid(0);
     return csize;
 }
 
-int MTTabControl::savetostream(MTFile *f, int flags)
+int MTTabControl::savetostream(MTFile* f, int flags)
 {
     return MTWinControl::savetostream(f, flags);
 }
@@ -59,46 +76,62 @@ int MTTabControl::savetostream(MTFile *f, int flags)
 int MTTabControl::getnumproperties(int id)
 {
     if (id == -1)
-    { return TabControlNP; }
+    {
+        return TabControlNP;
+    }
     if (id < ControlNP)
-    { return MTControl::getnumproperties(id); }
+    {
+        return MTControl::getnumproperties(id);
+    }
     return 0;
 }
 
-bool MTTabControl::getpropertytype(int id, char **name, int &flags)
+bool MTTabControl::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[1] = {"New page"};
+    static char* propname[1] = {"New page"};
     static int propflags[1] = {MTP_ACTION};
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getpropertytype(id, name, flags); }
+    {
+        return MTControl::getpropertytype(id, name, flags);
+    }
     if (id >= TabControlNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id - ControlNP];
     flags = propflags[id - ControlNP];
     return true;
 }
 
-bool MTTabControl::getproperty(int id, void *value)
+bool MTTabControl::getproperty(int id, void* value)
 {
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getproperty(id, value); }
+    {
+        return MTControl::getproperty(id, value);
+    }
     return true;
 }
 
-bool MTTabControl::setproperty(int id, void *value)
+bool MTTabControl::setproperty(int id, void* value)
 {
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::setproperty(id, value); }
+    {
+        return MTControl::setproperty(id, value);
+    }
     if (id >= TabControlNP)
-    { return false; }
+    {
+        return false;
+    }
     if (window)
-    { window->modified = true; }
+    {
+        window->modified = true;
+    }
     gi->newcontrol(MTC_WINDOW, 0, this, br.left, br.top, width - br.left + br.right, height - br.top + br.bottom, 0);
     return true;
 }
 
-void MTTabControl::getrect(MTRect &r, int client)
+void MTTabControl::getrect(MTRect& r, int client)
 {
     r.left = left;
     r.top = top;
@@ -135,19 +168,23 @@ void MTTabControl::switchflags(int f, bool set)
     MTWinControl::switchflags(f, set);
 }
 
-void MTTabControl::draw(MTRect &rect)
+void MTTabControl::draw(MTRect& rect)
 {
     int x = 0;
     int y = 0;
-    MTBitmap *b;
+    MTBitmap* b;
     MTRect cr = {0, 0, width, height};
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     if (&rect)
     {
         if (!cliprect(cr, rect))
-        { return; }
+        {
+            return;
+        }
     };
     if ((parent) && ((npages != 1) || (!autohidetabs)))
     {
@@ -159,7 +196,7 @@ void MTTabControl::draw(MTRect &rect)
     MTWinControl::draw(rect);
 }
 
-bool MTTabControl::message(MTCMessage &msg)
+bool MTTabControl::message(MTCMessage& msg)
 {
     int id, cbtno, ow;
 
@@ -169,7 +206,9 @@ bool MTTabControl::message(MTCMessage &msg)
         {
             case MTCM_MOUSEDOWN:
                 if (msg.button != DB_LEFT)
-                { break; }
+                {
+                    break;
+                }
                 if (btno >= 0)
                 {
                     btnd = btno;
@@ -236,7 +275,9 @@ bool MTTabControl::message(MTCMessage &msg)
                         while(ow >= MTWS_CLOSE)
                         {
                             if ((cstyle & ow) && (btno-- == 0))
-                            { break; }
+                            {
+                                break;
+                            }
                             ow >>= 1;
                             msg.msg++;
                         };
@@ -256,12 +297,16 @@ bool MTTabControl::message(MTCMessage &msg)
                 if (msg.buttons & DB_SHIFT)
                 {
                     if (id-- == 0)
-                    { id = (ncontrols >> 1) - 1; }
+                    {
+                        id = (ncontrols >> 1) - 1;
+                    }
                 }
                 else
                 {
                     if (++id == (ncontrols >> 1))
-                    { id = 0; }
+                    {
+                        id = 0;
+                    }
                 };
                 setpageid(id);
                 return true;
@@ -276,13 +321,15 @@ bool MTTabControl::message(MTCMessage &msg)
             break;
         case MTCM_NOTIFY:
             if (msg.param1 == 0)
-            { updateborders(); }
+            {
+                updateborders();
+            }
             break;
     };
     return MTWinControl::message(msg);
 }
 
-void MTTabControl::addcontrol(MTControl *control)
+void MTTabControl::addcontrol(MTControl* control)
 {
     int x, y, ox;
     MTRect b;
@@ -290,7 +337,7 @@ void MTTabControl::addcontrol(MTControl *control)
     if ((control->guiid == MTC_WINDOW) || (control->guiid == MTC_TABSHEET))
     {
         npages++;
-        MTWindow *cp = (MTWindow *) control;
+        MTWindow* cp = (MTWindow*) control;
         if (!page)
         {
             page = cp;
@@ -300,10 +347,12 @@ void MTTabControl::addcontrol(MTControl *control)
         {
             control->flags |= MTCF_HIDDEN;
         };
-        MTControl *old = focused;
+        MTControl* old = focused;
         focused = page;
         if (old)
-        { old->switchflags(MTCF_FOCUSED, false); }
+        {
+            old->switchflags(MTCF_FOCUSED, false);
+        }
         page->switchflags(MTCF_FOCUSED, true);
         page->nextcontrol(0, false);
         cstyle = page->style;
@@ -312,7 +361,9 @@ void MTTabControl::addcontrol(MTControl *control)
             updateborders();
         }
         else
-        { updatebuttons(); }
+        {
+            updatebuttons();
+        }
         flags |= MTCF_DONTRESIZE;
         cp->guiid = MTC_TABSHEET;
         y = cp->flags;
@@ -326,7 +377,7 @@ void MTTabControl::addcontrol(MTControl *control)
         y = 0;
         for(x = 0; x < ncontrols; x++)
         {
-            MTControl &cctrl = *controls[x];
+            MTControl& cctrl = *controls[x];
             if ((cctrl.guiid == MTC_WINDOW) || (cctrl.guiid == MTC_TABSHEET))
             {
                 y++;
@@ -336,9 +387,9 @@ void MTTabControl::addcontrol(MTControl *control)
                 ox += cctrl.width;
             };
         };
-        MTButton *cb = (MTButton *) gi->newcontrol(MTC_BUTTON, y, this, ox, b.top, 0, br.top - b.top - b.bottom, 0);
-        cb->imageindex = ((MTWindow *) control)->imageindex;
-        cb->setcaption(((MTWindow *) control)->caption);
+        MTButton* cb = (MTButton*) gi->newcontrol(MTC_BUTTON, y, this, ox, b.top, 0, br.top - b.top - b.bottom, 0);
+        cb->imageindex = ((MTWindow*) control)->imageindex;
+        cb->setcaption(((MTWindow*) control)->caption);
         cb->switchflags(MTCF_DONTSAVE, true);
         cb->switchflags(MTCF_HIDDEN, autohidetabs);
         if (flags & MTCF_HIDDEN)
@@ -358,7 +409,7 @@ void MTTabControl::addcontrol(MTControl *control)
     MTWinControl::addcontrol(control);
 }
 
-void MTTabControl::delcontrol(MTControl *control)
+void MTTabControl::delcontrol(MTControl* control)
 {
     int x, id, ox;
     MTRect b;
@@ -366,13 +417,15 @@ void MTTabControl::delcontrol(MTControl *control)
     if ((control->guiid == MTC_WINDOW) || (control->guiid == MTC_TABSHEET))
     {
         npages--;
-        MTWindow *cp = (MTWindow *) control;
+        MTWindow* cp = (MTWindow*) control;
         if (page == cp)
-        { page = 0; }
+        {
+            page = 0;
+        }
         id = getpageid(cp);
         for(x = 0; x < ncontrols; x++)
         {
-            MTButton &cb = *(MTButton *) controls[x];
+            MTButton& cb = *(MTButton*) controls[x];
             if (cb.guiid == MTC_BUTTON)
             {
                 if (cb.tag == id)
@@ -380,14 +433,16 @@ void MTTabControl::delcontrol(MTControl *control)
                     gi->delcontrol(&cb);
                 }
                 else if (cb.tag > id)
-                { cb.tag--; }
+                {
+                    cb.tag--;
+                }
             };
         };
         skin->getwindowoffsets(style, &b);
         ox = br.left + b.left;
         for(x = 0; x < ncontrols; x++)
         {
-            MTButton &cb = *(MTButton *) controls[x];
+            MTButton& cb = *(MTButton*) controls[x];
             if (cb.guiid == MTC_BUTTON)
             {
                 cb.setbounds(ox, cb.top, cb.width, cb.height);
@@ -401,36 +456,44 @@ void MTTabControl::delcontrol(MTControl *control)
         updateborders();
     };
     if ((ncontrols == 0) && (!design))
-    { switchflags(MTCF_HIDDEN, true); }
+    {
+        switchflags(MTCF_HIDDEN, true);
+    }
 }
 
-void MTTabControl::bringtofront(MTWinControl *w)
+void MTTabControl::bringtofront(MTWinControl* w)
 {
     if (w->guiid == MTC_TABSHEET)
     {
-        setpage((MTWindow *) w);
+        setpage((MTWindow*) w);
     }
     else
-    { MTWinControl::bringtofront(w); }
+    {
+        MTWinControl::bringtofront(w);
+    }
 }
 
-void MTTabControl::puttoback(MTWinControl *w)
+void MTTabControl::puttoback(MTWinControl* w)
 {
 }
 
-void MTTabControl::setpage(MTWindow *p)
+void MTTabControl::setpage(MTWindow* p)
 {
     int x;
-    MTControl *old;
+    MTControl* old;
 
     if (page == p)
-    { return; }
+    {
+        return;
+    }
     for(x = 0; x < ncontrols; x++)
     {
-        if (controls[x] == (MTControl *) p)
+        if (controls[x] == (MTControl*) p)
         {
             if (page)
-            { page->switchflags(MTCF_HIDDEN, true); }
+            {
+                page->switchflags(MTCF_HIDDEN, true);
+            }
             page = p;
             cstyle = page->style;
             updatebuttons();
@@ -440,7 +503,9 @@ void MTTabControl::setpage(MTWindow *p)
                 old = focused;
                 focused = page;
                 if (old)
-                { old->switchflags(MTCF_FOCUSED, false); }
+                {
+                    old->switchflags(MTCF_FOCUSED, false);
+                }
                 page->switchflags(MTCF_FOCUSED, true);
                 page->nextcontrol(0, false);
             };
@@ -454,20 +519,24 @@ void MTTabControl::setpage(MTWindow *p)
 void MTTabControl::setpageid(int id)
 {
     int x, y;
-    MTControl *old;
+    MTControl* old;
 
     y = 0;
     for(x = 0; x < ncontrols; x++)
     {
-        MTWindow &cp = *(MTWindow *) controls[x];
+        MTWindow& cp = *(MTWindow*) controls[x];
         if (cp.guiid == MTC_TABSHEET)
         {
             if (id == y)
             {
                 if (page == &cp)
-                { return; }
+                {
+                    return;
+                }
                 if (page)
-                { page->switchflags(MTCF_HIDDEN, true); }
+                {
+                    page->switchflags(MTCF_HIDDEN, true);
+                }
                 page = &cp;
                 cstyle = page->style;
                 updatebuttons();
@@ -492,31 +561,35 @@ void MTTabControl::setpageid(int id)
     };
 }
 
-int MTTabControl::getpageid(MTWindow *p)
+int MTTabControl::getpageid(MTWindow* p)
 {
     int x, y;
 
     y = 0;
     for(x = 0; x < ncontrols; x++)
     {
-        MTWindow &cp = *(MTWindow *) controls[x];
+        MTWindow& cp = *(MTWindow*) controls[x];
         if ((cp.guiid == MTC_WINDOW) || (cp.guiid == MTC_TABSHEET))
         {
             if (&cp == p)
-            { return y; }
+            {
+                return y;
+            }
             y++;
         };
     };
     return -1;
 }
 
-MTWindow *MTTabControl::loadpage(MTResources *res, int id, bool autosave)
+MTWindow* MTTabControl::loadpage(MTResources* res, int id, bool autosave)
 {
-    MTWindow *w;
+    MTWindow* w;
 
     w = gi->loadwindow(res, id, dsk, autosave);
     if (!w)
-    { return 0; }
+    {
+        return 0;
+    }
     w->setparent(this);
     return w;
 }
@@ -535,7 +608,7 @@ void MTTabControl::setautohidetabs(bool autohide)
     };
 }
 
-void MTTabControl::updatecaption(MTWindow *p)
+void MTTabControl::updatecaption(MTWindow* p)
 {
     int x, id, ox;
     bool found = false;
@@ -543,12 +616,14 @@ void MTTabControl::updatecaption(MTWindow *p)
 
     id = getpageid(p);
     if (id < 0)
-    { return; }
+    {
+        return;
+    }
     skin->getwindowoffsets(style, &b);
     ox = br.left + b.left;
     for(x = 0; x < ncontrols; x++)
     {
-        MTButton &cb = *(MTButton *) controls[x];
+        MTButton& cb = *(MTButton*) controls[x];
         if (cb.guiid == MTC_BUTTON)
         {
             if (cb.tag == id)
@@ -558,7 +633,9 @@ void MTTabControl::updatecaption(MTWindow *p)
                 found = true;
             }
             else if (found)
-            { cb.setbounds(ox, cb.top, cb.width, cb.height); }
+            {
+                cb.setbounds(ox, cb.top, cb.width, cb.height);
+            }
             ox += cb.width;
         };
     };
@@ -589,13 +666,13 @@ void MTTabControl::updateborders()
     flags |= MTCF_DONTRESIZE;
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if (cctrl.guiid == MTC_BUTTON)
         {
             cctrl.switchflags(MTCF_HIDDEN, hide);
             cctrl.left = ox;
             cctrl.top = b.top;
-            cctrl.width = ((MTButton *) &cctrl)->getautowidth();
+            cctrl.width = ((MTButton*) &cctrl)->getautowidth();
             cctrl.height = br.top - b.top - b.bottom;
             ox += cctrl.width;
         }
@@ -610,7 +687,9 @@ void MTTabControl::updateborders()
 void MTTabControl::updatebuttons()
 {
     if (style != 6)
-    { return; }
+    {
+        return;
+    }
     skin->getcontrolsize(MTC_WINDOW, style, btnx, btny);
     skin->getcontrolsize(MTC_WINDOW, 16, btnw, btnh);
     if (cstyle & MTWS_CLOSE)

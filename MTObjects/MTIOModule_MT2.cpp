@@ -170,22 +170,24 @@ struct _MT2VST
 #	pragma -a-
 #endif
 
-void loadMT2pattern(MTPattern *p, void *buffer, int size, bool compressed)
+void loadMT2pattern(MTPattern* p, void* buffer, int size, bool compressed)
 {
-    register unsigned char *start = (unsigned char *) buffer;
-    register unsigned char *repeat, *dest, *cdest;
-    unsigned char *end = start + size;
+    register unsigned char* start = (unsigned char*) buffer;
+    register unsigned char* repeat, * dest, * cdest;
+    unsigned char* end = start + size;
     register int x, track, line;
     register unsigned char cb, m;
     register unsigned short r;
     bool ok = true;
     int o = 0;
-    static const char *columns[] = {"Note", "Volume", "Panning", "Effect"};
+    static const char* columns[] = {"Note", "Volume", "Panning", "Effect"};
 
     p->change(p->nlines, p->ntracks, 4, columns, false);
     if ((p->data == 0) || (p->tracks[0].colsize != 7))
-    { return; }
-    dest = (unsigned char *) p->data;
+    {
+        return;
+    }
+    dest = (unsigned char*) p->data;
     if (compressed)
     {
         track = 0;
@@ -205,7 +207,9 @@ void loadMT2pattern(MTPattern *p, void *buffer, int size, bool compressed)
                 m = 0x7F;
             }
             else
-            { m = cb & 0x7F; }
+            {
+                m = cb & 0x7F;
+            }
             repeat = start;
             if (m != 0)
             {
@@ -214,30 +218,46 @@ void loadMT2pattern(MTPattern *p, void *buffer, int size, bool compressed)
                 {
                     start = repeat;
                     if (m & 1)
-                    { cdest[0] = *start++; }
+                    {
+                        cdest[0] = *start++;
+                    }
                     if (m & 2)
-                    { cdest[1] = *start++; }
+                    {
+                        cdest[1] = *start++;
+                    }
                     if (m & 4)
-                    { cdest[2] = *start++; }
+                    {
+                        cdest[2] = *start++;
+                    }
                     if (m & 8)
-                    { cdest[3] = *start++; }
+                    {
+                        cdest[3] = *start++;
+                    }
                     if (m & 16)
-                    { cdest[4] = *start++; }
+                    {
+                        cdest[4] = *start++;
+                    }
                     if (m & 32)
-                    { cdest[5] = *start++; }
+                    {
+                        cdest[5] = *start++;
+                    }
                     if (m & 64)
-                    { cdest[6] = *start++; }
+                    {
+                        cdest[6] = *start++;
+                    }
                     cdest += p->linesize;
                     line++;
                 };
             }
             else
-            { line += r; }
+            {
+                line += r;
+            }
             if (line == p->nlines)
             {
                 track++;
                 line = 0;
-                dest = (unsigned char *) p->data + track * 7;
+                dest = (unsigned char*) p->data + track * 7;
             };
         };
     }
@@ -252,27 +272,31 @@ void loadMT2pattern(MTPattern *p, void *buffer, int size, bool compressed)
     };
 }
 
-void loadMT2drums(MTPattern *p, void *buffer, int size)
+void loadMT2drums(MTPattern* p, void* buffer, int size)
 {
-    register unsigned char *start = (unsigned char *) buffer;
-    register unsigned char *dest;
-    unsigned char *end = start + size;
+    register unsigned char* start = (unsigned char*) buffer;
+    register unsigned char* dest;
+    unsigned char* end = start + size;
     register int track, line;
     bool ok = true;
     int o = 0;
-    static const char *columns[] = {"Drums", "Volume", "Panning"};
+    static const char* columns[] = {"Drums", "Volume", "Panning"};
 
     p->change(p->nlines, p->ntracks, 3, columns, false);
     if ((p->data == 0) || (p->tracks[0].colsize != 4))
-    { return; }
-    dest = (unsigned char *) p->data;
+    {
+        return;
+    }
+    dest = (unsigned char*) p->data;
     track = 0;
     line = 0;
     while(start < end)
     {
         dest[0] = *start++;
         if (dest[0])
-        { dest[1] = track + 1; }
+        {
+            dest[1] = track + 1;
+        }
         dest[2] = *start++;
         dest[3] = *start++;
         start++;
@@ -284,16 +308,16 @@ void loadMT2drums(MTPattern *p, void *buffer, int size)
     };
 }
 
-bool loadMT2(MTObject *object, char *filename, void *process)
+bool loadMT2(MTObject* object, char* filename, void* process)
 {
-    MTModule &module = *(MTModule *) object;
-    MTFile *f;
-    MTProcess *p = (MTProcess *) process;
+    MTModule& module = *(MTModule*) object;
+    MTFile* f;
+    MTProcess* p = (MTProcess*) process;
     int x, y, z, incl, size, csize, pc, ac, dc, max, nvst, eox;
     mt_uint32 tmpl;
     _MT2Header header;
     _MT2DrumsData drums;
-    char tmpb, *tmpc, *tmpc2;
+    char tmpb, * tmpc, * tmpc2;
     unsigned short tmpw, ndtracks;
     double pcl, acl, dcl, incd, tmpd;
     bool ok;
@@ -302,7 +326,9 @@ bool loadMT2(MTObject *object, char *filename, void *process)
     char tmp_panx[256];
 
     if ((f = si->fileopen(filename, MTF_READ | MTF_SHAREREAD)) == 0)
-    { return false; }
+    {
+        return false;
+    }
     mtmemzero(&nispl, sizeof(nispl));
     mtmemzero(&tmp_vol, sizeof(tmp_vol));
     mtmemzero(&tmp_panx, sizeof(tmp_panx));
@@ -311,16 +337,22 @@ bool loadMT2(MTObject *object, char *filename, void *process)
 // Header
     f->read(&header, sizeof(header));
     if (strncmp(header.id, "MT20", 4))
-    { goto error; }
+    {
+        goto error;
+    }
 //TODO
 //	module.access.creatorid = header.userid;
     memcpy(module.name, header.title, 64);
     FLOG3("Loading \"%s\" Author: %08X Software: %s"
               NL, header.title, header.userid, header.tracker);
     if (header.ticks < 1)
-    { header.ticks = 6; }
+    {
+        header.ticks = 6;
+    }
     if (header.lpb < 1)
-    { header.lpb = 4; }
+    {
+        header.lpb = 4;
+    }
     D(module.tempo, Tempo)[0].bpm = 44100.0 * 60.0 / (header.ticks * header.lpb * header.spt);
     if (header.ddl)
     {
@@ -333,7 +365,9 @@ bool loadMT2(MTObject *object, char *filename, void *process)
         mtmemzero(&drums, sizeof(drums));
     };
     if (!module.settracks(header.ntracks + ndtracks, module.nmtracks))
-    { goto error; }
+    {
+        goto error;
+    }
     module.enabletracks();
     if (p)
     {
@@ -362,7 +396,7 @@ bool loadMT2(MTObject *object, char *filename, void *process)
                 A(module.master, Track)[0]->vol = (float) tmpw / 131072;
                 for(x = 0; x < header.ntracks + ndtracks; x++)
                 {
-                    Track &ctrk = *A(module.trk, Track)[x];
+                    Track& ctrk = *A(module.trk, Track)[x];
                     _MT2TRKS trk;
                     f->read(&trk, sizeof(trk));
                     if (header.version < 0x0205)
@@ -370,7 +404,7 @@ bool loadMT2(MTObject *object, char *filename, void *process)
                         trk.trkfxparam[1][0] = (int) (trk.trkfxparam[1][0] / header.spt);
                         trk.trkfxparam[2][0] = (int) (trk.trkfxparam[2][0] / header.spt);
                     };
-                    Effect *e = 0;
+                    Effect* e = 0;
                     if (trk.trackfx)
                     {
                         switch (trk.trkfxid)
@@ -378,7 +412,7 @@ bool loadMT2(MTObject *object, char *filename, void *process)
                             case 1:        // Delay
                                 e = new MTDelay(&module, x);
                                 {
-                                    MTDelay &cd = *(MTDelay *) e;
+                                    MTDelay& cd = *(MTDelay*) e;
                                     cd.setparam(0, 0, 1.0);
                                     cd.setparam(1, 0, DF_BEATS);
                                     cd.setparam(1, 1, (float) trk.trkfxparam[1][0] / (header.lpb * header.ticks));
@@ -389,7 +423,7 @@ bool loadMT2(MTObject *object, char *filename, void *process)
                             case 2:        // Stereo Delay
                                 e = new MTDelay(&module, x);
                                 {
-                                    MTDelay &cd = *(MTDelay *) e;
+                                    MTDelay& cd = *(MTDelay*) e;
                                     cd.setparam(1, 0, DF_BEATS);
                                     cd.setparam(1, 1, (float) trk.trkfxparam[1][0] / (header.lpb * header.ticks));
                                     cd.setparam(1, 2, (float) trk.trkfxparam[1][1] / 128.0);
@@ -420,10 +454,14 @@ bool loadMT2(MTObject *object, char *filename, void *process)
                             trk.output = trk.output - 64 + header.ntracks;
                         }
                         else
-                        { trk.output = trk.output - 32 + header.ntracks; }
+                        {
+                            trk.output = trk.output - 32 + header.ntracks;
+                        }
                     };
                     if (trk.output >= module.trk->nitems)
-                    { trk.output = 0; }
+                    {
+                        trk.output = 0;
+                    }
                     if (e)
                     {
                         module.fx->a[x] = e;
@@ -450,13 +488,15 @@ bool loadMT2(MTObject *object, char *filename, void *process)
                 module.needupdaterouting();
                 break;
             case FOURCC('T', 'R', 'K', 'L'):
-                tmpc = (char *) si->memalloc(csize, 0);
+                tmpc = (char*) si->memalloc(csize, 0);
                 for(x = 0; x < header.ntracks + ndtracks; x++)
                 {
-                    Track &ctrk = *A(module.trk, Track)[x];
+                    Track& ctrk = *A(module.trk, Track)[x];
                     f->readln(tmpc, csize);
                     if (tmpc[0])
-                    { ctrk.setname(tmpc); }
+                    {
+                        ctrk.setname(tmpc);
+                    }
                 };
                 si->memfree(tmpc);
                 break;
@@ -464,7 +504,7 @@ bool loadMT2(MTObject *object, char *filename, void *process)
                 break;
             case FOURCC('M', 'S', 'G', '\0'):
                 f->read(&module.showmessage, 1);
-                module.message = (char *) si->memalloc(csize, 0);
+                module.message = (char*) si->memalloc(csize, 0);
                 f->read(module.message, csize - 1);
                 break;
             case FOURCC('P', 'I', 'C', 'T'):
@@ -474,16 +514,18 @@ bool loadMT2(MTObject *object, char *filename, void *process)
                 {
                     f->read(&tmpb, 1);
                     if (tmpb)
-                    { module.summarymask |= (1 << x); }
+                    {
+                        module.summarymask |= (1 << x);
+                    }
                 };
-                tmpc = (char *) si->memalloc(csize - 6, 0);
+                tmpc = (char*) si->memalloc(csize - 6, 0);
                 tmpc2 = tmpc;
                 f->read(tmpc, csize - 6);
                 for(x = 0; x < 6; x++)
                 {
                     if ((tmpl = strlen(tmpc)) != 0)
                     {
-                        module.summary[x] = (char *) si->memalloc(tmpl + 1, 0);
+                        module.summary[x] = (char*) si->memalloc(tmpl + 1, 0);
                         strcpy(module.summary[x], tmpc);
                     };
                     tmpc = strchr(tmpc, '\0') + 1;
@@ -505,11 +547,13 @@ bool loadMT2(MTObject *object, char *filename, void *process)
     FLOG1("  BPM: %0.4f"
               NL, D(module.tempo, Tempo)[0].bpm);
     if (p)
-    { p->setprogress((float) f->seek(0, MTF_CURRENT) / max); }
+    {
+        p->setprogress((float) f->seek(0, MTF_CURRENT) / max);
+    }
 // Patterns
     for(x = 0; x < header.npatts; x++)
     {
-        MTPattern &cpatt = *(MTPattern *) oi->newobject(MTO_MTPATTERN, &module, x, 0, true);
+        MTPattern& cpatt = *(MTPattern*) oi->newobject(MTO_MTPATTERN, &module, x, 0, true);
         module.patt->a[x] = &cpatt;
         cpatt.lpb = header.lpb;
         cpatt.ticks = header.ticks;
@@ -522,21 +566,25 @@ bool loadMT2(MTObject *object, char *filename, void *process)
             cpatt.nlines = tmpl;
             cpatt.nbeats = (double) tmpl / header.lpb;
             cpatt.ntracks = header.ntracks;
-            void *buf = f->getpointer(-1, size);
+            void* buf = f->getpointer(-1, size);
             loadMT2pattern(&cpatt, buf, size, ((header.flags & MF_PACKEDPATTERNS) != 0));
             f->releasepointer(buf);
             if (size & 1)
-            { size++; }
+            {
+                size++;
+            }
             f->seek(size, MTF_CURRENT);
         };
         cpatt.lock(MTOL_LOCK, false);
         if (p)
-        { p->setprogress((float) f->seek(0, MTF_CURRENT) / max); }
+        {
+            p->setprogress((float) f->seek(0, MTF_CURRENT) / max);
+        }
     };
 // Drums Patterns
     for(x = 0; x < drums.ndpatts; x++)
     {
-        MTPattern &cdpatt = *(MTPattern *) oi->newobject(MTO_MTPATTERN, &module, header.npatts + x, 0, true);
+        MTPattern& cdpatt = *(MTPattern*) oi->newobject(MTO_MTPATTERN, &module, header.npatts + x, 0, true);
         module.patt->a[header.npatts + x] = &cdpatt;
         cdpatt.lpb = header.lpb;
         cdpatt.ticks = header.ticks;
@@ -547,20 +595,22 @@ bool loadMT2(MTObject *object, char *filename, void *process)
         cdpatt.nbeats = (double) tmpl / header.lpb;
         cdpatt.ntracks = ndtracks;
         size = (int) (cdpatt.nbeats * header.lpb) * 8 * 4;
-        void *buf = f->getpointer(-1, size);
+        void* buf = f->getpointer(-1, size);
         loadMT2drums(&cdpatt, buf, size);
         f->releasepointer(buf);
         f->seek(size, MTF_CURRENT);
         cdpatt.lock(MTOL_LOCK, false);
         if (p)
-        { p->setprogress((float) f->seek(0, MTF_CURRENT) / max); }
+        {
+            p->setprogress((float) f->seek(0, MTF_CURRENT) / max);
+        }
     };
 // Automation
     if (header.flags & MF_AUTOMATION)
     {
         for(x = 0; x < header.npatts; x++)
         {
-            Automation *pauto = new Automation(A(module.patt, Pattern)[x], 0);
+            Automation* pauto = new Automation(A(module.patt, Pattern)[x], 0);
 //			A(module.apatt,Automation)[x] = pauto;
             y = 0;
             ok = false;
@@ -626,10 +676,14 @@ bool loadMT2(MTObject *object, char *filename, void *process)
                 else if (y == MAX_TRACKS + 1)
                 {
                     if (header.version < 0x250)
-                    { break; }
+                    {
+                        break;
+                    }
                 };
                 if (y >= MAX_TRACKS + 1 + nvst)
-                { break; }
+                {
+                    break;
+                }
             };
             if (!ok)
             {
@@ -639,7 +693,9 @@ bool loadMT2(MTObject *object, char *filename, void *process)
             };
         };
         if (p)
-        { p->setprogress((float) f->seek(0, MTF_CURRENT) / max); }
+        {
+            p->setprogress((float) f->seek(0, MTF_CURRENT) / max);
+        }
     };
 //TODO Implement the sequence translation into a function
 // Sequences
@@ -701,7 +757,9 @@ bool loadMT2(MTObject *object, char *filename, void *process)
             dcl = tmpd + incd;
         };
         if (x == header.restart)
-        { module.loops = tmpd; }
+        {
+            module.loops = tmpd;
+        }
         tmpd += incd;
     };
     module.nsequ[0] = ac;
@@ -718,16 +776,22 @@ bool loadMT2(MTObject *object, char *filename, void *process)
         idata.envmask = 3;
         tmpl = sizeof(idata);
         if (header.version < 0x0202)
-        { tmpl -= 4; }
+        {
+            tmpl -= 4;
+        }
         if (header.version < 0x0201)
-        { tmpl -= 2; }
+        {
+            tmpl -= 2;
+        }
         f->read(&idata, 36);
         if (idata.datalength == 32)
-        { idata.datalength += 108 + sizeof(_MT2IEnvelope) * 4; }
+        {
+            idata.datalength += 108 + sizeof(_MT2IEnvelope) * 4;
+        }
         if (idata.datalength)
         {
             f->read(&idata.nsamples, tmpl - 36);
-            MTInstrument &cinstr = *(new MTInstrument(&module, x));
+            MTInstrument& cinstr = *(new MTInstrument(&module, x));
             module.instr->a[x] = &cinstr;
             memcpy(cinstr.name, idata.name, 32);
             nispl[x] = idata.nsamples;
@@ -746,7 +810,7 @@ bool loadMT2(MTObject *object, char *filename, void *process)
                 _MT2IEnvelope iedata;
                 if (tmpl & 1)
                 {
-                    IEnvelope &cenv = cinstr.env[y];
+                    IEnvelope& cenv = cinstr.env[y];
                     f->read(&iedata, sizeof(iedata));
                     cenv.flags = iedata.flags;
                     cenv.npoints = iedata.npoints;
@@ -776,7 +840,7 @@ bool loadMT2(MTObject *object, char *filename, void *process)
                 };
                 tmpl >>= 1;
             };
-            IEnvelope &cenv = cinstr.env[1];
+            IEnvelope& cenv = cinstr.env[1];
             if (cenv.npoints)
             {
                 for(incl = 0; incl < cenv.npoints; incl++)
@@ -796,7 +860,9 @@ bool loadMT2(MTObject *object, char *filename, void *process)
             };
         };
         if (p)
-        { p->setprogress((float) f->seek(0, MTF_CURRENT) / max); }
+        {
+            p->setprogress((float) f->seek(0, MTF_CURRENT) / max);
+        }
     };
 // Samples
     for(x = 0; x < 256; x++)
@@ -806,7 +872,7 @@ bool loadMT2(MTObject *object, char *filename, void *process)
         if (sdata.length)
         {
             f->read(&sdata.datalength, sizeof(sdata) - 36);
-            MTSample &cspl = *(new MTSample(&module, x));
+            MTSample& cspl = *(new MTSample(&module, x));
             module.spl->a[x] = &cspl;
             memcpy(cspl.name, sdata.name, 32);
             cspl.length = sdata.datalength;
@@ -821,18 +887,22 @@ bool loadMT2(MTObject *object, char *filename, void *process)
             tmp_panx[x] = sdata.panning;
             cspl.note = sdata.note + 11;
             if (sdata.spb > 0)
-            { cspl.bpm = 60.0 * cspl.frequency / sdata.spb; }
+            {
+                cspl.bpm = 60.0 * cspl.frequency / sdata.spb;
+            }
             cspl.sl = cspl.depth * cspl.nchannels;
             cspl.ns = cspl.length / cspl.sl;
         };
         if (p)
-        { p->setprogress((float) f->seek(0, MTF_CURRENT) / max); }
+        {
+            p->setprogress((float) f->seek(0, MTF_CURRENT) / max);
+        }
     };
 // Groups
-    tmpc = (char *) si->memalloc(8, 0);
+    tmpc = (char*) si->memalloc(8, 0);
     for(x = 1; x <= header.ninstr; x++)
     {
-        MTInstrument &cinstr = *A(module.instr, MTInstrument)[x];
+        MTInstrument& cinstr = *A(module.instr, MTInstrument)[x];
         if (&cinstr)
         {
             for(y = 0; y < nispl[x]; y++)
@@ -848,13 +918,15 @@ bool loadMT2(MTObject *object, char *filename, void *process)
             };
         }
         else
-        { f->seek(nispl[x] * sizeof(_MT2Group), MTF_CURRENT); }
+        {
+            f->seek(nispl[x] * sizeof(_MT2Group), MTF_CURRENT);
+        }
     };
     si->memfree(tmpc);
 // Instruments <-> Samples
     for(x = 2; x < 256; x++)
     {
-        MTInstrument &cinstr = *A(module.instr, MTInstrument)[x];
+        MTInstrument& cinstr = *A(module.instr, MTInstrument)[x];
         if ((&cinstr) && (cinstr.name[0] == 0))
         {
             if ((nispl[x] == 0) || ((nispl[x] == 1) && (cinstr.grp[0].spl == 0)))
@@ -866,12 +938,14 @@ bool loadMT2(MTObject *object, char *filename, void *process)
     };
     for(x = 1; x < 256; x++)
     {
-        MTInstrument &cinstr = *A(module.instr, MTInstrument)[x];
+        MTInstrument& cinstr = *A(module.instr, MTInstrument)[x];
         if (!&cinstr)
-        { continue; }
+        {
+            continue;
+        }
 #		ifdef _DEBUG
 //<TEST>
-        char *e = strstr(cinstr.name, "VST ");
+        char* e = strstr(cinstr.name, "VST ");
         if (e)
         {
             oi->newobject(MTO_INSTRUMENT + 1, &module, x, e + 4, false, true);
@@ -882,26 +956,34 @@ bool loadMT2(MTObject *object, char *filename, void *process)
 #		endif
         for(y = 0; y < 96; y++)
         {
-            Oscillator &cspl = *cinstr.grp[cinstr.range[0][y]].spl;
+            Oscillator& cspl = *cinstr.grp[cinstr.range[0][y]].spl;
             if (!&cspl)
-            { continue; }
+            {
+                continue;
+            }
             cinstr.range[1][y] = tmp_vol[cspl.id] / 256;
             cinstr.range[2][y] = tmp_panx[cspl.id];
         };
     };
     if (p)
-    { p->setprogress((float) f->seek(0, MTF_CURRENT) / max); }
+    {
+        p->setprogress((float) f->seek(0, MTF_CURRENT) / max);
+    }
 // Samples data
     tmpc2 = strrchr(filename, '/');
     if (!tmpc2)
-    { tmpc2 = strrchr(filename, '\\'); }
+    {
+        tmpc2 = strrchr(filename, '\\');
+    }
     if (tmpc2)
-    { *(tmpc2 + 1) = 0; }
+    {
+        *(tmpc2 + 1) = 0;
+    }
     for(x = 0; x < header.nspl; x++)
     {
         if (module.spl->a[x])
         {
-            MTSample &cspl = *A(module.spl, MTSample)[x];
+            MTSample& cspl = *A(module.spl, MTSample)[x];
             switch (cspl.flags & 0x5)
             {
                 case 0:
@@ -914,20 +996,20 @@ bool loadMT2(MTObject *object, char *filename, void *process)
                     break;
                 case 1:
                 case 4:
-                    tmpc = (char *) si->memalloc(512, MTM_ZERO);
+                    tmpc = (char*) si->memalloc(512, MTM_ZERO);
                     f->read(&size, 4);
                     f->seek(12, MTF_CURRENT);
                     f->read(tmpc, size);
                     if (tmpc[1] != ':')
                     {
                         tmpl = strlen(filename) + strlen(tmpc) + 1;
-                        cspl.filename = (char *) si->memalloc(tmpl, 0);
+                        cspl.filename = (char*) si->memalloc(tmpl, 0);
                         strcpy(cspl.filename, filename);
                         strcat(cspl.filename, tmpc);
                     }
                     else
                     {
-                        cspl.filename = (char *) si->memalloc(strlen(tmpc) + 1, 0);
+                        cspl.filename = (char*) si->memalloc(strlen(tmpc) + 1, 0);
                         strcpy(cspl.filename, tmpc);
                     };
                     si->memfree(tmpc);
@@ -956,7 +1038,9 @@ bool loadMT2(MTObject *object, char *filename, void *process)
             };
         };
         if (p)
-        { p->setprogress((float) f->seek(0, MTF_CURRENT) / max); }
+        {
+            p->setprogress((float) f->seek(0, MTF_CURRENT) / max);
+        }
     };
     si->fileclose(f);
     return true;
@@ -966,12 +1050,12 @@ bool loadMT2(MTObject *object, char *filename, void *process)
     return false;
 }
 
-bool infoMT2(MTMiniConfig *data, char *filename, void *process)
+bool infoMT2(MTMiniConfig* data, char* filename, void* process)
 {
-    MTFile *f;
+    MTFile* f;
     _MT2Header header;
     _MT2DrumsData drums;
-    char *e;
+    char* e;
     int x, y, ndtracks;
     mt_uint32 incl, orig, tmpl, size, csize;
     mt_uint32 nvst = 0;
@@ -979,11 +1063,15 @@ bool infoMT2(MTMiniConfig *data, char *filename, void *process)
     double pattbeats[256];
 
     if ((f = si->fileopen(filename, MTF_READ | MTF_SHAREREAD)) == 0)
-    { return false; }
+    {
+        return false;
+    }
     mtmemzero(pattbeats, sizeof(pattbeats));
     f->read(&header, sizeof(header));
     if (strncmp(header.id, "MT20", 4))
-    { goto error; }
+    {
+        goto error;
+    }
     if (header.title[0] != 0)
     {
         e = header.title;
@@ -992,13 +1080,17 @@ bool infoMT2(MTMiniConfig *data, char *filename, void *process)
     {
         e = strrchr(filename, '/');
         if (!e)
-        { e = strrchr(filename, '\\'); }
+        {
+            e = strrchr(filename, '\\');
+        }
         if (e)
         {
             e++;
         }
         else
-        { e = filename; }
+        {
+            e = filename;
+        }
     };
     data->setparameter("title", e, MTCT_STRING, -1);
     tmpd = 44100.0 * 60.0 / (header.ticks * header.lpb * header.spt);
@@ -1041,7 +1133,9 @@ bool infoMT2(MTMiniConfig *data, char *filename, void *process)
         pattbeats[x] = (double) tmpl / header.lpb;
         f->read(&size, 4);
         if (size & 1)
-        { size++; }
+        {
+            size++;
+        }
         f->seek(size, MTF_CURRENT);
     };
     for(x = 0; x < drums.ndpatts; x++)
@@ -1106,10 +1200,14 @@ bool infoMT2(MTMiniConfig *data, char *filename, void *process)
                 else if (y == MAX_TRACKS + 1)
                 {
                     if (header.version < 0x250)
-                    { break; }
+                    {
+                        break;
+                    }
                 };
                 if (y >= MAX_TRACKS + 1 + nvst)
-                { break; }
+                {
+                    break;
+                }
             };
         };
     };

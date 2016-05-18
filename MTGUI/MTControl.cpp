@@ -13,7 +13,7 @@
 #include <MTXAPI/MTXInput.h>
 
 //---------------------------------------------------------------------------
-MTControl *overctrl, *btnctrl;
+MTControl* overctrl, * btnctrl;
 
 MTCMessage leavemsg = {MTCM_LEAVE};
 
@@ -24,19 +24,36 @@ MTCMessage btnupmsg = {MTCM_MOUSEUP, 0, 0, 0, 0, DB_LEFT};
 //---------------------------------------------------------------------------
 // MTControl
 //---------------------------------------------------------------------------
-MTControl::MTControl(int id, int tg, MTWinControl *p, int l, int t, int w, int h):
-    parent(p), guiid(id), uid(0), name(0), tag(tg), flags(0), left(l), top(t), width(w), height(h), align(MTCA_TOPLEFT),
-    direct(false), timercount(0), popup(0), autopopup(true), skindata(0), cborder(-1), moving(false), sizing(false),
+MTControl::MTControl(int id, int tg, MTWinControl* p, int l, int t, int w, int h):
+    parent(p),
+    guiid(id),
+    uid(0),
+    name(0),
+    tag(tg),
+    flags(0),
+    left(l),
+    top(t),
+    width(w),
+    height(h),
+    align(MTCA_TOPLEFT),
+    direct(false),
+    timercount(0),
+    popup(0),
+    autopopup(true),
+    skindata(0),
+    cborder(-1),
+    moving(false),
+    sizing(false),
     triggered(false)
 {
 #ifdef _DEBUG
-    name = (char *) si->memalloc(64, MTM_ZERO);
+    name = (char*) si->memalloc(64, MTM_ZERO);
 #else
     if (candesign) name = (char*)si->memalloc(64,MTM_ZERO);
 #endif
     if ((guiid == MTC_WINDOW) || (guiid == MTC_TABSHEET))
     {
-        window = (MTWindow *) this;
+        window = (MTWindow*) this;
     }
     else if ((p) && (p->window))
     {
@@ -44,23 +61,31 @@ MTControl::MTControl(int id, int tg, MTWinControl *p, int l, int t, int w, int h
     }
     else if ((p) && ((p->guiid == MTC_WINDOW) || (p->guiid == MTC_TABSHEET)))
     {
-        window = (MTWindow *) p;
+        window = (MTWindow*) p;
     }
     else
-    { window = 0; }
+    {
+        window = 0;
+    }
 }
 
 MTControl::~MTControl()
 {
     if (this == overctrl)
-    { overctrl = 0; }
+    {
+        overctrl = 0;
+    }
     if (this == btnctrl)
-    { btnctrl = 0; }
+    {
+        btnctrl = 0;
+    }
     if (name)
-    { si->memfree(name); }
+    {
+        si->memfree(name);
+    }
 }
 
-int MTControl::loadfromstream(MTFile *f, int size, int flags)
+int MTControl::loadfromstream(MTFile* f, int size, int flags)
 {
     int l, x;
     struct
@@ -74,7 +99,9 @@ int MTControl::loadfromstream(MTFile *f, int size, int flags)
     buf[63] = 0;
     l = strlen(buf) + 1;
     if (name)
-    { strcpy(name, buf); }
+    {
+        strcpy(name, buf);
+    }
     x = (4 - (l & 3)) & 3;
     f->seek(x, MTF_CURRENT);
     l += x;
@@ -85,7 +112,9 @@ int MTControl::loadfromstream(MTFile *f, int size, int flags)
     f->read(&align, 8);
     direct = false;
     if (guiid == MTC_WINDOW)
-    { this->flags |= MTCF_HIDDEN; }
+    {
+        this->flags |= MTCF_HIDDEN;
+    }
     x = this->flags;
     this->flags |= MTCF_DONTDRAW;
     setbounds(n.l, n.t, n.w, n.h);
@@ -93,7 +122,7 @@ int MTControl::loadfromstream(MTFile *f, int size, int flags)
     return 40 + l;
 }
 
-int MTControl::savetostream(MTFile *f, int flags)
+int MTControl::savetostream(MTFile* f, int flags)
 {
     int l = (name) ? strlen(name) + 1 : 1;
     int bflags;
@@ -109,7 +138,9 @@ int MTControl::savetostream(MTFile *f, int flags)
         f->write(&zero, bflags);
     }
     else
-    { f->write(&zero, 4); }
+    {
+        f->write(&zero, 4);
+    }
     bflags = this->flags;
     this->flags &= (~(MTCF_FOCUSED | MTCF_SELECTED | MTCF_OVER | MTCF_NEEDUPDATE | MTCF_TRANSPARENT));
     f->write(&tag, 28);
@@ -122,17 +153,21 @@ int MTControl::savetostream(MTFile *f, int flags)
 int MTControl::getnumproperties(int id)
 {
     if (id == -1)
-    { return ControlNP; }
+    {
+        return ControlNP;
+    }
     if (id == 7)
-    { return 9; }
+    {
+        return 9;
+    }
     return 0;
 }
 
-bool MTControl::getpropertytype(int id, char **name, int &flags)
+bool MTControl::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[9] = {"UID", "Name", "Tag", "Left", "Top", "Width", "Height", "Align", "Enabled"};
+    static char* propname[9] = {"UID", "Name", "Tag", "Left", "Top", "Width", "Height", "Align", "Enabled"};
     static int propflags[9] = {MTP_INT, MTP_TEXT, MTP_INT, MTP_INT, MTP_INT, MTP_INT, MTP_INT, MTP_LIST, MTP_BOOL};
-    static char *subname[9] = {
+    static char* subname[9] = {
         "Top-left", "Top-right", "Bottom-left", "Bottom-right", "Left", "Right", "Top", "Bottom", "Client"
     };
 
@@ -140,21 +175,25 @@ bool MTControl::getpropertytype(int id, char **name, int &flags)
     {
         id &= 0xFF;
         if (id >= 9)
-        { return false; }
+        {
+            return false;
+        }
         *name = subname[id];
         flags = -1;
         return true;
     };
     if (id >= ControlNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id];
     flags = propflags[id];
     return true;
 }
 
-bool MTControl::getproperty(int id, void *value)
+bool MTControl::getproperty(int id, void* value)
 {
-    int &iv = *((int *) value);
+    int& iv = *((int*) value);
     static const int revalignmap[16] = {0, 1, 2, 3, 4, 5, 0, 0, 6, 0, 7, 0, 8, 0, 0, 0};
 
     if ((id >= 3) && (id <= 6) && (guiid & 2) && (flags & MTCF_BORDER))
@@ -183,7 +222,7 @@ bool MTControl::getproperty(int id, void *value)
                 iv = uid;
                 break;
             case 1:
-                strcpy((char *) value, name);
+                strcpy((char*) value, name);
                 break;
             case 2:
                 iv = tag;
@@ -213,13 +252,15 @@ bool MTControl::getproperty(int id, void *value)
     return true;
 }
 
-bool MTControl::setproperty(int id, void *value)
+bool MTControl::setproperty(int id, void* value)
 {
-    int &iv = *((int *) value);
+    int& iv = *((int*) value);
     static const int alignmap[16] = {0, 1, 2, 3, 4, 5, 8, 10, 12, 0, 0, 0};
 
     if (window)
-    { window->modified = true; }
+    {
+        window->modified = true;
+    }
     if ((id >= 3) && (id <= 6) && (guiid & 2) && (flags & MTCF_BORDER))
     {
         switch (id)
@@ -246,7 +287,7 @@ bool MTControl::setproperty(int id, void *value)
                 uid = iv;
                 break;
             case 1:
-                strcpy(name, (char *) value);
+                strcpy(name, (char*) value);
                 break;
             case 2:
                 tag = iv;
@@ -265,13 +306,17 @@ bool MTControl::setproperty(int id, void *value)
                 break;
             case 7:
                 if (guiid == MTC_WINDOW)
-                { return false; }
+                {
+                    return false;
+                }
                 align = alignmap[iv];
                 break;
             case 8:
                 flags &= (~MTCF_DISABLED);
                 if (iv == 0)
-                { flags |= MTCF_DISABLED; }
+                {
+                    flags |= MTCF_DISABLED;
+                }
                 break;
             default:
                 return false;
@@ -295,14 +340,22 @@ void MTControl::setbounds(int l, int t, int w, int h)
     if (design)
     {
         if ((w > 0) && (w < 8))
-        { w = 8; }
+        {
+            w = 8;
+        }
         if ((h > 0) && (h < 8))
-        { h = 8; }
+        {
+            h = 8;
+        }
     };
     if (w > 0)
-    { width = w; }
+    {
+        width = w;
+    }
     if (h > 0)
-    { height = h; }
+    {
+        height = h;
+    }
     msg.x = left;
     msg.y = top;
     msg.w = width;
@@ -311,20 +364,28 @@ void MTControl::setbounds(int l, int t, int w, int h)
     {
         if ((!design) && (align) && ((parent->flags & MTCF_DONTRESIZE) == 0))
         {
-            MTControl &cctrl = *parent;
+            MTControl& cctrl = *parent;
             flags |= MTCF_DONTRESIZE;
             cl = cctrl.left;
             ct = cctrl.top;
             cw = cctrl.width;
             ch = cctrl.height;
             if (align & 0x1)
-            { cl += w - ow; }
+            {
+                cl += w - ow;
+            }
             if (align & 0x2)
-            { ct += h - oh; }
+            {
+                ct += h - oh;
+            }
             if (align & 0x4)
-            { ch += h - oh; }
+            {
+                ch += h - oh;
+            }
             if (align & 0x8)
-            { cw += w - ow; }
+            {
+                cw += w - ow;
+            }
             cctrl.setbounds(cl, ct, cw, ch);
             flags &= (~MTCF_DONTRESIZE);
         };
@@ -341,10 +402,12 @@ void MTControl::setbounds(int l, int t, int w, int h)
         };
     };
     if ((guiid & 2) && ((flags & MTCF_CANTDRAW) == 0))
-    { message(msg); }
+    {
+        message(msg);
+    }
 }
 
-bool MTControl::checkbounds(int &l, int &t, int &w, int &h)
+bool MTControl::checkbounds(int& l, int& t, int& w, int& h)
 {
     bool ok = true;
 
@@ -361,7 +424,7 @@ bool MTControl::checkbounds(int &l, int &t, int &w, int &h)
     return ok;
 }
 
-void MTControl::getrect(MTRect &r, int client)
+void MTControl::getrect(MTRect& r, int client)
 {
     r.left = left;
     r.top = top;
@@ -374,7 +437,9 @@ void MTControl::switchflags(int f, bool set)
     int newflags = (flags & (~f));
 
     if (set)
-    { newflags |= f; }
+    {
+        newflags |= f;
+    }
     if (newflags != flags)
     {
         if (f & MTCF_FOCUSED)
@@ -382,22 +447,32 @@ void MTControl::switchflags(int f, bool set)
             message((set) ? entermsg : leavemsg);
         }
         else if ((f & MTCF_HIDDEN) && (set))
-        { message(leavemsg); }
+        {
+            message(leavemsg);
+        }
         if ((design) && (flags & MTCF_DONTSAVE) && (f == MTCF_SELECTED))
-        { return; }
+        {
+            return;
+        }
         flags = newflags;
         if (f & MTCF_NOTIFYPOS)
         {
             if (parent)
-            { parent->switchflags(MTCF_NOTIFYPOS, set); }
+            {
+                parent->switchflags(MTCF_NOTIFYPOS, set);
+            }
             if (f == MTCF_NOTIFYPOS)
-            { return; }
+            {
+                return;
+            }
         };
         if (guiid & 2)
         {
             //   if (guiid==MTC_WINDOW){
             if (f & MTCF_OVER)
-            { return; }
+            {
+                return;
+            }
             /*   }
             else{
             if (f & (MTCF_OVER|MTCF_FOCUSED)) return;
@@ -411,15 +486,19 @@ void MTControl::switchflags(int f, bool set)
     };
 }
 
-void MTControl::draw(MTRect &rect)
+void MTControl::draw(MTRect& rect)
 {
     if ((flags & MTCF_CANTDRAW) == 0)
     {
         if ((direct) || ((parent) && (parent->direct)))
-        { flags |= MTCF_NEEDUPDATE; }
+        {
+            flags |= MTCF_NEEDUPDATE;
+        }
     };
     if (flags & MTCF_DONTDRAW)
-    { return; }
+    {
+        return;
+    }
     if ((parent) && (design) && (guiid != MTC_WINDOW) && ((flags & MTCF_DONTSAVE) == 0))
     {
         if (flags & MTCF_SELECTED)
@@ -428,10 +507,19 @@ void MTControl::draw(MTRect &rect)
             {
                 MTRect r = {0, 0, width, height};
                 cliprect(r, rect);
-                parent->fillcolor(r.left + left, r.top + top, r.right - r.left, r.bottom - r.top, skin->getcolor(SC_EDIT_SELECTION), 128);
+                parent->fillcolor(
+                    r.left + left,
+                    r.top + top,
+                    r.right - r.left,
+                    r.bottom - r.top,
+                    skin->getcolor(SC_EDIT_SELECTION),
+                    128
+                );
             }
             else
-            { parent->fillcolor(left, top, width, height, skin->getcolor(SC_EDIT_SELECTION), 128); }
+            {
+                parent->fillcolor(left, top, width, height, skin->getcolor(SC_EDIT_SELECTION), 128);
+            }
         };
         if (parent->open(0))
         {
@@ -453,7 +541,7 @@ void MTControl::draw(MTRect &rect)
     };
 }
 
-bool MTControl::message(MTCMessage &msg)
+bool MTControl::message(MTCMessage& msg)
 {
     switch (msg.msg)
     {
@@ -462,15 +550,20 @@ bool MTControl::message(MTCMessage &msg)
             {    // Context-menu key
                 MTPoint p = {8, 8};
                 if (popup)
-                { popup->popup(this, p); }
+                {
+                    popup->popup(this, p);
+                }
                 return true;
             }
             else if ((msg.msg == MTCM_KEYDOWN) && (guiid != MTC_WINDOW) && (parent) && (parent->focused == this))
             {
                 if ((msg.key == KB_TAB) && !(msg.buttons & DB_CONTROL) && (flags & MTCF_ACCEPTINPUT))
                 {
-                    MTWinControl *p = parent;
-                    while((p->parent) && (p->parent->guiid != MTC_DESKTOP)) p = p->parent;
+                    MTWinControl* p = parent;
+                    while((p->parent) && (p->parent->guiid != MTC_DESKTOP))
+                    {
+                        p = p->parent;
+                    }
                     p->nextcontrol(this, (msg.buttons & DB_SHIFT) != 0);
                     return true;
                 }
@@ -506,7 +599,7 @@ bool MTControl::message(MTCMessage &msg)
     return false;
 }
 
-void MTControl::preparedraw(MTBitmap **b, int &ox, int &oy)
+void MTControl::preparedraw(MTBitmap** b, int& ox, int& oy)
 {
     if ((parent->mb) && (!direct))
     {
@@ -523,18 +616,22 @@ void MTControl::preparedraw(MTBitmap **b, int &ox, int &oy)
     oy += parent->boy;
 }
 
-void MTControl::setparent(MTWinControl *newparent)
+void MTControl::setparent(MTWinControl* newparent)
 {
-    MTWinControl *wc;
+    MTWinControl* wc;
     bool hidden;
 
     if (!newparent)
-    { return; }
+    {
+        return;
+    }
     hidden = ((flags & MTCF_HIDDEN) != 0);
     if (parent)
-    { parent->delcontrol(this); }
+    {
+        parent->delcontrol(this);
+    }
     parent = newparent;
-    if (window != (MTWindow *) this)
+    if (window != (MTWindow*) this)
     {
         window = 0;
         wc = parent;
@@ -542,30 +639,37 @@ void MTControl::setparent(MTWinControl *newparent)
         {
             if ((wc->guiid == MTC_WINDOW) || (wc->guiid == MTC_TABSHEET))
             {
-                window = (MTWindow *) wc;
+                window = (MTWindow*) wc;
                 break;
             };
             wc = wc->parent;
-        } while(wc);
+        }
+        while(wc);
     };
     if (!hidden)
-    { flags &= (~MTCF_HIDDEN); }
+    {
+        flags &= (~MTCF_HIDDEN);
+    }
     newparent->addcontrol(this);
     MTCMessage msg = {MTCM_CHANGE, 0, this};
     parent->message(msg);
 }
 
-bool MTControl::designmessage(MTCMessage &msg)
+bool MTControl::designmessage(MTCMessage& msg)
 {
     int ow, oh, ol2, ot2, ow2, oh2;
 
     if ((guiid == MTC_DESKTOP) || (guiid == MTC_WINDOW) || (guiid == MTC_TABSHEET))
-    { return false; }
+    {
+        return false;
+    }
     switch (msg.msg)
     {
         case MTCM_MOUSEDOWN:
             if (msg.button != DB_LEFT)
-            { break; }
+            {
+                break;
+            }
             moving = false;
             mox = msg.x;
             moy = msg.y;
@@ -611,7 +715,9 @@ bool MTControl::designmessage(MTCMessage &msg)
                     triggered = true;
                 }
                 else
-                { return true; }
+                {
+                    return true;
+                }
             };
             ow = ((msg.x - mox) / gridx) * gridx;
             oh = ((msg.y - moy) / gridy) * gridy;

@@ -13,9 +13,9 @@ public:
 
     MTImageList();
 
-    virtual void MTCT setmetrics(MTSQMetrics *m);
+    virtual void MTCT setmetrics(MTSQMetrics* m);
 
-    virtual void MTCT drawimage(int id, MTBitmap *dest, int x, int y, int opacity = 255);
+    virtual void MTCT drawimage(int id, MTBitmap* dest, int x, int y, int opacity = 255);
 
 private:
     MTSQMetrics mm;
@@ -27,25 +27,25 @@ public:
     int type, orientation;
     int minpos, maxpos, value;
 
-    MTSlider(int tag, MTWinControl *p, int l, int t, int type);
+    MTSlider(int tag, MTWinControl* p, int l, int t, int type);
 
-    int MTCT loadfromstream(MTFile *f, int size, int flags);
+    int MTCT loadfromstream(MTFile* f, int size, int flags);
 
-    int MTCT savetostream(MTFile *f, int flags);
+    int MTCT savetostream(MTFile* f, int flags);
 
     int MTCT getnumproperties(int id);
 
-    bool MTCT getpropertytype(int id, char **name, int &flags);
+    bool MTCT getpropertytype(int id, char** name, int& flags);
 
-    bool MTCT getproperty(int id, void *value);
+    bool MTCT getproperty(int id, void* value);
 
-    bool MTCT setproperty(int id, void *value);
+    bool MTCT setproperty(int id, void* value);
 
     void MTCT setbounds(int l, int t, int w, int h);
 
-    void MTCT draw(MTRect &rect);
+    void MTCT draw(MTRect& rect);
 
-    bool MTCT message(MTCMessage &msg);
+    bool MTCT message(MTCMessage& msg);
 
     virtual void MTCT setminmax(int newmin, int newmax);
 
@@ -56,20 +56,20 @@ private:
     int morigx, morigy;
     int mincr;
     int ctimer, ctouch;
-    MTSLMetrics *cm;
+    MTSLMetrics* cm;
 };
 
 class MTOscillo: public MTControl
 {
 public:
-    MTOscillo(int tag, MTWinControl *p, int l, int t, int w, int h, Track *trk);
+    MTOscillo(int tag, MTWinControl* p, int l, int t, int w, int h, Track* trk);
 
-    void MTCT draw(MTRect &rect);
+    void MTCT draw(MTRect& rect);
 
-    virtual void MTCT settrack(Track *trk);
+    virtual void MTCT settrack(Track* trk);
 
 private:
-    Track *mtrk;
+    Track* mtrk;
 };
 
 //---------------------------------------------------------------------------

@@ -29,7 +29,7 @@
 #endif
 
 //---------------------------------------------------------------------------
-static const char *objectsname = {"MadTracker Objects"};
+static const char* objectsname = {"MadTracker Objects"};
 
 static const int objectsversion = 0x30000;
 
@@ -39,39 +39,39 @@ static const MTXKey objectskey = {0, 0, 0, 0};
 
 MTXInterfaces i;
 
-MTObjectsInterface *oi;
+MTObjectsInterface* oi;
 
-MTInterface *mtinterface;
+MTInterface* mtinterface;
 
-MTSystemInterface *si;
+MTSystemInterface* si;
 
-MTAudioInterface *ai;
+MTAudioInterface* ai;
 
-MTDSPInterface *dspi;
+MTDSPInterface* dspi;
 
-MTGUIInterface *gi;
+MTGUIInterface* gi;
 
 #endif
 
 MTObjectsPreferences objectsprefs = {false, false, 32.0};
 
-Skin *skin;
+Skin* skin;
 
 #ifdef MTSYSTEM_RESOURCES
 
-MTResources *res;
+MTResources* res;
 
 #endif
 
-MTWindow *monitor;
+MTWindow* monitor;
 
-MTHash *objecttype;
+MTHash* objecttype;
 
-MTArray *load, *save, *edit, *info;
+MTArray* load, * save, * edit, * info;
 
-MTLock *objectlock;
+MTLock* objectlock;
 
-WaveOutput *output;
+WaveOutput* output;
 
 MTObjectWrapper ow;
 
@@ -80,31 +80,41 @@ bool smpsupport = true;
 #endif
 
 //---------------------------------------------------------------------------
-bool grantaccess(MTObject *object, int access, bool silent = true, bool lock = false)
+bool grantaccess(MTObject* object, int access, bool silent = true, bool lock = false)
 {
     int a = 0;
     int o;
     char as[16], os[16];
     bool read = false;
     bool write = false;
-    MTUser *oowner, *cuser;
+    MTUser* oowner, * cuser;
 
     if (!object)
-    { return false; }
+    {
+        return false;
+    }
     if (!access)
-    { return true; }
+    {
+        return true;
+    }
     if (!objectlock->lock())
-    { return false; }
-    cuser = (MTUser *) mtinterface->getcurrentuser();
+    {
+        return false;
+    }
+    cuser = (MTUser*) mtinterface->getcurrentuser();
     if (object->owner == cuser)
     {
         objectlock->unlock();
         return true;
     };
     if (access & (MTOA_CANREAD | MTOA_CANCOPY | MTOA_CANDELETE | MTOA_CANPLAY))
-    { read = true; }
+    {
+        read = true;
+    }
     if (access & (MTOA_CANWRITE | MTOA_CANDELETE))
-    { write = true; }
+    {
+        write = true;
+    }
     switch (object->objecttype & MTO_TYPEMASK)
     {
         case MTO_MODULE:
@@ -154,19 +164,33 @@ bool grantaccess(MTObject *object, int access, bool silent = true, bool lock = f
         return false;
     };
     if (object->access.caccess & access)
-    { goto granted; }
+    {
+        goto granted;
+    }
     if ((object->owner) && (object->owner->id == cuser->id))
-    { goto granted; }
+    {
+        goto granted;
+    }
     if (access & MTOA_CANREAD)
-    { a = MTT_can_read; }
+    {
+        a = MTT_can_read;
+    }
     if (access & MTOA_CANWRITE)
-    { a = MTT_can_write; }
+    {
+        a = MTT_can_write;
+    }
     if (access & MTOA_CANCOPY)
-    { a = MTT_can_copy; }
+    {
+        a = MTT_can_copy;
+    }
     if (access & MTOA_CANDELETE)
-    { a = MTT_can_delete; }
+    {
+        a = MTT_can_delete;
+    }
     if (access & MTOA_CANPLAY)
-    { a = MTT_can_play; }
+    {
+        a = MTT_can_play;
+    }
     if (a == 0)
     {
         objectlock->unlock();
@@ -186,45 +210,67 @@ bool grantaccess(MTObject *object, int access, bool silent = true, bool lock = f
     if (lock)
     {
         if (read)
-        { a |= MTOL_READ; }
+        {
+            a |= MTOL_READ;
+        }
         if (write)
-        { a |= MTOL_WRITE; }
+        {
+            a |= MTOL_WRITE;
+        }
         if (a)
-        { object->lock(a, true); }
+        {
+            object->lock(a, true);
+        }
     };
     object->owner = cuser;
     objectlock->unlock();
     return true;
 }
 
-bool freeaccess(MTObject *object, int access, bool lock = false)
+bool freeaccess(MTObject* object, int access, bool lock = false)
 {
     int a = 0;
     bool read = false;
     bool write = false;
-    MTUser *cuser;
+    MTUser* cuser;
 
     if (!object)
-    { return false; }
+    {
+        return false;
+    }
     if (!access)
-    { return true; }
+    {
+        return true;
+    }
     if (!objectlock->lock())
-    { return false; }
+    {
+        return false;
+    }
     if (access & (MTOA_CANREAD | MTOA_CANCOPY | MTOA_CANDELETE | MTOA_CANPLAY))
-    { read = true; }
+    {
+        read = true;
+    }
     if (access & (MTOA_CANWRITE | MTOA_CANDELETE))
-    { write = true; }
-    cuser = (MTUser *) mtinterface->getcurrentuser();
+    {
+        write = true;
+    }
+    cuser = (MTUser*) mtinterface->getcurrentuser();
     if ((object->access.caccess & access) || ((object->owner) && (object->owner == cuser)))
     {
         if (lock)
         {
             if (read)
-            { a |= MTOL_READ; }
+            {
+                a |= MTOL_READ;
+            }
             if (write)
-            { a |= MTOL_WRITE; }
+            {
+                a |= MTOL_WRITE;
+            }
             if (a)
-            { object->lock(a, false); }
+            {
+                object->lock(a, false);
+            }
         };
         object->owner = 0;
         objectlock->unlock();
@@ -246,13 +292,13 @@ MTObjectsInterface::MTObjectsInterface()
 
 bool MTObjectsInterface::init()
 {
-    MTConfigFile *conf;
+    MTConfigFile* conf;
     int x;
 
-    si = (MTSystemInterface *) mtinterface->getinterface(systemtype);
-    ai = (MTAudioInterface *) mtinterface->getinterface(audiotype);
-    dspi = (MTDSPInterface *) mtinterface->getinterface(dsptype);
-    gi = (MTGUIInterface *) mtinterface->getinterface(guitype);
+    si = (MTSystemInterface*) mtinterface->getinterface(systemtype);
+    ai = (MTAudioInterface*) mtinterface->getinterface(audiotype);
+    dspi = (MTDSPInterface*) mtinterface->getinterface(dsptype);
+    gi = (MTGUIInterface*) mtinterface->getinterface(guitype);
     if (!ai)
     {
         LOGD("%s - [Objects] ERROR: Missing MTAudio extension!"
@@ -282,7 +328,7 @@ bool MTObjectsInterface::init()
     nthreads = si->ncpu;
 #	endif
 #	ifdef MTSYSTEM_CONFIG
-    if ((conf = (MTConfigFile *) mtinterface->getconf("Global", false)))
+    if ((conf = (MTConfigFile*) mtinterface->getconf("Global", false)))
     {
         if (conf->setsection("MTObjects"))
         {
@@ -345,7 +391,7 @@ bool MTObjectsInterface::init()
 void MTObjectsInterface::uninit()
 {
     int x;
-    MTLock *oldlock;
+    MTLock* oldlock;
 
     ENTER("MTObjectsInterface::uninit");
     LOGD("%s - [Objects] Uninitializing..."
@@ -426,7 +472,7 @@ void MTObjectsInterface::uninit()
 
 void MTObjectsInterface::start()
 {
-    MTCustomControl *cc;
+    MTCustomControl* cc;
 
 #	ifdef MTSYSTEM_RESOURCES
     if (gi)
@@ -436,9 +482,9 @@ void MTObjectsInterface::start()
         monitor = gi->loadwindow(res, MTW_monitor, 0);
         if (monitor)
         {
-            cc = (MTCustomControl *) monitor->getcontrolfromuid(MTC_cpumonitor);
+            cc = (MTCustomControl*) monitor->getcontrolfromuid(MTC_cpumonitor);
             cc->behaviours = new MTCPUGraph(cc);
-            cc = (MTCustomControl *) monitor->getcontrolfromuid(MTC_chanmonitor);
+            cc = (MTCustomControl*) monitor->getcontrolfromuid(MTC_chanmonitor);
             cc->behaviours = new MTChannelsGraph(cc);
         };
         objectlock->unlock();
@@ -455,19 +501,25 @@ void MTObjectsInterface::stop()
 //		_test_stop();
 #	endif
     if (!gi)
-    { return; }
+    {
+        return;
+    }
     if (monitor)
     {
         if (objectlock)
-        { objectlock->lock(); }
+        {
+            objectlock->lock();
+        }
         gi->delcontrol(monitor);
         monitor = 0;
         if (objectlock)
-        { objectlock->unlock(); }
+        {
+            objectlock->unlock();
+        }
     };
 }
 
-void MTObjectsInterface::processcmdline(void *params)
+void MTObjectsInterface::processcmdline(void* params)
 {
 #	ifdef MTVERSION_PROFESSIONAL
     MTArray *pa = (MTArray*)params;
@@ -484,7 +536,7 @@ void MTObjectsInterface::processcmdline(void *params)
 #	endif
 }
 
-void MTObjectsInterface::showusage(void *out)
+void MTObjectsInterface::showusage(void* out)
 {
 #	ifdef MTVERSION_PROFESSIONAL
     MTFile *co = (MTFile*)out;
@@ -499,17 +551,19 @@ int MTObjectsInterface::config(int command, int param)
     return 0;
 }
 
-MTObject *MTObjectsInterface::newobject(mt_uint32 type, MTObject *parent, mt_int32 id, void *param, bool locked, bool assign)
+MTObject* MTObjectsInterface::newobject(mt_uint32 type, MTObject* parent, mt_int32 id, void* param, bool locked, bool assign)
 {
     int x;
-    MTModule *module = 0;
-    MTObject *object = 0;
-    ObjectType *ctype;
+    MTModule* module = 0;
+    MTObject* object = 0;
+    ObjectType* ctype;
 
     FENTER5("MTObjectsInterface::newobject(%d,%.8X,%d,%.8X,%d)", type, parent, id, param, locked);
 //	objectlock->lock();
     if (parent)
-    { module = parent->module; }
+    {
+        module = parent->module;
+    }
     if (module)
     {
         module->mlock->lock();
@@ -589,7 +643,9 @@ MTObject *MTObjectsInterface::newobject(mt_uint32 type, MTObject *parent, mt_int
         case MTO_AUTOMATION:
             object = new Automation(parent, id);
             if ((parent) && (assign) && (parent == module))
-            { module->apatt->a[id] = object; }
+            {
+                module->apatt->a[id] = object;
+            }
             break;
         case MTO_TRACK:
             object = new Track(parent, id);
@@ -600,11 +656,13 @@ MTObject *MTObjectsInterface::newobject(mt_uint32 type, MTObject *parent, mt_int
                     module->trk->a[id] = object;
                 }
                 else
-                { module->master->a[id - MAX_TRACKS] = object; }
+                {
+                    module->master->a[id - MAX_TRACKS] = object;
+                }
             };
             break;
         default:
-            ctype = (ObjectType *) objecttype->getitem(type);
+            ctype = (ObjectType*) objecttype->getitem(type);
             if ((ctype) && (ctype->type == type))
             {
                 object = ctype->create(parent, id, param);
@@ -635,53 +693,71 @@ MTObject *MTObjectsInterface::newobject(mt_uint32 type, MTObject *parent, mt_int
         LOGD("%s [Objects] ERROR: Unknown object!");
     };
     if ((object) && (locked))
-    { object->lock(MTOL_LOCK, true); }
+    {
+        object->lock(MTOL_LOCK, true);
+    }
     if (module)
-    { module->mlock->unlock(); }
+    {
+        module->mlock->unlock();
+    }
 //	objectlock->unlock();
     if (object)
-    { mtinterface->notify(object, MTN_NEW, id); }
+    {
+        mtinterface->notify(object, MTN_NEW, id);
+    }
     LEAVE();
     return object;
 }
 
-int MTCT candeleteenum(MTObject *object, void *data)
+int MTCT candeleteenum(MTObject* object, void* data)
 {
     if (object->islocked())
     {
-        *(bool *) data = false;
+        *(bool*) data = false;
         return 0;
     };
     return 1;
 }
 
-bool MTObjectsInterface::deleteobject(MTObject *object)
+bool MTObjectsInterface::deleteobject(MTObject* object)
 {
     if (!object)
-    { return false; }
+    {
+        return false;
+    }
     bool candelete = true;
     int type = 0;
     int id = -1;
-    MTObject *parent = object->parent;
-    MTModule *module = object->module;
+    MTObject* parent = object->parent;
+    MTModule* module = object->module;
 
     if (object->islocked())
-    { return false; }
+    {
+        return false;
+    }
     if (!grantaccess(object, MTOA_CANDELETE, true, true))
-    { return false; }
+    {
+        return false;
+    }
     FENTER1("MTObjectsInterface::deleteobject(%.8X)", object);
     if ((object->objecttype & MTO_TYPEMASK) == MTO_MODULE)
-    { object->enumchildren(candeleteenum, &candelete); }
+    {
+        object->enumchildren(candeleteenum, &candelete);
+    }
     if (candelete)
     {
         mtinterface->notify(object, MTN_DELETE, 0);
         MTTRY
 //			objectlock->lock();
             if (module)
-            { module->mlock->lock(); }
+            {
+                module->mlock->lock();
+            }
             type = object->objecttype;
             id = object->id;
-            delete object; MTCATCH MTEND
+            delete object;
+        MTCATCH
+        MTEND
         if ((parent) && (parent == module))
         {
             if (id >= 0)
@@ -716,7 +792,7 @@ bool MTObjectsInterface::deleteobject(MTObject *object)
     return false;
 }
 
-bool MTObjectsInterface::loadobject(MTObject *object, const char *filename, void *process)
+bool MTObjectsInterface::loadobject(MTObject* object, const char* filename, void* process)
 {
     int x;
     char filetype[32];
@@ -724,16 +800,24 @@ bool MTObjectsInterface::loadobject(MTObject *object, const char *filename, void
 
     si->filetype(filename, filetype, 32);
     if (filetype[0] == 0)
-    { return false; }
+    {
+        return false;
+    }
     FENTER3("MTObjectsInterface::loadobject(%.8X,%s,%.8X)", object, filename, process);
     for(x = 0; x < load->nitems; x++)
     {
-        ObjectIO &cio = *(ObjectIO *) load->a[x];
+        ObjectIO& cio = *(ObjectIO*) load->a[x];
         if (cio.type != object->objecttype)
-        { continue; }
+        {
+            continue;
+        }
         if (strstr(cio.filetypes, filetype))
         {
-            MTTRY ret = cio.func(object, (char *) filename, process); MTCATCH ret = false; MTEND
+            MTTRY
+                ret = cio.func(object, (char*) filename, process);
+            MTCATCH
+                ret = false;
+            MTEND
             LEAVE();
             return ret;
         };
@@ -742,37 +826,41 @@ bool MTObjectsInterface::loadobject(MTObject *object, const char *filename, void
     return false;
 }
 
-bool MTObjectsInterface::saveobject(MTObject *object, const char *filename, void *process)
+bool MTObjectsInterface::saveobject(MTObject* object, const char* filename, void* process)
 {
     int x;
     char filetype[32];
 
     si->filetype(filename, filetype, 32);
     if (filetype[0] == 0)
-    { return false; }
+    {
+        return false;
+    }
     FENTER3("MTObjectsInterface::saveobject(%.8X,%s,%.8X)", object, filename, process);
     for(x = 0; x < save->nitems; x++)
     {
-        ObjectIO &cio = *(ObjectIO *) save->a[x];
+        ObjectIO& cio = *(ObjectIO*) save->a[x];
         if (cio.type != object->objecttype)
-        { continue; }
+        {
+            continue;
+        }
         if (strstr(cio.filetypes, filetype))
         {
             LEAVE();
-            return cio.func(object, (char *) filename, process);
+            return cio.func(object, (char*) filename, process);
         };
     };
     LEAVE();
     return false;
 }
 
-bool MTObjectsInterface::ownobject(MTObject *object, MTUser *user, bool silent)
+bool MTObjectsInterface::ownobject(MTObject* object, MTUser* user, bool silent)
 {
     int o;
     char os[16];
-    MTUser *oowner, *cuser;
+    MTUser* oowner, * cuser;
 
-    cuser = (MTUser *) mtinterface->getcurrentuser();
+    cuser = (MTUser*) mtinterface->getcurrentuser();
     /* if ((user==&cuser) && (nwmanager) && (nwmanager->connected) && (!nwmanager->server) && (nwmanager->cmodule)){
     if (object->parent==nwmanager->cmodule){
         return nwmanager->nwownobject(object);
@@ -782,7 +870,9 @@ bool MTObjectsInterface::ownobject(MTObject *object, MTUser *user, bool silent)
     if ((object->owner == 0) || (object->owner == user))
     {
         if (user != cuser)
-        { object->lock(MTOL_LOCK, true); }
+        {
+            object->lock(MTOL_LOCK, true);
+        }
         object->owner = user;
         object->lastowner = user;
         objectlock->unlock();
@@ -830,34 +920,36 @@ bool MTObjectsInterface::ownobject(MTObject *object, MTUser *user, bool silent)
     return false;
 }
 
-void MTObjectsInterface::freeobject(MTObject *object, MTUser *user)
+void MTObjectsInterface::freeobject(MTObject* object, MTUser* user)
 {
-    MTUser *cuser;
+    MTUser* cuser;
 
-    cuser = (MTUser *) mtinterface->getcurrentuser();
+    cuser = (MTUser*) mtinterface->getcurrentuser();
     objectlock->lock();
     if (object->owner == user)
     {
         if (user != cuser)
-        { object->lock(MTOL_LOCK, false); }
+        {
+            object->lock(MTOL_LOCK, false);
+        }
         object->owner = 0;
     };
     objectlock->unlock();
 }
 
-bool MTObjectsInterface::editobject(MTObject *object, MTWindow *window, int flags)
+bool MTObjectsInterface::editobject(MTObject* object, MTWindow* window, int flags)
 {
-    MTUser *cuser;
+    MTUser* cuser;
     int x;
     bool ok = false;
 
-    cuser = (MTUser *) mtinterface->getcurrentuser();
+    cuser = (MTUser*) mtinterface->getcurrentuser();
     if ((grantaccess(object, MTOA_CANREAD, false)) && (ownobject(object, cuser)))
     {
         gi->setmouseshape(DCUR_WORKING);
         for(x = 0; x < edit->nitems; x++)
         {
-            ObjectEdit &cedit = *(ObjectEdit *) edit->a[x];
+            ObjectEdit& cedit = *(ObjectEdit*) edit->a[x];
             if (cedit.type == object->objecttype)
             {
                 ok = cedit.func(object, window, flags, cuser);
@@ -869,19 +961,21 @@ bool MTObjectsInterface::editobject(MTObject *object, MTWindow *window, int flag
     return ok;
 }
 
-void MTObjectsInterface::closeobject(MTObject *object)
+void MTObjectsInterface::closeobject(MTObject* object)
 {
-    MTUser *cuser;
+    MTUser* cuser;
 
     if (!object)
-    { return; }
-    cuser = (MTUser *) mtinterface->getcurrentuser();
+    {
+        return;
+    }
+    cuser = (MTUser*) mtinterface->getcurrentuser();
     // if ((nwmanager) && (nwmanager->connected) && (!nwmanager->server)) uploadobject(object,-2,false);
     freeobject(object, cuser);
     freeaccess(object, MTOA_CANREAD);
 }
 
-bool MTObjectsInterface::infoobject(MTMiniConfig *data, const char *filename, void *process)
+bool MTObjectsInterface::infoobject(MTMiniConfig* data, const char* filename, void* process)
 {
     int x;
     char filetype[32];
@@ -889,14 +983,20 @@ bool MTObjectsInterface::infoobject(MTMiniConfig *data, const char *filename, vo
 
     si->filetype(filename, filetype, 32);
     if (filetype[0] == 0)
-    { return false; }
+    {
+        return false;
+    }
     FENTER3("MTObjectsInterface::infoobject(%.8X,%s,%.8X)", info, filename, process);
     for(x = 0; x < info->nitems; x++)
     {
-        ObjectInfo &cinfo = *(ObjectInfo *) info->a[x];
+        ObjectInfo& cinfo = *(ObjectInfo*) info->a[x];
         if (strstr(cinfo.filetypes, filetype))
         {
-            MTTRY ret = cinfo.func(data, (char *) filename, process); MTCATCH ret = false; MTEND
+            MTTRY
+                ret = cinfo.func(data, (char*) filename, process);
+            MTCATCH
+                ret = false;
+            MTEND
             LEAVE();
             return ret;
         };
@@ -912,23 +1012,25 @@ int MTObjectsInterface::getnumtypes()
 
 mt_uint32 MTObjectsInterface::gettype(int id)
 {
-    ObjectType *ctype = (ObjectType *) objecttype->getitemfromid(id);
+    ObjectType* ctype = (ObjectType*) objecttype->getitemfromid(id);
     if (!ctype)
-    { return 0; }
+    {
+        return 0;
+    }
     return ctype->type;
 }
 
-ObjectType *MTObjectsInterface::getobjecttype(mt_uint32 type)
+ObjectType* MTObjectsInterface::getobjecttype(mt_uint32 type)
 {
-    return (ObjectType *) objecttype->getitem(type);
+    return (ObjectType*) objecttype->getitem(type);
 }
 
-ObjectType *MTObjectsInterface::getobjecttype(const char *description)
+ObjectType* MTObjectsInterface::getobjecttype(const char* description)
 {
-    ObjectType *ctype;
+    ObjectType* ctype;
 
     objecttype->reset();
-    while((ctype = (ObjectType *) objecttype->next()))
+    while((ctype = (ObjectType*) objecttype->next()))
     {
         if (strcmp(ctype->description, description) == 0)
         {
@@ -938,7 +1040,7 @@ ObjectType *MTObjectsInterface::getobjecttype(const char *description)
     return 0;
 }
 
-mt_uint32 MTObjectsInterface::addobjecttype(ObjectType *type)
+mt_uint32 MTObjectsInterface::addobjecttype(ObjectType* type)
 {
     FLOGD2("%s - [Objects] Adding object type: %s (%.8X)"
                NL, type->description, type->type);
@@ -946,65 +1048,65 @@ mt_uint32 MTObjectsInterface::addobjecttype(ObjectType *type)
     return type->type;
 }
 
-bool MTObjectsInterface::addload(mt_uint32 type, ObjectIOFunc loadfunc, const char *filetypes, const char *description)
+bool MTObjectsInterface::addload(mt_uint32 type, ObjectIOFunc loadfunc, const char* filetypes, const char* description)
 {
-    ObjectIO *cio;
+    ObjectIO* cio;
 
     cio = mtnew(ObjectIO);
     load->push(cio);
     cio->type = type;
     cio->func = loadfunc;
-    cio->filetypes = (char *) si->memalloc(strlen(filetypes) + 1, 0);
-    cio->description = (char *) si->memalloc(strlen(description) + 1, 0);
+    cio->filetypes = (char*) si->memalloc(strlen(filetypes) + 1, 0);
+    cio->description = (char*) si->memalloc(strlen(description) + 1, 0);
     strcpy(cio->filetypes, filetypes);
     strcpy(cio->description, description);
     return true;
 }
 
-bool MTObjectsInterface::addsave(mt_uint32 type, ObjectIOFunc savefunc, const char *filetypes, const char *description)
+bool MTObjectsInterface::addsave(mt_uint32 type, ObjectIOFunc savefunc, const char* filetypes, const char* description)
 {
-    ObjectIO *cio;
+    ObjectIO* cio;
 
     cio = mtnew(ObjectIO);
     save->push(cio);
     cio->type = type;
     cio->func = savefunc;
-    cio->filetypes = (char *) si->memalloc(strlen(filetypes) + 1, 0);
-    cio->description = (char *) si->memalloc(strlen(description) + 1, 0);
+    cio->filetypes = (char*) si->memalloc(strlen(filetypes) + 1, 0);
+    cio->description = (char*) si->memalloc(strlen(description) + 1, 0);
     strcpy(cio->filetypes, filetypes);
     strcpy(cio->description, description);
     return true;
 }
 
-bool MTObjectsInterface::addedit(mt_uint32 type, ObjectEditFunc editfunc, const char *description)
+bool MTObjectsInterface::addedit(mt_uint32 type, ObjectEditFunc editfunc, const char* description)
 {
-    ObjectEdit *cedit;
+    ObjectEdit* cedit;
 
     cedit = mtnew(ObjectEdit);
     edit->push(cedit);
     cedit->type = type;
     cedit->func = editfunc;
-    cedit->description = (char *) si->memalloc(strlen(description) + 1, 0);
+    cedit->description = (char*) si->memalloc(strlen(description) + 1, 0);
     strcpy(cedit->description, description);
     return true;
 }
 
-bool MTObjectsInterface::addinfo(mt_uint32 type, ObjectInfoFunc infofunc, const char *filetypes, const char *description)
+bool MTObjectsInterface::addinfo(mt_uint32 type, ObjectInfoFunc infofunc, const char* filetypes, const char* description)
 {
-    ObjectInfo *cinfo;
+    ObjectInfo* cinfo;
 
     cinfo = mtnew(ObjectInfo);
     info->push(cinfo);
     cinfo->type = type;
     cinfo->func = infofunc;
-    cinfo->filetypes = (char *) si->memalloc(strlen(filetypes) + 1, 0);
-    cinfo->description = (char *) si->memalloc(strlen(description) + 1, 0);
+    cinfo->filetypes = (char*) si->memalloc(strlen(filetypes) + 1, 0);
+    cinfo->description = (char*) si->memalloc(strlen(description) + 1, 0);
     strcpy(cinfo->filetypes, filetypes);
     strcpy(cinfo->description, description);
     return true;
 }
 
-void MTObjectsInterface::delobjecttype(ObjectType *type)
+void MTObjectsInterface::delobjecttype(ObjectType* type)
 {
     objecttype->delitem(type->type);
 }
@@ -1015,7 +1117,7 @@ void MTObjectsInterface::delload(mt_uint32 type, ObjectIOFunc loadfunc)
 
     for(x = 0; x < load->nitems; x++)
     {
-        ObjectIO &cio = *(ObjectIO *) load->a[x];
+        ObjectIO& cio = *(ObjectIO*) load->a[x];
         if ((cio.type == type) && (cio.func == loadfunc))
         {
             si->memfree(cio.filetypes);
@@ -1032,7 +1134,7 @@ void MTObjectsInterface::delsave(mt_uint32 type, ObjectIOFunc savefunc)
 
     for(x = 0; x < save->nitems; x++)
     {
-        ObjectIO &cio = *(ObjectIO *) save->a[x];
+        ObjectIO& cio = *(ObjectIO*) save->a[x];
         if ((cio.type == type) && (cio.func == savefunc))
         {
             si->memfree(cio.filetypes);
@@ -1049,7 +1151,7 @@ void MTObjectsInterface::deledit(mt_uint32 type, ObjectEditFunc editfunc)
 
     for(x = 0; x < edit->nitems; x++)
     {
-        ObjectEdit &cedit = *(ObjectEdit *) edit->a[x];
+        ObjectEdit& cedit = *(ObjectEdit*) edit->a[x];
         if ((cedit.type == type) && (cedit.func == editfunc))
         {
             si->memfree(cedit.description);
@@ -1065,7 +1167,7 @@ void MTObjectsInterface::delinfo(mt_uint32 type, ObjectInfoFunc infofunc)
 
     for(x = 0; x < info->nitems; x++)
     {
-        ObjectInfo &cinfo = *(ObjectInfo *) info->a[x];
+        ObjectInfo& cinfo = *(ObjectInfo*) info->a[x];
         if ((cinfo.type == type) && (cinfo.func == infofunc))
         {
             si->memfree(cinfo.filetypes);
@@ -1078,14 +1180,16 @@ void MTObjectsInterface::delinfo(mt_uint32 type, ObjectInfoFunc infofunc)
 //---------------------------------------------------------------------------
 extern "C" {
 
-MTXInterfaces *MTCT MTXMain(MTInterface *mti)
+MTXInterfaces* MTCT MTXMain(MTInterface* mti)
 {
     mtinterface = mti;
     mtinterface->_ow = &ow;
     if (!oi)
-    { oi = new MTObjectsInterface(); }
+    {
+        oi = new MTObjectsInterface();
+    }
     i.ninterfaces = 1;
-    i.interfaces[0] = (MTXInterface *) oi;
+    i.interfaces[0] = (MTXInterface*) oi;
     return &i;
 }
 

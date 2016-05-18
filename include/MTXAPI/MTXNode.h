@@ -23,7 +23,7 @@ class Node;
 #include "MTXSystem2.h"
 
 //---------------------------------------------------------------------------
-extern MTSystemInterface *si;
+extern MTSystemInterface* si;
 
 //---------------------------------------------------------------------------
 struct Pin
@@ -31,7 +31,7 @@ struct Pin
     unsigned short s;    // Source pin
     unsigned short d;    // Destination pin
     float m;                    // Volume (multiplier)
-    Node *n;                    // Connected node
+    Node* n;                    // Connected node
 };
 
 class Node: public MTObject
@@ -39,9 +39,9 @@ class Node: public MTObject
 public:
     int ninputs, noutputs;
     Pin outputs[MAX_CONNECTIONS];
-    MTLock *_lock;
+    MTLock* _lock;
 
-    Node(MTObject *parent, mt_uint32 type, mt_int32 i):
+    Node(MTObject* parent, mt_uint32 type, mt_int32 i):
         MTObject(parent, type, i)
     {
         ninputs = noutputs = 2;
@@ -50,27 +50,35 @@ public:
     };
 
     virtual ~Node()
-    { si->lockdelete(_lock); };
+    {
+        si->lockdelete(_lock);
+    };
 
-    virtual int MTCT process(int ooffset, int ioffset, int count, bool &silence) = 0;
+    virtual int MTCT process(int ooffset, int ioffset, int count, bool& silence) = 0;
 
     virtual void MTCT preprocess(int count)
-    { };
+    {
+    };
 
     virtual void MTCT postprocess(int count)
-    { };
+    {
+    };
 
     virtual void MTCT prebuffer(int count)
-    { };
+    {
+    };
 
     virtual void MTCT postbuffer(int count)
-    { };
+    {
+    };
 
-    void setoutput(Node *dest, float m)
+    void setoutput(Node* dest, float m)
     {
         int x, n = noutputs;
         if (dest->ninputs < n)
-        { n = dest->ninputs; }
+        {
+            n = dest->ninputs;
+        }
         for(x = 0; x < n; x++)
         {
             outputs[x].s = x;

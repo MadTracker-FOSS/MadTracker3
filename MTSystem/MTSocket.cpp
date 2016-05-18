@@ -93,7 +93,12 @@ void uninitSocket()
 
 //---------------------------------------------------------------------------
 MTSocket::MTSocket(bool datagram):
-    server(0), isdatagram(datagram), connected(false), ip(0), port(0), s(0)
+    server(0),
+    isdatagram(datagram),
+    connected(false),
+    ip(0),
+    port(0),
+    s(0)
 {
 #	ifdef _WIN32
     if (!socketinit) initSocket();
@@ -102,8 +107,13 @@ MTSocket::MTSocket(bool datagram):
     addr.sin_family = AF_INET;
 }
 
-MTSocket::MTSocket(MTServer *cserver, SOCKET cs, sockaddr_in *caddr):
-    server(cserver), isdatagram(cserver->isdatagram), connected(true), ip(0), port(0), s(cs)
+MTSocket::MTSocket(MTServer* cserver, SOCKET cs, sockaddr_in* caddr):
+    server(cserver),
+    isdatagram(cserver->isdatagram),
+    connected(true),
+    ip(0),
+    port(0),
+    s(cs)
 {
 #	ifdef _WIN32
     if (!socketinit) initSocket();
@@ -132,7 +142,9 @@ void MTSocket::disconnect()
         connected = false;
     };
     if (server)
-    { server->disconnectclient(this); }
+    {
+        server->disconnectclient(this);
+    }
 }
 
 int MTSocket::getlasterror()
@@ -140,58 +152,74 @@ int MTSocket::getlasterror()
     return lasterror;
 }
 
-int MTSocket::read(void *buffer, int size, sockaddr *from, mt_uint32 *fromsize)
+int MTSocket::read(void* buffer, int size, sockaddr* from, mt_uint32* fromsize)
 {
     int res;
 
     if (!connected)
-    { return 0; }
+    {
+        return 0;
+    }
     if (isdatagram)
     {
-        res = mtrecvfrom(s, (char *) buffer, size, 0, from, fromsize);
+        res = mtrecvfrom(s, (char*) buffer, size, 0, from, fromsize);
         if (res > 0)
-        { return res; }
+        {
+            return res;
+        }
         return -1;
     }
     else
     {
-        res = mtrecv(s, (char *) buffer, size, 0);
+        res = mtrecv(s, (char*) buffer, size, 0);
         if (res > 0)
-        { return res; }
+        {
+            return res;
+        }
         lasterror = wsgetlasterror();
         if ((lasterror) && (lasterror != WSAEWOULDBLOCK))
         {
             mtshutdown(s, SD_SEND);
             connected = false;
             if (server)
-            { server->disconnectclient(this); }
+            {
+                server->disconnectclient(this);
+            }
             return -1;
         };
     };
     return 0;
 }
 
-int MTSocket::write(const void *buffer, mt_uint32 size)
+int MTSocket::write(const void* buffer, mt_uint32 size)
 {
     if (!connected)
-    { return 0; }
+    {
+        return 0;
+    }
     if (isdatagram)
     {
-        if (mtsendto(s, (char *) buffer, size, 0, (struct sockaddr *) &addr, sizeof(addr)) == size)
-        { return size; }
+        if (mtsendto(s, (char*) buffer, size, 0, (struct sockaddr*) &addr, sizeof(addr)) == size)
+        {
+            return size;
+        }
         return -1;
     }
     else
     {
-        if (mtsend(s, (const char *) buffer, size, 0) == size)
-        { return size; }
+        if (mtsend(s, (const char*) buffer, size, 0) == size)
+        {
+            return size;
+        }
         lasterror = wsgetlasterror();
         if ((lasterror) && (lasterror != WSAEWOULDBLOCK))
         {
             mtshutdown(s, SD_SEND);
             connected = false;
             if (server)
-            { server->disconnectclient(this); }
+            {
+                server->disconnectclient(this);
+            }
             return -1;
         };
     };
@@ -210,16 +238,20 @@ void MTSocket::setblocking(bool b)
         state &= (!O_NONBLOCK);
     }
     else
-    { state |= O_NONBLOCK; }
+    {
+        state |= O_NONBLOCK;
+    }
     mtioctlsocket(s, F_SETFL, state);
 #	endif
 }
 
-const char *MTSocket::getname()
+const char* MTSocket::getname()
 {
-    hostent *he = mtgethostbyaddr((char *) &addr.sin_addr.s_addr, sizeof(ip), AF_INET);
+    hostent* he = mtgethostbyaddr((char*) &addr.sin_addr.s_addr, sizeof(ip), AF_INET);
     if (!he)
-    { return 0; }
+    {
+        return 0;
+    }
     return he->h_name;
 }
 
@@ -247,34 +279,40 @@ int MTSocket::makesocket()
         s = mtsocket(AF_INET, SOCK_DGRAM, 0);
     }
     else
-    { s = mtsocket(AF_INET, SOCK_STREAM, IPPROTO_TCP); }
+    {
+        s = mtsocket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    }
     if (addr.sin_addr.s_addr == INADDR_BROADCAST)
     {
         optval = 1;
-        mtsetsockopt(s, SOL_SOCKET, SO_BROADCAST, (char *) &optval, sizeof(optval));
+        mtsetsockopt(s, SOL_SOCKET, SO_BROADCAST, (char*) &optval, sizeof(optval));
     };
     return s;
 }
 
 //---------------------------------------------------------------------------
 MTServer::MTServer(int p, int max, bool datagram):
-    MTSocket(datagram), maxconn(max), nclients(0)
+    MTSocket(datagram),
+    maxconn(max),
+    nclients(0)
 {
-    hostent *he;
+    hostent* he;
     char buf[1024];
 
     port = p;
     mtgethostname(buf, 1024);
     he = mtgethostbyname(buf);
     if (he)
-    { ip = *(int *) he->h_addr_list[0]; }
+    {
+        ip = *(int*) he->h_addr_list[0];
+    }
     addr.sin_port = mthtons(p);
     addr.sin_addr.s_addr = INADDR_ANY;
-    clients = (MTSocket **) mtmemalloc(4 * max, MTM_ZERO);
+    clients = (MTSocket**) mtmemalloc(4 * max, MTM_ZERO);
     s = makesocket();
     if (s != INVALID_SOCKET)
     {
-        if (mtbind(s, (sockaddr *) &addr, sizeof(addr)) == 0)
+        if (mtbind(s, (sockaddr*) &addr, sizeof(addr)) == 0)
         {
             if (isdatagram)
             {
@@ -307,31 +345,41 @@ MTServer::~MTServer()
         connected = false;
         mtshutdown(s, SD_BOTH);
         mtclosesocket(s);
-        for(x = 0; x < nclients; x++) delete clients[x];
+        for(x = 0; x < nclients; x++)
+        {
+            delete clients[x];
+        }
     };
     mtmemfree(clients);
 }
 
-int MTServer::write(const void *buffer, int size)
+int MTServer::write(const void* buffer, int size)
 {
     int x;
 
     if ((!connected) || (nclients == 0) || (isdatagram))
-    { return 0; }
-    for(x = 0; x < nclients; x++) clients[x]->write(buffer, size);
+    {
+        return 0;
+    }
+    for(x = 0; x < nclients; x++)
+    {
+        clients[x]->write(buffer, size);
+    }
     return size;
 }
 
-MTSocket *MTServer::accept()
+MTSocket* MTServer::accept()
 {
     mt_uint32 l;
     SOCKET cc;
     sockaddr_in client;
 
     if ((nclients == maxconn) || (isdatagram))
-    { return 0; }
+    {
+        return 0;
+    }
     l = sizeof(client);
-    cc = ::mtaccept(s, (sockaddr *) &client, &l);
+    cc = ::mtaccept(s, (sockaddr*) &client, &l);
     if (cc != INVALID_SOCKET)
     {
         clients[nclients] = new MTSocket(this, cc, &client);
@@ -344,13 +392,13 @@ MTSocket *MTServer::accept()
     return 0;
 }
 
-void MTServer::disconnectclient(MTSocket *s)
+void MTServer::disconnectclient(MTSocket* s)
 {
     int x, y;
 
     for(x = 0; x < nclients; x++)
     {
-        MTSocket *c = clients[x];
+        MTSocket* c = clients[x];
         if (c == s)
         {
             for(y = x; y < nclients - 1; y++)
@@ -368,17 +416,17 @@ int MTServer::getnumclients()
     return nclients;
 }
 
-MTSocket *MTServer::getclient(int id)
+MTSocket* MTServer::getclient(int id)
 {
     return clients[id];
 }
 
 //---------------------------------------------------------------------------
-MTClient::MTClient(const char *a, int p, bool datagram):
+MTClient::MTClient(const char* a, int p, bool datagram):
     MTSocket(datagram)
 {
     int ip;
-    hostent *he;
+    hostent* he;
     char buf[1024];
 
     port = p;
@@ -396,10 +444,12 @@ MTClient::MTClient(const char *a, int p, bool datagram):
                 he = mtgethostbyname(a);
                 if (he)
                 {
-                    ip = *(int *) he->h_addr_list[0];
+                    ip = *(int*) he->h_addr_list[0];
                 }
                 else
-                { return; }
+                {
+                    return;
+                }
             }
             else
             {
@@ -407,10 +457,12 @@ MTClient::MTClient(const char *a, int p, bool datagram):
                 he = mtgethostbyname(buf);
                 if (he)
                 {
-                    ip = *(int *) he->h_addr_list[0];
+                    ip = *(int*) he->h_addr_list[0];
                 }
                 else
-                { return; }
+                {
+                    return;
+                }
             };
         };
     };
@@ -432,7 +484,8 @@ bool MTClient::reconnect()
 {
     if (connected)
     {
-        if (!isdatagram) mtshutdown(s, SD_BOTH);
+        if (!isdatagram)
+            mtshutdown(s, SD_BOTH);
         mtclosesocket(s);
         connected = false;
     };
@@ -443,7 +496,7 @@ bool MTClient::reconnect()
         {
             connected = true;
         }
-        else if (mtconnect(s, (sockaddr *) &addr, sizeof(addr)) == 0)
+        else if (mtconnect(s, (sockaddr*) &addr, sizeof(addr)) == 0)
         {
             connected = true;
         }

@@ -259,8 +259,8 @@ enum
 struct MTPreferences
 {
     char options[16];   // <- this is just cruel. There don't even seem to be usages.
-    char *path[8];      // <- 8 paths. For whatever.
-    char *syspath[8];   // <- 8 syspaths. And yes, there is an iteration over these.
+    char* path[8];      // <- 8 paths. For whatever.
+    char* syspath[8];   // <- 8 syspaths. And yes, there is an iteration over these.
 };
 
 // Some apparently meaningless key constants that will come back and haunt
@@ -278,8 +278,10 @@ struct MTUserID
     mt_uint32 id1;
     mt_uint32 id2;
 
-    inline bool operator==(MTUserID &u)
-    { return ((id1 == u.id1) && (id2 == u.id2)); }
+    inline bool operator==(MTUserID& u)
+    {
+        return ((id1 == u.id1) && (id2 == u.id2));
+    }
 //	inline bool operator = (MTUserID u){ id1 = u.id1; id2 = u.id2; return true; }
 };
 
@@ -325,23 +327,30 @@ struct MTColor
     }
 
     constexpr MTColor(mt_uint8 r, mt_uint8 g, mt_uint8 b, mt_uint8 a):
-        R(r), G(g), B(b), A(a)
-    { }
+        R(r),
+        G(g),
+        B(b),
+        A(a)
+    {
+    }
 
     constexpr MTColor(mt_uint32 rgba):
-        R((rgba & 0xFF000000) >> 24), G((rgba & 0x00FF0000) >> 16), B((rgba & 0x0000FF00) >> 8),
+        R((rgba & 0xFF000000) >> 24),
+        G((rgba & 0x00FF0000) >> 16),
+        B((rgba & 0x0000FF00) >> 8),
         A((rgba & 0x000000FF) >> 0)
-    { }
+    {
+    }
 
-    MTColor &operator=(MTColor const &other) = default;
+    MTColor& operator=(MTColor const& other) = default;
 
-    inline bool operator==(MTColor const &other) const
+    inline bool operator==(MTColor const& other) const
     {
         return (getRGBA() == other.getRGBA());
     }
 
     // operators + and * operate via saturation arithmetic.
-    inline MTColor &operator+=(MTColor const &other)
+    inline MTColor& operator+=(MTColor const& other)
     {
         R = util::min(255u, (mt_uint32) (R) + other.R);
         B = util::min(255u, (mt_uint32) (G) + other.B);
@@ -350,7 +359,7 @@ struct MTColor
         return *this;
     }
 
-    inline MTColor &operator*=(MTColor const &other)
+    inline MTColor& operator*=(MTColor const& other)
     {
         R = (mt_uint32) (R) * other.R / 0xff;
         B = (mt_uint32) (B) * other.B / 0xff;
@@ -360,14 +369,14 @@ struct MTColor
     }
 };
 
-inline MTColor operator+(MTColor const &c1, MTColor const &c2)
+inline MTColor operator+(MTColor const& c1, MTColor const& c2)
 {
     MTColor ret = c1;
     ret += c2;
     return ret;
 }
 
-inline MTColor operator*(MTColor const &c1, MTColor const &c2)
+inline MTColor operator*(MTColor const& c1, MTColor const& c2)
 {
     MTColor ret = c1;
     ret *= c2;
@@ -379,8 +388,8 @@ inline MTColor operator*(MTColor const &c1, MTColor const &c2)
 // Please let the usage of this be reasonable.
 struct MTCLParam
 {
-    char *name;
-    char *value;
+    char* name;
+    char* value;
 };
 
 // Parent class of The Big Bad Wolf MTSystemInterface (aka si).
@@ -390,9 +399,9 @@ class MTXInterface
 {
 public:
     int type;
-    const char *name;
+    const char* name;
     int version;
-    const MTXKey *key;
+    const MTXKey* key;
     int status;
 
     virtual bool MTCT init() = 0;
@@ -404,31 +413,39 @@ public:
     virtual void MTCT stop() = 0;
 
 //	virtual void MTCT processcmdline(void *params){ };
-    virtual void MTCT processcmdline(void *)
-    { }; // removed parameter name to shut up -Wunused-parameter.
-    virtual void MTCT showusage(void *out)
-    { };
+    virtual void MTCT processcmdline(void*)
+    {
+    }; // removed parameter name to shut up -Wunused-parameter.
+    virtual void MTCT showusage(void*)
+    {
+    }; // dito
 
     // FIXME None of the implementations use the "param" parameter, and it comes from a pointer-to-int cast.
     // In fact most subclass overrides just return 0. Only the one in MTDisplayInterface does sth. with command.
     virtual int MTCT config(int command, int param)
-    { return 0; };
+    {
+        return 0;
+    };
 
-    virtual int MTCT processinput(const char *input)
-    { return 0; };
+    // The only implementation that actually does something is the one in MT3Interface. The others just
+    // return 0 straight away.
+    virtual int MTCT processinput(const char* input)
+    {
+        return 0;
+    };
 };
 
 // Are you shitting me?
 struct MTXInterfaces
 {
     int ninterfaces;
-    MTXInterface *interfaces[1];
+    MTXInterface* interfaces[1];
 };
 
 // Alright? "Refresh" could mean a lot of things, but nothing too bad so far.
 // Will have to see how and where it's used to get an idea of how bad it is.
 // My guess is that it means screen refresh.
-typedef void (MTCT *RefreshProc)(void *param);
+typedef void (MTCT* RefreshProc)(void* param);
 
 // Another generic term. "Object". But since there's a lock function and
 // a modification flag on it, I'll take a guess and say that this includes
@@ -440,15 +457,15 @@ typedef void (MTCT *RefreshProc)(void *param);
 class ObjectWrapper
 {
 public:
-    virtual void MTCT create(void *object, void *parent, mt_uint32 type, mt_int32 i) = 0;
+    virtual void MTCT create(void* object, void* parent, mt_uint32 type, mt_int32 i) = 0;
 
-    virtual void MTCT destroy(void *object) = 0;
+    virtual void MTCT destroy(void* object) = 0;
 
-    virtual bool MTCT lock(void *object, int flags, bool lock, int timeout = -1) = 0;
+    virtual bool MTCT lock(void* object, int flags, bool lock, int timeout = -1) = 0;
 
-    virtual void MTCT setname(void *object, char *newname) = 0;
+    virtual void MTCT setname(void* object, char* newname) = 0;
 
-    virtual void MTCT setmodified(void *object, int value, int flags) = 0;
+    virtual void MTCT setmodified(void* object, int value, int flags) = 0;
 };
 
 // So now there's MTXInterface and also MTInterface. And both of them are
@@ -458,54 +475,58 @@ class MTInterface
 {
 public:
     int type;
-    const char *name;
+    const char* name;
     int version;
-    const MTXKey *key;
+    const MTXKey* key;
 
-    ObjectWrapper *_ow;
+    ObjectWrapper* _ow;
 
-    virtual MTXInterface *MTCT getinterface(int id) = 0;
+    virtual MTXInterface* MTCT getinterface(int id) = 0;
 
-    virtual MTPreferences *MTCT getprefs() = 0;
+    virtual MTPreferences* MTCT getprefs() = 0;
 
-    virtual void *MTCT getcurrentuser() = 0;
+    virtual void* MTCT getcurrentuser() = 0;
 
     virtual int MTCT getnummodules() = 0;
 
-    virtual void *MTCT getmodule(int id) = 0;
+    virtual void* MTCT getmodule(int id) = 0;
 
-    virtual void MTCT addmodule(void *module) = 0;
+    virtual void MTCT addmodule(void* module) = 0;
 
-    virtual void MTCT delmodule(void *module) = 0;
+    virtual void MTCT delmodule(void* module) = 0;
 
-    virtual void MTCT setmodule(void *module) = 0;
+    virtual void MTCT setmodule(void* module) = 0;
 
     virtual bool MTCT addchannel() = 0;
 
-    virtual void MTCT notify(void *object, int notify, int param) = 0;
+    virtual void MTCT notify(void* object, int notify, int param) = 0;
 
-    virtual bool MTCT editobject(void *object, bool newwindow) = 0;
+    virtual bool MTCT editobject(void* object, bool newwindow) = 0;
 
-    virtual void *MTCT getconf(const char *name, bool user) = 0;
+    virtual void* MTCT getconf(const char* name, bool user) = 0;
 
-    virtual void MTCT releaseconf(void *conf) = 0;
+    virtual void MTCT releaseconf(void* conf) = 0;
 
-    virtual int MTCT addrefreshproc(RefreshProc proc, void *param) = 0;
+    virtual int MTCT addrefreshproc(RefreshProc proc, void* param) = 0;
 
     virtual void MTCT delrefreshproc(int id) = 0;
 
-    virtual char *MTCT getextension(void *ptr) = 0;
+    virtual char* MTCT getextension(void* ptr) = 0;
 
     virtual bool MTCT canclose() = 0;
 
-    virtual void *MTCT getconsole()
-    { return 0; };
+    virtual void* MTCT getconsole()
+    {
+        return 0;
+    };
 
-    virtual int MTCT processinput(const char *input)
-    { return 0; };
+    virtual int MTCT processinput(const char* input)
+    {
+        return 0;
+    };
 };
 
-typedef MTXInterfaces *MTCT MTXMainCall(MTInterface *mti);
+typedef MTXInterfaces* MTCT MTXMainCall(MTInterface* mti);
 //---------------------------------------------------------------------------
 //	Swapping functions to convert little<->big endian
 //---------------------------------------------------------------------------
@@ -544,9 +565,9 @@ inline long FASTCALL swap_dword(long a)
     return (a >> 24) | ((a & 0xFF0000) >> 8) | ((a & 0xFF00) << 8) | ((a & 0xFF) << 24);
 }
 
-inline void FASTCALL int64todouble(void *int64, double *d)
+inline void FASTCALL int64todouble(void* int64, double* d)
 {
-    *d = ((double) (*(int *) int64)) * 4294967296.0 + (double) (*(((int *) int64) + 1));
+    *d = ((double) (*(int*) int64)) * 4294967296.0 + (double) (*(((int*) int64) + 1));
 }
 
 #undef FASTCALL
@@ -563,17 +584,23 @@ inline void FASTCALL int64todouble(void *int64, double *d)
 
 #include <ctype.h>
 
-inline char *strupr(char *str)
+inline char* strupr(char* str)
 {
-    char *orig = str;
-    for(; *str != '\0'; str++) *str = toupper(*str);
+    char* orig = str;
+    for(; *str != '\0'; str++)
+    {
+        *str = toupper(*str);
+    }
     return orig;
 }
 
-inline char *strlwr(char *str)
+inline char* strlwr(char* str)
 {
-    char *orig = str;
-    for(; *str != '\0'; str++) *str = tolower(*str);
+    char* orig = str;
+    for(; *str != '\0'; str++)
+    {
+        *str = tolower(*str);
+    }
     return orig;
 }
 

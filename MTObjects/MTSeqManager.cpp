@@ -16,27 +16,36 @@
 #include "../MTGUI/MTGUITools.h"
 
 //---------------------------------------------------------------------------
-const char *autoc = ("Automation");
+const char* autoc = ("Automation");
 
-const char *layerc = ("Layer %d");
+const char* layerc = ("Layer %d");
 
 //---------------------------------------------------------------------------
 // Module editor
 //---------------------------------------------------------------------------
-bool MTCT ModuleEdit(MTObject *object, MTWindow *window, int flags, MTUser *user)
+bool MTCT ModuleEdit(MTObject* object, MTWindow* window, int flags, MTUser* user)
 {
-    MTCustomWinControl *data;
-    MTSeqManager *sm;
+    MTCustomWinControl* data;
+    MTSeqManager* sm;
 
     if (window->uid == (int) object)
-    { return true; }
+    {
+        return true;
+    }
 
     if (window->tag != MTO_MODULE)
     {
-        while(window->ncontrols > 0) gi->delcontrol(window->controls[0]);
-        data = (MTCustomWinControl *) gi->newcontrol(MTC_CUSTOMWINCTRL, 0, window, 2, 2, window->width - 4, window->height - 4, 0);
+        while(window->ncontrols > 0)
+        {
+            gi->delcontrol(window->controls[0]);
+        }
+        data = (MTCustomWinControl*) gi->newcontrol(
+            MTC_CUSTOMWINCTRL, 0, window, 2, 2, window->width - 4, window->height - 4, 0
+        );
         if (!data)
-        { return false; }
+        {
+            return false;
+        }
         data->flags |= MTCF_DONTSAVE;
         data->align = MTCA_CLIENT;
         data->uid = 100;
@@ -45,25 +54,34 @@ bool MTCT ModuleEdit(MTObject *object, MTWindow *window, int flags, MTUser *user
     }
     else
     {
-        data = (MTCustomWinControl *) window->getcontrolfromuid(100);
-        sm = (MTSeqManager *) data->behaviours;
+        data = (MTCustomWinControl*) window->getcontrolfromuid(100);
+        sm = (MTSeqManager*) data->behaviours;
     };
-    sm->setmodule((MTModule *) object);
+    sm->setmodule((MTModule*) object);
     return true;
 }
 
 //---------------------------------------------------------------------------
-MTSeqManager::MTSeqManager(MTCustomWinControl *control):
-    MTCustomWinBehaviours(control), module(0), selecting(0), followsong(true), offsetx(0), offsety(0), zoom(0.125),
-    cursor(0), pattx(128), patty(16), patth(20)
+MTSeqManager::MTSeqManager(MTCustomWinControl* control):
+    MTCustomWinBehaviours(control),
+    module(0),
+    selecting(0),
+    followsong(true),
+    offsetx(0),
+    offsety(0),
+    zoom(0.125),
+    cursor(0),
+    pattx(128),
+    patty(16),
+    patth(20)
 {
     int tmp, ah;
 
     skin->getcontrolsize(MTC_SCROLLER, 0, tmp, ah);
     width = parent->width;
     height = parent->height;
-    hs = (MTScroller *) gi->newcontrol(MTC_SCROLLER, 0, parent, pattx, height - ah, width - pattx, 0, 0);
-    vs = (MTScroller *) gi->newcontrol(MTC_SCROLLER, 0, parent, pattx - ah, patty, 0, height - patty - ah, 0);
+    hs = (MTScroller*) gi->newcontrol(MTC_SCROLLER, 0, parent, pattx, height - ah, width - pattx, 0, 0);
+    vs = (MTScroller*) gi->newcontrol(MTC_SCROLLER, 0, parent, pattx - ah, patty, 0, height - patty - ah, 0);
     parent->hs = hs;
     parent->vs = vs;
     updatemetrics();
@@ -93,9 +111,13 @@ void MTSeqManager::onsetbounds(int l, int t, int w, int h)
     int oldnlayers = nlayers;
 
     if (w > 0)
-    { width = w; }
+    {
+        width = w;
+    }
     if (h > 0)
-    { height = h; }
+    {
+        height = h;
+    }
     nbeats = (w - pattx) * zoom;
     nlayers = (h - hs->height - patty) / patth;
     updatescroller();
@@ -115,7 +137,7 @@ void MTSeqManager::onsetbounds(int l, int t, int w, int h)
     };
 }
 
-bool MTSeqManager::oncheckbounds(int &l, int &t, int &w, int &h)
+bool MTSeqManager::oncheckbounds(int& l, int& t, int& w, int& h)
 {
     bool ok = true;
 
@@ -132,7 +154,7 @@ bool MTSeqManager::oncheckbounds(int &l, int &t, int &w, int &h)
     return ok;
 }
 
-void MTSeqManager::ondraw(MTRect &rect)
+void MTSeqManager::ondraw(MTRect& rect)
 {
     double x, w;
     int y, h;
@@ -162,7 +184,9 @@ void MTSeqManager::ondraw(MTRect &rect)
         w = (double) (cr.right - cr.left) * zoom;
         h = ((cr.bottom - patty + patth - 1) / patth) - y;
         if (w > 0.0)
-        { drawseq(x, w, y, h); }
+        {
+            drawseq(x, w, y, h);
+        }
     };
     if (&rect)
     {
@@ -170,7 +194,7 @@ void MTSeqManager::ondraw(MTRect &rect)
     };
 }
 
-bool MTSeqManager::onmessage(MTCMessage &msg)
+bool MTSeqManager::onmessage(MTCMessage& msg)
 {
     int x, layer;
 
@@ -184,7 +208,9 @@ bool MTSeqManager::onmessage(MTCMessage &msg)
             return true;
         case MTCM_MOUSEMOVE:
             if (parent->processmessage(msg))
-            { return true; }
+            {
+                return true;
+            }
             x = msg.x;
             layer = msg.y;
             clienttosequence(x, layer);
@@ -192,7 +218,9 @@ bool MTSeqManager::onmessage(MTCMessage &msg)
             return false;
         case MTCM_MOUSEDOWN:
             if (parent->processmessage(msg))
-            { return true; }
+            {
+                return true;
+            }
             if (msg.buttons & DB_LEFT)
             {
                 if (msg.x >= pattx)
@@ -200,15 +228,21 @@ bool MTSeqManager::onmessage(MTCMessage &msg)
                     if (msg.y < patty)
                     {
                         if (module)
-                        { module->setpos(clienttodata(msg.x, 0)); }
+                        {
+                            module->setpos(clienttodata(msg.x, 0));
+                        }
                     }
                     else
                     {
                         x = 0;
                         if (msg.buttons & DB_CONTROL)
-                        { x = 1; }
+                        {
+                            x = 1;
+                        }
                         if (msg.buttons & DB_SHIFT)
-                        { x = 2; }
+                        {
+                            x = 2;
+                        }
                         selectsequence(hl.y, hl.x, x);
                         if ((msg.buttons & DB_DOUBLE) && (module) && (hl.x >= 0) && (hl.y >= 0))
                         {
@@ -218,7 +252,9 @@ bool MTSeqManager::onmessage(MTCMessage &msg)
                                 mtinterface->editobject(A(module->apatt, Automation)[x & 0xFFF], false);
                             }
                             else
-                            { mtinterface->editobject(A(module->patt, Pattern)[x], false); }
+                            {
+                                mtinterface->editobject(A(module->patt, Pattern)[x], false);
+                            }
                         };
                     };
                 };
@@ -228,10 +264,10 @@ bool MTSeqManager::onmessage(MTCMessage &msg)
     return false;
 }
 
-void *MTSeqManager::ongetoffsetrgn(int type)
+void* MTSeqManager::ongetoffsetrgn(int type)
 {
     MTRect r = {pattx, patty, width, patty + nlayers * patth};
-    void *rgn, *op;
+    void* rgn, * op;
 
     rgn = recttorgn(r);
     if (type == 0)
@@ -259,7 +295,7 @@ void MTSeqManager::onoffset(int ox, int oy)
     offsety = vs->pos;
 }
 
-void MTSeqManager::setmodule(MTModule *newmodule)
+void MTSeqManager::setmodule(MTModule* newmodule)
 {
     if (newmodule != module)
     {
@@ -281,7 +317,7 @@ void MTSeqManager::setcursor(double value)
     double oldcursor = cursor;
     MTRect r1, r2;
     MTCMessage msg = {MTCM_CHANGE, 0, parent};
-    MTWinControl *cparent = parent->parent;
+    MTWinControl* cparent = parent->parent;
 
     if ((value != cursor) && (cparent))
     {
@@ -319,9 +355,13 @@ void MTSeqManager::setcursor(double value)
         if (followsong)
         {
             if (cursor < offsetx)
-            { setoffsetx(cursor - nbeats / 2); }
+            {
+                setoffsetx(cursor - nbeats / 2);
+            }
             if (cursor > offsetx + nbeats - nbeats / 8)
-            { setoffsetx(cursor - nbeats / 8); }
+            {
+                setoffsetx(cursor - nbeats / 8);
+            }
         };
     };
 }
@@ -329,13 +369,17 @@ void MTSeqManager::setcursor(double value)
 void MTSeqManager::setoffsetx(double value)
 {
     if (value != offsetx)
-    { hs->setposition(value / zoom); }
+    {
+        hs->setposition(value / zoom);
+    }
 }
 
 void MTSeqManager::setoffsety(int value)
 {
     if (value != offsety)
-    { vs->setposition(value); }
+    {
+        vs->setposition(value);
+    }
 }
 
 void MTSeqManager::setzoom(int value)
@@ -356,7 +400,9 @@ void MTSeqManager::sethighlight(int x, int layer)
     MTCMessage msg = {MTCM_CHANGE, 0, parent};
 
     if ((!module) || (!parent))
-    { return; }
+    {
+        return;
+    }
     if ((x != hl.x) || (layer != hl.y))
     {
         hl.x = x;
@@ -384,18 +430,22 @@ void MTSeqManager::updatepos()
     if (module)
     {
         if ((vs->slide) || (hs->slide))
-        { return; }
+        {
+            return;
+        }
         setcursor(module->playstatus.pos);
     };
 }
 
-double MTSeqManager::clienttodata(int x, int *layer)
+double MTSeqManager::clienttodata(int x, int* layer)
 {
     double beat;
 
     x -= pattx;
     if ((x < 0) || (x >= width - pattx))
-    { return -1.0; }
+    {
+        return -1.0;
+    }
     beat = ((double) x * zoom) + offsetx;
     if (layer)
     {
@@ -410,15 +460,19 @@ double MTSeqManager::clienttodata(int x, int *layer)
     return beat;
 }
 
-int MTSeqManager::datatoclient(double x, int *layer)
+int MTSeqManager::datatoclient(double x, int* layer)
 {
     int line;
 
     if (x < 0.0)
-    { return -1; }
+    {
+        return -1;
+    }
     line = (int) ((x - offsetx) / zoom);
     if ((line < 0) || (line >= width - pattx))
-    { return -1; }
+    {
+        return -1;
+    }
     line += pattx;
     if (layer)
     {
@@ -433,15 +487,19 @@ int MTSeqManager::datatoclient(double x, int *layer)
     return line;
 }
 
-void MTSeqManager::clienttosequence(int &x, int &layer)
+void MTSeqManager::clienttosequence(int& x, int& layer)
 {
     x -= pattx;
     layer -= patty;
     if ((!module) || (layer < 0) || (x < 0) || (x >= width - pattx))
-    { goto error; }
+    {
+        goto error;
+    }
     layer /= patth;
     if (layer >= nlayers)
-    { goto error; }
+    {
+        goto error;
+    }
     x = module->getsequence(layer + offsety, (double) x * zoom + offsetx, 0);
     layer += offsety;
     return;
@@ -456,7 +514,9 @@ void MTSeqManager::selectsequence(int layer, int s, int how)
     MTCMessage msg = {MTCM_CHANGE, 0, parent};
 
     if (!module)
-    { return; }
+    {
+        return;
+    }
     switch (how)
     {
 // Replace selection
@@ -469,12 +529,16 @@ void MTSeqManager::selectsequence(int layer, int s, int how)
                 };
             };
             if ((layer >= 0) && (s >= 0))
-            { module->sequ[layer][s].flags |= SF_SELECTED; }
+            {
+                module->sequ[layer][s].flags |= SF_SELECTED;
+            }
             break;
 // Toggle selection
         case 1:
             if ((layer >= 0) && (s >= 0))
-            { module->sequ[layer][s].flags ^= SF_SELECTED; }
+            {
+                module->sequ[layer][s].flags ^= SF_SELECTED;
+            }
             sequencetorect(layer, s, msg.dr);
             break;
 // Area selection
@@ -525,7 +589,9 @@ void MTSeqManager::deletesequence(int layer, int s, bool adapt)
     double l, ss, se;
 
     if ((layer < 0) || (layer >= MAX_LAYERS))
-    { return; }
+    {
+        return;
+    }
     ss = (module->sequ[layer][s].pos - offsetx) / zoom;
     se = module->sequ[layer][s].length / zoom;
     if (adapt)
@@ -620,7 +686,9 @@ void MTSeqManager::drawlayer(int sy, int sh)
     char layers[64];
 
     if (sy + offsety >= MAX_LAYERS)
-    { return; }
+    {
+        return;
+    }
     if (sy < 0)
     {
         if (sy + sh >= 0)
@@ -629,7 +697,9 @@ void MTSeqManager::drawlayer(int sy, int sh)
             sy = 0;
         }
         else
-        { return; }
+        {
+            return;
+        }
     };
     if (sy + sh > nlayers)
     {
@@ -638,7 +708,9 @@ void MTSeqManager::drawlayer(int sy, int sh)
             return;
         }
         else
-        { sh = nlayers - sy; }
+        {
+            sh = nlayers - sy;
+        }
     };
     parent->fillcolor(0, sy * patth + patty, pattx - ah, sh * patth, skin->getcolor(SC_BACKGROUND));
     cr.left = 4;
@@ -657,7 +729,9 @@ void MTSeqManager::drawlayer(int sy, int sh)
         for(x = sy; x < sy + sh; x++)
         {
             if (x >= MAX_LAYERS)
-            { break; }
+            {
+                break;
+            }
             cr.top = patty + (x - offsety) * patth;
             cr.bottom = cr.top + patth - 1;
             if (x)
@@ -681,19 +755,21 @@ void MTSeqManager::drawseqp(int layer, int s, double sl, double el)
     int w, y, sx, id;
     double cl, lng, stl, nl;
     unsigned short p, t;
-    Pattern *cpatt;
-    Automation *capatt;
-    char *pattname;
+    Pattern* cpatt;
+    Automation* capatt;
+    char* pattname;
     unsigned char f;
     char pattid[8];
     MTRect cr, br;
     MTPoint pt;
     int bx = 0;
     int by = 0;
-    MTBitmap *b;
+    MTBitmap* b;
 
     if (s < 0)
-    { return; }
+    {
+        return;
+    }
     if ((sl == 0) && (el == 0))
     {
         sl = offsetx;
@@ -707,7 +783,9 @@ void MTSeqManager::drawseqp(int layer, int s, double sl, double el)
     cl = module->sequ[layer][s].pos;
     lng = module->sequ[layer][s].length;
     if (lng <= 0)
-    { return; }
+    {
+        return;
+    }
     stl = cl;
     nl = lng;
     y = patty + patth * (layer - offsety);
@@ -715,7 +793,9 @@ void MTSeqManager::drawseqp(int layer, int s, double sl, double el)
     {
         case 0:
             if (!module->patt->a[p])
-            { return; }
+            {
+                return;
+            }
             cpatt = A(module->patt, Pattern)[p];
             nl = cpatt->nbeats;
             id = cpatt->id;
@@ -724,7 +804,9 @@ void MTSeqManager::drawseqp(int layer, int s, double sl, double el)
         case 1:
             capatt = A(module->apatt, Automation)[p];
             if (!capatt)
-            { return; }
+            {
+                return;
+            }
             id = capatt->id;
             pattname = capatt->name;
             break;
@@ -732,9 +814,13 @@ void MTSeqManager::drawseqp(int layer, int s, double sl, double el)
             return;
     };
     if (el >= cl + lng)
-    { el = cl + lng - zoom; }
+    {
+        el = cl + lng - zoom;
+    }
     if (sl < cl)
-    { sl = cl; }
+    {
+        sl = cl;
+    }
     cr.left = (int) ((sl - offsetx) / zoom) + pattx;
     cr.right = (int) ((el - offsetx + zoom) / zoom) + pattx;
     cr.top = y;
@@ -756,7 +842,9 @@ void MTSeqManager::drawseqp(int layer, int s, double sl, double el)
         f = 2;
     }
     else
-    { f = 0; }
+    {
+        f = 0;
+    }
     br.left = sx + bx;
     br.top = y + by;
     br.right = br.left + w;
@@ -769,7 +857,9 @@ void MTSeqManager::drawseqp(int layer, int s, double sl, double el)
             while(lng > 0)
             {
                 if (nl > lng)
-                { nl = lng; }
+                {
+                    nl = lng;
+                }
                 if (cl != stl)
                 {
                     sx = (int) ((cl - offsetx) / zoom) + pattx;
@@ -816,7 +906,7 @@ void MTSeqManager::drawseqp(int layer, int s, double sl, double el)
     parent->unclip();
 }
 
-bool MTSeqManager::sequencetorect(int layer, int s, MTRect &r)
+bool MTSeqManager::sequencetorect(int layer, int s, MTRect& r)
 {
     unsigned short p, t;
     double cl, lng;
@@ -824,7 +914,9 @@ bool MTSeqManager::sequencetorect(int layer, int s, MTRect &r)
     int by = 0;
 
     if ((s < 0) || (layer < 0))
-    { return false; }
+    {
+        return false;
+    }
     p = module->sequ[layer][s].patt;
     t = p >> 12;
     p &= 0xFFF;
@@ -832,7 +924,9 @@ bool MTSeqManager::sequencetorect(int layer, int s, MTRect &r)
     cl = module->sequ[layer][s].pos;
     lng = module->sequ[layer][s].length;
     if (lng <= 0)
-    { return false; }
+    {
+        return false;
+    }
     r.left = (int) ((cl - offsetx) / zoom) + pattx;
     r.right = (int) ((cl + lng - offsetx + zoom) / zoom) + pattx;
     r.top = patty + patth * (layer - offsety);
@@ -858,7 +952,9 @@ void MTSeqManager::drawseq(double sx, double sw, int sy, int sh)
             sx = 0;
         }
         else
-        { return; }
+        {
+            return;
+        }
     };
     if (sx + sw > nbeats)
     {
@@ -867,7 +963,9 @@ void MTSeqManager::drawseq(double sx, double sw, int sy, int sh)
             return;
         }
         else
-        { sw = nbeats - sx; }
+        {
+            sw = nbeats - sx;
+        }
     };
     if (sy < 0)
     {
@@ -877,7 +975,9 @@ void MTSeqManager::drawseq(double sx, double sw, int sy, int sh)
             sy = 0;
         }
         else
-        { return; }
+        {
+            return;
+        }
     };
     if (sy + sh > nlayers)
     {
@@ -886,7 +986,9 @@ void MTSeqManager::drawseq(double sx, double sw, int sy, int sh)
             return;
         }
         else
-        { sh = nlayers - sy; }
+        {
+            sh = nlayers - sy;
+        }
     };
 //	parent->fillcolor(sx/zoom+pattx,sy*patth+patty,sw/zoom,sh*patth,skin->getcolor(SC_EDIT_BACKGROUND));
     if (module)
@@ -898,10 +1000,17 @@ void MTSeqManager::drawseq(double sx, double sw, int sy, int sh)
             sseq = module->getsequence(x, sl, 1);
             eseq = module->getsequence(x, el, 2);
             if (eseq < 0)
-            { continue; }
+            {
+                continue;
+            }
             if (sseq < 0)
-            { sseq = eseq; }
-            for(y = sseq; y <= eseq; y++) drawseqp(x, y, sl, el);
+            {
+                sseq = eseq;
+            }
+            for(y = sseq; y <= eseq; y++)
+            {
+                drawseqp(x, y, sl, el);
+            }
         };
         if ((cursor >= sl) && (cursor < el))
         {

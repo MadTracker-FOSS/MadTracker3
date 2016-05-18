@@ -21,8 +21,8 @@
 //---------------------------------------------------------------------------
 struct DSDevice
 {
-    GUID *guid;
-    char *name;
+    GUID* guid;
+    char* name;
     DSCAPS caps;
     DSBCAPS bcaps;
 };
@@ -30,7 +30,7 @@ struct DSDevice
 class MTDirectSoundDevice: public MTAudioDevice
 {
 public:
-    MTDirectSoundDevice(DSDevice *dev);
+    MTDirectSoundDevice(DSDevice* dev);
 
     ~MTDirectSoundDevice();
 
@@ -44,17 +44,17 @@ public:
 
     int MTCT getposition(bool playback = false);
 
-    bool MTCT getdata(int position, int length, void **ptr1, void **ptr2, unsigned long *lng1, unsigned long *lng2);
+    bool MTCT getdata(int position, int length, void** ptr1, void** ptr2, unsigned long* lng1, unsigned long* lng2);
 
-    bool MTCT writedata(void *ptr1, void *ptr2, unsigned long lng1, unsigned long lng2);
+    bool MTCT writedata(void* ptr1, void* ptr2, unsigned long lng1, unsigned long lng2);
 
 private:
     int delay;
-    DSDevice *device;
+    DSDevice* device;
     WAVEFORMATEX format;
     DSBUFFERDESC bufferdesc;
-    IDirectSound *ids;
-    IDirectSoundBuffer *idsb;
+    IDirectSound* ids;
+    IDirectSoundBuffer* idsb;
 };
 
 class MTDirectSoundDeviceManager: public MTAudioDeviceManager
@@ -64,9 +64,9 @@ public:
 
     ~MTDirectSoundDeviceManager();
 
-    MTAudioDevice *MTCT newdevice(int id);
+    MTAudioDevice* MTCT newdevice(int id);
 
-    void MTCT deldevice(MTAudioDevice *device);
+    void MTCT deldevice(MTAudioDevice* device);
 };
 //---------------------------------------------------------------------------
 #endif

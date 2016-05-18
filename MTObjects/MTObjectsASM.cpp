@@ -13,7 +13,7 @@
 #include "MTObjectsASM.h"
 
 //---------------------------------------------------------------------------
-bool MTCT a_floattofixed(double f, int &i, unsigned int &d)
+bool MTCT a_floattofixed(double f, int& i, unsigned int& d)
 {
 #	ifndef __GNUC__
     __asm{
@@ -106,7 +106,7 @@ bool MTCT a_floattofixed(double f, int &i, unsigned int &d)
 }
 
 //---------------------------------------------------------------------------
-void MTCT a_changesign(char *buffer, int count)
+void MTCT a_changesign(char* buffer, int count)
 {
 #	ifndef __GNUC__
     _asm{
@@ -164,7 +164,7 @@ void MTCT a_changesign(char *buffer, int count)
 }
 
 //---------------------------------------------------------------------------
-void MTCT a_delta_add_8(char *dest, char *source, int count)
+void MTCT a_delta_add_8(char* dest, char* source, int count)
 {
 #	ifndef __GNUC__
     _asm{
@@ -202,7 +202,7 @@ void MTCT a_delta_add_8(char *dest, char *source, int count)
 }
 
 //---------------------------------------------------------------------------
-void MTCT a_delta_add_16(short *dest, short *source, int count)
+void MTCT a_delta_add_16(short* dest, short* source, int count)
 {
 #	ifndef __GNUC__
     _asm{
@@ -240,19 +240,19 @@ void MTCT a_delta_add_16(short *dest, short *source, int count)
 }
 
 //---------------------------------------------------------------------------
-void MTCT a_delta_encode_8(char *buffer, int count)
+void MTCT a_delta_encode_8(char* buffer, int count)
 {
 //TODO
 }
 
 //---------------------------------------------------------------------------
-void MTCT a_delta_encode_16(short *buffer, int count)
+void MTCT a_delta_encode_16(short* buffer, int count)
 {
 //TODO
 }
 
 //---------------------------------------------------------------------------
-void MTCT a_delta_decode_8(char *buffer, int count)
+void MTCT a_delta_decode_8(char* buffer, int count)
 {
 #	ifndef __GNUC__
     _asm{
@@ -297,7 +297,7 @@ void MTCT a_delta_decode_8(char *buffer, int count)
 }
 
 //---------------------------------------------------------------------------
-void MTCT a_delta_decode_16(short *buffer, int count)
+void MTCT a_delta_decode_16(short* buffer, int count)
 {
 #	ifndef __GNUC__
     _asm{
@@ -342,7 +342,7 @@ void MTCT a_delta_decode_16(short *buffer, int count)
 }
 
 //---------------------------------------------------------------------------
-void MTCT a_deinterleave_8(char **dest, char *source, int channels, int count)
+void MTCT a_deinterleave_8(char** dest, char* source, int channels, int count)
 {
 #if 0 // FIXME: We need to port this to C; it's broken in GCC anyway -flibit
 #	ifndef __GNUC__
@@ -406,7 +406,7 @@ void MTCT a_deinterleave_8(char **dest, char *source, int channels, int count)
 }
 
 //---------------------------------------------------------------------------
-void MTCT a_deinterleave_16(short **dest, short *source, int channels, int count)
+void MTCT a_deinterleave_16(short** dest, short* source, int channels, int count)
 {
 #if 0 // FIXME: We need to port this to C; it's broken in GCC anyway -flibit
 #	ifndef __GNUC__
@@ -472,7 +472,7 @@ void MTCT a_deinterleave_16(short **dest, short *source, int channels, int count
 }
 
 //---------------------------------------------------------------------------
-void MTCT a_calcposition(int &posi, unsigned int &posd, int pitch, unsigned int pitchd, int count, bool reverse)
+void MTCT a_calcposition(int& posi, unsigned int& posd, int pitch, unsigned int pitchd, int count, bool reverse)
 {
 #if 0 // FIXME: We need to port this to C; it's broken in GCC anyway -flibit
 #	ifndef __GNUC__

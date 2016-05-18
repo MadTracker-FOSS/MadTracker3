@@ -23,20 +23,31 @@
 #include "MTTabControl.h"
 
 //---------------------------------------------------------------------------
-MTBitmap *db, *tb;        // Drag bitmaps
-MTControl *dc;            // Drag control
+MTBitmap* db, * tb;        // Drag bitmaps
+MTControl* dc;            // Drag control
 MTRect dcr;                    // Drag constrain recrangle
 struct DragContext
 {
     int bx, by, ox, oy;
-} *dctrl;                        // Drag context
+} * dctrl;                        // Drag context
 //---------------------------------------------------------------------------
 // MTControl
 //   MTScroller
 //---------------------------------------------------------------------------
-MTScroller::MTScroller(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTControl(MTC_SCROLLER, tag, p, l, t, w, h), pos(0), maxpos(1), incr(1), page(1), os(1.0), slide(false), bs(4),
-    minsize(4), f(1), carrow(-1), ctimer(0), speed(0)
+MTScroller::MTScroller(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTControl(MTC_SCROLLER, tag, p, l, t, w, h),
+    pos(0),
+    maxpos(1),
+    incr(1),
+    page(1),
+    os(1.0),
+    slide(false),
+    bs(4),
+    minsize(4),
+    f(1),
+    carrow(-1),
+    ctimer(0),
+    speed(0)
 {
     flags |= MTCF_ACCEPTINPUT | MTCF_TRANSPARENT;
     if (w < h)
@@ -47,7 +58,9 @@ MTScroller::MTScroller(int tag, MTWinControl *p, int l, int t, int w, int h):
             height = h;
         }
         else
-        { height = 128; }
+        {
+            height = 128;
+        }
         type = MTST_VBAR;
     }
     else
@@ -58,7 +71,9 @@ MTScroller::MTScroller(int tag, MTWinControl *p, int l, int t, int w, int h):
             width = w;
         }
         else
-        { width = 128; }
+        {
+            width = 128;
+        }
         type = MTST_HBAR;
     };
     gi->setcontrolname(this, "scroller");
@@ -68,10 +83,12 @@ MTScroller::MTScroller(int tag, MTWinControl *p, int l, int t, int w, int h):
 MTScroller::~MTScroller()
 {
     if (ctimer)
-    { gi->deltimer(this, ctimer); }
+    {
+        gi->deltimer(this, ctimer);
+    }
 }
 
-int MTScroller::loadfromstream(MTFile *f, int size, int flags)
+int MTScroller::loadfromstream(MTFile* f, int size, int flags)
 {
     int csize = MTControl::loadfromstream(f, size, flags);
 
@@ -79,7 +96,7 @@ int MTScroller::loadfromstream(MTFile *f, int size, int flags)
     return csize + 28;
 }
 
-int MTScroller::savetostream(MTFile *f, int flags)
+int MTScroller::savetostream(MTFile* f, int flags)
 {
     int csize = MTControl::savetostream(f, flags);
 
@@ -92,44 +109,58 @@ int MTScroller::savetostream(MTFile *f, int flags)
 int MTScroller::getnumproperties(int id)
 {
     if (id == -1)
-    { return ScrollerNP; }
+    {
+        return ScrollerNP;
+    }
     if (id < ControlNP)
-    { return MTControl::getnumproperties(id); }
+    {
+        return MTControl::getnumproperties(id);
+    }
     if (id == ControlNP)
-    { return 2; }
+    {
+        return 2;
+    }
     return 0;
 }
 
-bool MTScroller::getpropertytype(int id, char **name, int &flags)
+bool MTScroller::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[5] = {"Type", "Position", "Maximum", "Increment", "PageSize"};
+    static char* propname[5] = {"Type", "Position", "Maximum", "Increment", "PageSize"};
     static int propflags[5] = {MTP_LIST, MTP_INT, MTP_INT, MTP_INT, MTP_INT};
-    static char *subname[2] = {"Horizontal", "Vertical"};
+    static char* subname[2] = {"Horizontal", "Vertical"};
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getpropertytype(id, name, flags); }
+    {
+        return MTControl::getpropertytype(id, name, flags);
+    }
     if ((id >> 8) == ControlNP)
     {
         id &= 0xFF;
         if (id >= 2)
-        { return false; }
+        {
+            return false;
+        }
         *name = subname[id];
         flags = -1;
         return true;
     };
     if (id >= ScrollerNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id - ControlNP];
     flags = propflags[id - ControlNP];
     return true;
 }
 
-bool MTScroller::getproperty(int id, void *value)
+bool MTScroller::getproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getproperty(id, value); }
+    {
+        return MTControl::getproperty(id, value);
+    }
     switch (id - ControlNP)
     {
         case 0:
@@ -153,14 +184,18 @@ bool MTScroller::getproperty(int id, void *value)
     return true;
 }
 
-bool MTScroller::setproperty(int id, void *value)
+bool MTScroller::setproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::setproperty(id, value); }
+    {
+        return MTControl::setproperty(id, value);
+    }
     if (window)
-    { window->modified = true; }
+    {
+        window->modified = true;
+    }
     switch (id - ControlNP)
     {
         case 0:
@@ -206,25 +241,31 @@ void MTScroller::setbounds(int l, int t, int w, int h)
             type = MTST_HBAR;
         }
         else if (h > w)
-        { type = MTST_VBAR; }
+        {
+            type = MTST_VBAR;
+        }
     };
     if (type == MTST_HBAR)
     {
         skin->getcontrolsize(MTC_SCROLLER, 0, tmp, h);
     }
     else
-    { skin->getcontrolsize(MTC_SCROLLER, 1, w, tmp); }
+    {
+        skin->getcontrolsize(MTC_SCROLLER, 1, w, tmp);
+    }
     MTControl::setbounds(l, t, w, h);
 }
 
-void MTScroller::draw(MTRect &rect)
+void MTScroller::draw(MTRect& rect)
 {
     int x = left;
     int y = top;
-    MTBitmap *b;
+    MTBitmap* b;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     preparedraw(&b, x, y);
     skin->drawcontrol(this, rect, b, x, y);
     MTControl::draw(rect);
@@ -253,7 +294,9 @@ void MTScroller::setaction(int action)
     {
         factor = ((action > 2) ? guiprefs.scroll2 : guiprefs.scroll1) / speed;
         if (factor < 1)
-        { factor = 1; }
+        {
+            factor = 1;
+        }
     }
     else
     {
@@ -277,10 +320,12 @@ void MTScroller::updatemetrics()
         skin->getcontrolsize(MTC_SCROLLER, 2, minsize, tmp);
     };
     if (minsize < 4)
-    { minsize = 4; }
+    {
+        minsize = 4;
+    }
 }
 
-bool MTScroller::message(MTCMessage &msg)
+bool MTScroller::message(MTCMessage& msg)
 {
     int bw, bh;
     int p;
@@ -291,9 +336,13 @@ bool MTScroller::message(MTCMessage &msg)
         case MTCM_MOUSEDOWN:
             speed = 0;
             if (msg.buttons & DB_LEFT)
-            { speed |= 1; }
+            {
+                speed |= 1;
+            }
             if (msg.buttons & DB_RIGHT)
-            { speed |= 2; }
+            {
+                speed |= 2;
+            }
             if ((msg.x >= 0) && (msg.x < bw) && (msg.y >= 0) && (msg.y < bh))
             {
                 setaction(0);
@@ -315,7 +364,9 @@ bool MTScroller::message(MTCMessage &msg)
                 else if (msg.x < p + bs)
                 {
                     if (page >= maxpos)
-                    { return false; }
+                    {
+                        return false;
+                    }
                     slide = true;
                     slidepoint = msg.x;
                     slideorigin = pos;
@@ -343,7 +394,9 @@ bool MTScroller::message(MTCMessage &msg)
                 else if (msg.y < p + bs)
                 {
                     if (page >= maxpos)
-                    { return false; }
+                    {
+                        return false;
+                    }
                     slide = true;
                     slidepoint = msg.y;
                     slideorigin = pos;
@@ -365,20 +418,28 @@ bool MTScroller::message(MTCMessage &msg)
         case MTCM_MOUSEUP:
             speed = 0;
             if (msg.buttons & DB_LEFT)
-            { speed |= 1; }
+            {
+                speed |= 1;
+            }
             if (msg.buttons & DB_RIGHT)
-            { speed |= 2; }
+            {
+                speed |= 2;
+            }
             if (speed == 0)
             {
                 setaction(-1);
             }
             else
-            { setaction(carrow); }
+            {
+                setaction(carrow);
+            }
             slide = 0;
             break;
         case MTCM_TIMER:
             if ((timercount > 1) && (timercount < 6))
-            { break; }
+            {
+                break;
+            }
             switch (carrow)
             {
                 case 0:
@@ -408,11 +469,17 @@ void MTScroller::setposition(int p)
     int dy = 0;
 
     if (p > maxpos - page)
-    { p = maxpos - page; }
+    {
+        p = maxpos - page;
+    }
     if (p < 0)
-    { p = 0; }
+    {
+        p = 0;
+    }
     if (pos == p)
-    { return; }
+    {
+        return;
+    }
     if (parent)
     {
         if (type == MTST_HBAR)
@@ -420,12 +487,16 @@ void MTScroller::setposition(int p)
             dx = (int) ((pos - p) * os);
         }
         else
-        { dy = (int) ((pos - p) * os); }
+        {
+            dy = (int) ((pos - p) * os);
+        }
         pos = p;
         MTCMessage msg = {MTCM_TOUCHED, 0, this};
         parent->message(msg);
         if (flags & MTCF_SYSTEM)
-        { parent->offset(dx, dy); }
+        {
+            parent->offset(dx, dy);
+        }
     };
 }
 
@@ -433,9 +504,23 @@ void MTScroller::setposition(int p)
 // MTControl
 //   MTWinControl
 //---------------------------------------------------------------------------
-MTWinControl::MTWinControl(int id, int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTControl(id, tag, p, l, t, w, h), dsk(0), mb(0), ncontrols(0), controls(0), focused(0), hs(0), vs(0),
-    messageproc(0), oprgn(0), trrgn(0), modalparent(0), modalresult(MTDR_NULL), cmoving(false), frgn(0), notifycount(0)
+MTWinControl::MTWinControl(int id, int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTControl(id, tag, p, l, t, w, h),
+    dsk(0),
+    mb(0),
+    ncontrols(0),
+    controls(0),
+    focused(0),
+    hs(0),
+    vs(0),
+    messageproc(0),
+    oprgn(0),
+    trrgn(0),
+    modalparent(0),
+    modalresult(MTDR_NULL),
+    cmoving(false),
+    frgn(0),
+    notifycount(0)
 {
     flags |= MTCF_ACCEPTINPUT;
     if (parent)
@@ -443,15 +528,19 @@ MTWinControl::MTWinControl(int id, int tag, MTWinControl *p, int l, int t, int w
         direct = parent->direct;
     }
     else
-    { direct = false; }
+    {
+        direct = false;
+    }
     if ((w == 0) || (h == 0))
     {
         width = 160;
         height = 96;
     };
     if ((guiid != MTC_WINDOW) && (guiid != MTC_DESKTOP))
-    { flags |= MTCF_BORDER; }
-    controls = (MTControl **) si->memalloc(256 * 4, 0);
+    {
+        flags |= MTCF_BORDER;
+    }
+    controls = (MTControl**) si->memalloc(256 * 4, 0);
     if (p)
     {
         if (p->dsk)
@@ -460,17 +549,21 @@ MTWinControl::MTWinControl(int id, int tag, MTWinControl *p, int l, int t, int w
         }
         else if (p->guiid == MTC_DESKTOP)
         {
-            dsk = (MTDesktop *) p;
+            dsk = (MTDesktop*) p;
         }
         else
-        { dsk = 0; }
+        {
+            dsk = 0;
+        }
         messageproc = p->messageproc;
         if (p->mb)
         {
             mb = p->mb;
         }
         else
-        { direct = true; }
+        {
+            direct = true;
+        }
         box = p->box + left;
         boy = p->boy + top;
     }
@@ -491,20 +584,28 @@ MTWinControl::~MTWinControl()
 {
     MTCMessage msg = {MTCM_DESTROY, 0, this};
     if (messageproc)
-    { messageproc(this, msg); }
+    {
+        messageproc(this, msg);
+    }
     if ((window) && (window->wrapper))
-    { window->wrapper->onmessage(msg); }
+    {
+        window->wrapper->onmessage(msg);
+    }
     flags |= (MTCF_DONTDRAW | MTCF_DONTFLUSH);
     delcontrols(true);
     if ((!parent) && (mb))
-    { di->delbitmap(mb); }
+    {
+        di->delbitmap(mb);
+    }
     deletergn(oprgn);
     deletergn(trrgn);
     if (frgn)
-    { deletergn(frgn); }
+    {
+        deletergn(frgn);
+    }
 }
 
-int MTWinControl::loadfromstream(MTFile *f, int size, int flags)
+int MTWinControl::loadfromstream(MTFile* f, int size, int flags)
 {
     this->flags |= MTCF_DONTRESIZE;
     int csize = MTControl::loadfromstream(f, size, flags);
@@ -519,9 +620,11 @@ int MTWinControl::loadfromstream(MTFile *f, int size, int flags)
         ppos = psize + f->pos();
         f->read(&ptype, 4);
         f->seek(-4, MTF_CURRENT);
-        MTControl *nctrl = gi->newcontrol(ptype, 0, this, 0, 0, 128, 64, 0);
+        MTControl* nctrl = gi->newcontrol(ptype, 0, this, 0, 0, 128, 64, 0);
         if (nctrl)
-        { nctrl->loadfromstream(f, psize, flags); }
+        {
+            nctrl->loadfromstream(f, psize, flags);
+        }
         f->seek(ppos, MTF_BEGIN);
         csize += psize + 4;
     };
@@ -530,7 +633,7 @@ int MTWinControl::loadfromstream(MTFile *f, int size, int flags)
     return csize;
 }
 
-int MTWinControl::savetostream(MTFile *f, int flags)
+int MTWinControl::savetostream(MTFile* f, int flags)
 {
     int csize = MTControl::savetostream(f, flags);
     int x, l, o, nc;
@@ -539,14 +642,16 @@ int MTWinControl::savetostream(MTFile *f, int flags)
     for(x = 0; x < ncontrols; x++)
     {
         if (controls[x]->flags & MTCF_DONTSAVE)
-        { nc--; }
+        {
+            nc--;
+        }
     };
     f->write(&box, 8);
     f->write(&nc, 4);
     csize += 12;
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if (!(cctrl.flags & MTCF_DONTSAVE))
         {
             o = f->pos();
@@ -566,7 +671,7 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
     int x, n, ow, oh, cl, ct, cw, ch, pf, bflags, dflags;
     bool moved, resized;
     bool bdesign = design;
-    void *flushrgn, *drawrgn;
+    void* flushrgn, * drawrgn;
     MTRect or = {
         0, 0, 0, 0
     }; // "or" is a reserved keyword. I'm surprised that this even compiles. // UPDATE: Ah. It doesn't. I was compiling madtracker without GUI.
@@ -574,9 +679,13 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
 
     FENTER4("MTWinControl::setbounds(%d,%d,%d,%d)", l, t, w, h);
     if (w <= 0)
-    { w = width; }
+    {
+        w = width;
+    }
     if (h <= 0)
-    { h = height; }
+    {
+        h = height;
+    }
     checkbounds(l, t, w, h);
     bflags = flags;
     moved = ((l != left) || (t != top));
@@ -619,25 +728,33 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                 flags |= MTCF_DONTRESIZE;
                 if ((!design) && (align) && (parent) && ((parent->flags & MTCF_DONTRESIZE) == 0))
                 {
-                    MTControl &cctrl = *parent;
+                    MTControl& cctrl = *parent;
                     cl = cctrl.left;
                     ct = cctrl.top;
                     cw = cctrl.width;
                     ch = cctrl.height;
                     if (cctrl.align & 0x1)
-                    { cl += w - ow; }
+                    {
+                        cl += w - ow;
+                    }
                     if (cctrl.align & 0x2)
-                    { ct += h - oh; }
+                    {
+                        ct += h - oh;
+                    }
                     if (cctrl.align & 0x4)
-                    { ch += h - oh; }
+                    {
+                        ch += h - oh;
+                    }
                     if (cctrl.align & 0x8)
-                    { cw += w - ow; }
+                    {
+                        cw += w - ow;
+                    }
                     cctrl.setbounds(cl, ct, cw, ch);
                 };
                 design = false;
                 for(x = 0; x < ncontrols; x++)
                 {
-                    MTControl &cctrl = *controls[x];
+                    MTControl& cctrl = *controls[x];
                     if ((cctrl.align) && ((cctrl.flags & MTCF_DONTRESIZE) == 0))
                     {
                         cl = cctrl.left;
@@ -645,13 +762,21 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                         cw = cctrl.width;
                         ch = cctrl.height;
                         if (cctrl.align & 0x1)
-                        { cl += w - ow; }
+                        {
+                            cl += w - ow;
+                        }
                         if (cctrl.align & 0x2)
-                        { ct += h - oh; }
+                        {
+                            ct += h - oh;
+                        }
                         if (cctrl.align & 0x4)
-                        { ch += h - oh; }
+                        {
+                            ch += h - oh;
+                        }
                         if (cctrl.align & 0x8)
-                        { cw += w - ow; }
+                        {
+                            cw += w - ow;
+                        }
                         cctrl.setbounds(cl, ct, cw, ch);
                     };
                 };
@@ -682,7 +807,7 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
             msg.y = top;
             for(x = 0; x < ncontrols; x++)
             {
-                MTControl &cctrl = *controls[x];
+                MTControl& cctrl = *controls[x];
                 if (cctrl.flags & MTCF_NOTIFYPOS)
                 {
                     cctrl.message(msg);
@@ -736,13 +861,13 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                     dr.right += 2;
                     dr.bottom += 2;
                 };
-                void *cliprgn;                     // Update region
-                void *brdrgn;                      // Borders region
-                void *bltrgn;                      // Source client area being moved
-                void *cdrawrgn;                    // Area to be redrawn
-                void *corgn = recttorgn( or);       // Source client area
-                void *cdrgn = recttorgn(dr);       // Destination client area
-                void *drgn;                        // Destination area
+                void* cliprgn;                     // Update region
+                void* brdrgn;                      // Borders region
+                void* bltrgn;                      // Source client area being moved
+                void* cdrawrgn;                    // Area to be redrawn
+                void* corgn = recttorgn( or);       // Source client area
+                void* cdrgn = recttorgn(dr);       // Destination client area
+                void* drgn;                        // Destination area
                 cl = dr.left - or.left;
                 ct = dr.top - or.top;
                 cliprgn = getvisiblergn(false);
@@ -753,7 +878,9 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                 bltrgn = copyrgn(oprgn);
                 offsetrgn(bltrgn, left, top);
                 if (resized)
-                { updateregions(); }
+                {
+                    updateregions();
+                }
                 if ((cl) || (ct))
                 {                 // Blit
                     drgn = copyrgn(oprgn);
@@ -771,7 +898,9 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                             for(x = n - 1; x >= 0; x--)
                             {
                                 rgngetrect(bltrgn, x, &dr);
-                                parent->blt(dr.left + cl, dr.top + ct, dr.right - dr.left, dr.bottom - dr.top, dr.left, dr.top);
+                                parent->blt(
+                                    dr.left + cl, dr.top + ct, dr.right - dr.left, dr.bottom - dr.top, dr.left, dr.top
+                                );
                             };
                         }
                         else
@@ -779,7 +908,9 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                             for(x = 0; x < n; x++)
                             {
                                 rgngetrect(bltrgn, x, &dr);
-                                parent->blt(dr.left + cl, dr.top + ct, dr.right - dr.left, dr.bottom - dr.top, dr.left, dr.top);
+                                parent->blt(
+                                    dr.left + cl, dr.top + ct, dr.right - dr.left, dr.bottom - dr.top, dr.left, dr.top
+                                );
                             };
                         };
 /*						parent->cliprgn(cliprgn);
@@ -807,7 +938,9 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                 deletergn(cdrgn);
                 intersectrgn(cdrawrgn, cliprgn);
                 if (guiid == MTC_WINDOW)
-                { addrgn(cdrawrgn, drgn); }
+                {
+                    addrgn(cdrawrgn, drgn);
+                }
                 deletergn(drgn);
                 deletergn(cliprgn);
                 deletergn(brdrgn);
@@ -835,9 +968,9 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                 dr = or;
                 dr.right = ow;
                 dr.bottom = oh;
-                void *clrgn = getvisiblergn(false);
-                void *orgn = recttorgn( or);
-                void *drgn = recttorgn(dr);
+                void* clrgn = getvisiblergn(false);
+                void* orgn = recttorgn( or);
+                void* drgn = recttorgn(dr);
                 subtractrgn(orgn, drgn);
                 offsetrgn(clrgn, left, top);
                 offsetrgn(orgn, left, top);
@@ -848,35 +981,43 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                 deletergn(drgn);
             };
             getrect(or2, 0);
-            void *orgn = recttorgn(or2);
+            void* orgn = recttorgn(or2);
             addrgn(flushrgn, orgn);
             deletergn(orgn);
-            void *clrgn = getvisiblergn(false);
+            void* clrgn = getvisiblergn(false);
             cliprgn(clrgn);
             deletergn(clrgn);
             flags |= MTCF_DONTRESIZE;
             if ((!design) && (align) && (parent) && ((parent->flags & MTCF_DONTRESIZE) == 0))
             {
-                MTControl &cctrl = *parent;
+                MTControl& cctrl = *parent;
                 cl = cctrl.left;
                 ct = cctrl.top;
                 cw = cctrl.width;
                 ch = cctrl.height;
                 if (cctrl.align & 0x1)
-                { cl += w - ow; }
+                {
+                    cl += w - ow;
+                }
                 if (cctrl.align & 0x2)
-                { ct += h - oh; }
+                {
+                    ct += h - oh;
+                }
                 if (cctrl.align & 0x4)
-                { ch += h - oh; }
+                {
+                    ch += h - oh;
+                }
                 if (cctrl.align & 0x8)
-                { cw += w - ow; }
+                {
+                    cw += w - ow;
+                }
                 cctrl.setbounds(cl, ct, cw, ch);
             };
             flags |= MTCF_DONTDRAW;
             design = false;
             for(x = 0; x < ncontrols; x++)
             {
-                MTControl &cctrl = *controls[x];
+                MTControl& cctrl = *controls[x];
                 if ((cctrl.align) && ((cctrl.flags & MTCF_DONTRESIZE) == 0))
                 {
                     cl = cctrl.left;
@@ -890,13 +1031,21 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                     addrgn(flushrgn, clrgn);
                     deletergn(clrgn);
                     if (cctrl.align & 0x1)
-                    { cl += w - ow; }
+                    {
+                        cl += w - ow;
+                    }
                     if (cctrl.align & 0x2)
-                    { ct += h - oh; }
+                    {
+                        ct += h - oh;
+                    }
                     if (cctrl.align & 0x4)
-                    { ch += h - oh; }
+                    {
+                        ch += h - oh;
+                    }
                     if (cctrl.align & 0x8)
-                    { cw += w - ow; }
+                    {
+                        cw += w - ow;
+                    }
                     cctrl.setbounds(cl, ct, cw, ch);
                     cctrl.getrect( or , 0);
                     clrgn = recttorgn( or);
@@ -952,7 +1101,9 @@ if (guiid==MTC_WINDOW){
     MTCMessage msg = {MTCM_BOUNDS, 0, this, 0, 0, width, height};
     message(msg);
     if (dsk)
-    { dsk->flags = (dflags | MTCF_DONTFLUSH); }
+    {
+        dsk->flags = (dflags | MTCF_DONTFLUSH);
+    }
     if (parent)
     {
         msg.x = left;
@@ -962,7 +1113,9 @@ if (guiid==MTC_WINDOW){
         parent->flags &= ~MTCF_DONTDRAW;
     };
     if (dsk)
-    { dsk->flags = dflags; }
+    {
+        dsk->flags = dflags;
+    }
     if (notifycount > 0)
     {
         msg.msg = MTCM_POSCHANGED;
@@ -970,7 +1123,7 @@ if (guiid==MTC_WINDOW){
         msg.y = top;
         for(x = 0; x < ncontrols; x++)
         {
-            MTControl &cctrl = *controls[x];
+            MTControl& cctrl = *controls[x];
             if (cctrl.flags & MTCF_NOTIFYPOS)
             {
                 cctrl.message(msg);
@@ -986,7 +1139,7 @@ if (guiid==MTC_WINDOW){
     flags = bflags & (~(MTCF_DONTDRAW | MTCF_DONTFLUSH));
 }
 
-bool MTWinControl::checkbounds(int &l, int &t, int &w, int &h)
+bool MTWinControl::checkbounds(int& l, int& t, int& w, int& h)
 {
     int x, cl, ct, cw, ch, ow, oh;
     bool ok = true;
@@ -995,7 +1148,7 @@ bool MTWinControl::checkbounds(int &l, int &t, int &w, int &h)
     oh = height;
     for(x = ncontrols - 1; x >= 0; x--)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if ((cctrl.align) && ((cctrl.flags & MTCF_DONTRESIZE) == 0))
         {
             cl = cctrl.left;
@@ -1003,23 +1156,39 @@ bool MTWinControl::checkbounds(int &l, int &t, int &w, int &h)
             cw = cctrl.width;
             ch = cctrl.height;
             if (cctrl.align & 0x1)
-            { cl += w - ow; }
+            {
+                cl += w - ow;
+            }
             if (cctrl.align & 0x2)
-            { ct += h - oh; }
+            {
+                ct += h - oh;
+            }
             if (cctrl.align & 0x4)
-            { ch += h - oh; }
+            {
+                ch += h - oh;
+            }
             if (cctrl.align & 0x8)
-            { cw += w - ow; }
+            {
+                cw += w - ow;
+            }
             if ((!cctrl.checkbounds(cl, ct, cw, ch)) && (cctrl.align >= MTCA_LEFT))
             {
                 if (cctrl.align & 0x1)
-                { w = cl - cctrl.left + ow; }
+                {
+                    w = cl - cctrl.left + ow;
+                }
                 if (cctrl.align & 0x2)
-                { h = ct - cctrl.top + oh; }
+                {
+                    h = ct - cctrl.top + oh;
+                }
                 if (cctrl.align & 0x4)
-                { h = ch - cctrl.height + oh; }
+                {
+                    h = ch - cctrl.height + oh;
+                }
                 if (cctrl.align & 0x8)
-                { w = cw - cctrl.width + ow; }
+                {
+                    w = cw - cctrl.width + ow;
+                }
                 ok = false;
             };
         };
@@ -1028,7 +1197,7 @@ bool MTWinControl::checkbounds(int &l, int &t, int &w, int &h)
 }
 
 
-void MTWinControl::getrect(MTRect &r, int client)
+void MTWinControl::getrect(MTRect& r, int client)
 {
     r.left = left;
     r.top = top;
@@ -1043,18 +1212,20 @@ void MTWinControl::getrect(MTRect &r, int client)
     };
 }
 
-void *MTWinControl::getemptyrgn()
+void* MTWinControl::getemptyrgn()
 {
     int x;
     MTRect r = {0, 0, width, height};
-    void *rgn, *op;
+    void* rgn, * op;
 
     rgn = recttorgn(r);
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if (cctrl.flags & MTCF_HIDDEN)
-        { continue; }
+        {
+            continue;
+        }
         if (cctrl.guiid == MTC_WINDOW)
         {
             r.left = cctrl.left;
@@ -1068,7 +1239,9 @@ void *MTWinControl::getemptyrgn()
         else if (cctrl.guiid & 2)
         {
             if (cctrl.flags & MTCF_TRANSPARENT)
-            { continue; }
+            {
+                continue;
+            }
             cctrl.getrect(r, 0);
             op = recttorgn(r);
             subtractrgn(rgn, op);
@@ -1078,10 +1251,10 @@ void *MTWinControl::getemptyrgn()
     return rgn;
 }
 
-void *MTWinControl::getvisiblergn(bool client, MTControl *control)
+void* MTWinControl::getvisiblergn(bool client, MTControl* control)
 {
     MTRect cr, r;
-    void *rgn, *op;
+    void* rgn, * op;
     int x;
 
     if (control)
@@ -1092,15 +1265,21 @@ void *MTWinControl::getvisiblergn(bool client, MTControl *control)
         rgn = recttorgn(cr);
         for(x = 0; x < ncontrols; x++)
         {
-            MTControl &pctrl = *controls[x];
+            MTControl& pctrl = *controls[x];
             if (&pctrl == control)
-            { break; }
+            {
+                break;
+            }
             if (pctrl.flags & MTCF_HIDDEN)
-            { continue; }
+            {
+                continue;
+            }
             if ((pctrl.guiid != MTC_WINDOW) && (pctrl.flags & MTCF_TRANSPARENT))
             {
                 if ((client) || (guiid != MTC_WINDOW))
-                { continue; }
+                {
+                    continue;
+                }
             };
             pctrl.getrect(r, client);
             op = recttorgn(r);
@@ -1118,15 +1297,21 @@ void *MTWinControl::getvisiblergn(bool client, MTControl *control)
         rgn = recttorgn(cr);
         for(x = 0; x < parent->ncontrols; x++)
         {
-            MTControl &pctrl = *parent->controls[x];
+            MTControl& pctrl = *parent->controls[x];
             if (&pctrl == this)
-            { break; }
+            {
+                break;
+            }
             if (pctrl.flags & MTCF_HIDDEN)
-            { continue; }
+            {
+                continue;
+            }
             if ((pctrl.guiid != MTC_WINDOW) && (pctrl.flags & MTCF_TRANSPARENT))
             {
                 if ((client) || (guiid != MTC_WINDOW))
-                { continue; }
+                {
+                    continue;
+                }
             };
             if (pctrl.guiid & 2)
             {
@@ -1152,17 +1337,17 @@ void *MTWinControl::getvisiblergn(bool client, MTControl *control)
     return rgn;
 }
 
-void *MTWinControl::getfixedrgn()
+void* MTWinControl::getfixedrgn()
 {
     int x;
-    void *rgn, *op;
+    void* rgn, * op;
     bool fixedbkg = true;
     MTRect r = {0, 0, 0, 0};
 
     rgn = recttorgn(r);
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if (cctrl.align == MTCA_TOPLEFT)
         {
             cctrl.getrect(r, 0);
@@ -1187,7 +1372,7 @@ void MTWinControl::switchflags(int f, bool set)
 
     if ((focused) && (((f & MTCF_FOCUSED) && (!set)) || ((f & MTCF_HIDDEN) && (set))))
     {
-        MTControl *old = focused;
+        MTControl* old = focused;
         focused = 0;
         old->switchflags(MTCF_FOCUSED, false);
     };
@@ -1197,12 +1382,15 @@ void MTWinControl::switchflags(int f, bool set)
         {
             if (guiid == MTC_TABSHEET)
             {
-                ((MTTabControl *) parent)->setpage((MTWindow *) this);
+                ((MTTabControl*) parent)->setpage((MTWindow*) this);
             };
         }
         else
         {
-            for(x = 0; x < ncontrols; x++) controls[x]->switchflags(MTCF_SELECTED, false);
+            for(x = 0; x < ncontrols; x++)
+            {
+                controls[x]->switchflags(MTCF_SELECTED, false);
+            }
         };
     };
     MTControl::switchflags(f, set);
@@ -1215,7 +1403,9 @@ void MTWinControl::switchflags(int f, bool set)
         else
         {
             if (notifycount <= 0)
-            { return; }
+            {
+                return;
+            }
             if (--notifycount)
             {
                 flags |= MTCF_NOTIFYPOS;
@@ -1224,17 +1414,19 @@ void MTWinControl::switchflags(int f, bool set)
     };
 }
 
-void MTWinControl::draw(MTRect &rect)
+void MTWinControl::draw(MTRect& rect)
 {
     int x;
     int bflags;
     bool wasmodal = false;
-    void *vis, *op;
+    void* vis, * op;
     MTRect cr = {0, 0, width, height};
     MTRect cr2;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     if (flags & MTCF_BORDER)
     {
         cr.left -= 2;
@@ -1245,7 +1437,9 @@ void MTWinControl::draw(MTRect &rect)
     if (&rect)
     {
         if (!cliprect(cr, rect))
-        { return; }
+        {
+            return;
+        }
     };
     ENTER("MTWinControl::draw");
     bflags = flags;
@@ -1259,9 +1453,11 @@ void MTWinControl::draw(MTRect &rect)
 // Draw visible child controls
     for(x = ncontrols - 1; x >= 0; x--)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if (cctrl.flags & MTCF_CANTDRAW)
-        { continue; }
+        {
+            continue;
+        }
 // If a child control is modal, make the control look darker
         if ((!wasmodal) && (!design))
         {
@@ -1274,7 +1470,9 @@ void MTWinControl::draw(MTRect &rect)
         };
         cctrl.getrect(cr2, 0);
         if (!cliprect(cr2, cr))
-        { continue; }
+        {
+            continue;
+        }
         op = getvisiblergn(true, &cctrl);
         intersectrgn(op, vis);
         if (rectinrgn(cr2, op))
@@ -1291,7 +1489,7 @@ void MTWinControl::draw(MTRect &rect)
     {
         int x = -2;
         int y = -2;
-        MTBitmap *b;
+        MTBitmap* b;
         preparedraw(&b, x, y);
         skin->drawborder(this, rect, b, x, y);
     };
@@ -1302,10 +1500,10 @@ void MTWinControl::draw(MTRect &rect)
     LEAVE();
 }
 
-bool MTWinControl::message(MTCMessage &msg)
+bool MTWinControl::message(MTCMessage& msg)
 {
     int x, y, bflags;
-    void *cl, *op;
+    void* cl, * op;
     signed char cmodal = 0, modal = 0;
     bool candraw, ok;
     MTRect cr = {0, 0, width, height};
@@ -1329,12 +1527,14 @@ bool MTWinControl::message(MTCMessage &msg)
             return true;
         };
     };
-    MTControl &cctrl = *msg.ctrl;
+    MTControl& cctrl = *msg.ctrl;
     if (msg.msg & MTCM_CHANGE)
     {
         if ((design) && (guiid == MTC_WINDOW))
-        { ((MTWindow *) this)->modified = true; }
-        MTWinControl *check = this;
+        {
+            ((MTWindow*) this)->modified = true;
+        }
+        MTWinControl* check = this;
         while(check)
         {
             if (check->flags & MTCF_CANTDRAW)
@@ -1352,14 +1552,18 @@ bool MTWinControl::message(MTCMessage &msg)
         if (&cctrl == this)
         {
             if (msg.dr.right)
-            { cr = msg.dr; }
+            {
+                cr = msg.dr;
+            }
             draw(cr);
         }
         else if (!(cctrl.flags & MTCF_DONTDRAW))
         {
-            MTDesktop *p = (MTDesktop *) this;
+            MTDesktop* p = (MTDesktop*) this;
             if (p->dsk)
-            { p = p->dsk; }
+            {
+                p = p->dsk;
+            }
             if (msg.dr.right)
             {
                 cr.left = msg.dr.left + cctrl.left;
@@ -1396,10 +1600,14 @@ bool MTWinControl::message(MTCMessage &msg)
                         cctrl.draw(msg.dr);
                     }
                     else
-                    { cctrl.draw(NORECT); }
+                    {
+                        cctrl.draw(NORECT);
+                    }
                     p->drawover(this, cr);
                     if (guiid == MTC_WINDOW)
-                    { p->flush(cr); }
+                    {
+                        p->flush(cr);
+                    }
                 };
                 unclip();
                 cr.left -= box;
@@ -1421,7 +1629,9 @@ bool MTWinControl::message(MTCMessage &msg)
     {
         candraw = !(flags & MTCF_CANTDRAW);
         if (dsk)
-        { candraw &= !(dsk->flags & MTCF_CANTDRAW); }
+        {
+            candraw &= !(dsk->flags & MTCF_CANTDRAW);
+        }
         if ((&cctrl == this) && (flags & MTCF_BORDER))
         {
             cr.left -= 2;
@@ -1440,7 +1650,9 @@ bool MTWinControl::message(MTCMessage &msg)
     {
         case MTCM_BOUNDS:
             if ((design) && (guiid == MTC_WINDOW))
-            { ((MTWindow *) this)->modified = true; }
+            {
+                ((MTWindow*) this)->modified = true;
+            }
 /*
 		if (candraw){
 			cctrl.draw(cr);
@@ -1455,14 +1667,18 @@ bool MTWinControl::message(MTCMessage &msg)
                 msg.result = flush(cctrl.left + msg.x, cctrl.top + msg.y, msg.w, msg.h);
             }
             else
-            { msg.result = flush(cctrl.left, cctrl.top, cctrl.width, cctrl.height); }
+            {
+                msg.result = flush(cctrl.left, cctrl.top, cctrl.width, cctrl.height);
+            }
             break;
         case MTCM_MOUSEDOWN:
             for(x = 0; x < ncontrols; x++)
             {
-                MTControl &cctrl = *controls[x];
+                MTControl& cctrl = *controls[x];
                 if (cctrl.flags & MTCF_CANTTOUCH)
-                { continue; }
+                {
+                    continue;
+                }
                 if (!design)
                 {
                     cmodal = (cctrl.flags >> 24);
@@ -1471,9 +1687,13 @@ bool MTWinControl::message(MTCMessage &msg)
                         modal = cmodal;
                     }
                     else if ((modal & 4) && (cmodal < modal))
-                    { continue; }
+                    {
+                        continue;
+                    }
                     if ((cmodal > 1) && (cmodal < 8) && (cmodal < modal))
-                    { continue; }
+                    {
+                        continue;
+                    }
                 };
                 cctrl.getrect(r, -1);
                 if ((msg.x >= r.left) && (msg.x < r.right) && (msg.y >= r.top) && (msg.y < r.bottom))
@@ -1505,7 +1725,7 @@ bool MTWinControl::message(MTCMessage &msg)
                         {
                             if ((cctrl.guiid == MTC_BUTTON) && (guiid == MTC_TABCONTROL))
                             {
-                                ((MTTabControl *) this)->setpageid(cctrl.tag);
+                                ((MTTabControl*) this)->setpageid(cctrl.tag);
                             };
                             continue;
                         };
@@ -1540,7 +1760,9 @@ bool MTWinControl::message(MTCMessage &msg)
                             };
                             LEAVE();
                             if (cctrl.flags & MTCF_DONTSAVE)
-                            { return false; }
+                            {
+                                return false;
+                            }
                             return false;
                         };
                     };
@@ -1575,17 +1797,21 @@ bool MTWinControl::message(MTCMessage &msg)
                     else if (((flags & MTCF_SELECTED) == 0) || (guiid == MTC_DESKTOP))
                     {
                         if (parent)
-                        { parent->switchflags(MTCF_SELECTED, false); }
+                        {
+                            parent->switchflags(MTCF_SELECTED, false);
+                        }
                         switchflags(MTCF_SELECTED, false);
                         switchflags(MTCF_SELECTED, true);
                     };
                 };
                 if (focused)
                 {
-                    MTControl *old = focused;
+                    MTControl* old = focused;
                     focused = 0;
                     if (old)
-                    { old->switchflags(MTCF_FOCUSED, false); }
+                    {
+                        old->switchflags(MTCF_FOCUSED, false);
+                    }
                 };
                 switchflags(MTCF_FOCUSED, true);
                 designmessage(msg);
@@ -1606,10 +1832,12 @@ bool MTWinControl::message(MTCMessage &msg)
                 };
                 if (focused)
                 {
-                    MTControl *old = focused;
+                    MTControl* old = focused;
                     focused = 0;
                     if (old)
-                    { old->switchflags(MTCF_FOCUSED, false); }
+                    {
+                        old->switchflags(MTCF_FOCUSED, false);
+                    }
                 };
                 switchflags(MTCF_FOCUSED, true);
             };
@@ -1623,18 +1851,24 @@ bool MTWinControl::message(MTCMessage &msg)
             };
             for(x = 0; x < ncontrols; x++)
             {
-                MTControl &cctrl = *controls[x];
+                MTControl& cctrl = *controls[x];
                 if (cctrl.flags & MTCF_CANTTOUCH)
-                { continue; }
+                {
+                    continue;
+                }
                 cctrl.getrect(r, -1);
                 if ((msg.x >= r.left) && (msg.x < r.right) && (msg.y >= r.top) && (msg.y < r.bottom))
                 {
                     if (((cctrl.guiid & 0xF) == MTC_CONTROL) && (overctrl != &cctrl))
                     {
                         if ((design) && (cctrl.flags & MTCF_DONTSAVE) && (cctrl.guiid != MTC_MENUITEM))
-                        { continue; }
+                        {
+                            continue;
+                        }
                         if (overctrl)
-                        { overctrl->switchflags(MTCF_OVER, false); }
+                        {
+                            overctrl->switchflags(MTCF_OVER, false);
+                        }
                         cctrl.switchflags(MTCF_OVER, true);
                         overctrl = &cctrl;
                     };
@@ -1643,19 +1877,23 @@ bool MTWinControl::message(MTCMessage &msg)
             };
             if ((focused) && (msg.buttons & (DB_LEFT | DB_RIGHT | DB_MIDDLE)))
             {
-                MTControl &cctrl = *focused;
+                MTControl& cctrl = *focused;
                 msg.x -= cctrl.left;
                 msg.y -= cctrl.top;
                 LEAVE();
                 if ((design) && (cctrl.designmessage(msg)))
-                { return true; }
+                {
+                    return true;
+                }
                 return cctrl.message(msg);
             };
             for(x = 0; x < ncontrols; x++)
             {
-                MTControl &cctrl = *controls[x];
+                MTControl& cctrl = *controls[x];
                 if (cctrl.flags & MTCF_CANTTOUCH)
-                { continue; }
+                {
+                    continue;
+                }
                 cctrl.getrect(r, -1);
                 if ((msg.x >= r.left) && (msg.x < r.right) && (msg.y >= r.top) && (msg.y < r.bottom))
                 {
@@ -1668,7 +1906,9 @@ bool MTWinControl::message(MTCMessage &msg)
             if (overctrl != this)
             {
                 if (overctrl)
-                { overctrl->switchflags(MTCF_OVER, false); }
+                {
+                    overctrl->switchflags(MTCF_OVER, false);
+                }
                 switchflags(MTCF_OVER, true);
                 overctrl = this;
             };
@@ -1701,11 +1941,13 @@ bool MTWinControl::message(MTCMessage &msg)
             clk.result = 0;
             if (focused)
             {
-                MTControl &cctrl = *focused;
+                MTControl& cctrl = *focused;
                 bool clicked = false;
                 cctrl.getrect(r, -1);
                 if ((msg.x >= r.left) && (msg.x < r.right) && (msg.y >= r.top) && (msg.y < r.bottom))
-                { clicked = true; }
+                {
+                    clicked = true;
+                }
                 MTCMessage msg2 = msg;
                 msg2.x -= cctrl.left;
                 msg2.y -= cctrl.top;
@@ -1715,9 +1957,13 @@ bool MTWinControl::message(MTCMessage &msg)
                 };
                 LEAVE();
                 if ((design) && (cctrl.guiid != MTC_MENUITEM) && (cctrl.designmessage(msg)))
-                { return true; }
+                {
+                    return true;
+                }
                 if (cctrl.message(msg2))
-                { return true; }
+                {
+                    return true;
+                }
                 if (clicked)
                 {
                     clk.ctrl = &cctrl;
@@ -1746,9 +1992,11 @@ bool MTWinControl::message(MTCMessage &msg)
         case MTCM_MOUSEWHEEL:
             for(x = 0; x < ncontrols; x++)
             {
-                MTControl &cctrl = *controls[x];
+                MTControl& cctrl = *controls[x];
                 if (cctrl.flags & MTCF_CANTTOUCH)
-                { continue; }
+                {
+                    continue;
+                }
                 if (!design)
                 {
                     cmodal = (cctrl.flags >> 24);
@@ -1757,9 +2005,13 @@ bool MTWinControl::message(MTCMessage &msg)
                         modal = cmodal;
                     }
                     else if ((modal & 4) && (cmodal < modal))
-                    { continue; }
+                    {
+                        continue;
+                    }
                     if ((cmodal > 1) && (cmodal < 8) && (cmodal < modal))
-                    { continue; }
+                    {
+                        continue;
+                    }
                 };
                 if (cctrl.guiid & 2)
                 {
@@ -1792,7 +2044,7 @@ bool MTWinControl::message(MTCMessage &msg)
         case MTCM_NOTIFY:
             for(x = 0; x < ncontrols; x++)
             {
-                MTControl &cctrl = *controls[x];
+                MTControl& cctrl = *controls[x];
                 if (cctrl.guiid & 2)
                 {
                     y = cctrl.flags;
@@ -1812,10 +2064,12 @@ bool MTWinControl::message(MTCMessage &msg)
             break;
         case MTCM_POSCHANGED:
             if (notifycount == 0)
-            { break; }
+            {
+                break;
+            }
             for(x = 0; x < ncontrols; x++)
             {
-                MTControl &cctrl = *controls[x];
+                MTControl& cctrl = *controls[x];
                 if (cctrl.flags & MTCF_NOTIFYPOS)
                 {
                     cctrl.message(msg);
@@ -1837,12 +2091,14 @@ bool MTWinControl::message(MTCMessage &msg)
             };
     };
     if ((msg.msg >= MTCM_BOUNDS) && (msg.msg <= MTCM_FLUSH))
-    { unclip(); }
+    {
+        unclip();
+    }
     LEAVE();
     return MTControl::message(msg);
 }
 
-void MTWinControl::preparedraw(MTBitmap **b, int &ox, int &oy)
+void MTWinControl::preparedraw(MTBitmap** b, int& ox, int& oy)
 {
     if (mb)
     {
@@ -1859,7 +2115,7 @@ void MTWinControl::preparedraw(MTBitmap **b, int &ox, int &oy)
     oy += boy;
 }
 
-void MTWinControl::addcontrol(MTControl *control)
+void MTWinControl::addcontrol(MTControl* control)
 {
     int nacontrols = ((ncontrols + 15) >> 4) << 4;
     int nacontrols2 = ((ncontrols + 16) >> 4) << 4;
@@ -1874,26 +2130,34 @@ void MTWinControl::addcontrol(MTControl *control)
     {
         if (guiid == MTC_WINDOW)
         {
-            ((MTWindow *) this)->modified = true;
+            ((MTWindow*) this)->modified = true;
         }
         else if (window)
-        { window->modified = true; }
+        {
+            window->modified = true;
+        }
     };
     if (nacontrols < 32)
-    { nacontrols = 32; }
+    {
+        nacontrols = 32;
+    }
     if (nacontrols2 < 32)
-    { nacontrols2 = 32; }
+    {
+        nacontrols2 = 32;
+    }
     if (!controls)
-    { nacontrols = 0; }
+    {
+        nacontrols = 0;
+    }
     if (nacontrols2 > nacontrols)
     {
         if (controls)
         {
-            controls = (MTControl **) si->memrealloc(controls, nacontrols2 * 4);
+            controls = (MTControl**) si->memrealloc(controls, nacontrols2 * 4);
         }
         else
         {
-            controls = (MTControl **) si->memalloc(nacontrols2 * 4, 0);
+            controls = (MTControl**) si->memalloc(nacontrols2 * 4, 0);
         }
     };
     if (guiid == MTC_DESKTOP)
@@ -1901,27 +2165,33 @@ void MTWinControl::addcontrol(MTControl *control)
         cmodal = (control->flags >> 24);
         for(x = ncontrols; x > 0; x--)
         {
-            MTWinControl &cw = *(MTWinControl *) controls[x - 1];
+            MTWinControl& cw = *(MTWinControl*) controls[x - 1];
             if ((signed char) (cw.flags >> 24) > cmodal)
-            { break; }
+            {
+                break;
+            }
             controls[x] = &cw;
         };
         if (x < 0)
-        { x = 0; }
+        {
+            x = 0;
+        }
         controls[x] = control;
     }
     else
-    { controls[ncontrols] = control; }
+    {
+        controls[ncontrols] = control;
+    }
     if (control->guiid & 2)
     {
-        MTWinControl &cw = *(MTWinControl *) control;
+        MTWinControl& cw = *(MTWinControl*) control;
         cw.box = box + cw.left;
         cw.boy = boy + cw.top;
     };
     ncontrols++;
 }
 
-void MTWinControl::delcontrol(MTControl *control)
+void MTWinControl::delcontrol(MTControl* control)
 {
     int nacontrols = ((ncontrols + 15) >> 4) << 4;
     int nacontrols2 = ((ncontrols + 14) >> 4) << 4;
@@ -1942,9 +2212,13 @@ void MTWinControl::delcontrol(MTControl *control)
     msg.dr.bottom -= control->top;
     message(msg);
     if (nacontrols < 256)
-    { nacontrols = 256; }
+    {
+        nacontrols = 256;
+    }
     if (nacontrols2 < 256)
-    { nacontrols2 = 256; }
+    {
+        nacontrols2 = 256;
+    }
     if (focused == control)
     {
         f = true;
@@ -1963,7 +2237,7 @@ void MTWinControl::delcontrol(MTControl *control)
             {
                 if (nacontrols2)
                 {
-                    controls = (MTControl **) si->memrealloc(controls, nacontrols2 * 4);
+                    controls = (MTControl**) si->memrealloc(controls, nacontrols2 * 4);
                 }
                 else
                 {
@@ -1993,7 +2267,10 @@ void MTWinControl::delcontrols(bool del)
 {
     if (del)
     {
-        while(ncontrols > 0) gi->delcontrol(controls[0]);
+        while(ncontrols > 0)
+        {
+            gi->delcontrol(controls[0]);
+        }
     };
     si->memfree(controls);
     controls = 0;
@@ -2007,34 +2284,40 @@ int MTWinControl::getnumcontrols()
     n = 0;
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if ((cctrl.flags & MTCF_DONTSAVE) == 0)
         {
             if (cctrl.guiid & 2)
-            { n += ((MTWinControl *) controls[x])->getnumcontrols(); }
+            {
+                n += ((MTWinControl*) controls[x])->getnumcontrols();
+            }
             n++;
         };
     };
     return n;
 }
 
-MTControl *MTWinControl::getcontrol(int id)
+MTControl* MTWinControl::getcontrol(int id)
 {
     int x, n, cn;
 
     n = 0;
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if ((cctrl.flags & MTCF_DONTSAVE) == 0)
         {
             if (id == n++)
-            { return &cctrl; }
+            {
+                return &cctrl;
+            }
             if (cctrl.guiid & 2)
             {
-                cn = ((MTWinControl *) &cctrl)->getnumcontrols();
+                cn = ((MTWinControl*) &cctrl)->getnumcontrols();
                 if (id < n + cn)
-                { return ((MTWinControl *) &cctrl)->getcontrol(id - n); }
+                {
+                    return ((MTWinControl*) &cctrl)->getcontrol(id - n);
+                }
                 n += cn;
             };
         };
@@ -2042,26 +2325,32 @@ MTControl *MTWinControl::getcontrol(int id)
     return 0;
 }
 
-int MTWinControl::getcontrolid(MTControl *ctrl)
+int MTWinControl::getcontrolid(MTControl* ctrl)
 {
     int x, id, cn, n;
 
     id = 0;
     if (ctrl->flags & MTCF_DONTSAVE)
-    { return -1; }
+    {
+        return -1;
+    }
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if (ctrl == &cctrl)
-        { return id; }
+        {
+            return id;
+        }
         if ((cctrl.flags & MTCF_DONTSAVE) == 0)
         {
             if (cctrl.guiid & 2)
             {
-                cn = ((MTWinControl *) &cctrl)->getnumcontrols();
-                n = ((MTWinControl *) &cctrl)->getcontrolid(ctrl);
+                cn = ((MTWinControl*) &cctrl)->getnumcontrols();
+                n = ((MTWinControl*) &cctrl)->getcontrolid(ctrl);
                 if (n >= 0)
-                { return id + n + 1; }
+                {
+                    return id + n + 1;
+                }
                 id += cn;
             };
             id++;
@@ -2070,44 +2359,50 @@ int MTWinControl::getcontrolid(MTControl *ctrl)
     return -1;
 }
 
-MTControl *MTWinControl::getcontrolfromuid(int uid)
+MTControl* MTWinControl::getcontrolfromuid(int uid)
 {
     int x;
-    MTControl *res;
+    MTControl* res;
 
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
 //		if (cctrl.flags & MTCF_DONTSAVE) continue;
         if (cctrl.uid == uid)
-        { return &cctrl; }
+        {
+            return &cctrl;
+        }
         if (cctrl.guiid & 2)
         {
-            res = ((MTWinControl *) &cctrl)->getcontrolfromuid(uid);
+            res = ((MTWinControl*) &cctrl)->getcontrolfromuid(uid);
             if (res)
-            { return res; }
+            {
+                return res;
+            }
         };
     };
     return 0;
 }
 
-MTControl *MTWinControl::getcontrolfrompoint(MTPoint &p)
+MTControl* MTWinControl::getcontrolfrompoint(MTPoint& p)
 {
     int x;
     MTRect r;
 
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if (cctrl.flags & (MTCF_DONTSAVE | MTCF_HIDDEN))
-        { continue; }
+        {
+            continue;
+        }
         cctrl.getrect(r, 0);
         if (pointinrect(p, r))
         {
             if (cctrl.guiid & 2)
             {
                 MTPoint p2 = {p.x - cctrl.left, p.y - cctrl.top};
-                return ((MTWinControl *) &cctrl)->getcontrolfrompoint(p2);
+                return ((MTWinControl*) &cctrl)->getcontrolfrompoint(p2);
             };
             return &cctrl;
         };
@@ -2115,31 +2410,39 @@ MTControl *MTWinControl::getcontrolfrompoint(MTPoint &p)
     return this;
 }
 
-void MTWinControl::nextcontrol(MTControl *start, bool reverse)
+void MTWinControl::nextcontrol(MTControl* start, bool reverse)
 {
     int x, sx, n;
-    MTControl *cctrl;
-    MTControl *old;
-    MTWinControl *p;
+    MTControl* cctrl;
+    MTControl* old;
+    MTWinControl* p;
     bool ok = false;
 
     n = getnumcontrols();
     if (!n)
-    { return; }
+    {
+        return;
+    }
     if (reverse)
     {
         x = n - 1;
     }
     else
-    { x = 0; }
+    {
+        x = 0;
+    }
     if (!start)
-    { ok = true; }
+    {
+        ok = true;
+    }
     sx = 0;
     while(true)
     {
         cctrl = getcontrol(x);
         if ((ok) && (cctrl->flags & MTCF_ACCEPTINPUT) && !(cctrl->flags & MTCF_HIDDEN) && !(cctrl->parent->flags & MTCF_HIDDEN))
-        { break; }
+        {
+            break;
+        }
         if (cctrl == start)
         {
             if (ok)
@@ -2158,21 +2461,29 @@ void MTWinControl::nextcontrol(MTControl *start, bool reverse)
         if (reverse)
         {
             if (x-- == 0)
-            { x = n - 1; }
+            {
+                x = n - 1;
+            }
         }
         else
         {
             if (++x == n)
-            { x = 0; }
+            {
+                x = 0;
+            }
         };
     };
     if (!cctrl)
-    { return; }
+    {
+        return;
+    }
     p = cctrl->parent;
     old = p->focused;
     p->focused = cctrl;
     if (old)
-    { old->switchflags(MTCF_FOCUSED, false); }
+    {
+        old->switchflags(MTCF_FOCUSED, false);
+    }
     cctrl->switchflags(MTCF_FOCUSED, true);
     while((p != parent) && (p->parent))
     {
@@ -2181,7 +2492,9 @@ void MTWinControl::nextcontrol(MTControl *start, bool reverse)
         {
             p->parent->focused = p;
             if (old)
-            { old->switchflags(MTCF_FOCUSED, false); }
+            {
+                old->switchflags(MTCF_FOCUSED, false);
+            }
             p->switchflags(MTCF_FOCUSED, true);
         };
         p = p->parent;
@@ -2189,10 +2502,10 @@ void MTWinControl::nextcontrol(MTControl *start, bool reverse)
     return;
 }
 
-void *MTWinControl::getoffsetrgn(int type)
+void* MTWinControl::getoffsetrgn(int type)
 {
     MTRect r = {0, 0, width, height};
-    void *rgn, *op;
+    void* rgn, * op;
 
     rgn = recttorgn(r);
     if (hs)
@@ -2215,34 +2528,44 @@ void *MTWinControl::getoffsetrgn(int type)
 void MTWinControl::offset(int ox, int oy)
 {
     if (ox)
-    { moffset(ox, 0); }
+    {
+        moffset(ox, 0);
+    }
     if (oy)
-    { moffset(0, oy); }
+    {
+        moffset(0, oy);
+    }
     flush();
 }
 
 void MTWinControl::moffset(int ox, int oy)
 {
     int x, n;
-    void *rgn, *crgn, *crgn2, *rgn2;
+    void* rgn, * crgn, * crgn2, * rgn2;
     MTRect r, r2;
 
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if ((cctrl.guiid == MTC_SCROLLER) && (cctrl.flags & MTCF_SYSTEM))
-        { continue; }
+        {
+            continue;
+        }
         cctrl.left += ox;
         cctrl.top += oy;
     };
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     if (ox)
     {
         rgn = getoffsetrgn(0);
     }
     else
-    { rgn = getoffsetrgn(1); }
+    {
+        rgn = getoffsetrgn(1);
+    }
     crgn = getvisiblergn(false);
     crgn2 = getvisiblergn(true);
     subtractrgn(crgn2, crgn);
@@ -2276,7 +2599,7 @@ void MTWinControl::moffset(int ox, int oy)
     };
     if (!isemptyrgn(crgn2))
     {
-        MTWinControl *cparent = this;
+        MTWinControl* cparent = this;
         for(x = rgngetnrects(crgn2) - 1; x >= 0; x--)
         {
             rgngetrect(crgn2, x, &r);
@@ -2313,40 +2636,50 @@ void MTWinControl::boffset(bool children)
     };
     for(x = 0; x < ncontrols; x++)
     {
-        MTWinControl &cctrl = *(MTWinControl *) controls[x];
+        MTWinControl& cctrl = *(MTWinControl*) controls[x];
         if (cctrl.guiid & 2)
-        { cctrl.boffset(); }
+        {
+            cctrl.boffset();
+        }
     };
 }
 
 void MTWinControl::createbitmap()
 {
     if ((!parent) && (mb))
-    { mb->setsize(width, height); }
+    {
+        mb->setsize(width, height);
+    }
     draw(NORECT);
 }
 
 void MTWinControl::deletebitmap()
 {
     if ((!parent) && (mb))
-    { mb->unload(); }
+    {
+        mb->unload();
+    }
 }
 
-void MTWinControl::mbchange(MTBitmap *oldbitmap, MTBitmap *newbitmap, void *param)
+void MTWinControl::mbchange(MTBitmap* oldbitmap, MTBitmap* newbitmap, void* param)
 {
-    MTWinControl *wnd = (MTWinControl *) param;
+    MTWinControl* wnd = (MTWinControl*) param;
     int x;
 
     if (wnd->mb != oldbitmap)
-    { return; }
+    {
+        return;
+    }
     wnd->mb = newbitmap;
     for(x = 0; x < wnd->ncontrols; x++)
     {
-        MTWinControl *cwnd = (MTWinControl *) wnd->controls[x];
+        MTWinControl* cwnd = (MTWinControl*) wnd->controls[x];
         if (cwnd->guiid & 2)
         {
             if (cwnd->mb == oldbitmap)
-            { cwnd->mbchange(oldbitmap, newbitmap, cwnd); }
+            {
+                cwnd->mbchange(oldbitmap, newbitmap, cwnd);
+            }
         };
     };
 }
@@ -2356,7 +2689,7 @@ bool MTWinControl::flush()
     return flush(0, 0, width, height);
 }
 
-bool MTWinControl::flush(MTRect &rect)
+bool MTWinControl::flush(MTRect& rect)
 {
     return flush(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
 }
@@ -2367,14 +2700,18 @@ bool MTWinControl::flush(int x, int y, int w, int h)
     bool ok;
 
     if ((!screen) || (flags & MTCF_DONTFLUSH))
-    { return false; }
+    {
+        return false;
+    }
     if (!mb)
-    { return true; }
+    {
+        return true;
+    }
     FENTER4("MTWinControl::flush(%d,%d,%d,%d)", x, y, w, h);
     flags |= MTCF_DONTFLUSH;
     for(a = 0; a < ncontrols; a++)
     {
-        MTControl &cctrl = *controls[a];
+        MTControl& cctrl = *controls[a];
         if (cctrl.flags & MTCF_NEEDUPDATE)
         {
             cctrl.flags &= (~MTCF_NEEDUPDATE);
@@ -2396,9 +2733,13 @@ bool MTWinControl::flush(int x, int y, int w, int h)
         y = 0;
     };
     if (x + w > width)
-    { w = width - x; }
+    {
+        w = width - x;
+    }
     if (y + h > height)
-    { h = height - y; }
+    {
+        h = height - y;
+    }
     if ((w <= 0) || (h <= 0))
     {
         LEAVE();
@@ -2414,7 +2755,7 @@ bool MTWinControl::flush(int x, int y, int w, int h)
     if (frgn)
     {
         MTRect r = {x, y, x + w, y + h};
-        void *op = recttorgn(r);
+        void* op = recttorgn(r);
         addrgn(frgn, op);
         deletergn(op);
         LEAVE();
@@ -2445,7 +2786,9 @@ void MTWinControl::flushstart()
     MTRect r = {0, 0, 0, 0};
 
     if (frgn)
-    { flushend(); }
+    {
+        flushend();
+    }
     frgn = recttorgn(r);
 }
 
@@ -2456,7 +2799,9 @@ bool MTWinControl::flushend()
     MTRect r;
 
     if (!frgn)
-    { return false; }
+    {
+        return false;
+    }
     ENTER("MTWinControl::flushend");
     screen->setwindow(this);
 #ifdef _DEBUG
@@ -2475,7 +2820,15 @@ bool MTWinControl::flushend()
     for(x = rgngetnrects(frgn) - 1; x >= 0; x--)
     {
         rgngetrect(frgn, x, &r);
-        ok &= bltbmp(screen, screen->wr.left + left + r.left, screen->wr.top + top + r.top, r.right - r.left, r.bottom - r.top, r.left, r.top);
+        ok &= bltbmp(
+            screen,
+            screen->wr.left + left + r.left,
+            screen->wr.top + top + r.top,
+            r.right - r.left,
+            r.bottom - r.top,
+            r.left,
+            r.top
+        );
     };
     deletergn(frgn);
     frgn = 0;
@@ -2488,24 +2841,28 @@ bool MTWinControl::flushend()
     return ok;
 }
 
-void *MTWinControl::open(int type)
+void* MTWinControl::open(int type)
 {
     if (mb)
-    { return mb->open(type); }
+    {
+        return mb->open(type);
+    }
     return screen->open(type);
 }
 
-void MTWinControl::close(void *o)
+void MTWinControl::close(void* o)
 {
     if (mb)
     {
         mb->close(o);
     }
     else
-    { screen->close(o); }
+    {
+        screen->close(o);
+    }
 }
 
-void MTWinControl::clip(MTRect &rect)
+void MTWinControl::clip(MTRect& rect)
 {
     MTRect nr = rect;
 
@@ -2526,12 +2883,14 @@ void MTWinControl::clip(MTRect &rect)
         mb->clip(&nr);
     }
     else
-    { screen->clip(&nr); }
+    {
+        screen->clip(&nr);
+    }
 }
 
-void MTWinControl::cliprgn(void *rgn)
+void MTWinControl::cliprgn(void* rgn)
 {
-    void *nrgn;
+    void* nrgn;
 
     nrgn = copyrgn(rgn);
     if (mb)
@@ -2555,10 +2914,12 @@ void MTWinControl::unclip()
         mb->unclip();
     }
     else
-    { screen->unclip(); }
+    {
+        screen->unclip();
+    }
 }
 
-bool MTWinControl::bmpblt(MTBitmap *src, int x, int y, int w, int h, int ox, int oy, int mode)
+bool MTWinControl::bmpblt(MTBitmap* src, int x, int y, int w, int h, int ox, int oy, int mode)
 {
     if (mb)
     {
@@ -2582,7 +2943,7 @@ bool MTWinControl::bmpblt(MTBitmap *src, int x, int y, int w, int h, int ox, int
     };
 }
 
-bool MTWinControl::bltbmp(MTBitmap *dest, int x, int y, int w, int h, int ox, int oy, int mode)
+bool MTWinControl::bltbmp(MTBitmap* dest, int x, int y, int w, int h, int ox, int oy, int mode)
 {
     if (mb)
     {
@@ -2595,7 +2956,7 @@ bool MTWinControl::bltbmp(MTBitmap *dest, int x, int y, int w, int h, int ox, in
     };
 }
 
-bool MTWinControl::sbmpblt(MTBitmap *src, int x, int y, int w, int h, int ox, int oy, int ow, int oh, int mode)
+bool MTWinControl::sbmpblt(MTBitmap* src, int x, int y, int w, int h, int ox, int oy, int ow, int oh, int mode)
 {
     if (mb)
     {
@@ -2608,7 +2969,7 @@ bool MTWinControl::sbmpblt(MTBitmap *src, int x, int y, int w, int h, int ox, in
     };
 }
 
-bool MTWinControl::sbltbmp(MTBitmap *dest, int x, int y, int w, int h, int ox, int oy, int ow, int oh, int mode)
+bool MTWinControl::sbltbmp(MTBitmap* dest, int x, int y, int w, int h, int ox, int oy, int ow, int oh, int mode)
 {
     if (mb)
     {
@@ -2644,11 +3005,20 @@ bool MTWinControl::blt(int x, int y, int w, int h, int ox, int oy, int mode)
     else
     {
         screen->setwindow(this);
-        return screen->blt(screen, x + screen->wr.left + box, y + screen->wr.top + boy, w, h, ox + screen->wr.left + box, oy + screen->wr.top + boy, mode);
+        return screen->blt(
+            screen,
+            x + screen->wr.left + box,
+            y + screen->wr.top + boy,
+            w,
+            h,
+            ox + screen->wr.left + box,
+            oy + screen->wr.top + boy,
+            mode
+        );
     };
 }
 
-bool MTWinControl::skinblt(int x, int y, int w, int h, MTSkinPart &o)
+bool MTWinControl::skinblt(int x, int y, int w, int h, MTSkinPart& o)
 {
     if (mb)
     {
@@ -2702,7 +3072,9 @@ bool MTWinControl::fillrect(int x, int y, int w, int h, int mode)
         return mb->fillex(box + x, boy + y, w, h, mode);
     }
     else
-    { return screen->fillex(x + screen->wr.left + box, y + screen->wr.top + boy, w, h, mode); }
+    {
+        return screen->fillex(x + screen->wr.left + box, y + screen->wr.top + boy, w, h, mode);
+    }
 }
 
 void MTWinControl::point(int x, int y, int color)
@@ -2712,7 +3084,9 @@ void MTWinControl::point(int x, int y, int color)
         mb->point(box + x, boy + y, color);
     }
     else
-    { screen->point(x + screen->wr.left + box, y + screen->wr.top + boy, color); }
+    {
+        screen->point(x + screen->wr.left + box, y + screen->wr.top + boy, color);
+    }
 }
 
 void MTWinControl::moveto(int x, int y)
@@ -2722,7 +3096,9 @@ void MTWinControl::moveto(int x, int y)
         mb->moveto(box + x, boy + y);
     }
     else
-    { screen->moveto(x + screen->wr.left + box, y + screen->wr.top + boy); }
+    {
+        screen->moveto(x + screen->wr.left + box, y + screen->wr.top + boy);
+    }
 }
 
 void MTWinControl::lineto(int x, int y)
@@ -2732,10 +3108,12 @@ void MTWinControl::lineto(int x, int y)
         mb->lineto(box + x, boy + y);
     }
     else
-    { screen->lineto(x + screen->wr.left + box, y + screen->wr.top + boy); }
+    {
+        screen->lineto(x + screen->wr.left + box, y + screen->wr.top + boy);
+    }
 }
 
-void MTWinControl::polygon(const MTPoint *pt, int np)
+void MTWinControl::polygon(const MTPoint* pt, int np)
 {
     MTPoint p[32];
     int x;
@@ -2757,10 +3135,12 @@ void MTWinControl::polygon(const MTPoint *pt, int np)
         mb->polygon(p, np);
     }
     else
-    { screen->polygon(p, np); }
+    {
+        screen->polygon(p, np);
+    }
 }
 
-void MTWinControl::polyline(const MTPoint *pt, int np)
+void MTWinControl::polyline(const MTPoint* pt, int np)
 {
     MTPoint p[32];
     int x;
@@ -2782,7 +3162,9 @@ void MTWinControl::polyline(const MTPoint *pt, int np)
         mb->polyline(p, np);
     }
     else
-    { screen->polyline(p, np); }
+    {
+        screen->polyline(p, np);
+    }
 }
 
 void MTWinControl::rectangle(int x, int y, int w, int h)
@@ -2794,7 +3176,9 @@ void MTWinControl::rectangle(int x, int y, int w, int h)
         mb->rectangle(x, y, w, h);
     }
     else
-    { screen->rectangle(x + screen->wr.left, y + screen->wr.top, w, h); }
+    {
+        screen->rectangle(x + screen->wr.left, y + screen->wr.top, w, h);
+    }
 }
 
 void MTWinControl::ellipse(int x, int y, int w, int h)
@@ -2806,7 +3190,9 @@ void MTWinControl::ellipse(int x, int y, int w, int h)
         mb->ellipse(x, y, w, h);
     }
     else
-    { screen->ellipse(x + screen->wr.left, y + screen->wr.top, w, h); }
+    {
+        screen->ellipse(x + screen->wr.left, y + screen->wr.top, w, h);
+    }
 }
 
 void MTWinControl::settextcolor(int color)
@@ -2816,20 +3202,24 @@ void MTWinControl::settextcolor(int color)
         mb->settextcolor(color);
     }
     else
-    { screen->settextcolor(color); }
+    {
+        screen->settextcolor(color);
+    }
 }
 
-void MTWinControl::setfont(void *font)
+void MTWinControl::setfont(void* font)
 {
     if (mb)
     {
         mb->setfont(font);
     }
     else
-    { screen->setfont(font); }
+    {
+        screen->setfont(font);
+    }
 }
 
-void MTWinControl::drawtext(const char *text, int length, MTRect &rect, int flags)
+void MTWinControl::drawtext(const char* text, int length, MTRect& rect, int flags)
 {
     MTRect nr = rect;
     int ox = box;
@@ -2849,27 +3239,33 @@ void MTWinControl::drawtext(const char *text, int length, MTRect &rect, int flag
         mb->drawtext(text, length, nr, flags);
     }
     else
-    { screen->drawtext(text, length, nr, flags); }
+    {
+        screen->drawtext(text, length, nr, flags);
+    }
 }
 
-bool MTWinControl::gettextsize(const char *text, int length, MTPoint *size, int maxwidth)
+bool MTWinControl::gettextsize(const char* text, int length, MTPoint* size, int maxwidth)
 {
     if (mb)
     {
         return mb->gettextsize(text, length, size, maxwidth);
     }
     else
-    { return screen->gettextsize(text, length, size, maxwidth); }
+    {
+        return screen->gettextsize(text, length, size, maxwidth);
+    }
 }
 
-int MTWinControl::gettextextent(const char *text, int length, int maxextent)
+int MTWinControl::gettextextent(const char* text, int length, int maxextent)
 {
     if (mb)
     {
         return mb->gettextextent(text, length, maxextent);
     }
     else
-    { return screen->gettextextent(text, length, maxextent); }
+    {
+        return screen->gettextextent(text, length, maxextent);
+    }
 }
 
 int MTWinControl::gettextheight()
@@ -2879,7 +3275,9 @@ int MTWinControl::gettextheight()
         return mb->gettextheight();
     }
     else
-    { return screen->gettextheight(); }
+    {
+        return screen->gettextheight();
+    }
 }
 
 int MTWinControl::getcharwidth(char c)
@@ -2889,10 +3287,12 @@ int MTWinControl::getcharwidth(char c)
         return mb->getcharwidth(c);
     }
     else
-    { return screen->getcharwidth(c); }
+    {
+        return screen->getcharwidth(c);
+    }
 }
 
-void MTWinControl::toscreen(MTPoint &p)
+void MTWinControl::toscreen(MTPoint& p)
 {
     p.x += box;
     p.y += boy;
@@ -2905,9 +3305,13 @@ void MTWinControl::updateregions()
     MTRect r = {0, 0, width, height};
 
     if (oprgn)
-    { deletergn(oprgn); }
+    {
+        deletergn(oprgn);
+    }
     if (trrgn)
-    { deletergn(trrgn); }
+    {
+        deletergn(trrgn);
+    }
     if (flags & MTCF_TRANSPARENT)
     {
         trrgn = recttorgn(r);
@@ -2922,11 +3326,11 @@ void MTWinControl::updateregions()
     };
 }
 
-int MTCT syncshow(MTSync *s)
+int MTCT syncshow(MTSync* s)
 {
-    MTDesktop *cdsk = 0;
-    MTWinControl *t = (MTWinControl *) s->param[0];
-    MTWinControl *w = (MTWinControl *) s->param[1];
+    MTDesktop* cdsk = 0;
+    MTWinControl* t = (MTWinControl*) s->param[0];
+    MTWinControl* w = (MTWinControl*) s->param[1];
     bool modal = (s->param[2] != 0);
     int res, modalresult;
 
@@ -2935,7 +3339,9 @@ int MTCT syncshow(MTSync *s)
         cdsk = t->dsk;
     }
     else if (t->guiid == MTC_DESKTOP)
-    { cdsk = (MTDesktop *) t; }
+    {
+        cdsk = (MTDesktop*) t;
+    }
     modalresult = MTDR_NULL;
     w->modalparent = &modalresult;
 //	t->modalresult = MTDR_NULL;
@@ -2949,7 +3355,9 @@ int MTCT syncshow(MTSync *s)
         w->setbounds((cdsk->width - w->width) / 2, (cdsk->height - w->height) / 2, 0, 0);
     };
     if (w->parent)
-    { w->parent->bringtofront(w); }
+    {
+        w->parent->bringtofront(w);
+    }
     t->focus(w);
     w->switchflags(MTCF_HIDDEN, false);
     if (modal)
@@ -2965,7 +3373,9 @@ int MTCT syncshow(MTSync *s)
             return -1;
         }
         else if (res == 0)
-        { break; }
+        {
+            break;
+        }
     };
     if (modal)
     {
@@ -2974,7 +3384,7 @@ int MTCT syncshow(MTSync *s)
     return modalresult;
 }
 
-int MTWinControl::show(MTWinControl *w, int modal)
+int MTWinControl::show(MTWinControl* w, int modal)
 {
     MTSync sync;
 
@@ -2990,26 +3400,32 @@ int MTWinControl::show(MTWinControl *w, int modal)
         sync.param[2] = 0;
     }
     else
-    { sync.param[2] = (si->issysthread()) ? 1 : 0; }
+    {
+        sync.param[2] = (si->issysthread()) ? 1 : 0;
+    }
     return gi->synchronize(&sync);
 }
 
-void MTWinControl::focus(MTControl *ctrl)
+void MTWinControl::focus(MTControl* ctrl)
 {
-    MTControl *old;
+    MTControl* old;
 
     if ((parent) && (parent->focused != this))
     {
         parent->focus(this);
     };
     if ((ctrl->flags & MTCF_ACCEPTINPUT) == 0)
-    { return; }
+    {
+        return;
+    }
     if (focused != ctrl)
     {
         old = focused;
         focused = ctrl;
         if (old)
-        { old->switchflags(MTCF_FOCUSED, false); }
+        {
+            old->switchflags(MTCF_FOCUSED, false);
+        }
         ctrl->switchflags(MTCF_FOCUSED, true);
         focused = ctrl;
         if ((ctrl->guiid & 2) == 0)
@@ -3017,11 +3433,13 @@ void MTWinControl::focus(MTControl *ctrl)
             gi->resetcursor();
         };
         if (ctrl->guiid != MTC_SCROLLER)
-        { showcontrol(ctrl); }
+        {
+            showcontrol(ctrl);
+        }
     };
 }
 
-void MTWinControl::showcontrol(MTControl *ctrl)
+void MTWinControl::showcontrol(MTControl* ctrl)
 {
     if (vs)
     {
@@ -3030,7 +3448,9 @@ void MTWinControl::showcontrol(MTControl *ctrl)
             vs->setposition(vs->pos + ctrl->top);
         }
         else if (ctrl->top + ctrl->height > vs->page)
-        { vs->setposition(vs->pos + ctrl->top + ctrl->height - vs->page); }
+        {
+            vs->setposition(vs->pos + ctrl->top + ctrl->height - vs->page);
+        }
     };
     if (hs)
     {
@@ -3039,11 +3459,13 @@ void MTWinControl::showcontrol(MTControl *ctrl)
             hs->setposition(hs->pos + ctrl->left);
         }
         else if (ctrl->left + ctrl->width > hs->page)
-        { hs->setposition(hs->pos + ctrl->left + ctrl->width - hs->page); }
+        {
+            hs->setposition(hs->pos + ctrl->left + ctrl->width - hs->page);
+        }
     };
 }
 
-void MTWinControl::showrect(MTRect &rect)
+void MTWinControl::showrect(MTRect& rect)
 {
     if (vs)
     {
@@ -3052,7 +3474,9 @@ void MTWinControl::showrect(MTRect &rect)
             vs->setposition(rect.top);
         }
         else if (rect.bottom > vs->pos + vs->page)
-        { vs->setposition(rect.bottom - vs->page); }
+        {
+            vs->setposition(rect.bottom - vs->page);
+        }
     };
     if (hs)
     {
@@ -3061,19 +3485,23 @@ void MTWinControl::showrect(MTRect &rect)
             hs->setposition(rect.left);
         }
         else if (rect.right > hs->pos + hs->page)
-        { hs->setposition(rect.right - hs->page); }
+        {
+            hs->setposition(rect.right - hs->page);
+        }
     };
 }
 
-void MTWinControl::bringtofront(MTControl *c)
+void MTWinControl::bringtofront(MTControl* c)
 {
     int x, y;
     MTRect r;
-    void *urgn, *op;
+    void* urgn, * op;
     signed char cmodal = (design) ? 127 : c->flags >> 24;
 
     if (c == controls[0])
-    { return; }
+    {
+        return;
+    }
     for(x = ncontrols - 1; x > 0; x--)
     {
         if (controls[x] == c)
@@ -3081,18 +3509,24 @@ void MTWinControl::bringtofront(MTControl *c)
             y = x;
             while(y > 0)
             {
-                MTControl &cc = *controls[y - 1];
+                MTControl& cc = *controls[y - 1];
                 if ((signed char) (cc.flags >> 24) > cmodal)
-                { break; }
+                {
+                    break;
+                }
                 controls[y] = &cc;
                 y--;
             };
             if (x == y)
-            { break; }
+            {
+                break;
+            }
             controls[y]->getrect(r, 0);
             controls[y] = c;
             if (c->flags & MTCF_HIDDEN)
-            { return; }
+            {
+                return;
+            }
             urgn = recttorgn(r);
             c->getrect(r, 0);
             op = recttorgn(r);
@@ -3109,15 +3543,17 @@ void MTWinControl::bringtofront(MTControl *c)
     };
 }
 
-void MTWinControl::puttoback(MTControl *c)
+void MTWinControl::puttoback(MTControl* c)
 {
     int x, y;
     MTRect r;
-    void *urgn, *op;
+    void* urgn, * op;
     signed char cmodal = c->flags >> 24;
 
     if (c == controls[ncontrols - 1])
-    { return; }
+    {
+        return;
+    }
     for(x = 0; x < ncontrols; x++)
     {
         if (controls[x] == c)
@@ -3125,18 +3561,24 @@ void MTWinControl::puttoback(MTControl *c)
             y = x;
             while(y < ncontrols - 1)
             {
-                MTControl &cc = *controls[y + 1];
+                MTControl& cc = *controls[y + 1];
                 if (((signed char) (cc.flags >> 24) < cmodal) || (cmodal < 0))
-                { break; }
+                {
+                    break;
+                }
                 controls[y] = &cc;
                 y++;
             };
             if (x == y)
-            { break; }
+            {
+                break;
+            }
             controls[y]->getrect(r, 0);
             controls[y] = c;
             if (c->flags & MTCF_HIDDEN)
-            { return; }
+            {
+                return;
+            }
             urgn = recttorgn(r);
             c->getrect(r, 0);
             op = recttorgn(r);
@@ -3153,10 +3595,12 @@ void MTWinControl::puttoback(MTControl *c)
     };
 }
 
-void MTWinControl::initdrag(MTControl &cctrl)
+void MTWinControl::initdrag(MTControl& cctrl)
 {
     if (!dsk)
-    { return; }
+    {
+        return;
+    }
     cmoving = true;
     dc = &cctrl;
     cmox = ((cctrl.mox + cctrl.left) / gridx) * gridx;
@@ -3167,31 +3611,39 @@ void MTWinControl::startdrag()
 {
     int aw, ah, mw, mh, _box, _boy;
     int x, y, z, n, error, cerror, bn, style;
-    void *cl, *op;
-    MTBitmap *_mb;
+    void* cl, * op;
+    MTBitmap* _mb;
     MTRect r, cr;
 
     if (!dsk)
-    { return; }
+    {
+        return;
+    }
     aw = ah = mw = mh = y = 0;
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if (cctrl.flags & MTCF_SELECTED)
         {
             if (cctrl.width > mw)
-            { mw = cctrl.width; }
+            {
+                mw = cctrl.width;
+            }
             if (cctrl.height > mh)
-            { mh = cctrl.height; }
+            {
+                mh = cctrl.height;
+            }
             aw += cctrl.width;
             ah += cctrl.height;
             y++;
         };
     };
     if (!y)
-    { return; }
+    {
+        return;
+    }
     triggered = true;
-    dctrl = (DragContext *) si->memalloc(sizeof(DragContext) * y, 0);
+    dctrl = (DragContext*) si->memalloc(sizeof(DragContext) * y, 0);
     aw = (aw + y - 1) / y;
     ah = (ah + y - 1) / y;
     r.left = r.top = 0;
@@ -3204,19 +3656,27 @@ void MTWinControl::startdrag()
     dcr.top = dcr.bottom = screen->height;
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if (cctrl.flags & MTCF_SELECTED)
         {
             error = 1000000;
             bn = 0;
             if (cctrl.left + cctrl.width < dcr.left)
-            { dcr.left = cctrl.left + cctrl.width; }
+            {
+                dcr.left = cctrl.left + cctrl.width;
+            }
             if (cctrl.top + cctrl.height < dcr.top)
-            { dcr.top = cctrl.top + cctrl.height; }
+            {
+                dcr.top = cctrl.top + cctrl.height;
+            }
             if (width - cctrl.left < dcr.right)
-            { dcr.right = width - cctrl.left; }
+            {
+                dcr.right = width - cctrl.left;
+            }
             if (height - cctrl.top < dcr.bottom)
-            { dcr.bottom = height - cctrl.top; }
+            {
+                dcr.bottom = height - cctrl.top;
+            }
             n = rgngetnrects(cl);
             for(z = 0; z < n; z++)
             {
@@ -3239,9 +3699,13 @@ void MTWinControl::startdrag()
             cr.right = cr.left + cctrl.width;
             cr.bottom = cr.top + cctrl.height;
             if (cr.right > r.right)
-            { r.right = cr.right; }
+            {
+                r.right = cr.right;
+            }
             if (cr.bottom > r.bottom)
-            { r.bottom = cr.bottom; }
+            {
+                r.bottom = cr.bottom;
+            }
             op = recttorgn(cr);
             subtractrgn(cl, op);
             deletergn(op);
@@ -3253,14 +3717,16 @@ void MTWinControl::startdrag()
     tb = di->newbitmap(MTB_DRAW, r.right, r.bottom);
     if (guiid == MTC_WINDOW)
     {
-        style = ((MTWindow *) this)->style;
+        style = ((MTWindow*) this)->style;
     }
     else if (window)
     {
         style = window->style;
     }
     else
-    { style = 0; }
+    {
+        style = 0;
+    }
     skin->drawdragbkg(db, r, style);
     tb->clip(&tb->wr);
     y = 0;
@@ -3270,7 +3736,7 @@ void MTWinControl::startdrag()
     mbchange(_mb, db, this);
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if (cctrl.flags & MTCF_SELECTED)
         {
             box = dctrl[y].bx - cctrl.left;
@@ -3300,7 +3766,9 @@ void MTWinControl::drag(int mx, int my)
     MTRect fr;
 
     if (!dsk)
-    { return; }
+    {
+        return;
+    }
     if (!db)
     {
         if ((abs(mx - cmox) > dragx) || (abs(my - cmoy) > dragy))
@@ -3308,7 +3776,9 @@ void MTWinControl::drag(int mx, int my)
             startdrag();
         }
         else
-        { return; }
+        {
+            return;
+        }
     };
     mx = (mx / gridx) * gridx;
     my = (my / gridy) * gridy;
@@ -3317,49 +3787,80 @@ void MTWinControl::drag(int mx, int my)
     dcr.right -= mx - cmox;
     dcr.bottom -= my - cmoy;
     if ((dcr.left < 0) || (dcr.top < 0) || (dcr.right < 0) || (dcr.bottom < 0))
-    { alpha = 64; }
+    {
+        alpha = 64;
+    }
     fr.left = fr.right = mx + box;
     fr.top = fr.bottom = my + boy;
     y = 0;
     dsk->mb->clip(&dsk->mb->wr);
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if ((cctrl.flags & MTCF_SELECTED) == 0)
-        { continue; }
+        {
+            continue;
+        }
         cx = cmox + dctrl[y].ox + box;
         cy = cmoy + dctrl[y].oy + boy;
         nx = mx + dctrl[y].ox + box;
         ny = my + dctrl[y].oy + boy;
         tb->blt(dsk->mb, cx, cy, cctrl.width, cctrl.height, dctrl[y].bx, dctrl[y].by);
         if (cx < fr.left)
-        { fr.left = cx; }
+        {
+            fr.left = cx;
+        }
         if (cy < fr.top)
-        { fr.top = cy; }
+        {
+            fr.top = cy;
+        }
         if (cx + cctrl.width > fr.right)
-        { fr.right = cx + cctrl.width; }
+        {
+            fr.right = cx + cctrl.width;
+        }
         if (cy + cctrl.height > fr.bottom)
-        { fr.bottom = cy + cctrl.height; }
+        {
+            fr.bottom = cy + cctrl.height;
+        }
         if (nx < fr.left)
-        { fr.left = nx; }
+        {
+            fr.left = nx;
+        }
         if (ny < fr.top)
-        { fr.top = ny; }
+        {
+            fr.top = ny;
+        }
         if (nx + cctrl.width > fr.right)
-        { fr.right = nx + cctrl.width; }
+        {
+            fr.right = nx + cctrl.width;
+        }
         if (ny + cctrl.height > fr.bottom)
-        { fr.bottom = ny + cctrl.height; }
+        {
+            fr.bottom = ny + cctrl.height;
+        }
         y++;
     };
     y = 0;
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if ((cctrl.flags & MTCF_SELECTED) == 0)
-        { continue; }
+        {
+            continue;
+        }
         nx = mx + dctrl[y].ox + box;
         ny = my + dctrl[y].oy + boy;
         dsk->bltbmp(tb, dctrl[y].bx, dctrl[y].by, cctrl.width, cctrl.height, nx, ny);
-        db->blendblt(dsk->mb, mx + dctrl[y].ox + box, my + dctrl[y].oy + boy, cctrl.width, cctrl.height, dctrl[y].bx, dctrl[y].by, alpha);
+        db->blendblt(
+            dsk->mb,
+            mx + dctrl[y].ox + box,
+            my + dctrl[y].oy + boy,
+            cctrl.width,
+            cctrl.height,
+            dctrl[y].bx,
+            dctrl[y].by,
+            alpha
+        );
 //		db->blt(dsk->mb,nx,ny,cctrl.width,cctrl.height,dctrl[y].bx,dctrl[y].by);
         y++;
     };
@@ -3387,27 +3888,39 @@ void MTWinControl::enddrag()
         if (db)
         {
             if ((dcr.left < 0) || (dcr.top < 0) || (dcr.right < 0) || (dcr.bottom < 0))
-            { move = false; }
+            {
+                move = false;
+            }
             fr.left = fr.right = cmox + box;
             fr.top = fr.bottom = cmoy + boy;
             y = 0;
             dsk->mb->clip(&dsk->mb->wr);
             for(x = 0; x < ncontrols; x++)
             {
-                MTControl &cctrl = *controls[x];
+                MTControl& cctrl = *controls[x];
                 if ((cctrl.flags & MTCF_SELECTED) == 0)
-                { continue; }
+                {
+                    continue;
+                }
                 cx = cmox + dctrl[y].ox + box;
                 cy = cmoy + dctrl[y].oy + boy;
                 tb->blt(dsk->mb, cx, cy, cctrl.width, cctrl.height, dctrl[y].bx, dctrl[y].by);
                 if (cx < fr.left)
-                { fr.left = cx; }
+                {
+                    fr.left = cx;
+                }
                 if (cy < fr.top)
-                { fr.top = cy; }
+                {
+                    fr.top = cy;
+                }
                 if (cx + cctrl.width > fr.right)
-                { fr.right = cx + cctrl.width; }
+                {
+                    fr.right = cx + cctrl.width;
+                }
                 if (cy + cctrl.height > fr.bottom)
-                { fr.bottom = cy + cctrl.height; }
+                {
+                    fr.bottom = cy + cctrl.height;
+                }
                 y++;
             };
             dsk->mb->unclip();
@@ -3416,9 +3929,11 @@ void MTWinControl::enddrag()
                 y = 0;
                 for(x = 0; x < ncontrols; x++)
                 {
-                    MTControl &cctrl = *controls[x];
+                    MTControl& cctrl = *controls[x];
                     if ((cctrl.flags & MTCF_SELECTED) == 0)
-                    { continue; }
+                    {
+                        continue;
+                    }
                     cctrl.setbounds(cmox + dctrl[y].ox, cmoy + dctrl[y].oy, 0, 0);
                     y++;
                 };

@@ -31,9 +31,9 @@ class MTResources;
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 extern "C" {
-MTResources *MTCT mtresfind(const char *filename, bool write);
-MTResources *MTCT mtresopen(MTFile *f, bool ownfile);
-void MTCT mtresclose(MTResources *res);
+MTResources* MTCT mtresfind(const char* filename, bool write);
+MTResources* MTCT mtresopen(MTFile* f, bool ownfile);
+void MTCT mtresclose(MTResources* res);
 }
 //---------------------------------------------------------------------------
 #endif

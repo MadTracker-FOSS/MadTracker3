@@ -15,12 +15,12 @@
 //---------------------------------------------------------------------------
 #include <string.h>
 
-inline void mtmemzero(void *mem, int count) // Pretty pointless function, but okay.
+inline void mtmemzero(void* mem, int count) // Pretty pointless function, but okay.
 {
     memset(mem, 0, count);
 }
 
-inline void mtmemzero64(void *mem, int count)
+inline void mtmemzero64(void* mem, int count)
 {
     memset(mem, 0, count * 8);
 }

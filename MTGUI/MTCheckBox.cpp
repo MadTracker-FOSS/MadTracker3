@@ -17,8 +17,11 @@
 // MTControl
 //   MTCheckBox
 //---------------------------------------------------------------------------
-MTCheckBox::MTCheckBox(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTControl(MTC_CHECKBOX, tag, p, l, t, w, h), radio(false), state(0), undef(false)
+MTCheckBox::MTCheckBox(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTControl(MTC_CHECKBOX, tag, p, l, t, w, h),
+    radio(false),
+    state(0),
+    undef(false)
 {
     flags |= (MTCF_TRANSPARENT | MTCF_ACCEPTINPUT);
     if ((w == 0) || (h == 0))
@@ -27,10 +30,14 @@ MTCheckBox::MTCheckBox(int tag, MTWinControl *p, int l, int t, int w, int h):
         height = 16;
     };
     if (width < 16)
-    { width = 16; }
+    {
+        width = 16;
+    }
     if (height < 16)
-    { height = 16; }
-    caption = (char *) si->memalloc(256, MTM_ZERO);
+    {
+        height = 16;
+    }
+    caption = (char*) si->memalloc(256, MTM_ZERO);
     if (candesign)
     {
         gi->setcontrolname(this, "checkbox");
@@ -43,7 +50,7 @@ MTCheckBox::~MTCheckBox()
     si->memfree(caption);
 }
 
-int MTCheckBox::loadfromstream(MTFile *f, int size, int flags)
+int MTCheckBox::loadfromstream(MTFile* f, int size, int flags)
 {
     int csize = MTControl::loadfromstream(f, size, flags);
     int l, x;
@@ -59,7 +66,7 @@ int MTCheckBox::loadfromstream(MTFile *f, int size, int flags)
     return csize + l + 8;
 }
 
-int MTCheckBox::savetostream(MTFile *f, int flags)
+int MTCheckBox::savetostream(MTFile* f, int flags)
 {
     int csize = MTControl::savetostream(f, flags);
     int l = strlen(caption) + 1;
@@ -80,48 +87,62 @@ int MTCheckBox::savetostream(MTFile *f, int flags)
 int MTCheckBox::getnumproperties(int id)
 {
     if (id == -1)
-    { return CheckBoxNP; }
+    {
+        return CheckBoxNP;
+    }
     if (id < ControlNP)
-    { return MTControl::getnumproperties(id); }
+    {
+        return MTControl::getnumproperties(id);
+    }
     if (id == ControlNP + 2)
-    { return 3; }
+    {
+        return 3;
+    }
     return 0;
 }
 
-bool MTCheckBox::getpropertytype(int id, char **name, int &flags)
+bool MTCheckBox::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[3] = {"Caption", "Radio", "State"};
+    static char* propname[3] = {"Caption", "Radio", "State"};
     static int propflags[3] = {MTP_TEXT, MTP_BOOL, MTP_LIST};
-    static char *subname[3] = {"Unchecked", "Checked", "Undefined"};
+    static char* subname[3] = {"Unchecked", "Checked", "Undefined"};
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getpropertytype(id, name, flags); }
+    {
+        return MTControl::getpropertytype(id, name, flags);
+    }
     if ((id >> 8) == ControlNP + 2)
     {
         id &= 0xFF;
         if (id >= 3)
-        { return false; }
+        {
+            return false;
+        }
         *name = subname[id];
         flags = -1;
         return true;
     };
     if (id >= CheckBoxNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id - ControlNP];
     flags = propflags[id - ControlNP];
     return true;
 }
 
-bool MTCheckBox::getproperty(int id, void *value)
+bool MTCheckBox::getproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getproperty(id, value); }
+    {
+        return MTControl::getproperty(id, value);
+    }
     switch (id - ControlNP)
     {
         case 0:
-            strcpy((char *) value, caption);
+            strcpy((char*) value, caption);
             break;
         case 1:
             iv = radio;
@@ -135,18 +156,22 @@ bool MTCheckBox::getproperty(int id, void *value)
     return true;
 }
 
-bool MTCheckBox::setproperty(int id, void *value)
+bool MTCheckBox::setproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::setproperty(id, value); }
+    {
+        return MTControl::setproperty(id, value);
+    }
     if (window)
-    { window->modified = true; }
+    {
+        window->modified = true;
+    }
     switch (id - ControlNP)
     {
         case 0:
-            strcpy(caption, (char *) value);
+            strcpy(caption, (char*) value);
             break;
         case 1:
             radio = iv != 0;
@@ -165,20 +190,22 @@ bool MTCheckBox::setproperty(int id, void *value)
     return true;
 }
 
-void MTCheckBox::draw(MTRect &rect)
+void MTCheckBox::draw(MTRect& rect)
 {
     int x = left;
     int y = top;
-    MTBitmap *b;
+    MTBitmap* b;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     preparedraw(&b, x, y);
     skin->drawcontrol(this, rect, b, x, y);
     MTControl::draw(rect);
 }
 
-bool MTCheckBox::message(MTCMessage &msg)
+bool MTCheckBox::message(MTCMessage& msg)
 {
     int newstate = state;
 
@@ -191,9 +218,11 @@ bool MTCheckBox::message(MTCMessage &msg)
                 int x;
                 for(x = 0; x < parent->ncontrols; x++)
                 {
-                    MTCheckBox &cchk = *(MTCheckBox *) parent->controls[x];
+                    MTCheckBox& cchk = *(MTCheckBox*) parent->controls[x];
                     if ((cchk.guiid == MTC_CHECKBOX) && (cchk.radio))
-                    { cchk.setstate(0, true); }
+                    {
+                        cchk.setstate(0, true);
+                    }
                 };
                 newstate = 1;
             };
@@ -204,10 +233,14 @@ bool MTCheckBox::message(MTCMessage &msg)
             if (undef)
             {
                 if (newstate >= 3)
-                { newstate = 0; }
+                {
+                    newstate = 0;
+                }
             }
             else if (newstate >= 2)
-            { newstate = 0; }
+            {
+                newstate = 0;
+            }
         };
         setstate(newstate, true);
         return true;
@@ -218,13 +251,17 @@ bool MTCheckBox::message(MTCMessage &msg)
 void MTCheckBox::setstate(int c, bool touched)
 {
     if (state == c)
-    { return; }
+    {
+        return;
+    }
     if (c == 2)
     {
         undef = true;
     }
     else if (!touched)
-    { undef = false; }
+    {
+        undef = false;
+    }
     skin->notify(this, 0, c, touched);
     state = c;
     if (parent)

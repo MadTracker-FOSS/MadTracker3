@@ -15,19 +15,19 @@
 //   MTWinControl
 //     MTToolBar
 //---------------------------------------------------------------------------
-MTToolBar::MTToolBar(int tag, MTWinControl *p, int l, int t, int w, int h):
+MTToolBar::MTToolBar(int tag, MTWinControl* p, int l, int t, int w, int h):
     MTWinControl(MTC_TOOLBAR, tag, p, l, t, w, h)
 {
     flags |= MTCF_ACCEPTCTRLS | MTCF_TRANSPARENT;
     flags &= (~MTCF_BORDER);
 }
 
-void MTToolBar::draw(MTRect &rect)
+void MTToolBar::draw(MTRect& rect)
 {
     MTWinControl::draw(rect);
 }
 
-void MTToolBar::addcontrol(MTControl *control)
+void MTToolBar::addcontrol(MTControl* control)
 {
     if (ncontrols == 0)
     {
@@ -41,7 +41,7 @@ void MTToolBar::addcontrol(MTControl *control)
     MTWinControl::addcontrol(control);
 }
 
-void MTToolBar::delcontrol(MTControl *control)
+void MTToolBar::delcontrol(MTControl* control)
 {
     int x, l;
 
@@ -49,7 +49,7 @@ void MTToolBar::delcontrol(MTControl *control)
     l = 0;
     for(x = 0; x < ncontrols; x++)
     {
-        MTControl &c = *controls[x];
+        MTControl& c = *controls[x];
         c.setbounds(l, 0, c.width, c.height);
         l += c.width;
     };

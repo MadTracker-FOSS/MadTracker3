@@ -220,43 +220,43 @@ public:
 #endif
 
 extern "C" {
-void MTCT mtlog(const char *log, char date = 0);
-void MTCT mtflog(const char *log, char date = 0, ...);
-void MTCT mtdump(unsigned char *address, int length, int offset = 0);
-void MTCT mtenter(const char *func);
-void MTCT mtfenter(const char *func, ...);
+void MTCT mtlog(const char* log, char date = 0);
+void MTCT mtflog(const char* log, char date = 0, ...);
+void MTCT mtdump(unsigned char* address, int length, int offset = 0);
+void MTCT mtenter(const char* func);
+void MTCT mtfenter(const char* func, ...);
 void MTCT mtleave();
-const char *MTCT mtgetcallstack();
-void mtgetlibmemoryrange(void *lib, int flags, void **start, int *length);
-void *MTCT mtmemalloc(int size, int flags = 0);
-bool MTCT mtmemfree(void *mem);
-void *MTCT mtmemrealloc(void *mem, int size);
-int MTCT mtdialog(const char *message, const char *caption, char *buttons, int flags, int timeout);
+const char* MTCT mtgetcallstack();
+void mtgetlibmemoryrange(void* lib, int flags, void** start, int* length);
+void* MTCT mtmemalloc(int size, int flags = 0);
+bool MTCT mtmemfree(void* mem);
+void* MTCT mtmemrealloc(void* mem, int size);
+int MTCT mtdialog(const char* message, const char* caption, char* buttons, int flags, int timeout);
 #ifdef MTSYSTEM_RESOURCES
-int MTCT mtresdialog(MTResources *res, int id, const char *caption, char *buttons, int timeout, int flags, ...);
-int MTCT mtauthdialog(char *message, char *login, char *password);
+int MTCT mtresdialog(MTResources* res, int id, const char* caption, char* buttons, int timeout, int flags, ...);
+int MTCT mtauthdialog(char* message, char* login, char* password);
 #endif
 void MTCT mtshowoserror(int error);
 void MTCT mtshowlastoserror();
-int MTCT mtsync_inc(int *value);
-int MTCT mtsync_dec(int *value);
+int MTCT mtsync_inc(int* value);
+int MTCT mtsync_dec(int* value);
 }
 
 //---------------------------------------------------------------------------
 // FIXME: flibit commented this #ifdef out
 //#ifdef MTSYSTEM_EXPORTS
-extern MTSystemInterface *si;
+extern MTSystemInterface* si;
 
 //#endif
-extern MTInterface *mtinterface;
+extern MTInterface* mtinterface;
 
-extern MTGUIInterface *gi;
+extern MTGUIInterface* gi;
 
-extern MTDisplayInterface *di;
+extern MTDisplayInterface* di;
 
 #ifdef MTSYSTEM_RESOURCES
 
-extern MTResources *sysres;
+extern MTResources* sysres;
 
 #endif
 #ifdef _WIN32

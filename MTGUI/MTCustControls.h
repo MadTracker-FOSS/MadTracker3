@@ -13,10 +13,10 @@ class MTCustomWinControl;
 class MTCustomBehaviours
 {
 public:
-    MTCustomControl *parent;
+    MTCustomControl* parent;
     int customid;
 
-    MTCustomBehaviours(MTCustomControl *control)
+    MTCustomBehaviours(MTCustomControl* control)
     {
         parent = control;
         customid = 0;
@@ -26,12 +26,12 @@ public:
     {
     };
 
-    virtual int MTCT onload(MTFile *, int, int)
+    virtual int MTCT onload(MTFile*, int, int)
     {
         return 0;
     };
 
-    virtual int MTCT onsave(MTFile *, int)
+    virtual int MTCT onsave(MTFile*, int)
     {
         return 0;
     };
@@ -40,7 +40,7 @@ public:
     {
     };
 
-    virtual bool MTCT oncheckbounds(int &, int &, int &, int &)
+    virtual bool MTCT oncheckbounds(int&, int&, int&, int&)
     {
         return true;
     };
@@ -49,11 +49,11 @@ public:
     {
     };
 
-    virtual void MTCT ondraw(MTRect &)
+    virtual void MTCT ondraw(MTRect&)
     {
     };
 
-    virtual bool MTCT onmessage(MTCMessage &)
+    virtual bool MTCT onmessage(MTCMessage&)
     {
         return false;
     };
@@ -62,38 +62,38 @@ public:
 class MTCustomControl: public MTControl
 {
 public:
-    MTCustomBehaviours *behaviours;
+    MTCustomBehaviours* behaviours;
 
-    MTCustomControl(int tg, MTWinControl *p, int l, int t, int w, int h);
+    MTCustomControl(int tg, MTWinControl* p, int l, int t, int w, int h);
 
     ~MTCustomControl();
 
-    int MTCT loadfromstream(MTFile *f, int size, int flags);
+    int MTCT loadfromstream(MTFile* f, int size, int flags);
 
-    int MTCT savetostream(MTFile *f, int flags);
+    int MTCT savetostream(MTFile* f, int flags);
 
     void MTCT setbounds(int l, int t, int w, int h);
 
-    bool MTCT checkbounds(int &l, int &t, int &w, int &h);
+    bool MTCT checkbounds(int& l, int& t, int& w, int& h);
 
     void MTCT switchflags(int f, bool set);
 
-    void MTCT draw(MTRect &rect);
+    void MTCT draw(MTRect& rect);
 
-    bool MTCT message(MTCMessage &msg);
+    bool MTCT message(MTCMessage& msg);
 
-    void MTCT preparedraw(MTBitmap **b, int &ox, int &oy);
+    void MTCT preparedraw(MTBitmap** b, int& ox, int& oy);
 
-    virtual bool MTCT processmessage(MTCMessage &msg);
+    virtual bool MTCT processmessage(MTCMessage& msg);
 };
 
 class MTCustomWinBehaviours
 {
 public:
-    MTCustomWinControl *parent;
+    MTCustomWinControl* parent;
     int customid;
 
-    MTCustomWinBehaviours(MTCustomWinControl *control)
+    MTCustomWinBehaviours(MTCustomWinControl* control)
     {
         parent = control;
         customid = 0;
@@ -103,12 +103,12 @@ public:
     {
     };
 
-    virtual int MTCT onload(MTFile *, int, int)
+    virtual int MTCT onload(MTFile*, int, int)
     {
         return 0;
     };
 
-    virtual int MTCT onsave(MTFile *, int)
+    virtual int MTCT onsave(MTFile*, int)
     {
         return 0;
     };
@@ -117,7 +117,7 @@ public:
     {
     };
 
-    virtual bool MTCT oncheckbounds(int &, int &, int &, int &)
+    virtual bool MTCT oncheckbounds(int&, int&, int&, int&)
     {
         return true;
     };
@@ -126,16 +126,16 @@ public:
     {
     };
 
-    virtual void MTCT ondraw(MTRect &)
+    virtual void MTCT ondraw(MTRect&)
     {
     };
 
-    virtual bool MTCT onmessage(MTCMessage &)
+    virtual bool MTCT onmessage(MTCMessage&)
     {
         return false;
     };
 
-    virtual void *MTCT ongetoffsetrgn(int)
+    virtual void* MTCT ongetoffsetrgn(int)
     {
         return 0;
     };
@@ -148,33 +148,33 @@ public:
 class MTCustomWinControl: public MTWinControl
 {
 public:
-    MTCustomWinBehaviours *behaviours;
+    MTCustomWinBehaviours* behaviours;
 
-    MTCustomWinControl(int tg, void *pw, int l, int t, int w, int h);
+    MTCustomWinControl(int tg, void* pw, int l, int t, int w, int h);
 
     ~MTCustomWinControl();
 
-    int MTCT loadfromstream(MTFile *f, int size, int flags);
+    int MTCT loadfromstream(MTFile* f, int size, int flags);
 
-    int MTCT savetostream(MTFile *f, int flags);
+    int MTCT savetostream(MTFile* f, int flags);
 
     void MTCT setbounds(int l, int t, int w, int h);
 
-    bool MTCT checkbounds(int &l, int &t, int &w, int &h);
+    bool MTCT checkbounds(int& l, int& t, int& w, int& h);
 
     void MTCT switchflags(int f, bool set);
 
-    void MTCT draw(MTRect &rect);
+    void MTCT draw(MTRect& rect);
 
-    bool MTCT message(MTCMessage &msg);
+    bool MTCT message(MTCMessage& msg);
 
-    void MTCT preparedraw(MTBitmap **b, int &ox, int &oy);
+    void MTCT preparedraw(MTBitmap** b, int& ox, int& oy);
 
-    void *MTCT getoffsetrgn(int type);
+    void* MTCT getoffsetrgn(int type);
 
     void MTCT offset(int ox, int oy);
 
-    virtual bool MTCT processmessage(MTCMessage &msg);
+    virtual bool MTCT processmessage(MTCMessage& msg);
 };
 //---------------------------------------------------------------------------
 #endif

@@ -28,17 +28,17 @@ public:
     float frequency;
     float resonance;
 
-    MTFilter(MTObject *parent, mt_int32 i);
+    MTFilter(MTObject* parent, mt_int32 i);
 
-    EffectInstance *MTCT createinstance(int noutputs, sample **outputs, int ninputs, sample **inputs, InstrumentInstance *caller = 0);
+    EffectInstance* MTCT createinstance(int noutputs, sample** outputs, int ninputs, sample** inputs, InstrumentInstance* caller = 0);
 
-    void MTCT deleteinstance(EffectInstance *i);
+    void MTCT deleteinstance(EffectInstance* i);
 
     int MTCT getnumparams(int cat);
 
-    const char *MTCT getparamname(int cat, int id);
+    const char* MTCT getparamname(int cat, int id);
 
-    double MTCT getparam(int cat, int id, char *display);
+    double MTCT getparam(int cat, int id, char* display);
 
     void MTCT setparam(int cat, int id, double value, int steps = 0);
 };
@@ -46,9 +46,9 @@ public:
 class MTFilterInstance: public EffectInstance
 {
 public:
-    MTFilterInstance(Effect *p, int no, sample **o, int ni, sample **i, InstrumentInstance *caller);
+    MTFilterInstance(Effect* p, int no, sample** o, int ni, sample** i, InstrumentInstance* caller);
 
-    int MTCT process(int ooffset, int ioffset, int count, bool &silence);
+    int MTCT process(int ooffset, int ioffset, int count, bool& silence);
 
     void MTCT setparam(int cat, int id, double value, int steps = 0);
 

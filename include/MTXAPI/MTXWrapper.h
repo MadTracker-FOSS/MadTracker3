@@ -24,16 +24,21 @@ class MTWrapper;
 class MTWrapper
 {
 public:
-    MTWindow *wthis;
+    MTWindow* wthis;
 
-    MTWrapper(MTWindow *w)
-    { wthis = w; };
+    MTWrapper(MTWindow* w)
+    {
+        wthis = w;
+    };
 
     virtual ~MTWrapper()
-    { };
+    {
+    };
 
-    virtual bool MTCT onmessage(MTCMessage &msg)
-    { return false; };
+    virtual bool MTCT onmessage(MTCMessage& msg)
+    {
+        return false;
+    };
 };
 //---------------------------------------------------------------------------
 #endif

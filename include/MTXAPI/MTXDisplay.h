@@ -76,18 +76,18 @@ struct MTSkinPart{
 };
 #endif
 
-typedef void (MTCT *MTBitmapChangeProc)(MTBitmap *oldbitmap, MTBitmap *newbitmap, void *param);
+typedef void (MTCT* MTBitmapChangeProc)(MTBitmap* oldbitmap, MTBitmap* newbitmap, void* param);
 
 class MTBitmap
 {
 public:
-    MTDisplayDevice *device;
+    MTDisplayDevice* device;
     int flags;
     int width, height;
     int bitcount;
     MTRect wr;
     MTBitmapChangeProc changeproc;
-    void *param;
+    void* param;
     bool loaded;
 
     virtual bool MTCT load() = 0;
@@ -96,39 +96,39 @@ public:
 
     virtual bool MTCT setsize(int w, int h) = 0;
 
-    virtual void *MTCT open(int wantedtype) = 0;
+    virtual void* MTCT open(int wantedtype) = 0;
 
-    virtual void MTCT close(void *o) = 0;
+    virtual void MTCT close(void* o) = 0;
 
-    virtual void MTCT clip(MTRect *rect) = 0;
+    virtual void MTCT clip(MTRect* rect) = 0;
 
-    virtual void MTCT cliprgn(void *rgn) = 0;
+    virtual void MTCT cliprgn(void* rgn) = 0;
 
     virtual void MTCT unclip() = 0;
 
-    virtual void *MTCT getclip() = 0;
+    virtual void* MTCT getclip() = 0;
 
-    virtual bool MTCT openbits(MTRect &rect, void **bits, int *pitch, void **maskbits = 0, int *maskpitch = 0) = 0;
+    virtual bool MTCT openbits(MTRect& rect, void** bits, int* pitch, void** maskbits = 0, int* maskpitch = 0) = 0;
 
     virtual void MTCT closebits() = 0;
 
-    virtual bool MTCT blt(MTBitmap *dest, int dx, int dy, int w, int h, int ox, int oy, int mode = MTBM_COPY) = 0;
+    virtual bool MTCT blt(MTBitmap* dest, int dx, int dy, int w, int h, int ox, int oy, int mode = MTBM_COPY) = 0;
 
-    virtual bool MTCT sblt(MTBitmap *dest, int dx, int dy, int dw, int dh, int ox, int oy, int ow, int oh, int mode = MTBM_COPY) = 0;
+    virtual bool MTCT sblt(MTBitmap* dest, int dx, int dy, int dw, int dh, int ox, int oy, int ow, int oh, int mode = MTBM_COPY) = 0;
 
-    virtual bool MTCT skinblt(int x, int y, int w, int h, MTSkinPart &o, int color = 0xFFFFFF) = 0;
+    virtual bool MTCT skinblt(int x, int y, int w, int h, MTSkinPart& o, int color = 0xFFFFFF) = 0;
 
-    virtual bool MTCT skinblta(int x, int y, int w, int h, MTSkinPart &o, int nx, int ny, int step, int color = 0xFFFFFF) = 0;
+    virtual bool MTCT skinblta(int x, int y, int w, int h, MTSkinPart& o, int nx, int ny, int step, int color = 0xFFFFFF) = 0;
 
-    virtual bool MTCT maskblt(MTMask *mask, int x, int y, int w, int h, MTSkinPart &o) = 0;
+    virtual bool MTCT maskblt(MTMask* mask, int x, int y, int w, int h, MTSkinPart& o) = 0;
 
-    virtual bool MTCT shade(int x, int y, int w, int h, MTMask *mask, int mx, int my) = 0;
+    virtual bool MTCT shade(int x, int y, int w, int h, MTMask* mask, int mx, int my) = 0;
 
-    virtual bool MTCT tshade(int x, int y, int w, int h, MTMask *mask, int mx, int my, int mw, int mh) = 0;
+    virtual bool MTCT tshade(int x, int y, int w, int h, MTMask* mask, int mx, int my, int mw, int mh) = 0;
 
-    virtual bool MTCT sshade(int x, int y, int w, int h, MTMask *mask, int mx, int my, int mw, int mh) = 0;
+    virtual bool MTCT sshade(int x, int y, int w, int h, MTMask* mask, int mx, int my, int mw, int mh) = 0;
 
-    virtual bool MTCT blendblt(MTBitmap *dest, int dx, int dy, int w, int h, int ox, int oy, int opacity) = 0;
+    virtual bool MTCT blendblt(MTBitmap* dest, int dx, int dy, int w, int h, int ox, int oy, int opacity) = 0;
 
     virtual int MTCT translatecolor(int color) = 0;
 
@@ -146,9 +146,9 @@ public:
 
     virtual void MTCT lineto(int x, int y) = 0;
 
-    virtual void MTCT polygon(const MTPoint *pt, int np) = 0;
+    virtual void MTCT polygon(const MTPoint* pt, int np) = 0;
 
-    virtual void MTCT polyline(const MTPoint *pt, int np) = 0;
+    virtual void MTCT polyline(const MTPoint* pt, int np) = 0;
 
     virtual void MTCT rectangle(int x, int y, int w, int h) = 0;
 
@@ -156,13 +156,13 @@ public:
 
     virtual void MTCT settextcolor(int color) = 0;
 
-    virtual void MTCT setfont(void *font) = 0;
+    virtual void MTCT setfont(void* font) = 0;
 
-    virtual void MTCT drawtext(const char *text, int length, MTRect &rect, int flags) = 0;
+    virtual void MTCT drawtext(const char* text, int length, MTRect& rect, int flags) = 0;
 
-    virtual bool MTCT gettextsize(const char *text, int length, MTPoint *size, int maxwidth = -1) = 0;
+    virtual bool MTCT gettextsize(const char* text, int length, MTPoint* size, int maxwidth = -1) = 0;
 
-    virtual int MTCT gettextextent(const char *text, int length, int maxextent) = 0;
+    virtual int MTCT gettextextent(const char* text, int length, int maxextent) = 0;
 
     virtual int MTCT gettextheight() = 0;
 
@@ -170,23 +170,23 @@ public:
 
     virtual int MTCT getbaseline() = 0;
 
-    virtual void MTCT setwindow(MTWinControl *window) = 0;
+    virtual void MTCT setwindow(MTWinControl* window) = 0;
 
-    virtual void MTCT setmodified(void *w) = 0;
+    virtual void MTCT setmodified(void* w) = 0;
 
-    virtual void MTCT toscreen(MTPoint &p) = 0;
+    virtual void MTCT toscreen(MTPoint& p) = 0;
 
 // FIXME: Are these needed? -flibit
 public:
     int id;
-    MTResources *mres;
+    MTResources* mres;
     int mresid;
-    char *mfilename;
-    MTBitmap *morig;
+    char* mfilename;
+    MTBitmap* morig;
     int mck;
     int mox, moy;
     bool modified;
-    void *mwnd;
+    void* mwnd;
 
     virtual void MTCT initialize() = 0;
 };
@@ -194,7 +194,7 @@ public:
 class MTMask
 {
 public:
-    MTDisplayDevice *device;
+    MTDisplayDevice* device;
     int width;
     int height;
 
@@ -212,35 +212,35 @@ class MTDisplayDevice
 public:
     MTDisplayDevice();
 
-    virtual bool MTCT init(bool &fullscreen) = 0;
+    virtual bool MTCT init(bool& fullscreen) = 0;
 
     virtual void MTCT uninit() = 0;
 
-    virtual MTBitmap *MTCT newbitmap(int flags, int width, int height) = 0;
+    virtual MTBitmap* MTCT newbitmap(int flags, int width, int height) = 0;
 
-    virtual MTBitmap *MTCT newresbitmap(int flags, MTResources *res, int id, int colorkey) = 0;
+    virtual MTBitmap* MTCT newresbitmap(int flags, MTResources* res, int id, int colorkey) = 0;
 
-    virtual MTBitmap *MTCT newfilebitmap(int flags, const char *filename, int colorkey) = 0;
+    virtual MTBitmap* MTCT newfilebitmap(int flags, const char* filename, int colorkey) = 0;
 
-    virtual MTBitmap *MTCT newbmpbitmap(int flags, MTBitmap &orig, int colorkey) = 0;
+    virtual MTBitmap* MTCT newbmpbitmap(int flags, MTBitmap& orig, int colorkey) = 0;
 
-    virtual void MTCT delbitmap(MTBitmap *bitmap) = 0;
+    virtual void MTCT delbitmap(MTBitmap* bitmap) = 0;
 
-    virtual MTMask *MTCT newmask(int w, int h) = 0;
+    virtual MTMask* MTCT newmask(int w, int h) = 0;
 
-    virtual void MTCT delmask(MTMask *mask) = 0;
+    virtual void MTCT delmask(MTMask* mask) = 0;
 
-    virtual bool MTCT setfullscreen(bool &fullscreen) = 0;
+    virtual bool MTCT setfullscreen(bool& fullscreen) = 0;
 
-    virtual bool MTCT switchto(MTDisplayDevice *newdevice);
+    virtual bool MTCT switchto(MTDisplayDevice* newdevice);
 
-    virtual void MTCT add(MTBitmap *bmp);
+    virtual void MTCT add(MTBitmap* bmp);
 
-    virtual void MTCT remove(MTBitmap *bmp);
+    virtual void MTCT remove(MTBitmap* bmp);
 
-    virtual void MTCT add(MTMask *bmp);
+    virtual void MTCT add(MTMask* bmp);
 
-    virtual void MTCT remove(MTMask *bmp);
+    virtual void MTCT remove(MTMask* bmp);
 
     virtual void MTCT checkbitmaps();
 
@@ -250,22 +250,22 @@ public:
 
 // FIXME: Are these needed? -flibit
 protected:
-    MTBitmap *bitmaps[32];
+    MTBitmap* bitmaps[32];
     int nbitmaps;
-    MTMask *masks[32];
+    MTMask* masks[32];
     int nmasks;
 };
 
 class MTDisplayDeviceManager
 {
 public:
-    char *devicename[MAX_DISPLAYDEVICES];
+    char* devicename[MAX_DISPLAYDEVICES];
 
     MTDisplayDeviceManager();
 
-    virtual MTDisplayDevice *MTCT newdevice(int id) = 0;
+    virtual MTDisplayDevice* MTCT newdevice(int id) = 0;
 
-    virtual void MTCT deldevice(MTDisplayDevice *device) = 0;
+    virtual void MTCT deldevice(MTDisplayDevice* device) = 0;
 };
 
 class MTDisplayInterface: public MTXInterface
@@ -283,47 +283,47 @@ public:
 
     void MTCT stop();
 
-    void MTCT processcmdline(void *params);
+    void MTCT processcmdline(void* params);
 
-    void MTCT showusage(void *out);
+    void MTCT showusage(void* out);
 
     int MTCT config(int command, int param);
 
     virtual int MTCT getnumdevices();
 
-    virtual const char *MTCT getdevicename(int id);
+    virtual const char* MTCT getdevicename(int id);
 
     virtual void MTCT setdevice(int id, bool silent = false);
 
-    virtual bool MTCT adddevicemanager(MTDisplayDeviceManager *manager);
+    virtual bool MTCT adddevicemanager(MTDisplayDeviceManager* manager);
 
-    virtual void MTCT deldevicemanager(MTDisplayDeviceManager *manager);
+    virtual void MTCT deldevicemanager(MTDisplayDeviceManager* manager);
 
-    virtual MTBitmap *MTCT newbitmap(int flags, int w, int h);
+    virtual MTBitmap* MTCT newbitmap(int flags, int w, int h);
 
-    virtual MTBitmap *MTCT newresbitmap(int flags, MTResources *res, int resid, int colorkey = -1);
+    virtual MTBitmap* MTCT newresbitmap(int flags, MTResources* res, int resid, int colorkey = -1);
 
-    virtual MTBitmap *MTCT newfilebitmap(int flags, const char *filename, int colorkey = -1);
+    virtual MTBitmap* MTCT newfilebitmap(int flags, const char* filename, int colorkey = -1);
 
-    virtual MTBitmap *MTCT newbmpbitmap(int flags, MTBitmap &orig, int colorkey = -1);
+    virtual MTBitmap* MTCT newbmpbitmap(int flags, MTBitmap& orig, int colorkey = -1);
 
-    virtual void MTCT setskinbitmap(int bmpid, MTBitmap *newskin);
+    virtual void MTCT setskinbitmap(int bmpid, MTBitmap* newskin);
 
-    virtual MTMask *MTCT newmask(int w, int h);
+    virtual MTMask* MTCT newmask(int w, int h);
 
-    virtual void MTCT delbitmap(MTBitmap *bmp);
+    virtual void MTCT delbitmap(MTBitmap* bmp);
 
-    virtual void MTCT delmask(MTMask *mask);
+    virtual void MTCT delmask(MTMask* mask);
 
-    virtual void MTCT adddesktop(MTWinControl *dsk);
+    virtual void MTCT adddesktop(MTWinControl* dsk);
 
-    virtual void MTCT deldesktop(MTWinControl *dsk);
+    virtual void MTCT deldesktop(MTWinControl* dsk);
 
-    virtual MTWinControl *MTCT getdefaultdesktop();
+    virtual MTWinControl* MTCT getdefaultdesktop();
 
     virtual void MTCT checkbitmaps();
 
-    virtual MTBitmap *MTCT getscreen();
+    virtual MTBitmap* MTCT getscreen();
 
     virtual void MTCT setfocus(bool focused);
 

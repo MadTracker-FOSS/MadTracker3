@@ -111,32 +111,32 @@ struct MTUser
 // Access
 struct MTACL
 {
-    MTUser *user;
+    MTUser* user;
     mt_uint32 access;
-    MTACL *next;
+    MTACL* next;
 };
 
 struct MTAccess
 {
     MTUserID creatorid;
     mt_uint32 caccess;
-    MTACL *acl;
+    MTACL* acl;
 };
 
-typedef int (MTCT *MTObjectEnum)(MTObject *object, void *data);
+typedef int (MTCT* MTObjectEnum)(MTObject* object, void* data);
 
 class MTObjectWrapper: public ObjectWrapper
 {
 public:
-    void MTCT create(void *object, void *parent, mt_uint32 type, mt_int32 i);
+    void MTCT create(void* object, void* parent, mt_uint32 type, mt_int32 i);
 
-    void MTCT destroy(void *object);
+    void MTCT destroy(void* object);
 
-    bool MTCT lock(void *object, int flags, bool lock, int timeout);
+    bool MTCT lock(void* object, int flags, bool lock, int timeout);
 
-    void MTCT setname(void *object, char *newname);
+    void MTCT setname(void* object, char* newname);
 
-    void MTCT setmodified(void *object, int value, int flags);
+    void MTCT setmodified(void* object, int value, int flags);
 };
 
 // MadTracker object
@@ -151,17 +151,17 @@ public:
     int lockread;
     int lockwrite;
     int modifying;
-    MTObject *parent;
-    MTModule *module;
-    MTUser *owner;
-    MTUser *lastowner;
+    MTObject* parent;
+    MTModule* module;
+    MTUser* owner;
+    MTUser* lastowner;
     mt_uint32 objecttype;
     mt_int32 id;
     mt_uint32 flags;
-    char *name;
+    char* name;
     MTColor color;
 
-    MTObject(MTObject *parent, mt_uint32 type, mt_int32 i);
+    MTObject(MTObject* parent, mt_uint32 type, mt_int32 i);
 
     virtual ~MTObject();
 
@@ -171,19 +171,19 @@ public:
 
     virtual bool MTCT lock(int flags, bool lock, int timeout = -1);
 
-    virtual void MTCT setname(char *newname);
+    virtual void MTCT setname(char* newname);
 
     virtual void MTCT setmodified(int value, int flags);
 
-    virtual void MTCT notify(MTObject *source, int message, int param1, void *param2);
+    virtual void MTCT notify(MTObject* source, int message, int param1, void* param2);
 
-    virtual void MTCT enumchildren(MTObjectEnum enumproc, void *data);
+    virtual void MTCT enumchildren(MTObjectEnum enumproc, void* data);
 
-    virtual int MTCT loadfromstream(MTFile *f, int size, void *params);
+    virtual int MTCT loadfromstream(MTFile* f, int size, void* params);
 
-    virtual int MTCT savetostream(MTFile *f, void *params);
+    virtual int MTCT savetostream(MTFile* f, void* params);
 
-    virtual MTObject *MTCT duplicate(mt_uint32 targettype);
+    virtual MTObject* MTCT duplicate(mt_uint32 targettype);
 
     virtual int MTCT getnumparams();
 

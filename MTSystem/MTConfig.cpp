@@ -20,55 +20,69 @@ struct NP
 {
     int line;
     int nlines;
-    char *buf;
+    char* buf;
 };
 
 //---------------------------------------------------------------------------
-MTConfigFile *mtconfigfind(const char *filename)
+MTConfigFile* mtconfigfind(const char* filename)
 {
     char path[512];
 
-    if (mtfileexists((char *) filename))
-    { return new MTConfigFile(filename); }
-    MTPreferences *prefs;
-    prefs = (MTPreferences *) mtinterface->getprefs();
+    if (mtfileexists((char*) filename))
+    {
+        return new MTConfigFile(filename);
+    }
+    MTPreferences* prefs;
+    prefs = (MTPreferences*) mtinterface->getprefs();
     if (!prefs)
-    { return 0; }
+    {
+        return 0;
+    }
     strcpy(path, prefs->syspath[SP_CONFIG]);
     strcat(path, filename);
     return mtconfigopen(path);
 }
 
-MTConfigFile *mtconfigopen(const char *filename)
+MTConfigFile* mtconfigopen(const char* filename)
 {
-    MTConfigFile *cf = new MTConfigFile(filename);
+    MTConfigFile* cf = new MTConfigFile(filename);
     if (cf->loaded())
-    { return cf; }
+    {
+        return cf;
+    }
     delete cf;
     return 0;
 }
 
-void mtconfigclose(MTConfigFile *file)
+void mtconfigclose(MTConfigFile* file)
 {
     delete file;
 }
 
 //---------------------------------------------------------------------------
-MTConfigFile::MTConfigFile(const char *filename):
-    sectionpos(-1), sectionline(-1), sectionnp(0), cpos(0), cline(0), cnp(0), np(0)
+MTConfigFile::MTConfigFile(const char* filename):
+    sectionpos(-1),
+    sectionline(-1),
+    sectionnp(0),
+    cpos(0),
+    cline(0),
+    cnp(0),
+    np(0)
 {
-    f = mtfileopen((char *) filename, MTF_READ | MTF_WRITE | MTF_SHAREREAD | MTF_CREATE);
+    f = mtfileopen((char*) filename, MTF_READ | MTF_WRITE | MTF_SHAREREAD | MTF_CREATE);
 }
 
 MTConfigFile::~MTConfigFile()
 {
     int x, l;
-    void *buf;
-    MTFile *tmpf;
+    void* buf;
+    MTFile* tmpf;
     char line[256];
 
     if (!f)
-    { return; }
+    {
+        return;
+    }
     if (np)
     {
         tmpf = mttempfile(MTF_READ | MTF_WRITE);
@@ -76,11 +90,13 @@ MTConfigFile::~MTConfigFile()
         cline = 0;
         for(x = 0; x < np->nitems; x++)
         {
-            NP &mnp = ((NP *) np->d)[x];
+            NP& mnp = ((NP*) np->d)[x];
             while(cline < mnp.line)
             {
                 if (f->eof())
-                { goto skip; }
+                {
+                    goto skip;
+                }
                 if (f->readln(line, 256))
                 {
                     tmpf->write(line, strlen(line));
@@ -96,7 +112,9 @@ MTConfigFile::~MTConfigFile()
                 while(cline < mnp.line + mnp.nlines)
                 {
                     if (f->eof())
-                    { goto skip2; }
+                    {
+                        goto skip2;
+                    }
                     f->readln(line, 256);
                     cline++;
                 };
@@ -128,7 +146,9 @@ void MTConfigFile::clear()
     int x;
 
     if (!f)
-    { return; }
+    {
+        return;
+    }
     f->seek(0, MTF_BEGIN);
     f->seteof();
     sectionpos = sectionline = -1;
@@ -138,21 +158,23 @@ void MTConfigFile::clear()
     {
         for(x = 0; x < np->nitems; x++)
         {
-            mtmemfree(((NP *) np->d)[x].buf);
+            mtmemfree(((NP*) np->d)[x].buf);
         };
         delete np;
         np = 0;
     };
 }
 
-bool MTConfigFile::setsection(const char *name)
+bool MTConfigFile::setsection(const char* name)
 {
     int x;
-    char *s, *e;
+    char* s, * e;
     char line[256];
 
     if (!f)
-    { return false; }
+    {
+        return false;
+    }
     sectionpos = sectionline = -1;
     cpos = cline = cnp = 0;
     f->seek(0, MTF_BEGIN);
@@ -163,14 +185,16 @@ bool MTConfigFile::setsection(const char *name)
         {
             for(x = cnp; x < np->nitems; x++)
             {
-                NP &mnp = ((NP *) np->d)[x];
+                NP& mnp = ((NP*) np->d)[x];
                 if (mnp.line == cline)
                 {
                     x = mnp.nlines;
                     while(x-- > 0)
                     {
                         if (f->eof())
-                        { goto exit; }
+                        {
+                            goto exit;
+                        }
                         f->readln(line, 256);
                         cline++;
                     };
@@ -181,16 +205,24 @@ bool MTConfigFile::setsection(const char *name)
         };
         cline++;
         if (!f->readln(line, 256))
-        { continue; }
+        {
+            continue;
+        }
         if ((line[0] == '#') || (line[0] == ';'))
-        { continue; }
+        {
+            continue;
+        }
         s = strchr(line, '[');
         if (!s)
-        { continue; }
+        {
+            continue;
+        }
         s++;
         e = strchr(s, ']');
         if (!e)
-        { continue; }
+        {
+            continue;
+        }
         *e = 0;
         if (strcmp(s, name) == 0)
         {
@@ -205,9 +237,9 @@ bool MTConfigFile::setsection(const char *name)
     return false;
 }
 
-bool MTConfigFile::getparameter(const char *paramname, void *value, int desiredtype, int size)
+bool MTConfigFile::getparameter(const char* paramname, void* value, int desiredtype, int size)
 {
-    char *p, *v, *e;
+    char* p, * v, * e;
     int x, tmpi;
     unsigned int tmpl;
     double tmpd;
@@ -215,7 +247,9 @@ bool MTConfigFile::getparameter(const char *paramname, void *value, int desiredt
     char line[256];
 
     if ((!f) || (sectionpos < 0))
-    { return false; }
+    {
+        return false;
+    }
     f->seek(sectionpos, MTF_BEGIN);
     cpos = sectionpos;
     cline = sectionline;
@@ -227,14 +261,16 @@ bool MTConfigFile::getparameter(const char *paramname, void *value, int desiredt
         {
             for(x = cnp; x < np->nitems; x++)
             {
-                NP &mnp = ((NP *) np->d)[x];
+                NP& mnp = ((NP*) np->d)[x];
                 if (mnp.line == cline)
                 {
                     x = mnp.nlines;
                     while(x-- > 0)
                     {
                         if (f->eof())
-                        { goto exit; }
+                        {
+                            goto exit;
+                        }
                         f->readln(line, 256);
                         cline++;
                     };
@@ -246,47 +282,69 @@ bool MTConfigFile::getparameter(const char *paramname, void *value, int desiredt
         };
         cline++;
         if (!f->readln(line, 256))
-        { continue; }
+        {
+            continue;
+        }
         skip:
         if (line[0] == '#')
-        { continue; }
+        {
+            continue;
+        }
         if (strchr(line, '['))
-        { return false; }
+        {
+            return false;
+        }
         p = line;
         while((*p == ' ') || (*p == '\t'))
         {
             p++;
             if (*p == 0)
-            { goto cont; }
+            {
+                goto cont;
+            }
         };
         v = p;
         while((*v != ' ') && (*v != '\t') && (*v != '=') && (*v != ':'))
         {
             v++;
             if (*v == 0)
-            { goto cont; }
+            {
+                goto cont;
+            }
         };
         *v++ = 0;
         if (strcmp(p, paramname))
-        { continue; }
+        {
+            continue;
+        }
         while((*v == ' ') || (*v == '\t') || (*v == ':') || (*v == '='))
         {
             v++;
             if (*v == 0)
-            { return false; }
+            {
+                return false;
+            }
         };
         if ((desiredtype == MTCT_STRING) || (desiredtype == MTCT_BINARY))
         {
             delim = *v++;
             if ((delim != '\'') && (delim != '"'))
-            { return false; }
+            {
+                return false;
+            }
             e = v;
-            while((*e) && (*e != delim)) e++;
+            while((*e) && (*e != delim))
+            {
+                e++;
+            }
             *e = 0;
             goto ok;
         };
         e = v;
-        while((*e) && (*e != ' ') && (*e != '\t')) e++;
+        while((*e) && (*e != ' ') && (*e != '\t'))
+        {
+            e++;
+        }
         *e = 0;
         goto ok;
     };
@@ -299,75 +357,85 @@ bool MTConfigFile::getparameter(const char *paramname, void *value, int desiredt
             tmpi = atoi(v);
             if (size == sizeof(char))
             {
-                *(char *) value = (char) tmpi;
+                *(char*) value = (char) tmpi;
             }
             else if (size == sizeof(short))
             {
-                *(short *) value = (short) tmpi;
+                *(short*) value = (short) tmpi;
             }
             else if (size == sizeof(int))
             {
-                *(int *) value = tmpi;
+                *(int*) value = tmpi;
             }
             else
-            { return false; }
+            {
+                return false;
+            }
             break;
         case MTCT_UINTEGER:
             tmpl = atol(v);
             if (size == sizeof(char))
             {
-                *(unsigned char *) value = (unsigned char) tmpl;
+                *(unsigned char*) value = (unsigned char) tmpl;
             }
             else if (size == sizeof(short))
             {
-                *(unsigned short *) value = (unsigned short) tmpl;
+                *(unsigned short*) value = (unsigned short) tmpl;
             }
             else if (size == sizeof(int))
             {
-                *(unsigned int *) value = tmpl;
+                *(unsigned int*) value = tmpl;
             }
             else
-            { return false; }
+            {
+                return false;
+            }
             break;
         case MTCT_FLOAT:
             tmpd = atof(v);
             if (size == sizeof(float))
             {
-                *(float *) value = (float) tmpd;
+                *(float*) value = (float) tmpd;
             }
             else if (size == sizeof(double))
             {
-                *(double *) value = tmpd;
+                *(double*) value = tmpd;
             }
             else
-            { return false; }
+            {
+                return false;
+            }
             break;
         case MTCT_BOOLEAN:
             if ((v[0] == '1') || (v[0] == 'y') || (v[0] == 'Y') || (v[0] == 't') || (v[0] == 'T'))
             {
-                *(bool *) value = true;
+                *(bool*) value = true;
             }
             else
-            { *(bool *) value = false; }
+            {
+                *(bool*) value = false;
+            }
             break;
         case MTCT_STRING:
-            strncpy((char *) value, v, size);
+            strncpy((char*) value, v, size);
             break;
         case MTCT_BINARY:
-            strncpy((char *) value, v, size);
+            strncpy((char*) value, v, size);
             break;
     };
     return true;
 }
 
-bool MTConfigFile::createsection(const char *name)
+bool MTConfigFile::createsection(const char* name)
 {
     int x;
-    char *s, *e;
+    char* s, * e;
     char line[256];
 
     if (!f)
-    { return false; }
+    {
+        return false;
+    }
     line[0] = 0;
     sectionpos = sectionline = -1;
     cpos = cline = 0;
@@ -380,14 +448,16 @@ bool MTConfigFile::createsection(const char *name)
         {
             for(x = cnp; x < np->nitems; x++)
             {
-                NP &mnp = ((NP *) np->d)[x];
+                NP& mnp = ((NP*) np->d)[x];
                 if (mnp.line == cline)
                 {
                     x = mnp.nlines;
                     while(x-- > 0)
                     {
                         if (f->eof())
-                        { goto exit; }
+                        {
+                            goto exit;
+                        }
                         f->readln(line, 256);
                         cline++;
                     };
@@ -398,16 +468,24 @@ bool MTConfigFile::createsection(const char *name)
         };
         cline++;
         if (!f->readln(line, 256))
-        { continue; }
+        {
+            continue;
+        }
         if (line[0] == '#')
-        { continue; }
+        {
+            continue;
+        }
         s = strchr(line, '[');
         if (!s)
-        { continue; }
+        {
+            continue;
+        }
         s++;
         e = strchr(s, ']');
         if (!e)
-        { continue; }
+        {
+            continue;
+        }
         *e = 0;
         if (strcmp(s, name) == 0)
         {
@@ -419,7 +497,9 @@ bool MTConfigFile::createsection(const char *name)
     };
     exit:
     if ((line[0] != 0) && (f->pos() > 0))
-    { f->write(NL, sizeof(NL) - 1); }
+    {
+        f->write(NL, sizeof(NL) - 1);
+    }
     sprintf(line, "[%s]"NL, name);
     f->write(line, strlen(line));
     sectionpos = cpos = f->pos();
@@ -428,18 +508,20 @@ bool MTConfigFile::createsection(const char *name)
     return true;
 }
 
-bool MTConfigFile::setparameter(const char *paramname, void *value, int type, int size)
+bool MTConfigFile::setparameter(const char* paramname, void* value, int type, int size)
 {
-    char *p, *v;
+    char* p, * v;
     int x, l, lastline;
-    NP *rnp = 0;
+    NP* rnp = 0;
     char delim;
     bool found = false;
     char fmt[256];
     char line[256];
 
     if ((!f) || (sectionpos < 0))
-    { return false; }
+    {
+        return false;
+    }
     f->seek(sectionpos, MTF_BEGIN);
     cpos = sectionpos;
     cline = lastline = sectionline;
@@ -455,20 +537,24 @@ bool MTConfigFile::setparameter(const char *paramname, void *value, int type, in
             rnp = 0;
             for(x = cnp; x < np->nitems; x++)
             {
-                NP &mnp = ((NP *) np->d)[x];
+                NP& mnp = ((NP*) np->d)[x];
                 if (mnp.line == cline)
                 {
                     x = mnp.nlines;
                     while(x-- > 0)
                     {
                         if (f->eof())
-                        { goto exit; }
+                        {
+                            goto exit;
+                        }
                         if (f->readln(line, 256))
                         {
                             lastline = ++cline;
                         }
                         else
-                        { cline++; }
+                        {
+                            cline++;
+                        }
                     };
                     strncpy(line, mnp.buf, 256);
                     cnp++;
@@ -479,26 +565,36 @@ bool MTConfigFile::setparameter(const char *paramname, void *value, int type, in
         };
         cline++;
         if (!f->readln(line, 256))
-        { continue; }
+        {
+            continue;
+        }
         skip:
         if (line[0] == '#')
-        { continue; }
+        {
+            continue;
+        }
         if (strchr(line, '['))
-        { goto exit; }
+        {
+            goto exit;
+        }
         lastline = cline;
         p = line;
         while((*p == ' ') || (*p == '\t'))
         {
             p++;
             if (*p == 0)
-            { goto cont; }
+            {
+                goto cont;
+            }
         };
         v = p;
         while((*v != ' ') && (*v != '\t') && (*v != '=') && (*v != ':'))
         {
             v++;
             if (*v == 0)
-            { goto cont; }
+            {
+                goto cont;
+            }
         };
         if (strncmp(p, paramname, v - p))
         {
@@ -510,7 +606,9 @@ bool MTConfigFile::setparameter(const char *paramname, void *value, int type, in
         {
             v++;
             if (*v == 0)
-            { goto exit; }
+            {
+                goto exit;
+            }
         };
         l = v - line;
         memcpy(fmt, line, l);
@@ -518,13 +616,21 @@ bool MTConfigFile::setparameter(const char *paramname, void *value, int type, in
         if ((*v == '\'') || (*v == '\"'))
         {
             delim = *v++;
-            while((*v) && (*v != delim)) v++;
+            while((*v) && (*v != delim))
+            {
+                v++;
+            }
             if (*v == delim)
-            { v++; }
+            {
+                v++;
+            }
         }
         else
         {
-            while((*v) && (*v != ' ') && (*v != '\t')) v++;
+            while((*v) && (*v != ' ') && (*v != '\t'))
+            {
+                v++;
+            }
         };
         break;
     };
@@ -535,70 +641,88 @@ bool MTConfigFile::setparameter(const char *paramname, void *value, int type, in
         strcpy(fmt, paramname);
         strcat(fmt, "\t");
         if (strlen(paramname) < 8)
-        { strcat(fmt, "\t"); }
+        {
+            strcat(fmt, "\t");
+        }
     };
     switch (type)
     {
         case MTCT_SINTEGER:
             strcat(fmt, "%d");
             if ((v) && (*v))
-            { strcat(fmt, v); }
+            {
+                strcat(fmt, v);
+            }
             if (size == sizeof(char))
             {
-                sprintf(line, fmt, *(char *) value);
+                sprintf(line, fmt, *(char*) value);
             }
             else if (size == sizeof(short))
             {
-                sprintf(line, fmt, *(short *) value);
+                sprintf(line, fmt, *(short*) value);
             }
             else if (size == sizeof(int))
-            { sprintf(line, fmt, *(int *) value); }
+            {
+                sprintf(line, fmt, *(int*) value);
+            }
             break;
         case MTCT_UINTEGER:
             strcat(fmt, "%u");
             if ((v) && (*v))
-            { strcat(fmt, v); }
+            {
+                strcat(fmt, v);
+            }
             if (size == sizeof(char))
             {
-                sprintf(line, fmt, *(unsigned char *) value);
+                sprintf(line, fmt, *(unsigned char*) value);
             }
             else if (size == sizeof(short))
             {
-                sprintf(line, fmt, *(unsigned short *) value);
+                sprintf(line, fmt, *(unsigned short*) value);
             }
             else if (size == sizeof(int))
-            { sprintf(line, fmt, *(unsigned int *) value); }
+            {
+                sprintf(line, fmt, *(unsigned int*) value);
+            }
             break;
         case MTCT_FLOAT:
             strcat(fmt, "%f");
             if ((v) && (*v))
-            { strcat(fmt, v); }
+            {
+                strcat(fmt, v);
+            }
             if (size == sizeof(float))
             {
-                sprintf(line, fmt, *(float *) value);
+                sprintf(line, fmt, *(float*) value);
             }
             else if (size == sizeof(double))
-            { sprintf(line, fmt, *(double *) value); }
+            {
+                sprintf(line, fmt, *(double*) value);
+            }
             break;
         case MTCT_BOOLEAN:
             strcat(fmt, "%s");
             if ((v) && (*v))
-            { strcat(fmt, v); }
-            sprintf(line, fmt, (*(bool *) value) ? "yes" : "no");
+            {
+                strcat(fmt, v);
+            }
+            sprintf(line, fmt, (*(bool*) value) ? "yes" : "no");
             break;
         case MTCT_STRING:
         case MTCT_BINARY:
             strcat(fmt, "\"%s\"");
             if ((v) && (*v))
-            { strcat(fmt, v); }
-            sprintf(line, fmt, (char *) value);
+            {
+                strcat(fmt, v);
+            }
+            sprintf(line, fmt, (char*) value);
             break;
     };
     if (rnp)
     {
         mtmemfree(rnp->buf);
         //TODO Find out how mtmemalloc differs from malloc; eventually use neither of them.
-        rnp->buf = (char *) mtmemalloc(strlen(line) + 1);
+        rnp->buf = (char*) mtmemalloc(strlen(line) + 1);
         strcpy(rnp->buf, line);
     }
     else
@@ -611,19 +735,21 @@ bool MTConfigFile::setparameter(const char *paramname, void *value, int type, in
         else
         {
             if (!np)
-            { np = new MTArray(4, sizeof(NP)); }
+            {
+                np = new MTArray(4, sizeof(NP));
+            }
             np->additems(cnp, 1);
-            NP &mnp = ((NP *) np->d)[cnp];
+            NP& mnp = ((NP*) np->d)[cnp];
             mnp.nlines = (found) ? 1 : 0;
             mnp.line = lastline - mnp.nlines;
-            mnp.buf = (char *) mtmemalloc(strlen(line) + 1);
+            mnp.buf = (char*) mtmemalloc(strlen(line) + 1);
             strcpy(mnp.buf, line);
         };
     };
     return true;
 }
 
-const char *MTConfigFile::getfilename()
+const char* MTConfigFile::getfilename()
 {
     return (f) ? f->url : "";
 }

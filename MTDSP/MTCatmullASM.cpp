@@ -13,7 +13,7 @@
 #include "MTCatmullASM.h"
 
 //---------------------------------------------------------------------------
-void MTCT a_splinereplace(sample *dest, int size, double x0, sample p0, double x1, sample p1, double x2, sample p2, double x3, sample p3, double xf, double xt)
+void MTCT a_splinereplace(sample* dest, int size, double x0, sample p0, double x1, sample p1, double x2, sample p2, double x3, sample p3, double xf, double xt)
 {
     double t1 = (xf - x1) / (x2 - x1);
     double ti = (xt - x1) / (x2 - x1);
@@ -21,7 +21,9 @@ void MTCT a_splinereplace(sample *dest, int size, double x0, sample p0, double x
     sample _p0, _p1, _p2, _p3;
 
     if ((t1 < 0.0) || (t1 > 1.0) || (ti < 0.0) || (ti > 1.0) || (ti < t1))
-    { return; }
+    {
+        return;
+    }
     ti = (ti - t1) / size;
     _p0 = 2 * p1;
     _p1 = -p0 + p2;
@@ -37,7 +39,7 @@ void MTCT a_splinereplace(sample *dest, int size, double x0, sample p0, double x
 }
 
 //---------------------------------------------------------------------------
-void MTCT a_splinemodulate(sample *dest, int size, double x0, sample p0, double x1, sample p1, double x2, sample p2, double x3, sample p3, double xf, double xt)
+void MTCT a_splinemodulate(sample* dest, int size, double x0, sample p0, double x1, sample p1, double x2, sample p2, double x3, sample p3, double xf, double xt)
 {
     double t1 = (xf - x1) / (x2 - x1);
     double ti = (xt - x1) / (x2 - x1);
@@ -45,7 +47,9 @@ void MTCT a_splinemodulate(sample *dest, int size, double x0, sample p0, double 
     sample _p0, _p1, _p2, _p3;
 
     if ((t1 < 0.0) || (t1 > 1.0) || (ti < 0.0) || (ti > 1.0) || (ti < t1))
-    { return; }
+    {
+        return;
+    }
     ti = (ti - t1) / size;
     _p0 = 2 * p1;
     _p1 = -p0 + p2;

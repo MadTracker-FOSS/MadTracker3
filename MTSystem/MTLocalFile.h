@@ -42,40 +42,40 @@ class MTLocalHook: public MTFileHook
 public:
     MTLocalHook();
 
-    MTFile *MTCT fileopen(const char *url, int flags);
+    MTFile* MTCT fileopen(const char* url, int flags);
 
-    MTFolder *MTCT folderopen(char *url);
+    MTFolder* MTCT folderopen(char* url);
 
-    bool MTCT filecopy(char *source, char *dest);
+    bool MTCT filecopy(char* source, char* dest);
 
-    bool MTCT filerename(char *source, char *dest);
+    bool MTCT filerename(char* source, char* dest);
 
-    bool MTCT filedelete(char *url);
+    bool MTCT filedelete(char* url);
 
-    void MTCT filetype(const char *url, char *type, int length);
+    void MTCT filetype(const char* url, char* type, int length);
 };
 
 class MTLocalFile: public MTFile
 {
 public:
-    MTLocalFile(const char *path, int access);
+    MTLocalFile(const char* path, int access);
 
-    MTLocalFile(MTFile *parent, int start, int end, int access);
+    MTLocalFile(MTFile* parent, int start, int end, int access);
 
     ~MTLocalFile();
 
-    int MTCT read(void *buffer, int size);
+    int MTCT read(void* buffer, int size);
 
-    int MTCT readln(char *buffer, int maxsize);
+    int MTCT readln(char* buffer, int maxsize);
 
 //	int MTCT reads(char *buffer,int maxsize);
-    int MTCT write(const void *buffer, int size);
+    int MTCT write(const void* buffer, int size);
 
     int MTCT seek(int pos, int origin);
 
-    void *MTCT getpointer(int offset, int size);
+    void* MTCT getpointer(int offset, int size);
 
-    void MTCT releasepointer(void *mem);
+    void MTCT releasepointer(void* mem);
 
     int MTCT length();
 
@@ -85,36 +85,36 @@ public:
 
     bool MTCT seteof();
 
-    bool MTCT gettime(int *modified, int *accessed);
+    bool MTCT gettime(int* modified, int* accessed);
 
-    bool MTCT settime(int *modified, int *accessed);
+    bool MTCT settime(int* modified, int* accessed);
 
-    MTFile *MTCT subclass(int start, int length, int access);
+    MTFile* MTCT subclass(int start, int length, int access);
 
 private:
 #ifdef _WIN32
     HANDLE h;
     HANDLE maph;
 #else
-    FILE *fs;
+    FILE* fs;
     int maplength;
 #endif
     bool stdhandle;
     int maccess;
     int cpos;
     int from, to;
-    void *mmap;
+    void* mmap;
     int mapoffset;
 };
 
 class MTLocalFolder: public MTFolder
 {
 public:
-    MTLocalFolder(char *url);
+    MTLocalFolder(char* url);
 
     ~MTLocalFolder();
 
-    bool MTCT getfile(const char **name, int *attrib, double *size);
+    bool MTCT getfile(const char** name, int* attrib, double* size);
 
     bool MTCT next();
 
@@ -125,7 +125,7 @@ private:
     HANDLE search;
     WIN32_FIND_DATA data;
 #else
-    DIR *d;
+    DIR* d;
 #endif
 };
 

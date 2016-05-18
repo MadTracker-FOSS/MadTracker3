@@ -30,7 +30,7 @@ class Pattern: public MTObject
 public:
     double nbeats;
 
-    Pattern(MTObject *parent, mt_uint32 type, mt_int32 i):
+    Pattern(MTObject* parent, mt_uint32 type, mt_int32 i):
         MTObject(parent, type, i)
     {
         nbeats = 8.0;
@@ -38,21 +38,21 @@ public:
 
     virtual ~Pattern();
 
-    virtual PatternInstance *MTCT createinstance(int layer, Sequence *sequ, PatternInstance *previous) = 0;
+    virtual PatternInstance* MTCT createinstance(int layer, Sequence* sequ, PatternInstance* previous) = 0;
 };
 
 class PatternInstance
 {
 public:
     int id;
-    MTModule *module;
-    Pattern *parent;
-    Sequence *sequ;
+    MTModule* module;
+    Pattern* parent;
+    Sequence* sequ;
     int layer;
     double cpos;
     double nextevent;
 
-    PatternInstance(Pattern *p, Sequence *s, int l, PatternInstance *previous)
+    PatternInstance(Pattern* p, Sequence* s, int l, PatternInstance* previous)
     {
         module = p->module;
         parent = p;
@@ -62,13 +62,14 @@ public:
     };
 
     virtual ~PatternInstance()
-    { };
+    {
+    };
 
     virtual void MTCT processevents() = 0;
 
     virtual bool MTCT seek(double offset, bool start) = 0;
 
-    virtual void MTCT delinstance(InstrumentInstance *i) = 0;
+    virtual void MTCT delinstance(InstrumentInstance* i) = 0;
 };
 //---------------------------------------------------------------------------
 #endif

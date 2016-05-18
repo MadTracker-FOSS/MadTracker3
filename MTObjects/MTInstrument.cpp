@@ -15,7 +15,7 @@
 #include <MTXAPI/RES/MTObjectsRES.h>
 
 //---------------------------------------------------------------------------
-InstrumentType *instrumenttype;
+InstrumentType* instrumenttype;
 
 //---------------------------------------------------------------------------
 InstrumentType::InstrumentType()
@@ -24,7 +24,7 @@ InstrumentType::InstrumentType()
     description = "Instrument";
 }
 
-MTObject *InstrumentType::create(MTObject *parent, mt_int32 id, void *param)
+MTObject* InstrumentType::create(MTObject* parent, mt_int32 id, void* param)
 {
     return new MTInstrument(parent, id);
 }
@@ -32,14 +32,31 @@ MTObject *InstrumentType::create(MTObject *parent, mt_int32 id, void *param)
 //---------------------------------------------------------------------------
 // MTInstrument functions
 //---------------------------------------------------------------------------
-MTInstrument::MTInstrument(MTObject *parent, mt_int32 i):
-    Instrument(parent, MTO_MTINSTRUMENT, i), gvol(1.0), gpanx(0.0), gpany(0.0), gpanz(0.0), vibtype(0), vibsweep(0),
-    vibdepth(0), vibrate(0), fadeout(1.0), nna(0), filter(0), cutoff(4000), resonance(64), attack(0.0f), decay(0.0f)
+MTInstrument::MTInstrument(MTObject* parent, mt_int32 i):
+    Instrument(parent, MTO_MTINSTRUMENT, i),
+    gvol(1.0),
+    gpanx(0.0),
+    gpany(0.0),
+    gpanz(0.0),
+    vibtype(0),
+    vibsweep(0),
+    vibdepth(0),
+    vibrate(0),
+    fadeout(1.0),
+    nna(0),
+    filter(0),
+    cutoff(4000),
+    resonance(64),
+    attack(0.0f),
+    decay(0.0f)
 {
     int x;
 
     mtmemzero(&range, sizeof(range));
-    for(x = 0; x < 96; x++) range[1][x] = 128;
+    for(x = 0; x < 96; x++)
+    {
+        range[1][x] = 128;
+    }
     mtmemzero(&env, sizeof(env));
     mtmemzero(&grp, sizeof(grp));
 #	ifdef MTSYSTEM_RESOURCES
@@ -52,7 +69,7 @@ MTInstrument::~MTInstrument()
     setfilter(false);
 }
 
-void MTInstrument::enumchildren(MTObjectEnum enumproc, void *data)
+void MTInstrument::enumchildren(MTObjectEnum enumproc, void* data)
 {
     int x;
 
@@ -61,12 +78,14 @@ void MTInstrument::enumchildren(MTObjectEnum enumproc, void *data)
         if (grp[x].spl)
         {
             if (!enumproc(grp[x].spl, data))
-            { return; }
+            {
+                return;
+            }
         };
     };
 }
 
-InstrumentInstance *MTInstrument::createinstance(Track *track, PatternInstance *caller, InstrumentInstance *previous)
+InstrumentInstance* MTInstrument::createinstance(Track* track, PatternInstance* caller, InstrumentInstance* previous)
 {
     return new MTInstrumentInstance(this, track, caller, caller->layer, previous);
 }
@@ -78,12 +97,14 @@ bool MTInstrument::acceptoscillator()
     for(x = 0; x < MAX_GRPS; x++)
     {
         if (!grp[x].spl)
-        { return true; }
+        {
+            return true;
+        }
     };
     return false;
 }
 
-int MTInstrument::addoscillator(Oscillator *o)
+int MTInstrument::addoscillator(Oscillator* o)
 {
     int x;
 
@@ -100,7 +121,7 @@ int MTInstrument::addoscillator(Oscillator *o)
     return -1;
 }
 
-int MTInstrument::deloscillator(Oscillator *o)
+int MTInstrument::deloscillator(Oscillator* o)
 {
     int x;
 
@@ -120,7 +141,9 @@ void MTInstrument::setfilter(bool active)
     if (active)
     {
         if (filter)
-        { return; }
+        {
+            return;
+        }
         lock(MTOL_LOCK, true);
         filter = new MTFilter(parent, 0);
         filter->setparam(0, 0, (float) cutoff / 44100.0);
@@ -130,7 +153,9 @@ void MTInstrument::setfilter(bool active)
     else
     {
         if (!filter)
-        { return; }
+        {
+            return;
+        }
         lock(MTOL_LOCK, true);
         delete filter;
         filter = 0;
@@ -145,18 +170,22 @@ const double f2pi = 6.283185307179586476925286766559;
 #endif
 
 //---------------------------------------------------------------------------
-MTInstrumentInstance::MTInstrumentInstance(Instrument *p, Track *t, PatternInstance *c, int l, InstrumentInstance *previous):
-    InstrumentInstance(p, t, c, l, previous), filter(0)
+MTInstrumentInstance::MTInstrumentInstance(Instrument* p, Track* t, PatternInstance* c, int l, InstrumentInstance* previous):
+    InstrumentInstance(p, t, c, l, previous),
+    filter(0)
 {
     int x;
 
     mtmemzero(osc, sizeof(osc));
     mtmemzero(envs, sizeof(envs));
-    for(x = 0; x < 8; x++) envs[x].lenvp = 65535;
-    MTInstrument &ins = *((MTInstrument *) parent);
+    for(x = 0; x < 8; x++)
+    {
+        envs[x].lenvp = 65535;
+    }
+    MTInstrument& ins = *((MTInstrument*) parent);
     if (previous)
     {
-        MTInstrumentInstance &cp = *(MTInstrumentInstance *) previous;
+        MTInstrumentInstance& cp = *(MTInstrumentInstance*) previous;
         iflags = cp.flags;
         lastpos = cp.lastpos;
         fadepos = cp.fadepos;
@@ -195,15 +224,17 @@ MTInstrumentInstance::MTInstrumentInstance(Instrument *p, Track *t, PatternInsta
         tpanx = tpany = tpanz = cpanx = cpany = cpanz = 0.0;
     };
     if ((iflags & MTIF_FAE) == 0)
-    { flags |= MTIIF_FADEOUT; }
+    {
+        flags |= MTIIF_FADEOUT;
+    }
     if (ins.filter)
     {
-        buffer[0] = (sample *) si->getprivatedata(0);
+        buffer[0] = (sample*) si->getprivatedata(0);
         for(x = 1; x < 8; x++)
         {
             buffer[x] = buffer[x - 1] + (PRIVATE_BUFFER / 8);
         };
-        filter = (MTFilterInstance *) ins.filter->createinstance(t->noutputs, t->buffer, t->noutputs, buffer, this);
+        filter = (MTFilterInstance*) ins.filter->createinstance(t->noutputs, t->buffer, t->noutputs, buffer, this);
 // Use built-in filter attack?
         if ((((ins.env[3].flags & EF_ENABLED) == 0) || (ins.env[3].npoints == 0)) && (ins.attack > 0))
         {
@@ -216,16 +247,20 @@ MTInstrumentInstance::MTInstrumentInstance(Instrument *p, Track *t, PatternInsta
 MTInstrumentInstance::~MTInstrumentInstance()
 {
     if (osc[0])
-    { delete osc[0]; }
+    {
+        delete osc[0];
+    }
     if (filter)
-    { delete filter; }
+    {
+        delete filter;
+    }
 }
 
 void MTInstrumentInstance::processevents()
 {
     int x, l, lp, e;
     double inc;
-    MTInstrument &cins = *(MTInstrument *) parent;
+    MTInstrument& cins = *(MTInstrument*) parent;
 
     if (!osc[0])
     {
@@ -237,16 +272,20 @@ void MTInstrumentInstance::processevents()
     {
         for(x = 0; x < 8; x++)
         {
-            IEnvelope &cenv = ((MTInstrument *) parent)->env[x];
-            EnvStatus &cs = envs[x];
+            IEnvelope& cenv = ((MTInstrument*) parent)->env[x];
+            EnvStatus& cs = envs[x];
             if ((cenv.flags & EF_ENABLED) && (cenv.npoints))
             {
                 // If the envelope was active then increment the position
                 if (!cs.process)
-                { cs.pos += inc; }
+                {
+                    cs.pos += inc;
+                }
                 // If the envelope was not idle then decrement the counter until next point
                 if (!cs.wait)
-                { cs.count -= inc; }
+                {
+                    cs.count -= inc;
+                }
             };
             // Mark the envelope as not active (it'll be active later if there is something to do with it)
             cs.process = false;
@@ -258,10 +297,10 @@ void MTInstrumentInstance::processevents()
     {
         for(x = 0; x < 8; x++)
         {
-            IEnvelope &cenv = cins.env[x];
+            IEnvelope& cenv = cins.env[x];
             if ((cenv.flags & EF_ENABLED) && (cenv.npoints))
             {
-                EnvStatus &cs = envs[x];
+                EnvStatus& cs = envs[x];
 /*				if (x==0){
 					FLOG4("%f\t%f\t%d\t%d\t%f",cs.pos,cs.count,cs.envp,cs.lenvp);
 					FLOG1("%f"NL,cvol);
@@ -274,8 +313,13 @@ void MTInstrumentInstance::processevents()
                     // Calculate the last point we can reach
                     e = cenv.npoints - 1; // ...either the last point
                     if (cenv.flags & EF_LOOP)
-                    { e = cenv.loope; } // ...or the loop end
-                    if ((cenv.flags & EF_SUSTAIN) && ((flags & MTIIF_NOTEOFF) == 0) && (cenv.suste < e)) e = cenv.suste; // ...or the sustain loop end
+                    {
+                        e = cenv.loope;
+                    } // ...or the loop end
+                    if ((cenv.flags & EF_SUSTAIN) && ((flags & MTIIF_NOTEOFF) == 0) && (cenv.suste < e))
+                    {
+                        e = cenv.suste;
+                    } // ...or the sustain loop end
                     if (e == 0)
                     { // First and only point
                         switch (x)
@@ -321,7 +365,10 @@ void MTInstrumentInstance::processevents()
                                     break;
                                 case 3:
                                     ccutoff = cenv.points[0].y;
-                                    if (filter) filter->setparam(0, 0, ccutoff * cins.cutoff);
+                                    if (filter)
+                                    {
+                                        filter->setparam(0, 0, ccutoff * cins.cutoff);
+                                    }
                                     break;
                             };
                         };
@@ -352,12 +399,20 @@ void MTInstrumentInstance::processevents()
                         {
                             if (x == 0)
                             {
-                                if (osc[0]->volume < VOLUME_THRESOLD) inc = -1.0;
+                                if (osc[0]->volume < VOLUME_THRESOLD)
+                                {
+                                    inc = -1.0;
+                                }
                                 else
                                 {
                                     if ((iflags & MTIF_FAE) && ((flags & MTIIF_FADEOUT) == 0))
                                     {
-                                        if (ai->recording) ai->debugpoint(module->beatstosamples(module->playstatus.pos), "FO");
+                                        if (ai->recording)
+                                        {
+                                            ai->debugpoint(
+                                                module->beatstosamples(module->playstatus.pos), "FO"
+                                            );
+                                        }
                                         flags |= MTIIF_FADEOUT;
                                         fadepos = cpos;
                                     };
@@ -384,7 +439,10 @@ void MTInstrumentInstance::processevents()
                             {
                                 l = FAST_RAMP;
                                 cs.count = module->samplestobeats(l);
-                                if (cs.count < inc) inc = cs.count;
+                                if (cs.count < inc)
+                                {
+                                    inc = cs.count;
+                                }
                                 switch (x)
                                 {
                                     case 0:
@@ -412,7 +470,9 @@ void MTInstrumentInstance::processevents()
                 {
                     l = (int) module->beatstosamples(cs.count);
                     if (cs.count < inc)
-                    { inc = cs.count; }
+                    {
+                        inc = cs.count;
+                    }
                 };
                 if (l >= 0)
                 {
@@ -424,11 +484,15 @@ void MTInstrumentInstance::processevents()
                             break;
                         case 1:
                             tpanx = pan_mul(mpanx, cpanx);
-                            osc[0]->setpanning(pan_mul(gpanx, tpanx), pan_mul(gpany, tpany), pan_mul(gpanz, tpanz), l, 0);
+                            osc[0]->setpanning(
+                                pan_mul(gpanx, tpanx), pan_mul(gpany, tpany), pan_mul(gpanz, tpanz), l, 0
+                            );
                             break;
                         case 3:
                             if (filter)
-                            { filter->setparam(0, 0, (int) (ccutoff * cins.cutoff), l); }
+                            {
+                                filter->setparam(0, 0, (int) (ccutoff * cins.cutoff), l);
+                            }
                             break;
                     };
                 };
@@ -436,7 +500,9 @@ void MTInstrumentInstance::processevents()
             if ((x == 0) && (flags & MTIIF_FADEOUT))
             {
                 if (inc <= 0.0)
-                { continue; }
+                {
+                    continue;
+                }
 /*
 				if (cfadeout==0.0){
 					inc = -1.0;
@@ -475,7 +541,9 @@ void MTInstrumentInstance::processevents()
         if ((cins.attack == 0) && (cpos >= (double) cins.attack * bpt))
         {
             if ((inc == 0) || (inc > bpt))
-            { inc = bpt; }
+            {
+                inc = bpt;
+            }
 //			if ((inc==0) || (inc>bpt*0.5)) inc = bpt*0.5;
             l = (int) module->beatstosamples(inc);
             double c = sqrt(1.0f / ((1.0f + (float) cins.decay * 0.5f) * (1 + (cpos + inc) * cins.tpb - cins.attack)));
@@ -488,8 +556,8 @@ void MTInstrumentInstance::processevents()
         nextevent += inc;
         for(x = 0; x < 8; x++)
         {
-            IEnvelope &cenv = ((MTInstrument *) parent)->env[x];
-            EnvStatus &cs = envs[x];
+            IEnvelope& cenv = ((MTInstrument*) parent)->env[x];
+            EnvStatus& cs = envs[x];
             cs.process = cs.wait;
         };
 /*
@@ -512,7 +580,9 @@ void MTInstrumentInstance::processevents()
 bool MTInstrumentInstance::seek(double offset, int origin, int units)
 {
     if (!osc[0])
-    { return false; }
+    {
+        return false;
+    }
     return osc[0]->seek(offset, origin, units);
 }
 
@@ -520,7 +590,7 @@ void MTInstrumentInstance::process(int count)
 {
     int x, o, l;
     bool silence;
-    MTInstrument &ins = *(MTInstrument *) parent;
+    MTInstrument& ins = *(MTInstrument*) parent;
 
     o = 0;
     if (filter)
@@ -528,14 +598,20 @@ void MTInstrumentInstance::process(int count)
         l = PRIVATE_BUFFER / 8;
     }
     else
-    { l = count; }
+    {
+        l = count;
+    }
     flags &= (~IIF_SLEEPING);
     while(count > 0)
     {
         if (!l)
-        { break; }
+        {
+            break;
+        }
         if (count < l)
-        { l = count; }
+        {
+            l = count;
+        }
         silence = false;
         if ((osc[0]) && (osc[0]->parent->lockread == 0) && (osc[0]->parent->access.caccess & MTOA_CANPLAY))
         {
@@ -574,19 +650,19 @@ void MTInstrumentInstance::process(int count)
     };
 }
 
-void MTInstrumentInstance::sendevents(int nevents, MTIEvent **events)
+void MTInstrumentInstance::sendevents(int nevents, MTIEvent** events)
 {
     int x, y;
     double next, tmp_vol, b, b1, b2;
     float tmp_panx, tmp_pany, tmp_panz;
-    MTInstrument &cparent = *(MTInstrument *) parent;
+    MTInstrument& cparent = *(MTInstrument*) parent;
     bool first = true;
 
     for(x = 0; x < nevents; x++)
     {
-        MTIEvent *cevent = events[x];
-        MTINoteEvent *nevent = (MTINoteEvent *) cevent;
-        MTIParamEvent *pevent = (MTIParamEvent *) cevent;
+        MTIEvent* cevent = events[x];
+        MTINoteEvent* nevent = (MTINoteEvent*) cevent;
+        MTIParamEvent* pevent = (MTIParamEvent*) cevent;
         if (cevent)
         {
             switch (cevent->type)
@@ -601,7 +677,9 @@ void MTInstrumentInstance::sendevents(int nevents, MTIEvent **events)
                             flags |= MTIIF_NOTECUT;
                             tvol = mvol = 0.0;
                             if (osc[0])
-                            { osc[0]->setvolume(0.0, FAST_RAMP, 0); }
+                            {
+                                osc[0]->setvolume(0.0, FAST_RAMP, 0);
+                            }
                         }
                         else
                         {
@@ -625,19 +703,24 @@ void MTInstrumentInstance::sendevents(int nevents, MTIEvent **events)
                         gpany = pan_mul(nevent->gpany, cparent.gpany);
                         gpanz = pan_mul(nevent->gpanz, cparent.gpanz);
                         mtmemzero(envs, sizeof(envs));
-                        for(x = 0; x < 8; x++) envs[x].lenvp = 65535;
+                        for(x = 0; x < 8; x++)
+                        {
+                            envs[x].lenvp = 65535;
+                        }
                         cvol = getvolume();
                         getpanning(&cpanx, &cpany, &cpanz);
                         lastpos = cpos;
                         fadepos = 0.0;
-                        MTInstrument &ins = *((MTInstrument *) parent);
+                        MTInstrument& ins = *((MTInstrument*) parent);
                         fadeout = ins.fadeout;
                         nna = ins.nna;
                         iflags = ins.flags;
                     };
                     note = nevent->note;
                     if (osc[0])
-                    { first = false; }
+                    {
+                        first = false;
+                    }
                     if (nevent->flags & MTIEF_ISNOTE)
                     { // Is there a note?
                         if (osc[0])
@@ -647,13 +730,17 @@ void MTInstrumentInstance::sendevents(int nevents, MTIEvent **events)
                             osc[0] = 0;
                         };
                         if ((note < 12) || (note > 106))
-                        { continue; }
+                        {
+                            continue;
+                        }
                         grp[0] = cparent.range[0][(int) note - 12];
                     }
                     else
                     {
                         if ((note < 12) || (note > 106))
-                        { continue; }
+                        {
+                            continue;
+                        }
                         grp[0] = cparent.range[0][(int) note - 12];
                     };
                     if (!osc[0])
@@ -686,25 +773,39 @@ void MTInstrumentInstance::sendevents(int nevents, MTIEvent **events)
                                 mvol = nevent->volume;
                             }
                             else
-                            { mvol = (float) cparent.range[1][y] / 128; }
+                            {
+                                mvol = (float) cparent.range[1][y] / 128;
+                            }
                             if (nevent->panx > -2.0)
                             {
                                 mpanx = pan_mul(cparent.grp[grp[0]].panx, nevent->panx);
                             }
                             else
-                            { mpanx = pan_mul(cparent.grp[grp[0]].panx, (float) ((signed char) cparent.range[2][y]) / 127); }
+                            {
+                                mpanx = pan_mul(
+                                    cparent.grp[grp[0]].panx, (float) ((signed char) cparent.range[2][y]) / 127
+                                );
+                            }
                             if (nevent->pany > -2.0)
                             {
                                 mpany = pan_mul(cparent.grp[grp[0]].pany, nevent->pany);
                             }
                             else
-                            { mpany = pan_mul(cparent.grp[grp[0]].pany, (float) ((signed char) cparent.range[3][y]) / 127); }
+                            {
+                                mpany = pan_mul(
+                                    cparent.grp[grp[0]].pany, (float) ((signed char) cparent.range[3][y]) / 127
+                                );
+                            }
                             if (nevent->panz > -2.0)
                             {
                                 mpanz = pan_mul(cparent.grp[grp[0]].panz, nevent->panz);
                             }
                             else
-                            { mpanz = pan_mul(cparent.grp[grp[0]].panz, (float) ((signed char) cparent.range[4][y]) / 127); }
+                            {
+                                mpanz = pan_mul(
+                                    cparent.grp[grp[0]].panz, (float) ((signed char) cparent.range[4][y]) / 127
+                                );
+                            }
                         };
                         tvol = cvol * mvol;
                         tpanx = pan_mul(mpanx, cpanx);
@@ -716,7 +817,9 @@ void MTInstrumentInstance::sendevents(int nevents, MTIEvent **events)
                     break;
                 case MTIE_KILL:
                     if (!osc[0])
-                    { return; }
+                    {
+                        return;
+                    }
                     flags |= IIF_BACKGROUND;
                     switch (nna & 0xFF)
                     {
@@ -761,7 +864,9 @@ void MTInstrumentInstance::sendevents(int nevents, MTIEvent **events)
                     break;
                 case MTIE_PARAM:
                     if ((!osc[0]) || (flags & MTIIF_NOTECUT))
-                    { return; }
+                    {
+                        return;
+                    }
                     y = 0;
                     if ((pevent->param == MTIP_VOLUME) || (pevent->param == MTIP_PANNING))
                     {
@@ -784,7 +889,9 @@ void MTInstrumentInstance::sendevents(int nevents, MTIEvent **events)
                         };
                         next = cpos + b;
                         if (next < nextevent)
-                        { nextevent = next; }
+                        {
+                            nextevent = next;
+                        }
                     };
                     switch (pevent->param)
                     {
@@ -799,13 +906,17 @@ void MTInstrumentInstance::sendevents(int nevents, MTIEvent **events)
                                 mvol += pevent->dvalue1;
                             }
                             else
-                            { mvol = pevent->dvalue1; }
+                            {
+                                mvol = pevent->dvalue1;
+                            }
                             if (mvol < 0.0)
                             {
                                 mvol = 0.0;
                             }
                             else if ((mvol > 1.0) && ((pevent->flags & MTIEF_DONTSATURATE) == 0))
-                            { mvol = 1.0; }
+                            {
+                                mvol = 1.0;
+                            }
                             tvol = tmp_vol * mvol;
                             osc[0]->setvolume(gvol * tvol, y);
                             break;
@@ -827,19 +938,25 @@ void MTInstrumentInstance::sendevents(int nevents, MTIEvent **events)
                                     mpanx = -1.0;
                                 }
                                 else if (mpanx > 1.0)
-                                { mpanx = 1.0; }
+                                {
+                                    mpanx = 1.0;
+                                }
                                 if (mpany < -1.0)
                                 {
                                     mpany = -1.0;
                                 }
                                 else if (mpany > 1.0)
-                                { mpany = 1.0; }
+                                {
+                                    mpany = 1.0;
+                                }
                                 if (mpanz < -1.0)
                                 {
                                     mpanz = -1.0;
                                 }
                                 else if (mpanz > 1.0)
-                                { mpanz = 1.0; }
+                                {
+                                    mpanz = 1.0;
+                                }
                             }
                             else
                             {
@@ -865,7 +982,9 @@ void MTInstrumentInstance::sendevents(int nevents, MTIEvent **events)
                                 note += pevent->dvalue1;
                             }
                             else
-                            { note = pevent->dvalue1; }
+                            {
+                                note = pevent->dvalue1;
+                            }
                             osc[0]->setnote(note);
                             break;
                     };
@@ -877,26 +996,32 @@ void MTInstrumentInstance::sendevents(int nevents, MTIEvent **events)
 
 float MTInstrumentInstance::getimportance()
 {
-    float i = 0.75f + (float) ((MTInstrument *) parent)->gvol / 4.0f;
+    float i = 0.75f + (float) ((MTInstrument*) parent)->gvol / 4.0f;
 
     if (osc[0])
     {
         i *= osc[0]->getimportance();
     }
     else
-    { return 0; }
+    {
+        return 0;
+    }
     if (flags & IIF_BACKGROUND)
-    { i /= 4; }
+    {
+        i /= 4;
+    }
     if (flags & IIF_SLEEPING)
-    { i /= 2; }
+    {
+        i /= 2;
+    }
     return i;
 }
 
 double MTInstrumentInstance::getvolume(double delay, bool needfadeout)
 {
     double p, l, fo;
-    EnvStatus &cs = envs[0];
-    IEnvelope &cenv = ((MTInstrument *) parent)->env[0];
+    EnvStatus& cs = envs[0];
+    IEnvelope& cenv = ((MTInstrument*) parent)->env[0];
 
     fo = 1.0;
     if ((needfadeout) && (flags & MTIIF_FADEOUT))
@@ -916,7 +1041,9 @@ double MTInstrumentInstance::getvolume(double delay, bool needfadeout)
     {
         l = cenv.points[cs.envp].x - cenv.points[cs.lenvp].x;
         if (l <= 0.0)
-        { return cenv.points[cs.envp].y * fo; }
+        {
+            return cenv.points[cs.envp].y * fo;
+        }
     }
     else
     {
@@ -928,30 +1055,40 @@ double MTInstrumentInstance::getvolume(double delay, bool needfadeout)
         p = l;
     }
     else if (p < 0.0)
-    { p = 0.0; }
+    {
+        p = 0.0;
+    }
     return ((cenv.points[cs.envp].y * (l - p) + cenv.points[cs.lenvp].y * p) / l) * fo;
 }
 
-void MTInstrumentInstance::getpanning(float *x, float *y, float *z, double delay)
+void MTInstrumentInstance::getpanning(float* x, float* y, float* z, double delay)
 {
     double p, l;
-    EnvStatus &cs = envs[1];
-    IEnvelope &cenv = ((MTInstrument *) parent)->env[1];
+    EnvStatus& cs = envs[1];
+    IEnvelope& cenv = ((MTInstrument*) parent)->env[1];
 
     if (y)
-    { *y = 0.0; }
+    {
+        *y = 0.0;
+    }
     if (z)
-    { *z = 0.0; }
+    {
+        *z = 0.0;
+    }
     if (((cenv.flags & EF_ENABLED) == 0) || (cenv.npoints == 0))
     {
         if (x)
-        { *x = 0.0; }
+        {
+            *x = 0.0;
+        }
         return;
     };
     if ((cs.lenvp == cs.envp) || (cs.lenvp == 65535))
     {
         if (x)
-        { *x = cenv.points[cs.envp].y; }
+        {
+            *x = cenv.points[cs.envp].y;
+        }
         return;
     };
     if (cs.lenvp < cs.envp)
@@ -960,7 +1097,9 @@ void MTInstrumentInstance::getpanning(float *x, float *y, float *z, double delay
         if (l <= 0.0)
         {
             if (x)
-            { *x = cenv.points[cs.envp].y; }
+            {
+                *x = cenv.points[cs.envp].y;
+            }
             return;
         };
     }
@@ -974,8 +1113,12 @@ void MTInstrumentInstance::getpanning(float *x, float *y, float *z, double delay
         p = l;
     }
     else if (p < 0.0)
-    { p = 0.0; }
+    {
+        p = 0.0;
+    }
     if (x)
-    { *x = (float) ((double) (cenv.points[cs.envp].y * (l - p) + cenv.points[cs.lenvp].y * p) / l); }
+    {
+        *x = (float) ((double) (cenv.points[cs.envp].y * (l - p) + cenv.points[cs.lenvp].y * p) / l);
+    }
 }
 //---------------------------------------------------------------------------

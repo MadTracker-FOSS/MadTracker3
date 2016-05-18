@@ -28,7 +28,7 @@
 struct MTShape
 {
     int type;
-    sample *data;
+    sample* data;
     int x1;
     sample y1;
     int x2;
@@ -52,11 +52,11 @@ public:
 
     virtual void MTCT add(int layer, int x1, sample y1, int x2, sample y2, int x3, sample y3, int x4, sample y4);
 
-    virtual void MTCT add(int layer, int x1, int x2, sample *data);
+    virtual void MTCT add(int layer, int x1, int x2, sample* data);
 
-    virtual MTShape *MTCT get(int from, int to, int accept);
+    virtual MTShape* MTCT get(int from, int to, int accept);
 
-    virtual void MTCT del(MTShape *s);
+    virtual void MTCT del(MTShape* s);
 
     virtual void MTCT flush(int to);
 

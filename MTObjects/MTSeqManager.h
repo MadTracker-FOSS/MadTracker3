@@ -20,7 +20,7 @@
 class MTSeqManager: public MTCustomWinBehaviours
 {
 public:
-    MTModule *module;
+    MTModule* module;
     double zoom;
     double cursor;
     double offsetx;
@@ -34,23 +34,23 @@ public:
     int selecting;
     bool followsong;
 
-    MTSeqManager(MTCustomWinControl *control);
+    MTSeqManager(MTCustomWinControl* control);
 
     void MTCT ondestroy();
 
     void MTCT onsetbounds(int l, int t, int w, int h);
 
-    bool MTCT oncheckbounds(int &l, int &t, int &w, int &h);
+    bool MTCT oncheckbounds(int& l, int& t, int& w, int& h);
 
-    void MTCT ondraw(MTRect &rect);
+    void MTCT ondraw(MTRect& rect);
 
-    bool MTCT onmessage(MTCMessage &msg);
+    bool MTCT onmessage(MTCMessage& msg);
 
-    void *MTCT ongetoffsetrgn(int type);
+    void* MTCT ongetoffsetrgn(int type);
 
     void MTCT onoffset(int ox, int oy);
 
-    virtual void MTCT setmodule(MTModule *newmodule);
+    virtual void MTCT setmodule(MTModule* newmodule);
 
     virtual void MTCT setcursor(double value);
 
@@ -64,11 +64,11 @@ public:
 
     virtual void MTCT updatepos();
 
-    virtual double MTCT clienttodata(int x, int *layer);
+    virtual double MTCT clienttodata(int x, int* layer);
 
-    virtual int MTCT datatoclient(double x, int *layer);
+    virtual int MTCT datatoclient(double x, int* layer);
 
-    virtual void MTCT clienttosequence(int &x, int &layer);
+    virtual void MTCT clienttosequence(int& x, int& layer);
 
     virtual void MTCT selectsequence(int layer, int s, int how);
 
@@ -78,10 +78,10 @@ public:
 
     virtual void MTCT drawseqp(int layer, int s, double sl, double el);
 
-    virtual bool MTCT sequencetorect(int layer, int s, MTRect &r);
+    virtual bool MTCT sequencetorect(int layer, int s, MTRect& r);
 
 private:
-    MTScroller *hs, *vs;
+    MTScroller* hs, * vs;
     int width, height;
 
     void MTCT updatemetrics();
@@ -94,6 +94,6 @@ private:
 };
 
 //---------------------------------------------------------------------------
-bool MTCT ModuleEdit(MTObject *object, MTWindow *window, int flags, MTUser *user);
+bool MTCT ModuleEdit(MTObject* object, MTWindow* window, int flags, MTUser* user);
 //---------------------------------------------------------------------------
 #endif

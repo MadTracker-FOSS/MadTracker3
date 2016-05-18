@@ -16,8 +16,11 @@
 // MTControl
 //   MTProgress
 //---------------------------------------------------------------------------
-MTProgress::MTProgress(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTControl(MTC_PROGRESS, tag, p, l, t, w, h), pos(0), maxpos(100), step(1)
+MTProgress::MTProgress(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTControl(MTC_PROGRESS, tag, p, l, t, w, h),
+    pos(0),
+    maxpos(100),
+    step(1)
 {
     int tmp;
 
@@ -31,7 +34,7 @@ MTProgress::MTProgress(int tag, MTWinControl *p, int l, int t, int w, int h):
     gi->setcontrolname(this, "progress");
 }
 
-int MTProgress::loadfromstream(MTFile *f, int size, int flags)
+int MTProgress::loadfromstream(MTFile* f, int size, int flags)
 {
     int csize = MTControl::loadfromstream(f, size, flags);
 
@@ -39,7 +42,7 @@ int MTProgress::loadfromstream(MTFile *f, int size, int flags)
     return csize + 12;
 }
 
-int MTProgress::savetostream(MTFile *f, int flags)
+int MTProgress::savetostream(MTFile* f, int flags)
 {
     int csize = MTControl::savetostream(f, flags);
 
@@ -52,32 +55,42 @@ int MTProgress::savetostream(MTFile *f, int flags)
 int MTProgress::getnumproperties(int id)
 {
     if (id == -1)
-    { return ProgressNP; }
+    {
+        return ProgressNP;
+    }
     if (id < ControlNP)
-    { return MTControl::getnumproperties(id); }
+    {
+        return MTControl::getnumproperties(id);
+    }
     return 0;
 }
 
-bool MTProgress::getpropertytype(int id, char **name, int &flags)
+bool MTProgress::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[3] = {"Position", "Maximum", "Increment"};
+    static char* propname[3] = {"Position", "Maximum", "Increment"};
     static int propflags[3] = {MTP_INT, MTP_INT, MTP_INT};
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getpropertytype(id, name, flags); }
+    {
+        return MTControl::getpropertytype(id, name, flags);
+    }
     if (id >= ProgressNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id - ControlNP];
     flags = propflags[id - ControlNP];
     return true;
 }
 
-bool MTProgress::getproperty(int id, void *value)
+bool MTProgress::getproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getproperty(id, value); }
+    {
+        return MTControl::getproperty(id, value);
+    }
     switch (id - ControlNP)
     {
         case 0:
@@ -95,14 +108,18 @@ bool MTProgress::getproperty(int id, void *value)
     return true;
 }
 
-bool MTProgress::setproperty(int id, void *value)
+bool MTProgress::setproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::setproperty(id, value); }
+    {
+        return MTControl::setproperty(id, value);
+    }
     if (window)
-    { window->modified = true; }
+    {
+        window->modified = true;
+    }
     switch (id - ControlNP)
     {
         case 0:
@@ -131,14 +148,16 @@ void MTProgress::setbounds(int l, int t, int w, int h)
     MTControl::setbounds(l, t, w, h);
 }
 
-void MTProgress::draw(MTRect &rect)
+void MTProgress::draw(MTRect& rect)
 {
     int x = left;
     int y = top;
-    MTBitmap *b;
+    MTBitmap* b;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     preparedraw(&b, x, y);
     skin->drawcontrol(this, rect, b, x, y);
     MTControl::draw(rect);
@@ -147,10 +166,14 @@ void MTProgress::draw(MTRect &rect)
 void MTProgress::setposition(int p)
 {
     if (pos == p)
-    { return; }
+    {
+        return;
+    }
     pos = p;
     if (pos > maxpos)
-    { pos = maxpos; }
+    {
+        pos = maxpos;
+    }
     if (parent)
     {
         MTCMessage msg = {MTCM_CHANGE, 0, this};

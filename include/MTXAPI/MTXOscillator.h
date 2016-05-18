@@ -28,34 +28,34 @@ public:
     float panx, pany, panz;
     float quality;
 
-    Oscillator(MTObject *parent, mt_uint32 type, mt_int32 i);
+    Oscillator(MTObject* parent, mt_uint32 type, mt_int32 i);
 
     virtual ~Oscillator() = 0;
 
-    virtual OscillatorInstance *MTCT createinstance(int noutputs, sample **outputs, InstrumentInstance *caller) = 0;
+    virtual OscillatorInstance* MTCT createinstance(int noutputs, sample** outputs, InstrumentInstance* caller) = 0;
 };
 
 class OscillatorInstance
 {
 public:
     int id;
-    MTModule *module;
-    Oscillator *parent;
+    MTModule* module;
+    Oscillator* parent;
     int noutputs;
-    sample **outputs;
+    sample** outputs;
     double note;
     double pitch;
     double volume;
     float panx, pany, panz;
     float quality;
 
-    OscillatorInstance(Oscillator *p, int no, sample **o, InstrumentInstance *caller);
+    OscillatorInstance(Oscillator* p, int no, sample** o, InstrumentInstance* caller);
 
     virtual ~OscillatorInstance() = 0;
 
     virtual bool MTCT seek(double offset, int origin = MTIS_BEGIN, int units = MTIS_BEATS) = 0;
 
-    virtual bool MTCT process(int offset, int count, bool &silence) = 0;
+    virtual bool MTCT process(int offset, int count, bool& silence) = 0;
 
     virtual void MTCT setnote(double n) = 0;
 
@@ -67,7 +67,7 @@ public:
 
     virtual double MTCT getvolume(int steps = 0) = 0;
 
-    virtual void MTCT getpanning(float *x, float *y, float *z, int steps = 0) = 0;
+    virtual void MTCT getpanning(float* x, float* y, float* z, int steps = 0) = 0;
 
     virtual float MTCT getimportance() = 0;
 };

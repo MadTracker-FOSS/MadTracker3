@@ -34,11 +34,11 @@ class MTDelayInstance;
 class DelayType: public ObjectType
 {
 public:
-    MTArray *columns;
+    MTArray* columns;
 
     DelayType();
 
-    MTObject *MTCT create(MTObject *parent, mt_int32 id, void *param);
+    MTObject* MTCT create(MTObject* parent, mt_int32 id, void* param);
 };
 
 //---------------------------------------------------------------------------
@@ -48,7 +48,7 @@ struct Tap
     float delay;
     float volume;
     float feedback;
-    Effect *effect;
+    Effect* effect;
     struct Pan
     {
         float pan;
@@ -61,31 +61,31 @@ struct Tap
 class MTDelay: public Effect
 {
 public:
-    MTDelay(MTObject *parent, mt_int32 i);
+    MTDelay(MTObject* parent, mt_int32 i);
 
     ~MTDelay();
 
-    void MTCT notify(MTObject *source, int message, int param1, void *param2);
+    void MTCT notify(MTObject* source, int message, int param1, void* param2);
 
-    EffectInstance *MTCT createinstance(int noutputs, sample **outputs, int ninputs, sample **inputs, InstrumentInstance *caller = 0);
+    EffectInstance* MTCT createinstance(int noutputs, sample** outputs, int ninputs, sample** inputs, InstrumentInstance* caller = 0);
 
-    void MTCT deleteinstance(EffectInstance *i);
+    void MTCT deleteinstance(EffectInstance* i);
 
     int MTCT getnumparams(int cat);
 
-    const char *MTCT getparamname(int cat, int id);
+    const char* MTCT getparamname(int cat, int id);
 
-    double MTCT getparam(int cat, int id, char *display);
+    double MTCT getparam(int cat, int id, char* display);
 
     void MTCT setparam(int cat, int id, double value, int steps = 0);
 
-    void MTCT settap(int tap, int flags, float delay, float volume, float feedback, Effect *effect);
+    void MTCT settap(int tap, int flags, float delay, float volume, float feedback, Effect* effect);
 
 private:
     friend class MTDelayInstance;
 
     int nsamples, cpos;
-    sample *buffer[8];
+    sample* buffer[8];
     int ntaps;
     bool monomerge;
     Tap taps[DELAY_MAX_TAPS];
@@ -98,9 +98,9 @@ private:
 class MTDelayInstance: public EffectInstance
 {
 public:
-    MTDelayInstance(Effect *p, int no, sample **o, int ni, sample **i, InstrumentInstance *caller);
+    MTDelayInstance(Effect* p, int no, sample** o, int ni, sample** i, InstrumentInstance* caller);
 
-    int MTCT process(int ooffset, int ioffset, int count, bool &silence);
+    int MTCT process(int ooffset, int ioffset, int count, bool& silence);
 
     void MTCT setparam(int cat, int id, double value, int steps = 0);
 
@@ -112,6 +112,6 @@ private:
 };
 
 //---------------------------------------------------------------------------
-extern DelayType *delaytype;
+extern DelayType* delaytype;
 //---------------------------------------------------------------------------
 #endif

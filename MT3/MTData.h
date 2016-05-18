@@ -14,7 +14,7 @@ struct _MTConf
 {
     int lastuse;
     int refcount;
-    MTConfigFile *conf;
+    MTConfigFile* conf;
 };
 
 //---------------------------------------------------------------------------
@@ -28,15 +28,15 @@ void uninit();
 //---------------------------------------------------------------------------
 extern MTPreferences prefs;
 
-extern MTModule *module[16];
+extern MTModule* module[16];
 
-extern WaveOutput *output;
+extern WaveOutput* output;
 
 extern MTUser cuser;
 
-extern MTFile *outmsg;
+extern MTFile* outmsg;
 
-extern MTHash *confs;
+extern MTHash* confs;
 
 extern bool wantreset;
 

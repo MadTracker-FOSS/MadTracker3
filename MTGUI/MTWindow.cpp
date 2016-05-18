@@ -21,9 +21,20 @@
 //   MTWinControl
 //     MTWindow
 //---------------------------------------------------------------------------
-MTWindow::MTWindow(int tag, MTWinControl *p, int l, int t, int w, int h, int s):
-    MTWinControl(MTC_WINDOW, tag, p, l, t, w, h), style(s), imageindex(-1), wrapper(0), modified(false), btnx(0),
-    btny(0), btnw(16), btnh(16), btno(-1), btnd(-1), res(0), resid(0)
+MTWindow::MTWindow(int tag, MTWinControl* p, int l, int t, int w, int h, int s):
+    MTWinControl(MTC_WINDOW, tag, p, l, t, w, h),
+    style(s),
+    imageindex(-1),
+    wrapper(0),
+    modified(false),
+    btnx(0),
+    btny(0),
+    btnw(16),
+    btnh(16),
+    btno(-1),
+    btnd(-1),
+    res(0),
+    resid(0)
 {
     flags |= (MTCF_ACCEPTCTRLS | MTCF_TRANSPARENT | MTCF_HIDDEN);
     if ((parent) && (parent->guiid == MTC_TABCONTROL))
@@ -31,18 +42,20 @@ MTWindow::MTWindow(int tag, MTWinControl *p, int l, int t, int w, int h, int s):
         guiid = MTC_TABSHEET;
         align = MTCA_CLIENT;
     };
-    caption = (char *) si->memalloc(256, MTM_ZERO);
+    caption = (char*) si->memalloc(256, MTM_ZERO);
     if (candesign)
     {
         gi->setcontrolname(this, (guiid == MTC_TABSHEET) ? "page" : "window");
         if (design)
         {
-            MTWinControl *oldp = parent;
+            MTWinControl* oldp = parent;
             parent = 0;
             setcaption(name);
             parent = oldp;
             if (guiid == MTC_TABSHEET)
-            { ((MTTabControl *) parent)->updatecaption(this); }
+            {
+                ((MTTabControl*) parent)->updatecaption(this);
+            }
         };
     };
     updateborders();
@@ -52,7 +65,9 @@ MTWindow::MTWindow(int tag, MTWinControl *p, int l, int t, int w, int h, int s):
         minsize[1] = 96;
     }
     else
-    { minsize[1] = 64; }
+    {
+        minsize[1] = 64;
+    }
     screen->setwindow(0);
     maxsize[0] = screen->wr.right;
     maxsize[1] = screen->wr.bottom;
@@ -62,31 +77,35 @@ MTWindow::MTWindow(int tag, MTWinControl *p, int l, int t, int w, int h, int s):
     {
         if (!popup)
         {
-            popup = (MTMenu *) gi->newcontrol(MTC_MENU, 0, dsk, 0, 0, 0, 0, 0);
+            popup = (MTMenu*) gi->newcontrol(MTC_MENU, 0, dsk, 0, 0, 0, 0, 0);
             popup->flags |= MTCF_DONTSAVE;
         }
         else
         {
             if (popup->numitems > 0)
-            { popup->additem("|Design", 0, 0, false, 0); }
+            {
+                popup->additem("|Design", 0, 0, false, 0);
+            }
         };
-        MTMenuItem *newctrl = (MTMenuItem *) popup->additem("New control...", -1, 0, false, 0);
+        MTMenuItem* newctrl = (MTMenuItem*) popup->additem("New control...", -1, 0, false, 0);
         newctrl->submenu = dsk->newctrl;
         newctrl->tag = 99999;
         autopopup = true;
     };
 }
 
-void nomorewindow(MTWinControl *w)
+void nomorewindow(MTWinControl* w)
 {
     int x;
 
     for(x = 0; x < w->ncontrols; x++)
     {
-        MTControl *c = w->controls[x];
+        MTControl* c = w->controls[x];
         c->window = 0;
         if (c->guiid & 2)
-        { nomorewindow((MTWinControl *) c); }
+        {
+            nomorewindow((MTWinControl*) c);
+        }
     };
 }
 
@@ -97,7 +116,7 @@ MTWindow::~MTWindow()
     nomorewindow(this);
 }
 
-int MTWindow::loadfromstream(MTFile *f, int size, int flags)
+int MTWindow::loadfromstream(MTFile* f, int size, int flags)
 {
     int csize = MTWinControl::loadfromstream(f, size, flags);
     char cap[256];
@@ -112,7 +131,7 @@ int MTWindow::loadfromstream(MTFile *f, int size, int flags)
     f->readln(cap, 256);
     cap[255] = 0;
     l = strlen(cap) + 1;
-    MTWinControl *oldp = parent;
+    MTWinControl* oldp = parent;
     parent = 0;
     setcaption(cap);
     parent = oldp;
@@ -122,7 +141,7 @@ int MTWindow::loadfromstream(MTFile *f, int size, int flags)
     f->read(&imageindex, 4);
     if ((parent) && (parent->guiid == MTC_TABCONTROL))
     {
-        ((MTTabControl *) parent)->updatecaption(this);
+        ((MTTabControl*) parent)->updatecaption(this);
     };
     box = parent->box + left;
     boy = parent->boy + top;
@@ -132,12 +151,14 @@ int MTWindow::loadfromstream(MTFile *f, int size, int flags)
         minsize[1] = 96;
     }
     else
-    { minsize[1] = 64; }
+    {
+        minsize[1] = 64;
+    }
     modified = false;
     return csize + 8 + l;
 }
 
-int MTWindow::savetostream(MTFile *f, int flags)
+int MTWindow::savetostream(MTFile* f, int flags)
 {
     int oalign = align;
     align = 0;
@@ -161,53 +182,67 @@ int MTWindow::savetostream(MTFile *f, int flags)
 int MTWindow::getnumproperties(int id)
 {
     if (id == -1)
-    { return WindowNP; }
+    {
+        return WindowNP;
+    }
     if (id < ControlNP)
-    { return MTControl::getnumproperties(id); }
+    {
+        return MTControl::getnumproperties(id);
+    }
     if (id == ControlNP)
-    { return 8; }
+    {
+        return 8;
+    }
     return 0;
 }
 
-bool MTWindow::getpropertytype(int id, char **name, int &flags)
+bool MTWindow::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[4] = {"Style", "Caption", "ImageIndex", "Stay-on-top"};
+    static char* propname[4] = {"Style", "Caption", "ImageIndex", "Stay-on-top"};
     static int propflags[4] = {MTP_LIST, MTP_TEXT, MTP_INT, MTP_BOOL};
-    static char *subname[8] = {
+    static char* subname[8] = {
         "Fixed", "Fixed+Caption", "Sizable", "Sizable+Caption", "Dialog", "Tabbed", "Dock", "Main"
     };
 
     if ((id < ControlNP) || ((id & 0xFF00) && (id >> 8 < ControlNP)))
-    { return MTControl::getpropertytype(id, name, flags); }
+    {
+        return MTControl::getpropertytype(id, name, flags);
+    }
     if ((id >> 8) == ControlNP)
     {
         id &= 0xFF;
         if (id >= 8)
-        { return false; }
+        {
+            return false;
+        }
         *name = subname[id];
         flags = -1;
         return true;
     };
     if (id >= WindowNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id - ControlNP];
     flags = propflags[id - ControlNP];
     return true;
 }
 
-bool MTWindow::getproperty(int id, void *value)
+bool MTWindow::getproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ControlNP) || ((id & 0xFF00) && (id >> 8 < ControlNP)))
-    { return MTControl::getproperty(id, value); }
+    {
+        return MTControl::getproperty(id, value);
+    }
     switch (id - ControlNP)
     {
         case 0:
             iv = style & 0xFF;
             break;
         case 1:
-            strcpy((char *) value, caption);
+            strcpy((char*) value, caption);
             break;
         case 2:
             iv = imageindex;
@@ -221,9 +256,9 @@ bool MTWindow::getproperty(int id, void *value)
     return true;
 }
 
-bool MTWindow::setproperty(int id, void *value)
+bool MTWindow::setproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     modified = true;
     if ((parent) && (parent->guiid == MTC_DESKTOP))
@@ -238,7 +273,9 @@ bool MTWindow::setproperty(int id, void *value)
         };
     };
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::setproperty(id, value); }
+    {
+        return MTControl::setproperty(id, value);
+    }
     switch (id - ControlNP)
     {
         case 0:
@@ -257,7 +294,7 @@ bool MTWindow::setproperty(int id, void *value)
             setstyle(iv);
             return true;
         case 1:
-            setcaption((const char *) value);
+            setcaption((const char*) value);
             return true;
         case 2:
             imageindex = iv;
@@ -271,7 +308,7 @@ bool MTWindow::setproperty(int id, void *value)
     };
 }
 
-bool MTWindow::checkbounds(int &l, int &t, int &w, int &h)
+bool MTWindow::checkbounds(int& l, int& t, int& w, int& h)
 {
     bool ok = true;
 
@@ -298,7 +335,7 @@ bool MTWindow::checkbounds(int &l, int &t, int &w, int &h)
     return ok && MTWinControl::checkbounds(l, t, w, h);
 }
 
-void MTWindow::getrect(MTRect &r, int client)
+void MTWindow::getrect(MTRect& r, int client)
 {
     r.left = left;
     r.top = top;
@@ -316,13 +353,21 @@ void MTWindow::getrect(MTRect &r, int client)
         int dx = guiprefs.shadowx;
         int dy = guiprefs.shadowy;
         if (8 - dx > 0)
-        { r.left -= 8 - dx; }
+        {
+            r.left -= 8 - dx;
+        }
         if (8 - dy > 0)
-        { r.top -= 8 - dy; }
+        {
+            r.top -= 8 - dy;
+        }
         if (8 + dx > 0)
-        { r.right += dx + 8; }
+        {
+            r.right += dx + 8;
+        }
         if (8 + dy > 0)
-        { r.bottom += dy + 8; }
+        {
+            r.bottom += dy + 8;
+        }
     };
 }
 
@@ -356,15 +401,17 @@ void MTWindow::switchflags(int f, bool set)
     MTWinControl::switchflags(f, set);
 }
 
-void MTWindow::draw(MTRect &rect)
+void MTWindow::draw(MTRect& rect)
 {
     int x = 0;
     int y = 0;
-    MTBitmap *b;
+    MTBitmap* b;
     MTRect cr = {0, 0, width, height};
 
     if (flags & MTCF_HIDDEN)
-    { return; }
+    {
+        return;
+    }
     if (&rect)
     {
         cliprect(cr, rect);
@@ -375,7 +422,9 @@ void MTWindow::draw(MTRect &rect)
         skin->drawcontrol(this, rect, b, x, y);
     };
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     if (design)
     {
         int x;
@@ -384,7 +433,10 @@ void MTWindow::draw(MTRect &rect)
         open(0);
         for(y = (cr.top >> 3) << 3; y <= cr.bottom; y += 8)
         {
-            for(x = (cr.left >> 3) << 3; x <= cr.right; x += 8) point(x, y, color);
+            for(x = (cr.left >> 3) << 3; x <= cr.right; x += 8)
+            {
+                point(x, y, color);
+            }
         };
         close(0);
     };
@@ -396,20 +448,22 @@ void MTWindow::draw(MTRect &rect)
         flush(cr);
     }
     else
-    { MTWinControl::draw(rect); }
+    {
+        MTWinControl::draw(rect);
+    }
 }
 
-bool MTWindow::message(MTCMessage &msg)
+bool MTWindow::message(MTCMessage& msg)
 {
     int x, y, ow, oh, ol2, ot2, ow2, oh2, cstyle, cbtno;
-    MTBitmap *tmp, *tmp2;
-    MTControl *hctrl, *fctrl;
+    MTBitmap* tmp, * tmp2;
+    MTControl* hctrl, * fctrl;
     bool multi;
     int focusid;
     char key;
     MTRect r;
-    MTMenu *popup;
-    MTMenuItem *newctrl;
+    MTMenu* popup;
+    MTMenuItem* newctrl;
 
     if (parent)
     {
@@ -419,7 +473,9 @@ bool MTWindow::message(MTCMessage &msg)
             {
                 case MTCM_MOUSEDOWN:
                     if (msg.button != DB_LEFT)
-                    { break; }
+                    {
+                        break;
+                    }
                     parent->bringtofront(this);
                     if (btno >= 0)
                     {
@@ -543,7 +599,9 @@ bool MTWindow::message(MTCMessage &msg)
                         parent->message(msg);
                     };
                     if (btno >= 0)
-                    { break; }
+                    {
+                        break;
+                    }
                     if (((moving) || (sizing)) && (!triggered))
                     {
                         if ((abs(msg.x - mox) > dragx) || (abs(msg.y - moy) > dragy))
@@ -551,7 +609,9 @@ bool MTWindow::message(MTCMessage &msg)
                             triggered = true;
                         }
                         else
-                        { return true; }
+                        {
+                            return true;
+                        }
                     };
                     if (moving)
                     {
@@ -624,7 +684,9 @@ bool MTWindow::message(MTCMessage &msg)
                     break;
                 case MTCM_MOUSEUP:
                     if (msg.button != DB_LEFT)
-                    { break; }
+                    {
+                        break;
+                    }
                     triggered = false;
                     if (btnd >= 0)
                     {
@@ -643,7 +705,9 @@ bool MTWindow::message(MTCMessage &msg)
                             while(ow >= MTWS_CLOSE)
                             {
                                 if ((style & ow) && (btno-- == 0))
-                                { break; }
+                                {
+                                    break;
+                                }
                                 ow >>= 1;
                                 msg.msg++;
                             };
@@ -670,7 +734,7 @@ bool MTWindow::message(MTCMessage &msg)
                     {
                         if ((focused) && (focused->guiid == MTC_BUTTON) && (msg.key == KB_RETURN))
                         {
-                            modalresult = ((MTButton *) focused)->modalresult;
+                            modalresult = ((MTButton*) focused)->modalresult;
                         };
                         MTCMessage msg = {MTCM_CLOSE, 0, this};
                         message(msg);
@@ -683,12 +747,18 @@ bool MTWindow::message(MTCMessage &msg)
         {
             case MTCM_CHAR:
                 if (MTWinControl::message(msg))
-                { return true; }
+                {
+                    return true;
+                }
                 if (hotcontrols->nitems == 0)
-                { return false; }
+                {
+                    return false;
+                }
                 key = msg.key;
                 if ((key >= 'a') && (key <= 'z'))
-                { key += 'A' - 'a'; }
+                {
+                    key += 'A' - 'a';
+                }
                 if (msg.buttons == 0)
                 {
                     hctrl = 0;
@@ -697,14 +767,14 @@ bool MTWindow::message(MTCMessage &msg)
                     fctrl = focused;
                     while((fctrl) && (fctrl->guiid & 2))
                     {
-                        if (((MTWinControl *) fctrl)->focused)
+                        if (((MTWinControl*) fctrl)->focused)
                         {
-                            fctrl = ((MTWinControl *) fctrl)->focused;
+                            fctrl = ((MTWinControl*) fctrl)->focused;
                         };
                     };
                     for(x = 0; x < hotcontrols->nitems; x++)
                     {
-                        HotControl &chot = D(hotcontrols, HotControl)[x];
+                        HotControl& chot = D(hotcontrols, HotControl)[x];
                         if (chot.hotkey == key)
                         {
                             if (chot.ctrl == fctrl)
@@ -715,25 +785,31 @@ bool MTWindow::message(MTCMessage &msg)
                             {
                                 multi = true;
                                 if (focusid >= 0)
-                                { break; }
+                                {
+                                    break;
+                                }
                             };
                             hctrl = chot.ctrl;
                         };
                     };
                     if (!hctrl)
-                    { return false; }
+                    {
+                        return false;
+                    }
                     if (multi)
                     {
                         focusid++;
                         for(y = 0; y < hotcontrols->nitems - 1; y++)
                         {
-                            HotControl &chot = D(hotcontrols, HotControl)[focusid];
+                            HotControl& chot = D(hotcontrols, HotControl)[focusid];
                             if (chot.hotkey == key)
                             {
                                 focus(chot.ctrl);
                             };
                             if (++focusid >= hotcontrols->nitems)
-                            { focusid = 0; }
+                            {
+                                focusid = 0;
+                            }
                         };
                     }
                     else
@@ -746,7 +822,9 @@ bool MTWindow::message(MTCMessage &msg)
                 return false;
             case MTCM_NOTIFY:
                 if (msg.param1 == 0)
-                { updateborders(); }
+                {
+                    updateborders();
+                }
                 break;
             case MTCM_STAYONTOP:
                 return true;
@@ -755,8 +833,8 @@ bool MTWindow::message(MTCMessage &msg)
             case MTCM_MINIMIZE:
                 return true;
             case MTCM_ONPOPUP:
-                popup = (MTMenu *) msg.ctrl;
-                newctrl = (MTMenuItem *) popup->getitemfromtag(99999);
+                popup = (MTMenu*) msg.ctrl;
+                newctrl = (MTMenuItem*) popup->getitemfromtag(99999);
                 if (newctrl)
                 {
                     if (design)
@@ -772,9 +850,13 @@ bool MTWindow::message(MTCMessage &msg)
                 return true;
             case MTCM_MAXIMIZE:
                 if ((!parent) || (msg.ctrl != this))
-                { break; }
+                {
+                    break;
+                }
                 if (MTWinControl::message(msg))
-                { return true; }
+                {
+                    return true;
+                }
                 if (parent->guiid == MTC_TABCONTROL)
                 {
                     setparent(dsk);
@@ -783,9 +865,11 @@ bool MTWindow::message(MTCMessage &msg)
                 {
                     for(x = parent->ncontrols - 1; x >= 0; x--)
                     {
-                        MTTabControl &ct = *(MTTabControl *) parent->controls[x];
-                        if ((MTWindow *) &ct == this)
-                        { break; }
+                        MTTabControl& ct = *(MTTabControl*) parent->controls[x];
+                        if ((MTWindow*) &ct == this)
+                        {
+                            break;
+                        }
                         if (ct.guiid == MTC_TABCONTROL)
                         {
                             MTRect cr;
@@ -803,9 +887,13 @@ bool MTWindow::message(MTCMessage &msg)
                 return true;
             case MTCM_CLOSE:
                 if (msg.ctrl != this)
-                { break; }
+                {
+                    break;
+                }
                 if (MTWinControl::message(msg))
-                { return true; }
+                {
+                    return true;
+                }
 /*			if ((modalparent) && (modalparent->modalresult==MTDR_NULL)){
 				if (modalresult==MTDR_NULL) modalparent->modalresult = 0;
 				else modalparent->modalresult = modalresult;
@@ -818,9 +906,13 @@ bool MTWindow::message(MTCMessage &msg)
                 {
                     getrect(r, 0);
                     if (r.left < 0)
-                    { r.left = 0; }
+                    {
+                        r.left = 0;
+                    }
                     if (r.top < 0)
-                    { r.top = 0; }
+                    {
+                        r.top = 0;
+                    }
                     r.right -= r.left;
                     r.bottom -= r.top;
                     r.left -= left - box;
@@ -847,7 +939,9 @@ bool MTWindow::message(MTCMessage &msg)
                             si->syswait(oh);
                         }
                         else if (oh < 5)
-                        { break; }
+                        {
+                            break;
+                        }
                     };
                     tmp2->blt(mb, r.left, r.top, r.right, r.bottom, 0, 0);
                     parent->flush(r.left, r.top, r.right, r.bottom);
@@ -859,17 +953,21 @@ bool MTWindow::message(MTCMessage &msg)
                     switchflags(MTCF_HIDDEN, true);
                 };
                 if (flags & MTCF_FREEONCLOSE)
-                { gi->delcontrol(this); }
+                {
+                    gi->delcontrol(this);
+                }
                 return true;
         };
     };
     return MTWinControl::message(msg);
 }
 
-void MTWindow::setparent(MTWinControl *newparent)
+void MTWindow::setparent(MTWinControl* newparent)
 {
     if (!newparent)
-    { return; }
+    {
+        return;
+    }
     if ((parent) && (parent->guiid == MTC_TABCONTROL) && (newparent->guiid != MTC_TABCONTROL))
     {
         guiid = MTC_WINDOW;
@@ -904,7 +1002,9 @@ void MTWindow::setstyle(int s)
         minsize[1] = 96;
     }
     else
-    { minsize[1] = 64; }
+    {
+        minsize[1] = 64;
+    }
     if (parent)
     {
         MTCMessage msg = {MTCM_CHANGE, 0, this};
@@ -913,14 +1013,14 @@ void MTWindow::setstyle(int s)
     };
 }
 
-void MTWindow::setcaption(const char *c)
+void MTWindow::setcaption(const char* c)
 {
     strcpy(caption, c);
     if (parent)
     {
         if (guiid == MTC_TABSHEET)
         {
-            ((MTTabControl *) parent)->updatecaption(this);
+            ((MTTabControl*) parent)->updatecaption(this);
         }
         else
         {
@@ -936,9 +1036,13 @@ void MTWindow::updateregions()
     MTRect r = {0, 0, width, height};
 
     if (oprgn)
-    { deletergn(oprgn); }
+    {
+        deletergn(oprgn);
+    }
     if (trrgn)
-    { deletergn(trrgn); }
+    {
+        deletergn(trrgn);
+    }
     if (guiid == MTC_TABSHEET)
     {
         oprgn = recttorgn(r);
@@ -951,7 +1055,7 @@ void MTWindow::updateregions()
     };
 }
 
-void MTWindow::addhotkey(MTControl *ctrl, char hotkey)
+void MTWindow::addhotkey(MTControl* ctrl, char hotkey)
 {
     HotControl hc = {hotkey, ctrl};
 
@@ -959,7 +1063,7 @@ void MTWindow::addhotkey(MTControl *ctrl, char hotkey)
     hotcontrols->push(&hc);
 }
 
-void MTWindow::delhotkey(MTControl *ctrl)
+void MTWindow::delhotkey(MTControl* ctrl)
 {
     int x;
 
@@ -980,23 +1084,33 @@ void MTWindow::setminsize(int width, int height)
         minsize[0] = width;
     }
     else
-    { minsize[0] = 128; }
+    {
+        minsize[0] = 128;
+    }
     if (style == 5)
     {
         minsize[1] = 96;
     }
     else
-    { minsize[1] = 64; }
+    {
+        minsize[1] = 64;
+    }
     if (height > minsize[1])
-    { minsize[1] = height; }
+    {
+        minsize[1] = height;
+    }
 }
 
 void MTWindow::setmaxsize(int width, int height)
 {
     if (width < screen->wr.right)
-    { maxsize[0] = width; }
+    {
+        maxsize[0] = width;
+    }
     if (height < screen->wr.bottom)
-    { maxsize[1] = height; }
+    {
+        maxsize[1] = height;
+    }
 }
 
 void MTWindow::updateborders()

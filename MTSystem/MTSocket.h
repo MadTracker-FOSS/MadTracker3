@@ -69,7 +69,7 @@ class MTSocket
 public:
     MTSocket(bool datagram = false);
 
-    MTSocket(MTServer *cserver, SOCKET cs, sockaddr_in *caddr);
+    MTSocket(MTServer* cserver, SOCKET cs, sockaddr_in* caddr);
 
 //    ~MTSocket();
     virtual ~MTSocket(); //made virtual to avoid shadowing in MTServer.
@@ -81,20 +81,20 @@ public:
 
     virtual int MTCT getlasterror();
 
-    virtual int MTCT read(void *buffer, int size, sockaddr *from = 0, mt_uint32 *fromsize = 0);
+    virtual int MTCT read(void* buffer, int size, sockaddr* from = 0, mt_uint32* fromsize = 0);
 
-    virtual int MTCT write(const void *buffer, mt_uint32 size);
+    virtual int MTCT write(const void* buffer, mt_uint32 size);
 
     virtual void MTCT setblocking(bool b);
 
-    virtual const char *MTCT getname();
+    virtual const char* MTCT getname();
 
     virtual int MTCT getip();
 
     virtual int MTCT getendip();
 
 protected:
-    MTServer *server;
+    MTServer* server;
     bool connected;
     int ip;
     int port;
@@ -112,26 +112,26 @@ public:
 
     ~MTServer();
 
-    virtual int MTCT write(const void *buffer, int size);
+    virtual int MTCT write(const void* buffer, int size);
 
-    virtual MTSocket *MTCT accept();
+    virtual MTSocket* MTCT accept();
 
-    virtual void MTCT disconnectclient(MTSocket *s);
+    virtual void MTCT disconnectclient(MTSocket* s);
 
     virtual int MTCT getnumclients();
 
-    virtual MTSocket *MTCT getclient(int id);
+    virtual MTSocket* MTCT getclient(int id);
 
 private:
     int maxconn;
     int nclients;
-    MTSocket **clients;
+    MTSocket** clients;
 };
 
 class MTClient: public MTSocket
 {
 public:
-    MTClient(const char *a, int p, bool datagram = false);
+    MTClient(const char* a, int p, bool datagram = false);
 
     MTClient(int ip, int p, bool datagram = false);
 

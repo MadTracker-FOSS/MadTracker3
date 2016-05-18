@@ -16,7 +16,7 @@
 //---------------------------------------------------------------------------
 unsigned char MTOSSkin::fontmap[256];
 
-static const char *passtxt = {"********************************"};
+static const char* passtxt = {"********************************"};
 
 //---------------------------------------------------------------------------
 MTOSSkin::MTOSSkin():
@@ -53,15 +53,15 @@ MTOSSkin::~MTOSSkin()
     };
 }
 
-void MTOSSkin::loadfromres(MTResources *res)
+void MTOSSkin::loadfromres(MTResources* res)
 {
 }
 
-void MTOSSkin::savetores(MTResources *res)
+void MTOSSkin::savetores(MTResources* res)
 {
 }
 
-void MTOSSkin::skinchange(MTBitmap *oldskin, MTBitmap *newskin, void *param)
+void MTOSSkin::skinchange(MTBitmap* oldskin, MTBitmap* newskin, void* param)
 {
     int id = (int) param;
 
@@ -72,7 +72,7 @@ void MTOSSkin::skinchange(MTBitmap *oldskin, MTBitmap *newskin, void *param)
     };
 }
 
-void MTOSSkin::initcontrol(MTControl *ctrl)
+void MTOSSkin::initcontrol(MTControl* ctrl)
 {
     switch (ctrl->guiid)
     {
@@ -83,7 +83,7 @@ void MTOSSkin::initcontrol(MTControl *ctrl)
     };
 }
 
-void MTOSSkin::uninitcontrol(MTControl *ctrl)
+void MTOSSkin::uninitcontrol(MTControl* ctrl)
 {
     switch (ctrl->guiid)
     {
@@ -99,7 +99,7 @@ void MTOSSkin::uninitcontrol(MTControl *ctrl)
     };
 }
 
-void MTOSSkin::resetcontrol(MTControl *ctrl, bool skinchange)
+void MTOSSkin::resetcontrol(MTControl* ctrl, bool skinchange)
 {
     switch (ctrl->guiid)
     {
@@ -110,7 +110,7 @@ void MTOSSkin::resetcontrol(MTControl *ctrl, bool skinchange)
     };
 }
 
-void MTOSSkin::timercontrol(MTControl *ctrl)
+void MTOSSkin::timercontrol(MTControl* ctrl)
 {
     switch (ctrl->guiid)
     {
@@ -121,7 +121,7 @@ void MTOSSkin::timercontrol(MTControl *ctrl)
     };
 }
 
-void MTOSSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int y, int flags)
+void MTOSSkin::drawcontrol(MTControl* ctrl, MTRect& rect, MTBitmap* b, int x, int y, int flags)
 {
     switch (ctrl->guiid)
     {
@@ -227,7 +227,7 @@ void MTOSSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, in
     };
 }
 
-void MTOSSkin::drawcontrol(int guiid, int id, MTRect &rect, MTBitmap *b, int x, int y, int flags)
+void MTOSSkin::drawcontrol(int guiid, int id, MTRect& rect, MTBitmap* b, int x, int y, int flags)
 {
     switch (guiid)
     {
@@ -244,36 +244,36 @@ void MTOSSkin::drawcontrol(int guiid, int id, MTRect &rect, MTBitmap *b, int x, 
     };
 }
 
-void MTOSSkin::drawborder(MTWinControl *ctrl, MTRect &rect, MTBitmap *b, int x, int y)
+void MTOSSkin::drawborder(MTWinControl* ctrl, MTRect& rect, MTBitmap* b, int x, int y)
 {
 
 }
 
-void MTOSSkin::drawmodalveil(MTWinControl *ctrl, MTRect &rect)
+void MTOSSkin::drawmodalveil(MTWinControl* ctrl, MTRect& rect)
 {
 
 }
 
 void MTOSSkin::updatemetrics()
 {
-    MTSQMetrics &csq = fnm.pattfont;
+    MTSQMetrics& csq = fnm.pattfont;
 
     fontwidth = csq.a.b.w / csq.nx;
     fontheight = csq.a.b.h / csq.ny;
 }
 
-MTBitmap *MTOSSkin::getbitmap(int id)
+MTBitmap* MTOSSkin::getbitmap(int id)
 {
     return skinbmp[id];
 }
 
-MTSLMetrics *MTOSSkin::getslider(int type, int orientation)
+MTSLMetrics* MTOSSkin::getslider(int type, int orientation)
 {
 //FIXME
     return 0;
 }
 
-void MTOSSkin::getcontrolsize(int guiid, int id, int &width, int &height)
+void MTOSSkin::getcontrolsize(int guiid, int id, int& width, int& height)
 {
     switch (guiid)
     {
@@ -334,17 +334,17 @@ void MTOSSkin::getcontrolsize(int guiid, int id, int &width, int &height)
     };
 }
 
-void MTOSSkin::getwindowborders(int style, MTRect *borders)
+void MTOSSkin::getwindowborders(int style, MTRect* borders)
 {
 
 }
 
-void MTOSSkin::getwindowoffsets(int style, MTRect *borders)
+void MTOSSkin::getwindowoffsets(int style, MTRect* borders)
 {
 
 }
 
-void MTOSSkin::getregions(MTControl *ctrl, void **opaque, void **transparent)
+void MTOSSkin::getregions(MTControl* ctrl, void** opaque, void** transparent)
 {
 
 }
@@ -352,16 +352,18 @@ void MTOSSkin::getregions(MTControl *ctrl, void **opaque, void **transparent)
 int MTOSSkin::getcolor(int id)
 {
     if (id < 0xFF000000)
-    { return id; }
+    {
+        return id;
+    }
     return fnm.colors[id - 0xFF000000];
 }
 
-void *MTOSSkin::getfont(int id)
+void* MTOSSkin::getfont(int id)
 {
     return hskfont[id];
 }
 
-bool MTOSSkin::gettextsize(MTControl *ctrl, const char *text, int length, MTPoint *size, int maxwidth)
+bool MTOSSkin::gettextsize(MTControl* ctrl, const char* text, int length, MTPoint* size, int maxwidth)
 {
     bool ok = false;
 
@@ -372,7 +374,9 @@ bool MTOSSkin::gettextsize(MTControl *ctrl, const char *text, int length, MTPoin
             ctrl->parent->setfont(hskfont[2]);
         }
         else
-        { ctrl->parent->setfont(hskfont[1]); }
+        {
+            ctrl->parent->setfont(hskfont[1]);
+        }
         switch (ctrl->guiid)
         {
             case MTC_EDIT:
@@ -384,7 +388,9 @@ bool MTOSSkin::gettextsize(MTControl *ctrl, const char *text, int length, MTPoin
                     ok = ctrl->parent->gettextsize(passtxt, length, size, maxwidth);
                 }
                 else
-                { ok = ctrl->parent->gettextsize(text, length, size, maxwidth); }
+                {
+                    ok = ctrl->parent->gettextsize(text, length, size, maxwidth);
+                }
             }
                 break;
             default:
@@ -396,7 +402,7 @@ bool MTOSSkin::gettextsize(MTControl *ctrl, const char *text, int length, MTPoin
     return ok;
 }
 
-int MTOSSkin::gettextextent(MTControl *ctrl, const char *text, int length, int maxextent)
+int MTOSSkin::gettextextent(MTControl* ctrl, const char* text, int length, int maxextent)
 {
     int res = 0;
 
@@ -407,7 +413,9 @@ int MTOSSkin::gettextextent(MTControl *ctrl, const char *text, int length, int m
             ctrl->parent->setfont(hskfont[2]);
         }
         else
-        { ctrl->parent->setfont(hskfont[1]); }
+        {
+            ctrl->parent->setfont(hskfont[1]);
+        }
         switch (ctrl->guiid)
         {
             case MTC_EDIT:
@@ -419,7 +427,9 @@ int MTOSSkin::gettextextent(MTControl *ctrl, const char *text, int length, int m
                     res = ctrl->parent->gettextextent(passtxt, length, maxextent);
                 }
                 else
-                { res = ctrl->parent->gettextextent(text, length, maxextent); }
+                {
+                    res = ctrl->parent->gettextextent(text, length, maxextent);
+                }
             }
                 break;
             default:
@@ -431,7 +441,7 @@ int MTOSSkin::gettextextent(MTControl *ctrl, const char *text, int length, int m
     return res;
 }
 
-int MTOSSkin::gettextheight(MTControl *ctrl)
+int MTOSSkin::gettextheight(MTControl* ctrl)
 {
     int res = 0;
 
@@ -442,14 +452,16 @@ int MTOSSkin::gettextheight(MTControl *ctrl)
             ctrl->parent->setfont(hskfont[2]);
         }
         else
-        { ctrl->parent->setfont(hskfont[1]); }
+        {
+            ctrl->parent->setfont(hskfont[1]);
+        }
         res = ctrl->parent->gettextheight();
         ctrl->parent->close(0);
     };
     return res;
 }
 
-int MTOSSkin::getcharwidth(MTControl *ctrl, char c)
+int MTOSSkin::getcharwidth(MTControl* ctrl, char c)
 {
     int res = 0;
 
@@ -460,30 +472,32 @@ int MTOSSkin::getcharwidth(MTControl *ctrl, char c)
             ctrl->parent->setfont(hskfont[2]);
         }
         else
-        { ctrl->parent->setfont(hskfont[1]); }
+        {
+            ctrl->parent->setfont(hskfont[1]);
+        }
         res = ctrl->parent->getcharwidth(c);
         ctrl->parent->close(0);
     };
     return res;
 }
 
-void MTOSSkin::drawitem(MTUserList *list, int i, MTRect &rect, MTBitmap *b, const char *caption, int imageindex, int itemflags, bool editable)
+void MTOSSkin::drawitem(MTUserList* list, int i, MTRect& rect, MTBitmap* b, const char* caption, int imageindex, int itemflags, bool editable)
 {
 
 }
 
-void MTOSSkin::drawchar(unsigned char c, MTBitmap *bmp, int &x, int y, int color)
+void MTOSSkin::drawchar(unsigned char c, MTBitmap* bmp, int& x, int y, int color)
 {
-    MTSQMetrics &csq = fnm.pattfont;
+    MTSQMetrics& csq = fnm.pattfont;
 
     bmp->skinblta(x, y, fontwidth, fontheight, csq.a, csq.nx, csq.ny, fontmap[c], color);
     x += fontwidth;
 }
 
-void MTOSSkin::drawtext(unsigned char *text, MTBitmap *bmp, int &x, int y, int color)
+void MTOSSkin::drawtext(unsigned char* text, MTBitmap* bmp, int& x, int y, int color)
 {
-    unsigned char *p = text;
-    MTSQMetrics &csq = fnm.pattfont;
+    unsigned char* p = text;
+    MTSQMetrics& csq = fnm.pattfont;
 
     while(*p)
     {
@@ -493,11 +507,11 @@ void MTOSSkin::drawtext(unsigned char *text, MTBitmap *bmp, int &x, int y, int c
     };
 }
 
-void MTOSSkin::drawdec(int val, bool zeroes, int n, MTBitmap *bmp, int &x, int y, int color)
+void MTOSSkin::drawdec(int val, bool zeroes, int n, MTBitmap* bmp, int& x, int y, int color)
 {
     int z, x2;
     char c;
-    MTSQMetrics &csq = fnm.pattfont;
+    MTSQMetrics& csq = fnm.pattfont;
 
     x += fontwidth * n;
     x2 = x - fontwidth;
@@ -507,16 +521,18 @@ void MTOSSkin::drawdec(int val, bool zeroes, int n, MTBitmap *bmp, int &x, int y
         val /= 10;
         bmp->skinblta(x2, y, fontwidth, fontheight, csq.a, csq.nx, csq.ny, fontmap[c + '0'], color);
         if ((!val) && (!zeroes))
-        { return; }
+        {
+            return;
+        }
         x2 -= fontwidth;
     };
 }
 
-void MTOSSkin::drawhex(int val, bool zeroes, int n, MTBitmap *bmp, int &x, int y, int color)
+void MTOSSkin::drawhex(int val, bool zeroes, int n, MTBitmap* bmp, int& x, int y, int color)
 {
     int z, x2;
     char c;
-    MTSQMetrics &csq = fnm.pattfont;
+    MTSQMetrics& csq = fnm.pattfont;
 
     x += fontwidth * n;
     x2 = x - fontwidth;
@@ -529,10 +545,14 @@ void MTOSSkin::drawhex(int val, bool zeroes, int n, MTBitmap *bmp, int &x, int y
             c += '0';
         }
         else
-        { c += 'A' - 10; }
+        {
+            c += 'A' - 10;
+        }
         bmp->skinblta(x2, y, fontwidth, fontheight, csq.a, csq.nx, csq.ny, fontmap[c], color);
         if ((!val) && (!zeroes))
-        { return; }
+        {
+            return;
+        }
         x2 -= fontwidth;
     };
 }
@@ -546,7 +566,7 @@ void MTOSSkin::setshadows(bool enabled)
 {
 }
 
-void MTOSSkin::drawframe(MTBitmap *bmp, int x, int y, int w, int h, int flags)
+void MTOSSkin::drawframe(MTBitmap* bmp, int x, int y, int w, int h, int flags)
 {
 
 }

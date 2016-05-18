@@ -20,24 +20,24 @@
 
 struct MTDevice
 {
-    char *devicename;
-    MTAudioDeviceManager *manager;
+    char* devicename;
+    MTAudioDeviceManager* manager;
     int id;
     bool selected;
 };
 
 //---------------------------------------------------------------------------
-extern MTInterface *mtinterface;
+extern MTInterface* mtinterface;
 
-extern MTSystemInterface *si;
+extern MTSystemInterface* si;
 
-extern MTObjectsInterface *oi;
+extern MTObjectsInterface* oi;
 
 extern WaveOutput output;
 
 #ifdef _DEBUG
 
-extern MTFile *recf;
+extern MTFile* recf;
 
 #endif
 //---------------------------------------------------------------------------

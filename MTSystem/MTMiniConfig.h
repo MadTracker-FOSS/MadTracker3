@@ -30,8 +30,8 @@ class MTMiniConfig;
 
 //---------------------------------------------------------------------------
 extern "C" {
-MTMiniConfig *MTCT mtminiconfigcreate();
-void MTCT mtminiconfigdelete(MTMiniConfig *cfg);
+MTMiniConfig* MTCT mtminiconfigcreate();
+void MTCT mtminiconfigdelete(MTMiniConfig* cfg);
 }
 //---------------------------------------------------------------------------
 #endif

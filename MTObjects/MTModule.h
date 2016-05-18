@@ -94,10 +94,10 @@ struct PlayStatus
     double nextevent;
     double length;
     double spb;
-    PatternInstance *patti[MAX_LAYERS];
+    PatternInstance* patti[MAX_LAYERS];
     mt_uint32 nchannels, nachannels;
-    InstrumentInstance **chan;
-    WaveOutput *coutput;
+    InstrumentInstance** chan;
+    WaveOutput* coutput;
 };
 
 // Module class
@@ -108,19 +108,19 @@ public:
     mt_uint16 ntracks;
     double loops;
     double loope;
-    char *message;
+    char* message;
     bool showmessage;
     mt_uint8 summarymask;
-    char *summary[8];
-    char *filename;
+    char* summary[8];
+    char* filename;
 
-    MTArray *patt, *apatt, *instr, *spl;
-    MTArray *master, *trk;
-    MTArray *fx;
-    MTArray *tempo;
+    MTArray* patt, * apatt, * instr, * spl;
+    MTArray* master, * trk;
+    MTArray* fx;
+    MTArray* tempo;
 
     PlayStatus playstatus;
-    MTCPUMonitor *cpu;
+    MTCPUMonitor* cpu;
 
     int nsequ[MAX_LAYERS];
     Sequence sequ[MAX_LAYERS][MAX_SEQUENCES];
@@ -131,11 +131,11 @@ public:
 
     void MTCT setmodified(int value, int flags);
 
-    void MTCT notify(MTObject *source, int message, int param1, void *param2);
+    void MTCT notify(MTObject* source, int message, int param1, void* param2);
 
-    void MTCT enumchildren(MTObjectEnum enumproc, void *data);
+    void MTCT enumchildren(MTObjectEnum enumproc, void* data);
 
-    virtual void MTCT getdisplayname(char *buffer, int cb);
+    virtual void MTCT getdisplayname(char* buffer, int cb);
 
     virtual void MTCT setstatus();
 
@@ -147,7 +147,7 @@ public:
 
     virtual void MTCT disabletracks();
 
-    virtual int MTCT getpattpos(int layer, double pos, double *offset, int *cseq, int from = 0);
+    virtual int MTCT getpattpos(int layer, double pos, double* offset, int* cseq, int from = 0);
 
     virtual int MTCT getsequence(int layer, double pos, int last);
 
@@ -155,19 +155,19 @@ public:
 
     virtual void MTCT setpos(double pos, bool fromengine = false);
 
-    virtual void MTCT settempo(int ctempo, int param, void *value, bool fromengine = false);
+    virtual void MTCT settempo(int ctempo, int param, void* value, bool fromengine = false);
 
-    virtual bool MTCT process(WaveOutput *output);
+    virtual bool MTCT process(WaveOutput* output);
 
-    virtual bool MTCT addchannel(InstrumentInstance *c);
+    virtual bool MTCT addchannel(InstrumentInstance* c);
 
-    virtual void MTCT delchannel(InstrumentInstance *c);
+    virtual void MTCT delchannel(InstrumentInstance* c);
 
     virtual void MTCT resetchannels();
 
     virtual void MTCT resetpatterns();
 
-    virtual InstrumentInstance *MTCT getlessimportantchannel(int *importance);
+    virtual InstrumentInstance* MTCT getlessimportantchannel(int* importance);
 
     virtual double MTCT beatstosamples(double nbeats);
 
@@ -177,22 +177,22 @@ public:
 
     virtual void MTCT needupdaterouting();
 
-    virtual void MTCT remove(MTObject *o);
+    virtual void MTCT remove(MTObject* o);
 
 private:
     friend class MTObjectsInterface;
 
-    friend int MTCT engineproc(MTThread *thread, void *param);
+    friend int MTCT engineproc(MTThread* thread, void* param);
 
-    MTLock *mlock;
+    MTLock* mlock;
     int lastbeat;
     int crashcount;
     bool needupdate;
-    MTArray *buffers;
-    MTArray *ris;
-    void *mts;
+    MTArray* buffers;
+    MTArray* ris;
+    void* mts;
 
-    bool MTCT subprocess(WaveOutput *output, int = 0, double = 0.0, int = 0, bool silence = false);
+    bool MTCT subprocess(WaveOutput* output, int = 0, double = 0.0, int = 0, bool silence = false);
 };
 //---------------------------------------------------------------------------
 #include "MTPattern.h"

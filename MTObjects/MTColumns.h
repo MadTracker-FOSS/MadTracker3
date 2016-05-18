@@ -37,7 +37,7 @@ class EffectColumn;
 struct NoteData
 {
     unsigned char lastnote, lastins, ninstances, flags;
-    InstrumentInstance *lastinstance[MAX_POLYPHONY];
+    InstrumentInstance* lastinstance[MAX_POLYPHONY];
     double onote, cnote, dnote;
 };
 
@@ -62,17 +62,17 @@ class NoteColumn: public Column
 public:
     NoteColumn();
 
-    void MTCT init(MTPatternInstance *, ColumnStatus &status);
+    void MTCT init(MTPatternInstance*, ColumnStatus& status);
 
-    void MTCT firstpass(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks);
+    void MTCT firstpass(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks);
 
-    void MTCT columnhandle(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks);
+    void MTCT columnhandle(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks);
 
     int MTCT getwidth(int charwidth);
 
-    void MTCT drawcolumn(MTBitmap *, MTRect &, unsigned char *celldata, ColumnDrawState &state);
+    void MTCT drawcolumn(MTBitmap*, MTRect&, unsigned char* celldata, ColumnDrawState& state);
 
-    void MTCT onmessage(MTPattManager *pm, MTCMessage &, int cursor, unsigned char *celldata);
+    void MTCT onmessage(MTPattManager* pm, MTCMessage&, int cursor, unsigned char* celldata);
 };
 
 class DrumsColumn: public Column
@@ -80,17 +80,17 @@ class DrumsColumn: public Column
 public:
     DrumsColumn();
 
-    void MTCT init(MTPatternInstance *, ColumnStatus &status);
+    void MTCT init(MTPatternInstance*, ColumnStatus& status);
 
-    void MTCT firstpass(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks);
+    void MTCT firstpass(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks);
 
-    void MTCT columnhandle(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks);
+    void MTCT columnhandle(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks);
 
     int MTCT getwidth(int charwidth);
 
-    void MTCT drawcolumn(MTBitmap *, MTRect &, unsigned char *celldata, ColumnDrawState &state);
+    void MTCT drawcolumn(MTBitmap*, MTRect&, unsigned char* celldata, ColumnDrawState& state);
 
-    void MTCT onmessage(MTPattManager *pm, MTCMessage &, int cursor, unsigned char *celldata);
+    void MTCT onmessage(MTPattManager* pm, MTCMessage&, int cursor, unsigned char* celldata);
 };
 
 class VolumeColumn: public Column
@@ -98,17 +98,17 @@ class VolumeColumn: public Column
 public:
     VolumeColumn();
 
-    void MTCT init(MTPatternInstance *, ColumnStatus &status);
+    void MTCT init(MTPatternInstance*, ColumnStatus& status);
 
-    void MTCT firstpass(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks);
+    void MTCT firstpass(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks);
 
-    void MTCT columnhandle(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks);
+    void MTCT columnhandle(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks);
 
     int MTCT getwidth(int charwidth);
 
-    void MTCT drawcolumn(MTBitmap *, MTRect &, unsigned char *celldata, ColumnDrawState &state);
+    void MTCT drawcolumn(MTBitmap*, MTRect&, unsigned char* celldata, ColumnDrawState& state);
 
-    void MTCT onmessage(MTPattManager *pm, MTCMessage &, int cursor, unsigned char *celldata);
+    void MTCT onmessage(MTPattManager* pm, MTCMessage&, int cursor, unsigned char* celldata);
 };
 
 class PanningColumn: public Column
@@ -116,17 +116,17 @@ class PanningColumn: public Column
 public:
     PanningColumn();
 
-    void MTCT init(MTPatternInstance *, ColumnStatus &status);
+    void MTCT init(MTPatternInstance*, ColumnStatus& status);
 
-    void MTCT firstpass(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks);
+    void MTCT firstpass(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks);
 
-    void MTCT columnhandle(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks);
+    void MTCT columnhandle(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks);
 
     int MTCT getwidth(int charwidth);
 
-    void MTCT drawcolumn(MTBitmap *, MTRect &, unsigned char *celldata, ColumnDrawState &state);
+    void MTCT drawcolumn(MTBitmap*, MTRect&, unsigned char* celldata, ColumnDrawState& state);
 
-    void MTCT onmessage(MTPattManager *pm, MTCMessage &, int cursor, unsigned char *celldata);
+    void MTCT onmessage(MTPattManager* pm, MTCMessage&, int cursor, unsigned char* celldata);
 };
 
 class EffectColumn: public Column
@@ -134,17 +134,17 @@ class EffectColumn: public Column
 public:
     EffectColumn();
 
-    void MTCT init(MTPatternInstance *, ColumnStatus &status);
+    void MTCT init(MTPatternInstance*, ColumnStatus& status);
 
-    void MTCT firstpass(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks);
+    void MTCT firstpass(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks);
 
-    void MTCT columnhandle(MTPatternInstance *, unsigned char *celldata, FirstPass &pass, ColumnStatus &status, int tick, int nticks);
+    void MTCT columnhandle(MTPatternInstance*, unsigned char* celldata, FirstPass& pass, ColumnStatus& status, int tick, int nticks);
 
     int MTCT getwidth(int charwidth);
 
-    void MTCT drawcolumn(MTBitmap *, MTRect &, unsigned char *celldata, ColumnDrawState &state);
+    void MTCT drawcolumn(MTBitmap*, MTRect&, unsigned char* celldata, ColumnDrawState& state);
 
-    void MTCT onmessage(MTPattManager *pm, MTCMessage &, int cursor, unsigned char *celldata);
+    void MTCT onmessage(MTPattManager* pm, MTCMessage&, int cursor, unsigned char* celldata);
 };
 
 //---------------------------------------------------------------------------

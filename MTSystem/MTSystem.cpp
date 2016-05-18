@@ -36,7 +36,7 @@
 #endif
 
 //---------------------------------------------------------------------------
-static const char *sysname = {"MadTracker System Core"};
+static const char* sysname = {"MadTracker System Core"};
 
 static const int sysversion = 0x30000;
 
@@ -48,16 +48,16 @@ MTXInterfaces i;
 MTSystemInterface *si;
 #endif
 
-MTInterface *mtinterface;
+MTInterface* mtinterface;
 
-MTGUIInterface *gi;
+MTGUIInterface* gi;
 
-MTDisplayInterface *di;
+MTDisplayInterface* di;
 
 #endif
 #ifdef MTSYSTEM_RESOURCES
 
-MTResources *sysres;
+MTResources* sysres;
 
 #endif
 #ifdef _WIN32
@@ -83,7 +83,7 @@ struct timespec timerres;
 
 #endif
 
-MTWindow *auth;
+MTWindow* auth;
 
 bool debugged = false;
 
@@ -91,7 +91,7 @@ extern char rootn[64];
 
 char dialog[256];
 
-char *d_ok, *d_cancel, *d_yes, *d_no;
+char* d_ok, * d_cancel, * d_yes, * d_no;
 
 #ifdef MTSYSTEM_EXPORTS
 //---------------------------------------------------------------------------
@@ -700,13 +700,13 @@ MTLock memlock;
 
 struct MTAlloc
 {
-    void *address;
+    void* address;
     int size;
-    void *caller;
-    char *callstack;
-} *mtalloc;
+    void* caller;
+    char* callstack;
+} * mtalloc;
 
-MTAlloc *addalloc()
+MTAlloc* addalloc()
 {
     if ((!mtalloc) || (nmallocs <= 0))
     {
@@ -714,7 +714,7 @@ MTAlloc *addalloc()
 #		ifdef _WIN32
         mtalloc = (MTAlloc*)HeapAlloc(GetProcessHeap(),HEAP_ZERO_MEMORY,nmallocs*sizeof(MTAlloc));
 #		else
-        mtalloc = (MTAlloc *) calloc(1, nmallocs * sizeof(MTAlloc));
+        mtalloc = (MTAlloc*) calloc(1, nmallocs * sizeof(MTAlloc));
 #		endif
     }
     else if (nallocs >= nmallocs)
@@ -723,7 +723,7 @@ MTAlloc *addalloc()
 #		ifdef _WIN32
         mtalloc = (MTAlloc*)HeapReAlloc(GetProcessHeap(),HEAP_ZERO_MEMORY,mtalloc,nmallocs*sizeof(MTAlloc));
 #		else
-        mtalloc = (MTAlloc *) realloc(mtalloc, nmallocs * sizeof(MTAlloc));
+        mtalloc = (MTAlloc*) realloc(mtalloc, nmallocs * sizeof(MTAlloc));
 #		endif
     };
     return &mtalloc[nallocs++];
@@ -740,7 +740,9 @@ void delalloc(unsigned int id)
 #		endif
     };
     if (id != nallocs - 1)
-    { memcpy(&mtalloc[id], &mtalloc[nallocs - 1], sizeof(MTAlloc)); }
+    {
+        memcpy(&mtalloc[id], &mtalloc[nallocs - 1], sizeof(MTAlloc));
+    }
     mtmemzero(&mtalloc[nallocs - 1], sizeof(MTAlloc));
     nallocs--;
     if ((nallocs < nmallocs - 64) && (nmallocs > 1024))
@@ -751,7 +753,7 @@ void delalloc(unsigned int id)
 #			ifdef _WIN32
             mtalloc = (MTAlloc*)HeapReAlloc(GetProcessHeap(),HEAP_ZERO_MEMORY,mtalloc,nmallocs*sizeof(MTAlloc));
 #			else
-            mtalloc = (MTAlloc *) realloc(mtalloc, nmallocs * sizeof(MTAlloc));
+            mtalloc = (MTAlloc*) realloc(mtalloc, nmallocs * sizeof(MTAlloc));
 #			endif
         }
         else
@@ -769,9 +771,9 @@ void delalloc(unsigned int id)
 #endif
 
 //---------------------------------------------------------------------------
-void *mtmemalloc(int size, int flags)
+void* mtmemalloc(int size, int flags)
 {
-    void *mem;
+    void* mem;
 
 #	ifdef _DEBUG
     if (size > 0x2000000)
@@ -789,20 +791,24 @@ void *mtmemalloc(int size, int flags)
         mem = calloc(1, size);
     }
     else
-    { mem = malloc(size); }
+    {
+        mem = malloc(size);
+    }
 #	endif
 #	ifdef _DEBUG
     if (mem)
     {
-        const char *cs;
+        const char* cs;
         memlock.lock();
         totalmemory += size;
         if (totalmemory > peakmemory)
-        { peakmemory = totalmemory; }
-        MTAlloc &calloc = *addalloc();
+        {
+            peakmemory = totalmemory;
+        }
+        MTAlloc& calloc = *addalloc();
         calloc.address = mem;
         calloc.size = size;
-        calloc.caller = *((void **) (((char *) (&size)) - 4));
+        calloc.caller = *((void**) (((char*) (&size)) - 4));
         calloc.callstack = 0;
 #			ifdef MTSYSTEM_EXPORTS
         cs = mtgetcallstack();
@@ -826,7 +832,7 @@ void *mtmemalloc(int size, int flags)
     return mem;
 }
 
-bool mtmemfree(void *mem)
+bool mtmemfree(void* mem)
 {
     if (mem)
     {
@@ -861,12 +867,14 @@ bool mtmemfree(void *mem)
     return true;
 }
 
-void *mtmemrealloc(void *mem, int size)
+void* mtmemrealloc(void* mem, int size)
 {
-    void *newmem;
+    void* newmem;
 
     if (!mem)
-    { return mtmemalloc(size, MTM_ZERO); }
+    {
+        return mtmemalloc(size, MTM_ZERO);
+    }
 #	ifdef _WIN32
     HANDLE ph = GetProcessHeap();
     int csize = HeapSize(ph,0,mem);
@@ -899,17 +907,19 @@ void *mtmemrealloc(void *mem, int size)
             mtalloc[x].size = size;
             totalmemory += size;
             if (totalmemory > peakmemory)
-            { peakmemory = totalmemory; }
+            {
+                peakmemory = totalmemory;
+            }
             break;
         };
     };
     memlock.unlock();
 #	endif
-    return (void *) newmem;
+    return (void*) newmem;
 }
 
 //---------------------------------------------------------------------------
-bool MTCT DialogProc(MTWinControl *window, MTCMessage &msg)
+bool MTCT DialogProc(MTWinControl* window, MTCMessage& msg)
 {
     if (msg.msg == MTCM_TIMER)
     {
@@ -943,30 +953,30 @@ char mtgetchar()
 
 #endif
 
-int mtdialog(const char *message, const char *caption, const char *buttons, int flags, int timeout)
+int mtdialog(const char* message, const char* caption, const char* buttons, int flags, int timeout)
 {
 #ifdef MTSYSTEM_RESOURCES
-    char *e;
-    MTDesktop *dsk;
+    char* e;
+    MTDesktop* dsk;
     int x, y, l, t, h, r, size, cbutton;
     char buf[128];
-    if ((sysres) && ((dsk = (MTDesktop *) di->getdefaultdesktop())) && ((dsk->flags & MTCF_HIDDEN) == 0))
+    if ((sysres) && ((dsk = (MTDesktop*) di->getdefaultdesktop())) && ((dsk->flags & MTCF_HIDDEN) == 0))
     {
-        MTFile *wf = sysres->getresourcefile(MTR_WINDOW, MTW_dialog, &size);
+        MTFile* wf = sysres->getresourcefile(MTR_WINDOW, MTW_dialog, &size);
         if (wf)
         {
-            MTLabel *c;
-            MTIcon *i;
-            MTButton *ob;
-            MTButton *b[8];
-            MTWindow *alert = gi->loadwindowfromfile(wf, size, dsk);
+            MTLabel* c;
+            MTIcon* i;
+            MTButton* ob;
+            MTButton* b[8];
+            MTWindow* alert = gi->loadwindowfromfile(wf, size, dsk);
             sysres->releaseresourcefile(wf);
             alert->messageproc = DialogProc;
             alert->flags |= MTCF_FREEONCLOSE;
-            c = (MTLabel *) alert->getcontrolfromuid(MTC_ltext);
-            i = (MTIcon *) alert->getcontrolfromuid(MTC_icon);
+            c = (MTLabel*) alert->getcontrolfromuid(MTC_ltext);
+            i = (MTIcon*) alert->getcontrolfromuid(MTC_icon);
             mtmemzero(b, sizeof(b));
-            ob = (MTButton *) alert->getcontrolfromuid(MTC_b1);
+            ob = (MTButton*) alert->getcontrolfromuid(MTC_b1);
             if ((!c) || (!ob))
             {
                 gi->delcontrol(alert);
@@ -974,7 +984,9 @@ int mtdialog(const char *message, const char *caption, const char *buttons, int 
             };
             alert->setcaption(caption);
             if (i)
-            { i->icon = flags & MTD_ICONMASK; }
+            {
+                i->icon = flags & MTD_ICONMASK;
+            }
             if (((int) buttons < 256) && (dialog[0] == 0))
             {
                 if (sysres->loadresource(MTR_TEXT, MTT_dialog, dialog, sizeof(dialog)))
@@ -994,13 +1006,19 @@ int mtdialog(const char *message, const char *caption, const char *buttons, int 
                                 *d_no++ = 0;
                             }
                             else
-                            { dialog[0] = 1; }
+                            {
+                                dialog[0] = 1;
+                            }
                         }
                         else
-                        { dialog[0] = 1; }
+                        {
+                            dialog[0] = 1;
+                        }
                     }
                     else
-                    { dialog[0] = 1; }
+                    {
+                        dialog[0] = 1;
+                    }
                 }
                 else
                 {
@@ -1024,37 +1042,41 @@ int mtdialog(const char *message, const char *caption, const char *buttons, int 
             switch (buttonAddr)
             {
                 case eMTD_OK:
-                    b[7] = (MTButton *) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
+                    b[7] = (MTButton*) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
                     b[7]->setcaption(d_ok);
                     b[7]->modalresult = 0;
                     alert->focus(b[7]);
                     break;
                 case eMTD_OKCANCEL:
-                    b[6] = (MTButton *) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
-                    b[7] = (MTButton *) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
+                    b[6] = (MTButton*) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
+                    b[7] = (MTButton*) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
                     b[6]->setcaption(d_ok);
                     b[7]->setcaption(d_cancel);
                     b[6]->modalresult = 0;
                     b[7]->modalresult = 1;
                     if (cbutton > 1)
-                    { cbutton = 1; }
+                    {
+                        cbutton = 1;
+                    }
                     alert->focus(b[6 + cbutton]);
                     break;
                 case eMTD_YESNO:
-                    b[6] = (MTButton *) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
-                    b[7] = (MTButton *) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
+                    b[6] = (MTButton*) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
+                    b[7] = (MTButton*) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
                     b[6]->setcaption(d_yes);
                     b[7]->setcaption(d_no);
                     b[6]->modalresult = 0;
                     b[7]->modalresult = 1;
                     if (cbutton > 1)
-                    { cbutton = 1; }
+                    {
+                        cbutton = 1;
+                    }
                     alert->focus(b[6 + cbutton]);
                     break;
                 case eMTD_YESNOCANCEL:
-                    b[5] = (MTButton *) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
-                    b[6] = (MTButton *) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
-                    b[7] = (MTButton *) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
+                    b[5] = (MTButton*) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
+                    b[6] = (MTButton*) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
+                    b[7] = (MTButton*) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
                     b[5]->setcaption(d_yes);
                     b[6]->setcaption(d_no);
                     b[7]->setcaption(d_cancel);
@@ -1062,7 +1084,9 @@ int mtdialog(const char *message, const char *caption, const char *buttons, int 
                     b[6]->modalresult = 1;
                     b[7]->modalresult = 2;
                     if (cbutton > 2)
-                    { cbutton = 2; }
+                    {
+                        cbutton = 2;
+                    }
                     alert->focus(b[5 + cbutton]);
                     break;
                 default:
@@ -1075,16 +1099,22 @@ int mtdialog(const char *message, const char *caption, const char *buttons, int 
                             e = buf;
                         }
                         else
-                        { *e++ = 0; }
-                        b[x] = (MTButton *) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
+                        {
+                            *e++ = 0;
+                        }
+                        b[x] = (MTButton*) gi->newcontrol(MTC_BUTTON, 0, alert, l, t, 0, h, 0);
                         b[x]->modalresult = x;
                         if (e == buf)
-                        { break; }
+                        {
+                            break;
+                        }
                     };
                     y = x;
                     e = buf;
                     if (cbutton > 7 - y)
-                    { cbutton = 7 - y; }
+                    {
+                        cbutton = 7 - y;
+                    }
                     alert->focus(b[y + cbutton]);
                     for(x = y; x < 8; x++)
                     {
@@ -1098,7 +1128,9 @@ int mtdialog(const char *message, const char *caption, const char *buttons, int 
             for(x = 7; x >= 0; x--)
             {
                 if (!b[x])
-                { break; }
+                {
+                    break;
+                }
                 r -= b[x]->width + 4;
                 b[x]->switchflags(MTCF_DONTSAVE, true);
                 b[x]->setbounds(r, t, 0, 0);
@@ -1109,17 +1141,25 @@ int mtdialog(const char *message, const char *caption, const char *buttons, int 
                 r = alert->width + l - r;
             }
             else
-            { r = 0; }
+            {
+                r = 0;
+            }
             c->setcaption(message);
             if (alert->width > r)
-            { r = 0; }
+            {
+                r = 0;
+            }
             h = alert->height;
             if (h < 96)
-            { h = 96; }
+            {
+                h = 96;
+            }
             alert->setbounds((dsk->width - alert->width) / 2, (dsk->height - alert->height) / 2, r, h);
             alert->modalresult = MTDR_CANCEL;
             if (timeout > 0)
-            { alert->tag = gi->ctrltimer(alert, 0, timeout, false); }
+            {
+                alert->tag = gi->ctrltimer(alert, 0, timeout, false);
+            }
             return dsk->show(alert, ((flags & MTD_MODAL) != 0) ? 1 : 0);
         };
         return MTDR_NULL;
@@ -1250,12 +1290,12 @@ int mtdialog(const char *message, const char *caption, const char *buttons, int 
 
 #ifdef MTSYSTEM_RESOURCES
 
-int mtresdialog(MTResources *res, int id, const char *caption, char *buttons, int flags, int timeout, ...)
+int mtresdialog(MTResources* res, int id, const char* caption, char* buttons, int flags, int timeout, ...)
 {
     int ret;
     va_list l;
-    char *buf = (char *) mtmemalloc(1024);
-    char *buffer = (char *) mtmemalloc(512);
+    char* buf = (char*) mtmemalloc(1024);
+    char* buffer = (char*) mtmemalloc(512);
 
     res->loadstring(id, buffer, 1024);
     va_start(l, timeout);
@@ -1267,23 +1307,25 @@ int mtresdialog(MTResources *res, int id, const char *caption, char *buttons, in
     return ret;
 }
 
-int mtauthdialog(char *message, char *login, char *password)
+int mtauthdialog(char* message, char* login, char* password)
 {
-    MTDesktop *dsk;
-    MTLabel *l;
-    MTEdit *elogin, *epassword;
+    MTDesktop* dsk;
+    MTLabel* l;
+    MTEdit* elogin, * epassword;
     int size;
 
     if (!auth)
     {
-        if ((sysres) && ((dsk = (MTDesktop *) di->getdefaultdesktop())))
+        if ((sysres) && ((dsk = (MTDesktop*) di->getdefaultdesktop())))
         {
-            MTFile *wf = sysres->getresourcefile(MTR_WINDOW, MTW_auth, &size);
+            MTFile* wf = sysres->getresourcefile(MTR_WINDOW, MTW_auth, &size);
             if (wf)
             {
                 auth = gi->loadwindowfromfile(wf, size, dsk);
                 if ((int) auth <= 0)
-                { return -1; }
+                {
+                    return -1;
+                }
                 auth->setbounds((dsk->width - auth->width) / 2, (dsk->height - auth->height) / 2, 0, 0);
                 sysres->releaseresourcefile(wf);
             };
@@ -1292,22 +1334,32 @@ int mtauthdialog(char *message, char *login, char *password)
     dsk = auth->dsk;
     if ((auth) && ((dsk->flags & MTCF_HIDDEN) == 0))
     {
-        l = (MTLabel *) auth->getcontrolfromuid(MTC_lcaption);
+        l = (MTLabel*) auth->getcontrolfromuid(MTC_lcaption);
         if (l)
-        { l->setcaption(message); }
-        elogin = (MTEdit *) auth->getcontrolfromuid(MTC_elogin);
-        epassword = (MTEdit *) auth->getcontrolfromuid(MTC_epassword);
+        {
+            l->setcaption(message);
+        }
+        elogin = (MTEdit*) auth->getcontrolfromuid(MTC_elogin);
+        epassword = (MTEdit*) auth->getcontrolfromuid(MTC_epassword);
         if (!login)
-        { elogin->switchflags(MTCF_DISABLED, true); }
+        {
+            elogin->switchflags(MTCF_DISABLED, true);
+        }
         if (!password)
-        { epassword->switchflags(MTCF_DISABLED, true); }
+        {
+            epassword->switchflags(MTCF_DISABLED, true);
+        }
         auth->modalresult = MTDR_CANCEL;
         if (dsk->show(auth, 1) == 0)
         {
             if (login)
-            { strcpy(login, elogin->text); }
+            {
+                strcpy(login, elogin->text);
+            }
             if (password)
-            { strcpy(password, epassword->text); }
+            {
+                strcpy(password, epassword->text);
+            }
             return 0;
         };
     };
@@ -1318,7 +1370,7 @@ int mtauthdialog(char *message, char *login, char *password)
 
 void mtshowoserror(int error)
 {
-    char *message;
+    char* message;
 
 #	ifdef _WIN32
     FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,0,error,0,(char*)&message,16,0);
@@ -1341,23 +1393,23 @@ void mtshowlastoserror()
 }
 
 //---------------------------------------------------------------------------
-int mtsync_inc(int *value)
+int mtsync_inc(int* value)
 {
 #	ifdef _WIN32
     return InterlockedIncrement((long*)value);
 #	else
     // FIXME: Architecture compatibility? -flibit
-    return __sync_add_and_fetch((long *) value, 1);
+    return __sync_add_and_fetch((long*) value, 1);
 #	endif
 }
 
-int mtsync_dec(int *value)
+int mtsync_dec(int* value)
 {
 #	ifdef _WIN32
     return InterlockedDecrement((long*)value);
 #	else
     // FIXME: Architecture compatibility? -flibit
-    return __sync_sub_and_fetch((long *) value, 1);
+    return __sync_sub_and_fetch((long*) value, 1);
 #	endif
 }
 //---------------------------------------------------------------------------

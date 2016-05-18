@@ -31,8 +31,13 @@
 //   MTWinControl
 //     MTList
 //---------------------------------------------------------------------------
-MTList::MTList(int id, int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTWinControl(id, tag, p, l, t, w, h), owner(0), viewflags(0), selected(-1), numitems(0), itemheight(16)
+MTList::MTList(int id, int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTWinControl(id, tag, p, l, t, w, h),
+    owner(0),
+    viewflags(0),
+    selected(-1),
+    numitems(0),
+    itemheight(16)
 {
 }
 
@@ -40,7 +45,7 @@ MTList::~MTList()
 {
     if ((owner) && ((owner->guiid == MTC_USERCOMBOBOX) || (owner->guiid == MTC_ITEMCOMBOBOX)))
     {
-        ((MTComboBox *) owner)->mlb = 0;
+        ((MTComboBox*) owner)->mlb = 0;
     };
 }
 
@@ -49,32 +54,42 @@ MTList::~MTList()
 int MTList::getnumproperties(int id)
 {
     if (id == -1)
-    { return ListNP; }
+    {
+        return ListNP;
+    }
     if (id < ListNP)
-    { return MTControl::getnumproperties(id); }
+    {
+        return MTControl::getnumproperties(id);
+    }
     return 0;
 }
 
-bool MTList::getpropertytype(int id, char **name, int &flags)
+bool MTList::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[1] = {"View"};
+    static char* propname[1] = {"View"};
     static int propflags[1] = {MTP_FLAGS};
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getpropertytype(id, name, flags); }
+    {
+        return MTControl::getpropertytype(id, name, flags);
+    }
     if (id >= ListNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id - ControlNP];
     flags = propflags[id - ControlNP];
     return true;
 }
 
-bool MTList::getproperty(int id, void *value)
+bool MTList::getproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getproperty(id, value); }
+    {
+        return MTControl::getproperty(id, value);
+    }
     switch (id - ControlNP)
     {
         case 0:
@@ -86,14 +101,18 @@ bool MTList::getproperty(int id, void *value)
     return true;
 }
 
-bool MTList::setproperty(int id, void *value)
+bool MTList::setproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::setproperty(id, value); }
+    {
+        return MTControl::setproperty(id, value);
+    }
     if (window)
-    { window->modified = true; }
+    {
+        window->modified = true;
+    }
     switch (id - ControlNP)
     {
         case 0:
@@ -110,7 +129,7 @@ bool MTList::setproperty(int id, void *value)
     return true;
 }
 
-bool MTList::message(MTCMessage &msg)
+bool MTList::message(MTCMessage& msg)
 {
     int id, p;
 
@@ -126,9 +145,13 @@ bool MTList::message(MTCMessage &msg)
                         id = selected - p;
                     }
                     else
-                    { id = numitems - 1; }
+                    {
+                        id = numitems - 1;
+                    }
                     if (id < 0)
-                    { id = 0; }
+                    {
+                        id = 0;
+                    }
                     setitem(id);
                     return true;
                 case KB_PAGEDOWN:
@@ -138,18 +161,26 @@ bool MTList::message(MTCMessage &msg)
                         id = selected + p;
                     }
                     else
-                    { id = 0; }
+                    {
+                        id = 0;
+                    }
                     if (id > numitems - 1)
-                    { id = numitems - 1; }
+                    {
+                        id = numitems - 1;
+                    }
                     setitem(id);
                     return true;
                 case KB_END:
                     if (numitems > 0)
-                    { setitem(numitems - 1); }
+                    {
+                        setitem(numitems - 1);
+                    }
                     return true;
                 case KB_HOME:
                     if (numitems > 0)
-                    { setitem(0); }
+                    {
+                        setitem(0);
+                    }
                     return true;
                 case KB_UP:
                     if (selected >= 0)
@@ -157,9 +188,13 @@ bool MTList::message(MTCMessage &msg)
                         id = selected - 1;
                     }
                     else
-                    { id = numitems - 1; }
+                    {
+                        id = numitems - 1;
+                    }
                     if (id < 0)
-                    { id = 0; }
+                    {
+                        id = 0;
+                    }
                     setitem(id);
                     return true;
                 case KB_DOWN:
@@ -168,27 +203,33 @@ bool MTList::message(MTCMessage &msg)
                         id = selected + 1;
                     }
                     else
-                    { id = 0; }
+                    {
+                        id = 0;
+                    }
                     if (id > numitems - 1)
-                    { id = numitems - 1; }
+                    {
+                        id = numitems - 1;
+                    }
                     setitem(id);
                     return true;
             };
             break;
         case MTCM_ACTION:
             if (parent)
-            { return parent->message(msg); }
+            {
+                return parent->message(msg);
+            }
             return false;
     };
     return MTWinControl::message(msg);
 }
 
-bool MTList::getiteminfo(int id, char **caption, int *imageindex, int *flags, bool *editable)
+bool MTList::getiteminfo(int id, char** caption, int* imageindex, int* flags, bool* editable)
 {
     return false;
 }
 
-int MTList::searchitem(const char *search, char **caption)
+int MTList::searchitem(const char* search, char** caption)
 {
     return -1;
 }
@@ -209,15 +250,19 @@ void MTList::setitem(int id)
 //     MTList
 //       MTUserList
 //---------------------------------------------------------------------------
-MTUserList::MTUserList(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTList(MTC_USERLIST, tag, p, l, t, w, h), over(-1), userdrawproc(0), getiteminfoproc(0), itemmessageproc(0)
+MTUserList::MTUserList(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTList(MTC_USERLIST, tag, p, l, t, w, h),
+    over(-1),
+    userdrawproc(0),
+    getiteminfoproc(0),
+    itemmessageproc(0)
 {
     int sw, sh;
 
     flags |= MTCF_ACCEPTINPUT;
     gi->setcontrolname(this, "userlist");
     skin->getcontrolsize(MTC_SCROLLER, 1, sw, sh);
-    vs = (MTScroller *) gi->newcontrol(MTC_SCROLLER, 0, this, width - sw, 0, 0, height, 0);
+    vs = (MTScroller*) gi->newcontrol(MTC_SCROLLER, 0, this, width - sw, 0, 0, height, 0);
     vs->type = MTST_VBAR;
     vs->switchflags(MTCF_SYSTEM | MTCF_DONTSAVE, true);
     vs->align = MTCA_RIGHT;
@@ -244,24 +289,28 @@ void MTUserList::switchflags(int f, bool set)
     };
 }
 
-void MTUserList::draw(MTRect &rect)
+void MTUserList::draw(MTRect& rect)
 {
     int i;
     int x = 0;
     int y = 0;
-    MTBitmap *b;
-    char *caption;
+    MTBitmap* b;
+    char* caption;
     int imageindex, itemflags;
     bool editable;
     MTRect cr = {0, 0, width, height};
     MTRect r;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     if (&rect)
     {
         if (!cliprect(cr, rect))
-        { goto exit; }
+        {
+            goto exit;
+        }
     };
     preparedraw(&b, x, y);
     skin->drawcontrol(this, cr, b, x, y);
@@ -277,7 +326,9 @@ void MTUserList::draw(MTRect &rect)
             if (r.top > cr.top - itemheight + y)
             {
                 if (r.top >= cr.bottom + y)
-                { break; }
+                {
+                    break;
+                }
                 userdrawproc(this, i, r, b);
             };
             r.top += itemheight;
@@ -291,13 +342,17 @@ void MTUserList::draw(MTRect &rect)
             if (r.top > cr.top - itemheight + y)
             {
                 if (r.top >= cr.bottom + y)
-                { break; }
+                {
+                    break;
+                }
                 caption = 0;
                 imageindex = -1;
                 itemflags = 0;
                 editable = false;
                 if (getiteminfoproc(this, i, &caption, &imageindex, &itemflags, &editable) < 0)
-                { continue; }
+                {
+                    continue;
+                }
                 skin->drawitem(this, i, r, b, caption, imageindex, itemflags, editable);
             };
             r.top += itemheight;
@@ -309,7 +364,7 @@ void MTUserList::draw(MTRect &rect)
     MTWinControl::draw(rect);
 }
 
-bool MTUserList::message(MTCMessage &msg)
+bool MTUserList::message(MTCMessage& msg)
 {
     int old;
 
@@ -317,13 +372,17 @@ bool MTUserList::message(MTCMessage &msg)
     {
         case MTCM_MOUSEMOVE:
             if ((MTList::message(msg)) || (msg.x >= width - vs->width))
-            { return true; }
+            {
+                return true;
+            }
             old = over;
             if (flags & MTCF_OVER)
             {
                 over = (msg.y + vs->pos) / itemheight;
                 if ((over < 0) || (over >= numitems))
-                { over = -1; }
+                {
+                    over = -1;
+                }
             }
             else
             {
@@ -367,7 +426,9 @@ bool MTUserList::message(MTCMessage &msg)
             return true;
         case MTCM_MOUSEDOWN:
             if ((MTList::message(msg)) || (msg.x >= width - vs->width))
-            { return true; }
+            {
+                return true;
+            }
             setitem((msg.y + vs->pos) / itemheight);
             if ((itemmessageproc) && (selected >= 0))
             {
@@ -385,23 +446,29 @@ bool MTUserList::message(MTCMessage &msg)
     return MTList::message(msg);
 }
 
-bool MTUserList::getiteminfo(int id, char **caption, int *imageindex, int *flags, bool *editable)
+bool MTUserList::getiteminfo(int id, char** caption, int* imageindex, int* flags, bool* editable)
 {
     if (getiteminfoproc)
-    { return (getiteminfoproc(this, id, caption, imageindex, flags, editable) >= 0); }
+    {
+        return (getiteminfoproc(this, id, caption, imageindex, flags, editable) >= 0);
+    }
     return false;
 }
 
-int MTUserList::searchitem(const char *search, char **caption)
+int MTUserList::searchitem(const char* search, char** caption)
 {
     int x, y;
-    char *ccap;
+    char* ccap;
 
     if (!getiteminfoproc)
-    { return -1; }
+    {
+        return -1;
+    }
     y = selected;
     if (y < 0)
-    { y = 0; }
+    {
+        y = 0;
+    }
     for(x = 0; x < numitems; x++)
     {
         if (getiteminfoproc(this, y, &ccap, 0, 0, 0) >= 0)
@@ -409,12 +476,16 @@ int MTUserList::searchitem(const char *search, char **caption)
             if (strstr(ccap, search))
             {
                 if (caption)
-                { *caption = ccap; }
+                {
+                    *caption = ccap;
+                }
                 return y;
             };
         };
         if (++y == numitems)
-        { y = 0; }
+        {
+            y = 0;
+        }
     };
     return -1;
 }
@@ -424,9 +495,13 @@ void MTUserList::setitem(int id)
     int old;
 
     if ((id < 0) || (id >= numitems))
-    { id = -1; }
+    {
+        id = -1;
+    }
     if (id == selected)
-    { return; }
+    {
+        return;
+    }
     old = selected;
     selected = id;
     if (selected != old)
@@ -469,7 +544,7 @@ void MTUserList::setitem(int id)
 
 void MTUserList::setnumitems(int n)
 {
-    MTComboBox *combo = (MTComboBox *) owner;
+    MTComboBox* combo = (MTComboBox*) owner;
 
     numitems = n;
     if (selected >= numitems)
@@ -477,7 +552,9 @@ void MTUserList::setnumitems(int n)
         setitem(-1);
     };
     if (over >= numitems)
-    { over = -1; }
+    {
+        over = -1;
+    }
     updatescroller();
     if (parent)
     {
@@ -489,7 +566,9 @@ void MTUserList::setnumitems(int n)
 void MTUserList::updatescroller()
 {
     if (!vs)
-    { return; }
+    {
+        return;
+    }
     vs->maxpos = numitems * itemheight;
     vs->page = (height / itemheight) * itemheight;
     vs->incr = itemheight;
@@ -500,21 +579,27 @@ void MTUserList::updatescroller()
 // MTControl
 //   MTItem
 //---------------------------------------------------------------------------
-MTItem::MTItem(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTControl(MTC_ITEM, tag, p, l, t, w, h), index(0), imageindex(-1), itemflags(0), data(0)
+MTItem::MTItem(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTControl(MTC_ITEM, tag, p, l, t, w, h),
+    index(0),
+    imageindex(-1),
+    itemflags(0),
+    data(0)
 {
     flags |= (MTCF_ACCEPTINPUT | MTCF_TRANSPARENT | MTCF_DONTSAVE);;
-    caption = (char *) si->memalloc(260, MTM_ZERO);
+    caption = (char*) si->memalloc(260, MTM_ZERO);
 }
 
 MTItem::~MTItem()
 {
     si->memfree(caption);
     if (parent)
-    { ((MTItemView *) parent)->removeitem(this); }
+    {
+        ((MTItemView*) parent)->removeitem(this);
+    }
 }
 
-bool MTItem::message(MTCMessage &msg)
+bool MTItem::message(MTCMessage& msg)
 {
     if (msg.msg == MTCM_MOUSEDOWN)
     {
@@ -528,8 +613,8 @@ bool MTItem::message(MTCMessage &msg)
         {
             parent->switchflags(MTCF_SELECTED, false);
             switchflags(MTCF_SELECTED, true);
-            ((MTItemView *) parent)->selecteditem = this;
-            ((MTList *) parent)->selected = index;
+            ((MTItemView*) parent)->selecteditem = this;
+            ((MTList*) parent)->selected = index;
             MTCMessage msg = {MTCM_ITEMSELECT, 0, this};
             parent->message(msg);
             return true;
@@ -544,7 +629,7 @@ bool MTItem::message(MTCMessage &msg)
     return MTControl::message(msg);
 }
 
-void MTItem::setcaption(const char *c)
+void MTItem::setcaption(const char* c)
 {
     strcpy(caption, c);
     if (parent)
@@ -559,8 +644,11 @@ void MTItem::setcaption(const char *c)
 //   MTWinControl
 //     MTItemView
 //---------------------------------------------------------------------------
-MTItemView::MTItemView(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTList(MTC_ITEMVIEW, tag, p, l, t, w, h), selecteditem(0), userdrawproc(0), updating(false)
+MTItemView::MTItemView(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTList(MTC_ITEMVIEW, tag, p, l, t, w, h),
+    selecteditem(0),
+    userdrawproc(0),
+    updating(false)
 {
     flags |= MTCF_ACCEPTINPUT;
 }
@@ -570,11 +658,11 @@ MTItemView::~MTItemView()
     clearitems();
 }
 
-int MTItemView::loadfromstream(MTFile *f, int size, int flags)
+int MTItemView::loadfromstream(MTFile* f, int size, int flags)
 {
     int csize = (flags == 0) ? MTWinControl::loadfromstream(f, size, flags) : 0;
     int nc, x, psize;
-    char *caption;
+    char* caption;
     struct
     {
         int image;
@@ -589,7 +677,7 @@ int MTItemView::loadfromstream(MTFile *f, int size, int flags)
     for(x = 0; x < nc; x++)
     {
         f->read(&psize, 4);
-        caption = (char *) si->memalloc(psize, 0);
+        caption = (char*) si->memalloc(psize, 0);
         f->read(caption, psize);
         f->read(&itemdata, sizeof(itemdata));
         additem(caption, itemdata.image, itemdata.flags, itemdata.editable, 0);
@@ -599,7 +687,7 @@ int MTItemView::loadfromstream(MTFile *f, int size, int flags)
     return csize;
 }
 
-int MTItemView::savetostream(MTFile *f, int flags)
+int MTItemView::savetostream(MTFile* f, int flags)
 {
     int csize = (flags == 0) ? MTWinControl::savetostream(f, flags) : 0;
     int x, l, nc, o, zero;
@@ -608,7 +696,9 @@ int MTItemView::savetostream(MTFile *f, int flags)
     for(x = 0; x < ncontrols; x++)
     {
         if (((controls[x]->guiid & MTC_ITEM) == MTC_ITEM) && ((controls[x]->flags & MTCF_DONTSAVE) == 0))
-        { nc++; }
+        {
+            nc++;
+        }
     };
     f->write(&viewflags, 4);
     x = 0;
@@ -618,7 +708,7 @@ int MTItemView::savetostream(MTFile *f, int flags)
     zero = 0;
     for(x = 0; x < ncontrols; x++)
     {
-        MTListItem &cli = *(MTListItem *) controls[x];
+        MTListItem& cli = *(MTListItem*) controls[x];
         if (((cli.guiid & MTC_ITEM) == MTC_ITEM) && ((cli.flags & MTCF_DONTSAVE) == 0))
         {
             l = strlen(cli.caption) + 1;
@@ -641,36 +731,46 @@ int MTItemView::savetostream(MTFile *f, int flags)
 int MTItemView::getnumproperties(int id)
 {
     if (id == -1)
-    { return ItemViewNP; }
+    {
+        return ItemViewNP;
+    }
     if (id < ItemViewNP)
-    { return MTList::getnumproperties(id); }
+    {
+        return MTList::getnumproperties(id);
+    }
     return 0;
 }
 
-bool MTItemView::getpropertytype(int id, char **name, int &flags)
+bool MTItemView::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[2] = {"View", "Items"};
+    static char* propname[2] = {"View", "Items"};
     static int propflags[2] = {MTP_FLAGS, MTP_ITEMS};
 
     if ((id < ListNP) || ((id & 0xFF00) && ((id >> 8) < ListNP)))
-    { return MTList::getpropertytype(id, name, flags); }
+    {
+        return MTList::getpropertytype(id, name, flags);
+    }
     if (id >= ItemViewNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id - ListNP];
     flags = propflags[id - ListNP];
     return true;
 }
 
-bool MTItemView::getproperty(int id, void *value)
+bool MTItemView::getproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ListNP) || ((id & 0xFF00) && ((id >> 8) < ListNP)))
-    { return MTList::getproperty(id, value); }
+    {
+        return MTList::getproperty(id, value);
+    }
     switch (id - ListNP)
     {
         case 0:
-            *(MTItemView **) value = this;
+            *(MTItemView**) value = this;
             break;
         default:
             return false;
@@ -678,14 +778,18 @@ bool MTItemView::getproperty(int id, void *value)
     return true;
 }
 
-bool MTItemView::setproperty(int id, void *value)
+bool MTItemView::setproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ListNP) || ((id & 0xFF00) && ((id >> 8) < ListNP)))
-    { return MTList::setproperty(id, value); }
+    {
+        return MTList::setproperty(id, value);
+    }
     if (window)
-    { window->modified = true; }
+    {
+        window->modified = true;
+    }
     switch (id - ListNP)
     {
         case 0:
@@ -701,17 +805,21 @@ bool MTItemView::setproperty(int id, void *value)
     return true;
 }
 
-bool MTItemView::message(MTCMessage &msg)
+bool MTItemView::message(MTCMessage& msg)
 {
     if ((msg.msg == MTCM_KEYDOWN) && ((msg.key == KB_RETURN) || (msg.key == KB_ESCAPE)))
     {
         MTCMessage msg = {MTCM_ACTION, 0, this};
         if (parent)
-        { return parent->message(msg); }
+        {
+            return parent->message(msg);
+        }
         return true;
     };
     if (MTList::message(msg))
-    { return true; }
+    {
+        return true;
+    }
     if (msg.msg == MTCM_MOUSEDOWN)
     {
         switchflags(MTCF_SELECTED, false);
@@ -721,14 +829,16 @@ bool MTItemView::message(MTCMessage &msg)
     return false;
 }
 
-void MTItemView::addcontrol(MTControl *control)
+void MTItemView::addcontrol(MTControl* control)
 {
     MTWinControl::addcontrol(control);
     if ((control->guiid & MTC_ITEM) == MTC_ITEM)
-    { numitems = ncontrols - 1; }
+    {
+        numitems = ncontrols - 1;
+    }
 }
 
-void MTItemView::delcontrol(MTControl *control)
+void MTItemView::delcontrol(MTControl* control)
 {
     if ((control->guiid & MTC_ITEM) == MTC_ITEM)
     {
@@ -741,18 +851,20 @@ void MTItemView::delcontrol(MTControl *control)
     MTWinControl::delcontrol(control);
 }
 
-MTItem *MTItemView::additem(const char *caption, int image, int flags, bool editable, void *data)
+MTItem* MTItemView::additem(const char* caption, int image, int flags, bool editable, void* data)
 {
     int top;
-    MTItem *ni;
+    MTItem* ni;
 
     if (ncontrols > 0)
     {
         top = controls[ncontrols - 1]->top + controls[ncontrols - 1]->height;
     }
     else
-    { top = 0; }
-    ni = (MTItem *) gi->newcontrol(MTC_ITEM, 0, this, 0, top, width, 16, 0);
+    {
+        top = 0;
+    }
+    ni = (MTItem*) gi->newcontrol(MTC_ITEM, 0, this, 0, top, width, 16, 0);
     ni->index = ncontrols - 2;
     ni->imageindex = image;
     ni->itemflags = flags;
@@ -769,9 +881,14 @@ void MTItemView::clearitems()
     for(io = 0; io < ncontrols; io++)
     {
         if ((controls[io]->guiid & MTC_ITEM) == MTC_ITEM)
-        { break; }
+        {
+            break;
+        }
     };
-    while(ncontrols > io) gi->delcontrol(controls[io]);
+    while(ncontrols > io)
+    {
+        gi->delcontrol(controls[io]);
+    }
 }
 
 void MTItemView::beginupdate()
@@ -797,18 +914,24 @@ void MTItemView::endupdate()
 void MTItemView::sort(int f)
 {
     int x, io;
-    MTItem *s, *c;
+    MTItem* s, * c;
 
     for(io = 0; io < ncontrols; io++)
     {
         if ((controls[io]->guiid & MTC_ITEM) == MTC_ITEM)
-        { break; }
+        {
+            break;
+        }
     };
     if (ncontrols < io + 2)
-    { return; }
+    {
+        return;
+    }
     bool bupdating = updating;
     if (!bupdating)
-    { beginupdate(); }
+    {
+        beginupdate();
+    }
     if (f == 0)
     {
         quicksort(0, 0, ncontrols - io - 1);
@@ -816,14 +939,16 @@ void MTItemView::sort(int f)
     else if (f == 1)
     {
         quicksort(io + 1, 0, ncontrols - io - 1);
-        s = (MTItem *) controls[io];
+        s = (MTItem*) controls[io];
         for(x = io + 1; x < ncontrols; x++)
         {
-            c = (MTItem *) controls[x];
+            c = (MTItem*) controls[x];
             if (c->data != s->data)
             {
                 if (c->index - 1 > s->index)
-                { quicksort(0, s->index, c->index - 1); }
+                {
+                    quicksort(0, s->index, c->index - 1);
+                }
                 s = c;
             }
             else if (x == ncontrols - 1)
@@ -833,76 +958,100 @@ void MTItemView::sort(int f)
         };
     };
     if (!bupdating)
-    { endupdate(); }
+    {
+        endupdate();
+    }
 }
 
-bool MTItemView::getiteminfo(int id, char **caption, int *imageindex, int *flags, bool *editable)
+bool MTItemView::getiteminfo(int id, char** caption, int* imageindex, int* flags, bool* editable)
 {
     int io;
-    MTItem *ci;
+    MTItem* ci;
 
     if (id < 0)
-    { id = selected; }
+    {
+        id = selected;
+    }
     for(io = 0; io < ncontrols; io++)
     {
         if ((controls[io]->guiid & MTC_ITEM) == MTC_ITEM)
-        { break; }
+        {
+            break;
+        }
     };
     if ((id < 0) || (id > ncontrols - io - 1))
-    { return false; }
-    ci = (MTItem *) controls[id + io];
+    {
+        return false;
+    }
+    ci = (MTItem*) controls[id + io];
     if (caption)
-    { *caption = ci->caption; }
+    {
+        *caption = ci->caption;
+    }
     if (imageindex)
-    { *imageindex = ci->imageindex; }
+    {
+        *imageindex = ci->imageindex;
+    }
     if (flags)
-    { *flags = ci->flags; }
+    {
+        *flags = ci->flags;
+    }
     if (editable)
-    { *editable = ci->editable; }
+    {
+        *editable = ci->editable;
+    }
     return true;
 }
 
-MTItem *MTItemView::getitem(int id)
+MTItem* MTItemView::getitem(int id)
 {
     int io;
 
     for(io = 0; io < ncontrols; io++)
     {
         if ((controls[io]->guiid & MTC_ITEM) == MTC_ITEM)
-        { break; }
+        {
+            break;
+        }
     };
-    return (MTItem *) controls[id + io];
+    return (MTItem*) controls[id + io];
 }
 
-MTItem *MTItemView::getitemfromtag(int tag)
+MTItem* MTItemView::getitemfromtag(int tag)
 {
     int x;
 
     for(x = 0; x < ncontrols; x++)
     {
         if (((controls[x]->guiid & MTC_ITEM) == MTC_ITEM) && (controls[x]->tag == tag))
-        { return (MTItem *) controls[x]; }
+        {
+            return (MTItem*) controls[x];
+        }
     };
     return 0;
 }
 
 void MTItemView::setitem(int id)
 {
-    MTControl *old = focused;
+    MTControl* old = focused;
     int io;
 
     if (selected == id)
-    { return; }
+    {
+        return;
+    }
     for(io = 0; io < ncontrols; io++)
     {
         if ((controls[io]->guiid & MTC_ITEM) == MTC_ITEM)
-        { break; }
+        {
+            break;
+        }
     };
     switchflags(MTCF_SELECTED, false);
     if ((id >= 0) && (id < ncontrols - 2))
     {
         controls[id + io]->switchflags(MTCF_SELECTED, true);
-        selecteditem = (MTListItem *) controls[id + io];
+        selecteditem = (MTListItem*) controls[id + io];
         focused = selecteditem;
     }
     else
@@ -911,7 +1060,9 @@ void MTItemView::setitem(int id)
         focused = 0;
     };
     if (old)
-    { old->switchflags(MTCF_FOCUSED, false); }
+    {
+        old->switchflags(MTCF_FOCUSED, false);
+    }
     if (focused)
     {
         focused->switchflags(MTCF_FOCUSED, true);
@@ -920,42 +1071,52 @@ void MTItemView::setitem(int id)
     MTList::setitem(id);
 }
 
-int MTItemView::searchitem(const char *search, char **caption)
+int MTItemView::searchitem(const char* search, char** caption)
 {
     int id, io, x, y;
 
     id = selected;
     if (id < 0)
-    { id = 0; }
+    {
+        id = 0;
+    }
     for(io = 0; io < ncontrols; io++)
     {
         if ((controls[io]->guiid & MTC_ITEM) == MTC_ITEM)
-        { break; }
+        {
+            break;
+        }
     };
     y = io + id;
     for(x = 0; x < ncontrols - io; x++)
     {
-        MTListItem &ci = *(MTListItem *) controls[y];
+        MTListItem& ci = *(MTListItem*) controls[y];
         if (strstr(ci.caption, search))
         {
             if (caption)
-            { *caption = ci.caption; }
+            {
+                *caption = ci.caption;
+            }
             return y - io;
         };
         if (++y == ncontrols)
-        { y = io; }
+        {
+            y = io;
+        }
     };
     return -1;
 }
 
-void MTItemView::removeitem(MTItem *item)
+void MTItemView::removeitem(MTItem* item)
 {
     int x, io, h;
 
     for(io = 0; io < ncontrols; io++)
     {
         if ((controls[io]->guiid & MTC_ITEM) == MTC_ITEM)
-        { break; }
+        {
+            break;
+        }
     };
     if (selecteditem == item)
     {
@@ -966,7 +1127,7 @@ void MTItemView::removeitem(MTItem *item)
     item->flags |= MTCF_DONTDRAW;
     for(x = item->index + io; x < ncontrols; x++)
     {
-        MTListItem &cli = *(MTListItem *) controls[x];
+        MTListItem& cli = *(MTListItem*) controls[x];
         cli.index--;
         cli.top -= h;
     };
@@ -980,18 +1141,20 @@ void MTItemView::removeitem(MTItem *item)
 void MTItemView::quicksort(int f, int lo, int hi)
 {
     int mlo, mhi, l, io;
-    MTItem *t, *mid;
-    char *ext, *p;
+    MTItem* t, * mid;
+    char* ext, * p;
     char midc[256];
 
     for(io = 0; io < ncontrols; io++)
     {
         if ((controls[io]->guiid & MTC_ITEM) == MTC_ITEM)
-        { break; }
+        {
+            break;
+        }
     };
     mlo = lo;
     mhi = hi;
-    mid = (MTItem *) controls[io + (mlo + mhi) / 2];
+    mid = (MTItem*) controls[io + (mlo + mhi) / 2];
     if (f == 1)
     {
         ext = strrchr(mid->caption, '.');
@@ -1016,72 +1179,87 @@ void MTItemView::quicksort(int f, int lo, int hi)
     {
         if (f == 0)
         {
-            while(strnatcmp(((MTItem *) controls[io + mlo])->caption, mid->caption) < 0)
+            while(strnatcmp(((MTItem*) controls[io + mlo])->caption, mid->caption) < 0)
+            {
                 mlo++;
-            while(strnatcmp(((MTItem *) controls[io + mhi])->caption, mid->caption) > 0)
+            }
+            while(strnatcmp(((MTItem*) controls[io + mhi])->caption, mid->caption) > 0)
+            {
                 mhi--;
+            }
         }
         else if (f == 1)
         {
-            while(strnatcmp(((MTItem *) controls[io + mlo])->caption, midc) < 0)
+            while(strnatcmp(((MTItem*) controls[io + mlo])->caption, midc) < 0)
             {
                 mlo++;
             };
-            while(strnatcmp(((MTItem *) controls[io + mhi])->caption, midc) > 0)
+            while(strnatcmp(((MTItem*) controls[io + mhi])->caption, midc) > 0)
             {
                 mhi--;
             };
         }
         else if (f == 2)
         {
-            while((int) ((MTItem *) controls[io + mlo])->data < (int) mid->data)
+            while((int) ((MTItem*) controls[io + mlo])->data < (int) mid->data)
+            {
                 mlo++;
-            while((int) ((MTItem *) controls[io + mhi])->data > (int) mid->data)
+            }
+            while((int) ((MTItem*) controls[io + mhi])->data > (int) mid->data)
+            {
                 mhi--;
+            }
         };
         if (mlo <= mhi)
         {
             if (mlo != mhi)
             {
-                t = (MTItem *) controls[io + mlo];
+                t = (MTItem*) controls[io + mlo];
                 controls[io + mlo] = controls[io + mhi];
                 controls[io + mhi] = t;
-                ((MTItem *) controls[io + mlo])->index = mlo;
+                ((MTItem*) controls[io + mlo])->index = mlo;
                 controls[io + mlo]->top = mlo * 16;
-                ((MTItem *) controls[io + mhi])->index = mhi;
+                ((MTItem*) controls[io + mhi])->index = mhi;
                 controls[io + mhi]->top = mhi * 16;
             };
             mlo++;
             mhi--;
         };
-    } while(mlo <= mhi);
+    }
+    while(mlo <= mhi);
     if (mhi > lo)
-    { quicksort(f, lo, mhi); }
+    {
+        quicksort(f, lo, mhi);
+    }
     if (mlo < hi)
-    { quicksort(f, mlo, hi); }
+    {
+        quicksort(f, mlo, hi);
+    }
 }
 
 //---------------------------------------------------------------------------
 // MTControl
 //   MTListItem
 //---------------------------------------------------------------------------
-MTListItem::MTListItem(int tag, MTWinControl *p, int l, int t, int w, int h):
+MTListItem::MTListItem(int tag, MTWinControl* p, int l, int t, int w, int h):
     MTItem(tag, p, l, t, w, h)
 {
     guiid = MTC_LISTITEM;
 }
 
-void MTListItem::draw(MTRect &rect)
+void MTListItem::draw(MTRect& rect)
 {
     int x = left;
     int y = top;
-    MTBitmap *b;
+    MTBitmap* b;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     preparedraw(&b, x, y);
     MTRect r = {x + 2, y, x + width - 2, y + height};
-    MTListBox &cparent = *(MTListBox *) parent;
+    MTListBox& cparent = *(MTListBox*) parent;
     if (cparent.userdrawproc)
     {
         cparent.userdrawproc(this, rect, b);
@@ -1098,7 +1276,7 @@ void MTListItem::draw(MTRect &rect)
 //     MTItemView
 //       MTListBox
 //---------------------------------------------------------------------------
-MTListBox::MTListBox(int tag, MTWinControl *p, int l, int t, int w, int h):
+MTListBox::MTListBox(int tag, MTWinControl* p, int l, int t, int w, int h):
     MTItemView(tag, p, l, t, w, h)
 {
     int tmp, sw;
@@ -1106,7 +1284,7 @@ MTListBox::MTListBox(int tag, MTWinControl *p, int l, int t, int w, int h):
     guiid = MTC_LISTBOX;
     gi->setcontrolname(this, "listbox");
     skin->getcontrolsize(MTC_SCROLLER, 1, sw, tmp);
-    vs = (MTScroller *) gi->newcontrol(MTC_SCROLLER, 0, this, width - sw, 0, 0, height, 0);
+    vs = (MTScroller*) gi->newcontrol(MTC_SCROLLER, 0, this, width - sw, 0, 0, height, 0);
     vs->type = MTST_VBAR;
     vs->switchflags(MTCF_SYSTEM | MTCF_DONTSAVE, true);
     vs->align = MTCA_RIGHT;
@@ -1117,46 +1295,55 @@ void MTListBox::setbounds(int l, int t, int w, int h)
 {
     int x;
 
-    for(x = 1; x < ncontrols; x++) controls[x]->width = w - vs->width;
+    for(x = 1; x < ncontrols; x++)
+    {
+        controls[x]->width = w - vs->width;
+    }
     MTWinControl::setbounds(l, t, w, h);
     updatescroller();
 }
 
-void MTListBox::draw(MTRect &rect)
+void MTListBox::draw(MTRect& rect)
 {
     MTRect cr = {0, 0, width, height};
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     if (&rect)
     {
         if (!cliprect(cr, rect))
-        { goto exit; }
+        {
+            goto exit;
+        }
     };
     skin->drawcontrol(this, cr, 0, 0, 0);
     exit:
     MTWinControl::draw(rect);
 }
 
-MTItem *MTListBox::additem(const char *caption, int image, int flags, bool editable, void *data)
+MTItem* MTListBox::additem(const char* caption, int image, int flags, bool editable, void* data)
 {
     int top;
-    MTListItem *ni;
+    MTListItem* ni;
 
     if (ncontrols > 1)
     {
         top = controls[ncontrols - 1]->top + controls[ncontrols - 1]->height;
     }
     else
-    { top = 0; }
-    ni = (MTListItem *) gi->newcontrol(MTC_LISTITEM, 0, this, 0, top, width - vs->width, 16, 0);
+    {
+        top = 0;
+    }
+    ni = (MTListItem*) gi->newcontrol(MTC_LISTITEM, 0, this, 0, top, width - vs->width, 16, 0);
     ni->index = ncontrols - 2;
     ni->imageindex = image;
     ni->itemflags = flags;
     ni->editable = editable;
     ni->data = data;
     ni->setcaption(caption);
-    return (MTItem *) ni;
+    return (MTItem*) ni;
 }
 
 void MTListBox::clearitems()
@@ -1169,7 +1356,9 @@ void MTListBox::clearitems()
 void MTListBox::endupdate()
 {
     if (!updating)
-    { return; }
+    {
+        return;
+    }
     MTItemView::endupdate();
     updatescroller();
 }
@@ -1177,13 +1366,17 @@ void MTListBox::endupdate()
 void MTListBox::updatescroller()
 {
     if (!vs)
-    { return; }
+    {
+        return;
+    }
     if (ncontrols > 0)
     {
         vs->maxpos = controls[ncontrols - 1]->top + controls[ncontrols - 1]->height;
     }
     else
-    { vs->maxpos = 0; }
+    {
+        vs->maxpos = 0;
+    }
     vs->page = (height / 16) * 16;
     vs->incr = 16;
     vs->setposition(vs->pos);
@@ -1194,22 +1387,29 @@ void MTListBox::updatescroller()
 //   MTItem
 //     MTMenuItem
 //---------------------------------------------------------------------------
-MTMenuItem::MTMenuItem(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTItem(tag, p, l, t, w, h), command(0), submenu(0), shortcut(0), hotkey(0), hotkeyoffset(-1)
+MTMenuItem::MTMenuItem(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTItem(tag, p, l, t, w, h),
+    command(0),
+    submenu(0),
+    shortcut(0),
+    hotkey(0),
+    hotkeyoffset(-1)
 {
     guiid = MTC_MENUITEM;
 }
 
-void MTMenuItem::draw(MTRect &rect)
+void MTMenuItem::draw(MTRect& rect)
 {
     int x = left;
     int y = top;
-    MTBitmap *b;
+    MTBitmap* b;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     preparedraw(&b, x, y);
-    MTListBox &cparent = *(MTListBox *) parent;
+    MTListBox& cparent = *(MTListBox*) parent;
     if (cparent.userdrawproc)
     {
         cparent.userdrawproc(this, rect, b);
@@ -1220,7 +1420,7 @@ void MTMenuItem::draw(MTRect &rect)
     MTControl::draw(rect);
 }
 
-bool MTMenuItem::message(MTCMessage &msg)
+bool MTMenuItem::message(MTCMessage& msg)
 {
     if (((msg.msg == MTCM_MOUSECLICK) || (msg.msg == MTCM_SHORTCUT)) && (!submenu) && (caption[0] != '|'))
     {
@@ -1231,9 +1431,9 @@ bool MTMenuItem::message(MTCMessage &msg)
     return MTItem::message(msg);
 }
 
-void MTMenuItem::setcaption(const char *c)
+void MTMenuItem::setcaption(const char* c)
 {
-    char *e, *e1, *e2;
+    char* e, * e1, * e2;
     int w = 12;
     int h = height;
     MTPoint p;
@@ -1260,11 +1460,15 @@ void MTMenuItem::setcaption(const char *c)
         *e1 = 0;
     };
     if ((hotkey >= 'a') && (hotkey <= 'z'))
-    { hotkey += 'A' - 'a'; }
+    {
+        hotkey += 'A' - 'a';
+    }
     if (caption[0] != '|')
     {
-        if (((MTListBox *) parent)->viewflags & MTVF_IMAGES)
-        { w += 18; }
+        if (((MTListBox*) parent)->viewflags & MTVF_IMAGES)
+        {
+            w += 18;
+        }
         skin->gettextsize(this, caption, -1, &p);
         w += p.x;
     }
@@ -1273,12 +1477,18 @@ void MTMenuItem::setcaption(const char *c)
         h = 6;
     };
     if (w < 32)
-    { w = 32; }
+    {
+        w = 32;
+    }
     if (parent->width > w)
-    { w = parent->width; }
+    {
+        w = parent->width;
+    }
     setbounds(left, top, w, h);
     if (parent->width < w)
-    { parent->setbounds(parent->left, parent->top, w, parent->height); }
+    {
+        parent->setbounds(parent->left, parent->top, w, parent->height);
+    }
     if (parent)
     {
         MTCMessage msg = {MTCM_CHANGE, 0, this};
@@ -1292,8 +1502,9 @@ void MTMenuItem::setcaption(const char *c)
 //     MTItemView
 //       MTMenu
 //---------------------------------------------------------------------------
-MTMenu::MTMenu(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTItemView(tag, p, l, t, 32, 16), ib(0)
+MTMenu::MTMenu(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTItemView(tag, p, l, t, 32, 16),
+    ib(0)
 {
     guiid = MTC_MENU;
     flags |= (MTCF_RAISED | MTCF_HIDDEN);
@@ -1305,7 +1516,9 @@ MTMenu::MTMenu(int tag, MTWinControl *p, int l, int t, int w, int h):
 MTMenu::~MTMenu()
 {
     if (ib)
-    { di->delbitmap(ib); }
+    {
+        di->delbitmap(ib);
+    }
 }
 
 void MTMenu::setbounds(int l, int t, int w, int h)
@@ -1315,10 +1528,12 @@ void MTMenu::setbounds(int l, int t, int w, int h)
 
     MTItemView::setbounds(l, t, w, h);
     if (!resize)
-    { return; }
+    {
+        return;
+    }
     for(x = 0; x < ncontrols; x++)
     {
-        MTMenuItem &cmi = *(MTMenuItem *) controls[x];
+        MTMenuItem& cmi = *(MTMenuItem*) controls[x];
         cmi.setbounds(cmi.left, cmi.top, w, cmi.height);
     };
 }
@@ -1351,15 +1566,17 @@ void MTMenu::switchflags(int f, bool set)
     MTWinControl::switchflags(f, set);
 }
 
-void MTMenu::draw(MTRect &rect)
+void MTMenu::draw(MTRect& rect)
 {
     MTRect cr = {0, 0, width, height};
-    MTBitmap *ob = mb;
+    MTBitmap* ob = mb;
     int obox = box;
     int oboy = boy;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     if (ib)
     {
         mb = ib;
@@ -1369,7 +1586,9 @@ void MTMenu::draw(MTRect &rect)
     if (&rect)
     {
         if (!cliprect(cr, rect))
-        { goto exit; }
+        {
+            goto exit;
+        }
     };
     skin->drawcontrol(this, cr, 0, 0, 0);
     exit:
@@ -1386,29 +1605,33 @@ void MTMenu::draw(MTRect &rect)
     };
 }
 
-bool MTMenu::message(MTCMessage &msg)
+bool MTMenu::message(MTCMessage& msg)
 {
     int x;
     char key;
-    MTMenuItem *cmi;
+    MTMenuItem* cmi;
 
     switch (msg.msg)
     {
         case MTCM_ACTION:
-            cmi = (MTMenuItem *) msg.ctrl;
+            cmi = (MTMenuItem*) msg.ctrl;
             if (dsk)
-            { dsk->clearmenu(0); }
+            {
+                dsk->clearmenu(0);
+            }
             if ((caller) && (caller->parent))
             {
                 caller->parent->focus(caller);
             };
             if ((cmi) && (cmi->command))
-            { cmi->command(0, cmi, 0); }
+            {
+                cmi->command(0, cmi, 0);
+            }
             return true;
         case MTCM_CHANGE:
             if ((msg.msg == MTCM_CHANGE) && (msg.ctrl->guiid == MTC_MENUITEM) && (msg.param1 & MTCF_OVER))
             {
-                cmi = (MTMenuItem *) msg.ctrl;
+                cmi = (MTMenuItem*) msg.ctrl;
                 if (cmi->flags & MTCF_OVER)
                 {
                     if ((cmi->submenu) && (dsk))
@@ -1417,25 +1640,33 @@ bool MTMenu::message(MTCMessage &msg)
                         cmi->submenu->popup(this, p);
                     }
                     else
-                    { dsk->clearmenu(this); }
+                    {
+                        dsk->clearmenu(this);
+                    }
                 };
             };
             break;
         case MTCM_CHAR:
             key = msg.key;
             if ((key >= 'a') && (key <= 'z'))
-            { key += 'A' - 'a'; }
+            {
+                key += 'A' - 'a';
+            }
             if (msg.buttons == 0)
             {
                 for(x = 0; x < ncontrols; x++)
                 {
-                    cmi = (MTMenuItem *) controls[x];
+                    cmi = (MTMenuItem*) controls[x];
                     if (cmi->hotkey == key)
                     {
                         if (dsk)
-                        { dsk->clearmenu(0); }
+                        {
+                            dsk->clearmenu(0);
+                        }
                         if ((cmi) && (cmi->command))
-                        { cmi->command(0, cmi, 0); }
+                        {
+                            cmi->command(0, cmi, 0);
+                        }
                         return true;
                     };
                 };
@@ -1447,9 +1678,9 @@ bool MTMenu::message(MTCMessage &msg)
     return MTItemView::message(msg);
 }
 
-MTItem *MTMenu::additem(const char *caption, int image, int flags, bool editable, void *data)
+MTItem* MTMenu::additem(const char* caption, int image, int flags, bool editable, void* data)
 {
-    MTMenuItem *ni;
+    MTMenuItem* ni;
     int top;
 
     if (ncontrols > 0)
@@ -1457,8 +1688,10 @@ MTItem *MTMenu::additem(const char *caption, int image, int flags, bool editable
         top = controls[ncontrols - 1]->top + controls[ncontrols - 1]->height;
     }
     else
-    { top = 0; }
-    ni = (MTMenuItem *) gi->newcontrol(MTC_MENUITEM, 0, this, 0, top, width, 16, 0);
+    {
+        top = 0;
+    }
+    ni = (MTMenuItem*) gi->newcontrol(MTC_MENUITEM, 0, this, 0, top, width, 16, 0);
     ni->index = ncontrols - 1;
     ni->imageindex = image;
     ni->itemflags = flags;
@@ -1466,10 +1699,10 @@ MTItem *MTMenu::additem(const char *caption, int image, int flags, bool editable
     ni->data = data;
     ni->setcaption(caption);
     setbounds(left, top, width, top + ni->height);
-    return (MTItem *) ni;
+    return (MTItem*) ni;
 }
 
-void MTMenu::removeitem(MTItem *item)
+void MTMenu::removeitem(MTItem* item)
 {
     int x;
     int top;
@@ -1478,7 +1711,7 @@ void MTMenu::removeitem(MTItem *item)
     width = 32;
     for(x = 0; x < ncontrols; x++)
     {
-        MTMenuItem &cmi = *(MTMenuItem *) controls[x];
+        MTMenuItem& cmi = *(MTMenuItem*) controls[x];
         cmi.setcaption(cmi.caption);
     };
     if (ncontrols > 0)
@@ -1486,17 +1719,21 @@ void MTMenu::removeitem(MTItem *item)
         top = controls[ncontrols - 1]->top + controls[ncontrols - 1]->height;
     }
     else
-    { top = 16; }
+    {
+        top = 16;
+    }
     setbounds(left, top, width, top);
 }
 
-void MTMenu::popup(MTControl *newcaller, MTPoint pos)
+void MTMenu::popup(MTControl* newcaller, MTPoint pos)
 {
     int px, py;
-    MTMenu *cm = 0;
+    MTMenu* cm = 0;
 
     if ((!dsk) || (ncontrols == 0))
-    { return; }
+    {
+        return;
+    }
     mouse = pos;
     area.right = area.left;
     area.bottom = area.top;
@@ -1504,11 +1741,13 @@ void MTMenu::popup(MTControl *newcaller, MTPoint pos)
     MTCMessage msg = {MTCM_ONPOPUP, 1, this};
     caller->message(msg);
     if (msg.result == 0)
-    { return; }
+    {
+        return;
+    }
     if (caller->guiid & 2)
     {
-        px = ((MTWinControl *) caller)->box + pos.x + 2;
-        py = ((MTWinControl *) caller)->boy + pos.y;
+        px = ((MTWinControl*) caller)->box + pos.x + 2;
+        py = ((MTWinControl*) caller)->boy + pos.y;
     }
     else if (caller->parent)
     {
@@ -1520,21 +1759,27 @@ void MTMenu::popup(MTControl *newcaller, MTPoint pos)
         px = 0;
     }
     else if (px > dsk->width - width)
-    { px = dsk->width - width; }
+    {
+        px = dsk->width - width;
+    }
     if (py < 0)
     {
         py = 0;
     }
     else if (py > dsk->height - height)
-    { py = dsk->height - height; }
+    {
+        py = dsk->height - height;
+    }
     if (caller->guiid == MTC_MENU)
     {
-        cm = (MTMenu *) caller;
+        cm = (MTMenu*) caller;
         if (cm->left + cm->width - 16 > px)
         {
             px = cm->left - width;
             if (px < 0)
-            { px = 0; }
+            {
+                px = 0;
+            }
         };
     };
     dsk->clearmenu(cm);
@@ -1542,7 +1787,7 @@ void MTMenu::popup(MTControl *newcaller, MTPoint pos)
     dsk->setmenu(this);
 }
 
-void MTMenu::popup(MTControl *newcaller, MTRect area)
+void MTMenu::popup(MTControl* newcaller, MTRect area)
 {
     popup(newcaller, mouse);
     this->area = area;
@@ -1554,15 +1799,17 @@ void MTMenu::popup(MTControl *newcaller, MTRect area)
 //     MTUserList
 //       MTFileListBox
 //---------------------------------------------------------------------------
-MTFileListBox::MTFileListBox(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTUserList(tag, p, l, t, w, h), entries(0), process(0)
+MTFileListBox::MTFileListBox(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTUserList(tag, p, l, t, w, h),
+    entries(0),
+    process(0)
 {
     getiteminfoproc = flb_getiteminfo;
     itemmessageproc = flb_itemmessage;
     viewflags |= MTVF_IMAGES;
     guiid = MTC_FILELISTBOX;
     gi->setcontrolname(this, "file");
-    path = (char *) si->memalloc(1024, 0);
+    path = (char*) si->memalloc(1024, 0);
     setpath(0);
 }
 
@@ -1576,33 +1823,40 @@ MTFileListBox::~MTFileListBox()
     };
     if (entries)
     {
-        for(x = 0; x < entries->nitems; x++) si->memfree(((MTFileEntry *) entries->d)[x].filename);
+        for(x = 0; x < entries->nitems; x++)
+        {
+            si->memfree(((MTFileEntry*) entries->d)[x].filename);
+        }
         si->arraydelete(entries);
     };
     si->memfree(path);
 }
 
-void MTFileListBox::additem(const char *c, int type, int imageindex)
+void MTFileListBox::additem(const char* c, int type, int imageindex)
 {
     MTFileEntry entry;
 
     entry.type = type;
     entry.imageindex = imageindex;
-    entry.filename = (char *) si->memalloc(strlen(c) + 1, 0);
+    entry.filename = (char*) si->memalloc(strlen(c) + 1, 0);
     strcpy(entry.filename, c);
     entries->push(&entry);
 }
 
-int MTFileListBox::flb_natsort(MTFileEntry *a, MTFileEntry *b)
+int MTFileListBox::flb_natsort(MTFileEntry* a, MTFileEntry* b)
 {
     int ta, tb;
 
     ta = (a->type & MTFA_TYPEMASK);
     tb = (b->type & MTFA_TYPEMASK);
     if (ta > tb)
-    { return 1; }
+    {
+        return 1;
+    }
     if (ta < tb)
-    { return -1; }
+    {
+        return -1;
+    }
     return strnatcmp(a->filename, b->filename);
 }
 
@@ -1611,10 +1865,10 @@ void MTFileListBox::sort(int f)
     entries->sort((SortProc) flb_natsort);
 }
 
-void MTFileListBox::setpath(const char *p)
+void MTFileListBox::setpath(const char* p)
 {
     int x;
-    char *s;
+    char* s;
 
 //TODO Linux
     if (process)
@@ -1626,7 +1880,7 @@ void MTFileListBox::setpath(const char *p)
     };
     setitem(-1);
     over = -1;
-    if (p == (char *) 1)
+    if (p == (char*) 1)
     {
         strcpy(path, "Root");
     }
@@ -1641,11 +1895,15 @@ void MTFileListBox::setpath(const char *p)
     else
     {
         if (strcmp(p, ".") == 0)
-        { return; }
+        {
+            return;
+        }
         if (strcmp(p, "..") == 0)
         {
             if (path[0] == 0)
-            { return; }
+            {
+                return;
+            }
             if (strcmp(path, "Root") == 0)
             {
                 path[0] = 0;
@@ -1660,11 +1918,15 @@ void MTFileListBox::setpath(const char *p)
                 if (s > path + 1)
                 {
                     if (s[-1] == ':')
-                    { s++; }
+                    {
+                        s++;
+                    }
                     *s = 0;
                 }
                 else
-                { path[0] = 0; }
+                {
+                    path[0] = 0;
+                }
             };
         }
         else
@@ -1683,16 +1945,23 @@ void MTFileListBox::setpath(const char *p)
     };
     if (entries)
     {
-        for(x = 0; x < entries->nitems; x++) si->memfree(((MTFileEntry *) entries->d)[x].filename);
+        for(x = 0; x < entries->nitems; x++)
+        {
+            si->memfree(((MTFileEntry*) entries->d)[x].filename);
+        }
         si->arraydelete(entries);
     };
     entries = si->arraycreate(32, sizeof(MTFileEntry));
     if (path[0])
-    { additem("..", 0, 52); }
+    {
+        additem("..", 0, 52);
+    }
     setnumitems(entries->nitems);
     if (!design)
     {
-        process = si->processcreate(flb_process, this, MTP_LOADMODULE, MTT_LOWER, this, flb_progress, true, "FileListBox");
+        process = si->processcreate(
+            flb_process, this, MTP_LOADMODULE, MTT_LOWER, this, flb_progress, true, "FileListBox"
+        );
     };
 }
 
@@ -1705,13 +1974,13 @@ void MTFileListBox::setfilter(int f)
     };
 }
 
-int MTFileListBox::flb_process(MTThread *thread, void *param)
+int MTFileListBox::flb_process(MTThread* thread, void* param)
 {
-    MTProcess *p = (MTProcess *) thread;
-    MTFileListBox &flb = *(MTFileListBox *) param;
-    MTFolder *folder;
+    MTProcess* p = (MTProcess*) thread;
+    MTFileListBox& flb = *(MTFileListBox*) param;
+    MTFolder* folder;
     int x, attr, image;
-    const char *file, *s;
+    const char* file, * s;
 
     folder = si->folderopen(flb.path);
     x = si->syscounter();
@@ -1733,19 +2002,25 @@ int MTFileListBox::flb_process(MTThread *thread, void *param)
         else
         {
             image = 51;
-            s = (char *) strrchr(file, '.');
+            s = (char*) strrchr(file, '.');
             if ((s) && (stricmp(s, ".mt2") == 0))
-            { image = 53; }
+            {
+                image = 53;
+            }
         };
         if (attr == MTFA_DISK)
         {
-            s = (char *) strchr(file, 0);
+            s = (char*) strchr(file, 0);
             if (s > file + 3)
-            { attr |= (s[-3] << 16); }
+            {
+                attr |= (s[-3] << 16);
+            }
         };
         flb.additem(file, attr, image);
         if (!folder->next())
-        { break; }
+        {
+            break;
+        }
         if (si->syscounter() - x >= 1000)
         {
             p->setprogress(0.5);
@@ -1756,9 +2031,9 @@ int MTFileListBox::flb_process(MTThread *thread, void *param)
     return 0;
 }
 
-void MTFileListBox::flb_progress(MTProcess *process, void *param, float p)
+void MTFileListBox::flb_progress(MTProcess* process, void* param, float p)
 {
-    MTFileListBox &flb = *(MTFileListBox *) param;
+    MTFileListBox& flb = *(MTFileListBox*) param;
     if (strcmp(flb.path, "Root"))
     {
         flb.sort(0);
@@ -1770,31 +2045,37 @@ void MTFileListBox::flb_progress(MTProcess *process, void *param, float p)
     };
 }
 
-int MTFileListBox::flb_getiteminfo(MTUserList *list, int id, char **caption, int *imageindex, int *flags, bool *editable)
+int MTFileListBox::flb_getiteminfo(MTUserList* list, int id, char** caption, int* imageindex, int* flags, bool* editable)
 {
-    MTFileListBox &flb = *(MTFileListBox *) list;
-    MTFileEntry &centry = ((MTFileEntry *) flb.entries->d)[id];
+    MTFileListBox& flb = *(MTFileListBox*) list;
+    MTFileEntry& centry = ((MTFileEntry*) flb.entries->d)[id];
 
     if (caption)
-    { *caption = centry.filename; }
+    {
+        *caption = centry.filename;
+    }
     if (imageindex)
-    { *imageindex = centry.imageindex; }
+    {
+        *imageindex = centry.imageindex;
+    }
     return id;
 }
 
-void MTFileListBox::flb_itemmessage(MTUserList *list, int id, MTCMessage &msg)
+void MTFileListBox::flb_itemmessage(MTUserList* list, int id, MTCMessage& msg)
 {
     if (msg.msg != MTCM_MOUSECLICK)
-    { return; }
-    MTFileListBox &flb = *(MTFileListBox *) list;
-    MTFileEntry &centry = ((MTFileEntry *) flb.entries->d)[id];
+    {
+        return;
+    }
+    MTFileListBox& flb = *(MTFileListBox*) list;
+    MTFileEntry& centry = ((MTFileEntry*) flb.entries->d)[id];
     char root[4] = {"C:\\"};
-    char *s;
+    char* s;
 
     switch (centry.type & MTFA_TYPEMASK)
     {
         case MTFA_ROOT:
-            flb.setpath((char *) 1);
+            flb.setpath((char*) 1);
             break;
         case MTFA_DISK:
             s = strchr(centry.filename, 0);

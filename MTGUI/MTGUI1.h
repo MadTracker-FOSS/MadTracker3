@@ -37,7 +37,7 @@ class MTWindow;
 class MTDesktop;
 
 //---------------------------------------------------------------------------
-typedef void (MTCT *MTCommand)(MTShortcut *, MTControl *, MTUndo *);
+typedef void (MTCT* MTCommand)(MTShortcut*, MTControl*, MTUndo*);
 //---------------------------------------------------------------------------
 #include "MTGUITools.h"
 #include <MTXAPI/MTXSystem.h>
@@ -67,9 +67,9 @@ struct MTGUIPreferences
 //---------------------------------------------------------------------------
 #ifdef _DEBUG
 
-void tracergn(void *rgn, MTBitmap *bmp);
+void tracergn(void* rgn, MTBitmap* bmp);
 
-void tracerect(MTRect &r, MTBitmap *bmp);
+void tracerect(MTRect& r, MTBitmap* bmp);
 
 #endif
 
@@ -80,19 +80,19 @@ extern bool design;
 
 extern bool blockinput;
 
-extern void *hinst;
+extern void* hinst;
 
-extern MTInterface *mtinterface;
+extern MTInterface* mtinterface;
 
-extern MTSystemInterface *si;
+extern MTSystemInterface* si;
 
-extern MTDisplayInterface *di;
+extern MTDisplayInterface* di;
 
-extern MTGUIInterface *gi;
+extern MTGUIInterface* gi;
 
 extern MTGUIPreferences guiprefs;
 
-extern MTBitmap *screen;
+extern MTBitmap* screen;
 
 extern int doubleclick, dragx, dragy, gridx, gridy;
 
@@ -100,6 +100,6 @@ extern int guitick;
 
 extern int lastwparam, lastlparam;
 
-extern Skin *skin;
+extern Skin* skin;
 //---------------------------------------------------------------------------
 #endif

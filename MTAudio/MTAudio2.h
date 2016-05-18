@@ -16,7 +16,7 @@
 #include <MTXAPI/MTXExtension.h>
 
 //---------------------------------------------------------------------------
-typedef void (MTCT *RenderProc)(sample *source, void *dest, int count, int nchannels, int channel);
+typedef void (MTCT* RenderProc)(sample* source, void* dest, int count, int nchannels, int channel);
 
 //---------------------------------------------------------------------------
 void generateoutput();

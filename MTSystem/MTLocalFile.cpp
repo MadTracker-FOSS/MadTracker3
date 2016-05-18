@@ -34,17 +34,17 @@ MTLocalHook::MTLocalHook()
 {
 }
 
-MTFile *MTLocalHook::fileopen(const char *url, int flags)
+MTFile* MTLocalHook::fileopen(const char* url, int flags)
 {
     return new MTLocalFile(url, flags);
 }
 
-MTFolder *MTLocalHook::folderopen(char *url)
+MTFolder* MTLocalHook::folderopen(char* url)
 {
     return new MTLocalFolder(url);
 }
 
-bool MTLocalHook::filecopy(char *source, char *dest)
+bool MTLocalHook::filecopy(char* source, char* dest)
 {
 #	ifdef _WIN32
     return (CopyFile(source,dest,false)==TRUE);
@@ -55,7 +55,9 @@ bool MTLocalHook::filecopy(char *source, char *dest)
     int sf, df;
     sf = open(source, 0);
     if (sf == 0)
-    { return false; }
+    {
+        return false;
+    }
     df = creat(dest, 0644);
     if (df == 0)
     {
@@ -75,7 +77,7 @@ bool MTLocalHook::filecopy(char *source, char *dest)
 #	endif
 }
 
-bool MTLocalHook::filerename(char *source, char *dest)
+bool MTLocalHook::filerename(char* source, char* dest)
 {
 #	ifdef _WIN32
     return (MoveFile(source,dest)==TRUE);
@@ -84,7 +86,7 @@ bool MTLocalHook::filerename(char *source, char *dest)
 #	endif
 }
 
-bool MTLocalHook::filedelete(char *url)
+bool MTLocalHook::filedelete(char* url)
 {
 #	ifdef _WIN32
     return (DeleteFile(url)==TRUE);
@@ -93,13 +95,15 @@ bool MTLocalHook::filedelete(char *url)
 #	endif
 }
 
-void MTLocalHook::filetype(const char *url, char *type, int length)
+void MTLocalHook::filetype(const char* url, char* type, int length)
 {
-    char *e;
+    char* e;
 
-    e = (char *) strrchr(url, '.');
+    e = (char*) strrchr(url, '.');
     if ((e) && ((strchr(e, '\\')) || (strchr(e, '/'))))
-    { e = 0; }
+    {
+        e = 0;
+    }
     if (e)
     {
         strncpy(type, e, length);
@@ -108,8 +112,12 @@ void MTLocalHook::filetype(const char *url, char *type, int length)
 }
 
 //---------------------------------------------------------------------------
-MTLocalFile::MTLocalFile(const char *path, int access):
-    maccess(access), stdhandle(true), cpos(0), from(0), to(0x7FFFFFFF),
+MTLocalFile::MTLocalFile(const char* path, int access):
+    maccess(access),
+    stdhandle(true),
+    cpos(0),
+    from(0),
+    to(0x7FFFFFFF),
 #ifdef _WIN32
     maph(0),
 #endif
@@ -118,7 +126,7 @@ MTLocalFile::MTLocalFile(const char *path, int access):
     // FIXME: This function deals with strings like crap. -flibit
 
     mtsetlasterror(0);
-    const char *e = strstr(path, "://");
+    const char* e = strstr(path, "://");
     if (e)
     {
         path = e + 3;
@@ -165,7 +173,7 @@ MTLocalFile::MTLocalFile(const char *path, int access):
         if (access & MTF_TEMP) wattr |= FILE_ATTRIBUTE_TEMPORARY|FILE_FLAG_DELETE_ON_CLOSE;
         h = CreateFile(e,waccess,wshare,0,wcreate,wattr,0);
 #		else
-        const char *laccess;
+        const char* laccess;
         switch (access & (MTF_READ | MTF_WRITE | MTF_CREATE))
         {
             case MTF_READ | MTF_WRITE:
@@ -184,7 +192,9 @@ MTLocalFile::MTLocalFile(const char *path, int access):
         };
         fs = fopen(e, laccess);
         if (fs)
-        { fseek(fs, 0, SEEK_SET); }
+        {
+            fseek(fs, 0, SEEK_SET);
+        }
 #		endif
     };
 #	ifdef _WIN32
@@ -225,12 +235,16 @@ MTLocalFile::MTLocalFile(const char *path, int access):
 #	endif
 }
 
-MTLocalFile::MTLocalFile(MTFile *parent, int start, int end, int access):
-    maccess(access), cpos(start), from(start), to(start + end),
+MTLocalFile::MTLocalFile(MTFile* parent, int start, int end, int access):
+    maccess(access),
+    cpos(start),
+    from(start),
+    to(start + end),
 #ifdef _WIN32
     maph(0),
 #endif
-    mmap(0), stdhandle(((MTLocalFile *) parent)->stdhandle)
+    mmap(0),
+    stdhandle(((MTLocalFile*) parent)->stdhandle)
 {
     mtsetlasterror(0);
 #	ifdef _WIN32
@@ -257,7 +271,7 @@ MTLocalFile::MTLocalFile(MTFile *parent, int start, int end, int access):
     };
     SetFilePointer(h,start,0,FILE_BEGIN);
 #	else
-    const char *laccess;
+    const char* laccess;
     switch (access & (MTF_READ | MTF_WRITE | MTF_CREATE))
     {
         case MTF_READ | MTF_WRITE:
@@ -274,7 +288,7 @@ MTLocalFile::MTLocalFile(MTFile *parent, int start, int end, int access):
             laccess = "r";
             break;
     };
-    fs = fdopen(dup(fileno(((MTLocalFile *) parent)->fs)), laccess);
+    fs = fdopen(dup(fileno(((MTLocalFile*) parent)->fs)), laccess);
 #	endif
 }
 
@@ -285,20 +299,28 @@ MTLocalFile::~MTLocalFile()
     if ((!stdhandle) && (h!=INVALID_HANDLE_VALUE)) CloseHandle(h);
 #	else
     if (mmap)
-    { munmap(mmap, maplength); }
+    {
+        munmap(mmap, maplength);
+    }
     if ((!stdhandle) && (fs))
-    { fclose(fs); }
+    {
+        fclose(fs);
+    }
 #	endif
 }
 
-int MTLocalFile::read(void *buffer, int size)
+int MTLocalFile::read(void* buffer, int size)
 {
     int read = 0;
 
     if (cpos + size > to)
-    { size = to - cpos; }
+    {
+        size = to - cpos;
+    }
     if (size <= 0)
-    { return 0; }
+    {
+        return 0;
+    }
 #	ifdef _WIN32
     ReadFile(h,buffer,size,(DWORD*)&read,0);
 #	else
@@ -308,16 +330,20 @@ int MTLocalFile::read(void *buffer, int size)
     return read;
 }
 
-int MTLocalFile::readln(char *buffer, int maxsize)
+int MTLocalFile::readln(char* buffer, int maxsize)
 {
     int read = 0;
     int x, y, i, r, r2;
-    char *e;
+    char* e;
 
     if (cpos + maxsize > to)
-    { maxsize = to - cpos; }
+    {
+        maxsize = to - cpos;
+    }
     if (maxsize <= 0)
-    { return 0; }
+    {
+        return 0;
+    }
 #	ifdef _WIN32
     x = maxsize;
     while (x>0){
@@ -370,7 +396,9 @@ int MTLocalFile::readln(char *buffer, int maxsize)
     {
         i = x;
         if (i > 32)
-        { i = 32; }
+        {
+            i = 32;
+        }
         r = fread(buffer, 1, i, fs);
         if (buffer[i - 1] == '\r')
         {
@@ -401,10 +429,14 @@ int MTLocalFile::readln(char *buffer, int maxsize)
                 read++;
             };
             if (r < i)
-            { break; }
+            {
+                break;
+            }
         }
         else
-        { break; }
+        {
+            break;
+        }
         x -= r;
     };
 #	endif
@@ -453,14 +485,18 @@ done:
 	return read;
 }
 */
-int MTLocalFile::write(const void *buffer, int size)
+int MTLocalFile::write(const void* buffer, int size)
 {
     int written = 0;
 
     if (cpos + size > to)
-    { size = to - cpos; }
+    {
+        size = to - cpos;
+    }
     if (size <= 0)
-    { return 0; }
+    {
+        return 0;
+    }
 #	ifdef _WIN32
     WriteFile(h,buffer,size,(DWORD*)&written,0);
 #	else
@@ -473,7 +509,9 @@ int MTLocalFile::write(const void *buffer, int size)
 int MTLocalFile::seek(int pos, int origin)
 {
     if (origin == MTF_BEGIN)
-    { pos += from; }
+    {
+        pos += from;
+    }
     if ((to < 0x7FFFFFFF) && (origin == MTF_END))
     {
         origin = MTF_BEGIN;
@@ -491,7 +529,9 @@ int MTLocalFile::seek(int pos, int origin)
 int MTLocalFile::length()
 {
     if (to < 0x7FFFFFFF)
-    { return to - from; }
+    {
+        return to - from;
+    }
 #	ifdef _WIN32
     return GetFileSize(h,0);
 #	else
@@ -501,7 +541,7 @@ int MTLocalFile::length()
 #	endif
 }
 
-void *MTLocalFile::getpointer(int offset, int size)
+void* MTLocalFile::getpointer(int offset, int size)
 {
     int waccess = 0;
 
@@ -522,32 +562,46 @@ void *MTLocalFile::getpointer(int offset, int size)
     mmap = MapViewOfFile(maph,waccess,0,offset-mapoffset,size+mapoffset);
 #	else
     if (mmap)
-    { return 0; }
+    {
+        return 0;
+    }
     if (offset < 0)
     {
         offset = cpos;
     }
     else
-    { offset += from; }
+    {
+        offset += from;
+    }
     if (size < 0)
-    { size = length() - offset; }
+    {
+        size = length() - offset;
+    }
     if (maccess & MTF_READ)
-    { waccess |= PROT_READ; }
+    {
+        waccess |= PROT_READ;
+    }
     if (maccess & MTF_WRITE)
-    { waccess |= PROT_WRITE; }
+    {
+        waccess |= PROT_WRITE;
+    }
     if (allocalign == 0)
-    { allocalign = getpagesize(); }
+    {
+        allocalign = getpagesize();
+    }
     mapoffset = (offset / allocalign) * allocalign;
     mapoffset = offset - mapoffset;
     maplength = size + mapoffset;
     mmap = ::mmap(0, maplength, waccess, MAP_PRIVATE, fileno(fs), offset - mapoffset);
 #	endif
     if (!mmap)
-    { return 0; }
-    return (char *) mmap + mapoffset;
+    {
+        return 0;
+    }
+    return (char*) mmap + mapoffset;
 }
 
-void MTLocalFile::releasepointer(void *mem)
+void MTLocalFile::releasepointer(void* mem)
 {
 #	ifdef _WIN32
     if ((maph) && (mmap) && ((char*)mmap==(char*)mem-mapoffset)){
@@ -555,7 +609,7 @@ void MTLocalFile::releasepointer(void *mem)
         mmap = 0;
     };
 #	else
-    if ((mmap) && ((char *) mmap == (char *) mem - mapoffset))
+    if ((mmap) && ((char*) mmap == (char*) mem - mapoffset))
     {
         munmap(mmap, maplength);
         mmap = 0;
@@ -571,7 +625,9 @@ int MTLocalFile::pos()
 bool MTLocalFile::eof()
 {
     if (cpos >= to)
-    { return true; }
+    {
+        return true;
+    }
 #	ifdef _WIN32
     return (cpos>=(int)GetFileSize(h,0));
 #	else
@@ -593,7 +649,7 @@ bool MTLocalFile::seteof()
 #	endif
 }
 
-bool MTLocalFile::gettime(int *modified, int *accessed)
+bool MTLocalFile::gettime(int* modified, int* accessed)
 {
 #	ifdef _WIN32
     FILETIME fa,fm;
@@ -631,14 +687,18 @@ bool MTLocalFile::gettime(int *modified, int *accessed)
 
     fstat(fileno(fs), &s);
     if (modified)
-    { *modified = s.st_mtime; }
+    {
+        *modified = s.st_mtime;
+    }
     if (accessed)
-    { *accessed = s.st_atime; }
+    {
+        *accessed = s.st_atime;
+    }
 #	endif
     return true;
 }
 
-bool MTLocalFile::settime(int *modified, int *accessed)
+bool MTLocalFile::settime(int* modified, int* accessed)
 {
 #	ifdef _WIN32
     FILETIME fm,fa;
@@ -681,34 +741,42 @@ bool MTLocalFile::settime(int *modified, int *accessed)
         utb.modtime = *modified;
     }
     else
-    { utb.modtime = s.st_mtime; }
+    {
+        utb.modtime = s.st_mtime;
+    }
     if (*accessed)
     {
         utb.actime = *accessed;
     }
     else
-    { utb.actime = s.st_atime; }
+    {
+        utb.actime = s.st_atime;
+    }
     return (utime(url, &utb) == 0);
 #	endif
 }
 
-MTFile *MTLocalFile::subclass(int start, int length, int access)
+MTFile* MTLocalFile::subclass(int start, int length, int access)
 {
     if (access == -1)
-    { access = maccess; }
+    {
+        access = maccess;
+    }
     if (start < 0)
-    { start = cpos; }
+    {
+        start = cpos;
+    }
     return new MTLocalFile(this, start, length, access);
 }
 
 //---------------------------------------------------------------------------
-MTLocalFolder::MTLocalFolder(char *path):
+MTLocalFolder::MTLocalFolder(char* path):
 
 #ifdef _WIN32
 
-search(INVALID_HANDLE_VALUE),
+    search(INVALID_HANDLE_VALUE),
 #endif
-id(0)
+    id(0)
 {
 #	ifdef _WIN32
     char *me;
@@ -736,7 +804,7 @@ MTLocalFolder::~MTLocalFolder()
 #	endif
 }
 
-bool MTLocalFolder::getfile(const char **name, int *attrib, double *size)
+bool MTLocalFolder::getfile(const char** name, int* attrib, double* size)
 {
     char tmp[512];
 
@@ -788,18 +856,24 @@ bool MTLocalFolder::getfile(const char **name, int *attrib, double *size)
         int64todouble((mt_int64*)&data.nFileSizeHigh,size);
     };
 #	else
-    struct dirent *de;
+    struct dirent* de;
     de = readdir(d);
     if (de == 0)
-    { return false; }
+    {
+        return false;
+    }
     if (name)
-    { *name = de->d_name; }
+    {
+        *name = de->d_name;
+    }
     if (attrib)
     {
         if (de->d_name[0] == '.')
         {
             if ((strcmp(de->d_name, ".") == 0) && (strcmp(de->d_name, "..") == 0))
-            { *attrib |= MTFA_HIDDEN; }
+            {
+                *attrib |= MTFA_HIDDEN;
+            }
         };
     };
     if ((attrib) || (size))
@@ -812,10 +886,14 @@ bool MTLocalFolder::getfile(const char **name, int *attrib, double *size)
         if (attrib)
         {
             if ((s.st_mode & S_IFMT) == S_IFDIR)
-            { *attrib |= MTFA_FOLDER; }
+            {
+                *attrib |= MTFA_FOLDER;
+            }
         };
         if (size)
-        { *size = s.st_size; }
+        {
+            *size = s.st_size;
+        }
     };
 #	endif
     return true;

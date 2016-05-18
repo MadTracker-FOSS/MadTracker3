@@ -20,6 +20,6 @@
 #include "MTDSP.h"
 
 //---------------------------------------------------------------------------
-void MTCT a_filter_(sample *dest, sample *source, FilterStatus &status, int count, int frequency);
+void MTCT a_filter_(sample* dest, sample* source, FilterStatus& status, int count, int frequency);
 //---------------------------------------------------------------------------
 #endif

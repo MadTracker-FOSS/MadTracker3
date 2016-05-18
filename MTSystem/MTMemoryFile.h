@@ -28,40 +28,40 @@ class MTMemoryHook: public MTFileHook
 public:
     MTMemoryHook();
 
-    MTFile *MTCT fileopen(const char *url, int flags);
+    MTFile* MTCT fileopen(const char* url, int flags);
 
-    MTFolder *MTCT folderopen(char *url);
+    MTFolder* MTCT folderopen(char* url);
 
-    bool MTCT filecopy(char *source, char *dest);
+    bool MTCT filecopy(char* source, char* dest);
 
-    bool MTCT filerename(char *source, char *dest);
+    bool MTCT filerename(char* source, char* dest);
 
-    bool MTCT filedelete(char *url);
+    bool MTCT filedelete(char* url);
 
-    void MTCT filetype(const char *url, char *type, int length);
+    void MTCT filetype(const char* url, char* type, int length);
 };
 
 class MTMemoryFile: public MTFile
 {
 public:
-    MTMemoryFile(void *mem, int length, int access);
+    MTMemoryFile(void* mem, int length, int access);
 
-    MTMemoryFile(MTFile *parent, int start, int end, int access);
+    MTMemoryFile(MTFile* parent, int start, int end, int access);
 
     ~MTMemoryFile();
 
-    int MTCT read(void *buffer, int size);
+    int MTCT read(void* buffer, int size);
 
-    int MTCT readln(char *buffer, int maxsize);
+    int MTCT readln(char* buffer, int maxsize);
 
 //	int MTCT reads(char *buffer,int maxsize);
-    int MTCT write(const void *buffer, int size);
+    int MTCT write(const void* buffer, int size);
 
     int MTCT seek(int pos, int origin);
 
-    void *MTCT getpointer(int offset, int size);
+    void* MTCT getpointer(int offset, int size);
 
-    void MTCT releasepointer(void *mem);
+    void MTCT releasepointer(void* mem);
 
     int MTCT length();
 
@@ -71,16 +71,16 @@ public:
 
     bool MTCT seteof();
 
-    bool MTCT gettime(int *modified, int *accessed);
+    bool MTCT gettime(int* modified, int* accessed);
 
-    bool MTCT settime(int *modified, int *accessed);
+    bool MTCT settime(int* modified, int* accessed);
 
-    MTFile *MTCT subclass(int start, int length, int access);
+    MTFile* MTCT subclass(int start, int length, int access);
 
 private:
     int maccess;
-    void *m;
-    char *c;
+    void* m;
+    char* c;
     int cpos;
     int al, l;
     bool subclassed, autosize, autofree;

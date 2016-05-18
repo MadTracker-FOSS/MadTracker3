@@ -16,8 +16,8 @@
 #include "MTPattern.h"
 
 //---------------------------------------------------------------------------
-void xmfirstpass(MTPatternInstance *, unsigned short command, FirstPass &pass, ColumnStatus &status, int tick, int nticks);
+void xmfirstpass(MTPatternInstance*, unsigned short command, FirstPass& pass, ColumnStatus& status, int tick, int nticks);
 
-double xmcommand(MTPatternInstance *, unsigned short command, FirstPass &pass, ColumnStatus &status, int tick, int nticks);
+double xmcommand(MTPatternInstance*, unsigned short command, FirstPass& pass, ColumnStatus& status, int tick, int nticks);
 //---------------------------------------------------------------------------
 #endif

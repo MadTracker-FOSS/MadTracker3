@@ -13,9 +13,9 @@ class MTPanel: public MTWinControl
 public:
     int style;
 
-    MTPanel(int tg, MTWinControl *p, int l, int t, int w, int h);
+    MTPanel(int tg, MTWinControl* p, int l, int t, int w, int h);
 
-    bool MTCT message(MTCMessage &msg);
+    bool MTCT message(MTCMessage& msg);
 };
 //---------------------------------------------------------------------------
 #endif

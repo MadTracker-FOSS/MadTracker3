@@ -38,10 +38,10 @@ class MTAudioInterface;
 //---------------------------------------------------------------------------
 struct WaveDevice
 {
-    char *name;
-    MTAudioDevice *device;
-    MTAudioDeviceManager *manager;
-    Track *master;
+    char* name;
+    MTAudioDevice* device;
+    MTAudioDeviceManager* manager;
+    Track* master;
     double timeopened;
     int nchannels;
     int bits;
@@ -52,15 +52,15 @@ struct WaveOutput
 {
     int ndevices;
     int sync;
-    WaveDevice *device[MAX_AUDIODEVICES];
+    WaveDevice* device[MAX_AUDIODEVICES];
     int frequency;
     float mincpu, maxcpu;
     float latency, interval;
     int playlng;
     int buffersamples;
-    MTTimer *timer;
-    MTLock *lock;
-    MTEvent *event;
+    MTTimer* timer;
+    MTLock* lock;
+    MTEvent* event;
 };
 
 class MTAudioDevice
@@ -80,22 +80,24 @@ public:
 
     virtual int MTCT getposition(bool playback = false) = 0;
 
-    virtual bool MTCT getdata(int position, int length, void **ptr1, void **ptr2, unsigned long *lng1, unsigned long *lng2) = 0;
+    virtual bool MTCT getdata(int position, int length, void** ptr1, void** ptr2, unsigned long* lng1, unsigned long* lng2) = 0;
 
-    virtual bool MTCT writedata(void *ptr1, void *ptr2, unsigned long lng1, unsigned long lng2) = 0;
+    virtual bool MTCT writedata(void* ptr1, void* ptr2, unsigned long lng1, unsigned long lng2) = 0;
 };
 
 class MTAudioDeviceManager
 {
 public:
-    char *devicename[16];
+    char* devicename[16];
 
     MTAudioDeviceManager()
-    { mtmemzero(devicename, sizeof(devicename)); };
+    {
+        mtmemzero(devicename, sizeof(devicename));
+    };
 
-    virtual MTAudioDevice *MTCT newdevice(int id) = 0;
+    virtual MTAudioDevice* MTCT newdevice(int id) = 0;
 
-    virtual void MTCT deldevice(MTAudioDevice *device) = 0;
+    virtual void MTCT deldevice(MTAudioDevice* device) = 0;
 };
 
 class MTAudioInterface: public MTXInterface
@@ -104,7 +106,7 @@ public:
     bool running, recording;
 
     // FIXME: DEBUG? -flibit
-    MTArray *_dp;
+    MTArray* _dp;
 
     // FIXME: Should this be explicitly here? -flibit
     MTAudioInterface();
@@ -117,18 +119,18 @@ public:
 
     void MTCT stop();
 
-    void MTCT processcmdline(void *params);
+    void MTCT processcmdline(void* params);
 
-    void MTCT showusage(void *out);
+    void MTCT showusage(void* out);
 
     int MTCT config(int command, int param);
 
-    int MTCT processinput(const char *input);
+    int MTCT processinput(const char* input);
 
     // FIXME: These were pure, should this class be extended? -flibit
     virtual int MTCT getnumdevices();
 
-    virtual const char *MTCT getdevicename(int id);
+    virtual const char* MTCT getdevicename(int id);
 
     virtual void MTCT selectdevice(int id);
 
@@ -138,16 +140,16 @@ public:
 
     virtual void MTCT deactivatedevices();
 
-    virtual bool MTCT adddevicemanager(MTAudioDeviceManager *manager);
+    virtual bool MTCT adddevicemanager(MTAudioDeviceManager* manager);
 
-    virtual void MTCT deldevicemanager(MTAudioDeviceManager *manager);
+    virtual void MTCT deldevicemanager(MTAudioDeviceManager* manager);
 
-    virtual WaveOutput *MTCT getoutput();
+    virtual WaveOutput* MTCT getoutput();
 
-    virtual void MTCT debugpoint(int offset, const char *text);
+    virtual void MTCT debugpoint(int offset, const char* text);
 
 private:
-    MTThread *thread;
+    MTThread* thread;
 };
 //---------------------------------------------------------------------------
 #endif

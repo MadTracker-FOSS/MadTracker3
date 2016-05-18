@@ -11,34 +11,34 @@ class MTButton;
 class MTButton: public MTControl
 {
 public:
-    char *caption;
+    char* caption;
     int imageindex;
     int modalresult;
-    MTShortcut *shortcut;
+    MTShortcut* shortcut;
     char hotkey;
     int hotkeyoffset;
 
-    MTButton(int tg, MTWinControl *p, int l, int t, int w, int h);
+    MTButton(int tg, MTWinControl* p, int l, int t, int w, int h);
 
     ~MTButton();
 
-    int MTCT loadfromstream(MTFile *f, int size, int flags);
+    int MTCT loadfromstream(MTFile* f, int size, int flags);
 
-    int MTCT savetostream(MTFile *f, int flags);
+    int MTCT savetostream(MTFile* f, int flags);
 
     int MTCT getnumproperties(int id);
 
-    bool MTCT getpropertytype(int id, char **name, int &flags);
+    bool MTCT getpropertytype(int id, char** name, int& flags);
 
-    bool MTCT getproperty(int id, void *value);
+    bool MTCT getproperty(int id, void* value);
 
-    bool MTCT setproperty(int id, void *value);
+    bool MTCT setproperty(int id, void* value);
 
-    void MTCT draw(MTRect &rect);
+    void MTCT draw(MTRect& rect);
 
-    bool MTCT message(MTCMessage &msg);
+    bool MTCT message(MTCMessage& msg);
 
-    virtual void MTCT setcaption(const char *c);
+    virtual void MTCT setcaption(const char* c);
 
     virtual void MTCT setimage(int index);
 

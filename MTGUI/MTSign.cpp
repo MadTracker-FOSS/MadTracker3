@@ -15,8 +15,9 @@
 // MTControl
 //   MTSign
 //---------------------------------------------------------------------------
-MTSign::MTSign(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTControl(MTC_SIGN, tag, p, l, t, w, h), sign(0)
+MTSign::MTSign(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTControl(MTC_SIGN, tag, p, l, t, w, h),
+    sign(0)
 {
     flags |= MTCF_TRANSPARENT;
     gi->setcontrolname(this, "sign");
@@ -26,7 +27,7 @@ MTSign::MTSign(int tag, MTWinControl *p, int l, int t, int w, int h):
     };
 }
 
-int MTSign::loadfromstream(MTFile *f, int size, int flags)
+int MTSign::loadfromstream(MTFile* f, int size, int flags)
 {
     int csize = MTControl::loadfromstream(f, size, flags);
 
@@ -34,7 +35,7 @@ int MTSign::loadfromstream(MTFile *f, int size, int flags)
     return csize + 4;
 }
 
-int MTSign::savetostream(MTFile *f, int flags)
+int MTSign::savetostream(MTFile* f, int flags)
 {
     int csize = MTControl::savetostream(f, flags);
 
@@ -47,19 +48,25 @@ int MTSign::savetostream(MTFile *f, int flags)
 int MTSign::getnumproperties(int id)
 {
     if (id == -1)
-    { return SignNP; }
+    {
+        return SignNP;
+    }
     if (id < ControlNP)
-    { return MTControl::getnumproperties(id); }
+    {
+        return MTControl::getnumproperties(id);
+    }
     if (id == ControlNP)
-    { return 3; }
+    {
+        return 3;
+    }
     return 0;
 }
 
-bool MTSign::getpropertytype(int id, char **name, int &flags)
+bool MTSign::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[1] = {"Sign"};
+    static char* propname[1] = {"Sign"};
     static int propflags[1] = {MTP_LIST};
-    static char *subname[11] = {
+    static char* subname[11] = {
         "None",
         "Information",
         "Question",
@@ -74,31 +81,39 @@ bool MTSign::getpropertytype(int id, char **name, int &flags)
     };
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getpropertytype(id, name, flags); }
+    {
+        return MTControl::getpropertytype(id, name, flags);
+    }
     if ((id >> 8) == ControlNP)
     {
         id &= 0xFF;
         if (id >= 3)
-        { return false; }
+        {
+            return false;
+        }
         *name = subname[id];
         flags = -1;
         return true;
     };
     if (id >= SignNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id - ControlNP];
     flags = propflags[id - ControlNP];
     return true;
 }
 
-bool MTSign::getproperty(int id, void *value)
+bool MTSign::getproperty(int id, void* value)
 {
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getproperty(id, value); }
+    {
+        return MTControl::getproperty(id, value);
+    }
     switch (id - ControlNP)
     {
         case 0:
-            *(int *) value = sign;
+            *(int*) value = sign;
             break;
         default:
             return false;
@@ -106,30 +121,36 @@ bool MTSign::getproperty(int id, void *value)
     return true;
 }
 
-bool MTSign::setproperty(int id, void *value)
+bool MTSign::setproperty(int id, void* value)
 {
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::setproperty(id, value); }
+    {
+        return MTControl::setproperty(id, value);
+    }
     if (window)
-    { window->modified = true; }
+    {
+        window->modified = true;
+    }
     switch (id - ControlNP)
     {
         case 0:
-            setsign(*(int *) value);
+            setsign(*(int*) value);
             return true;
         default:
             return false;
     };
 }
 
-void MTSign::draw(MTRect &rect)
+void MTSign::draw(MTRect& rect)
 {
     int x = left;
     int y = top;
-    MTBitmap *b;
+    MTBitmap* b;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     preparedraw(&b, x, y);
     skin->drawcontrol(this, rect, b, x, y);
     MTControl::draw(rect);
@@ -138,7 +159,9 @@ void MTSign::draw(MTRect &rect)
 void MTSign::setsign(int s)
 {
     if (sign == s)
-    { return; }
+    {
+        return;
+    }
     skin->resetcontrol(this, false);
     sign = s;
     if (parent)

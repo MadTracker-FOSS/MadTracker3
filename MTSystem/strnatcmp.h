@@ -14,6 +14,6 @@
 #define STRNATCMP_INCLUDED
 
 //---------------------------------------------------------------------------
-int strnatcmp(const char *a, const char *b);
+int strnatcmp(const char* a, const char* b);
 //---------------------------------------------------------------------------
 #endif

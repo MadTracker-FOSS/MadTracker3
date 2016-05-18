@@ -16,7 +16,7 @@
 #include <MTXAPI/RES/MTObjectsRES.h>
 
 //---------------------------------------------------------------------------
-SampleType *sampletype;
+SampleType* sampletype;
 
 //---------------------------------------------------------------------------
 SampleType::SampleType()
@@ -25,7 +25,7 @@ SampleType::SampleType()
     description = "Sample";
 }
 
-MTObject *SampleType::create(MTObject *parent, mt_int32 id, void *param)
+MTObject* SampleType::create(MTObject* parent, mt_int32 id, void* param)
 {
     return new MTSample(parent, id);
 }
@@ -33,9 +33,24 @@ MTObject *SampleType::create(MTObject *parent, mt_int32 id, void *param)
 //---------------------------------------------------------------------------
 // MTSample functions
 //---------------------------------------------------------------------------
-MTSample::MTSample(MTObject *parent, mt_int32 i):
-    Oscillator(parent, MTO_MTSAMPLE, i), filename(0), time(0), length(0), frequency(0), depth(0), nchannels(0), loop(0),
-    loops(0), loope(0), note(60), bpm(125.0), ns(0), sl(0), file(0), fileoffset(0), peaks(0)
+MTSample::MTSample(MTObject* parent, mt_int32 i):
+    Oscillator(parent, MTO_MTSAMPLE, i),
+    filename(0),
+    time(0),
+    length(0),
+    frequency(0),
+    depth(0),
+    nchannels(0),
+    loop(0),
+    loops(0),
+    loope(0),
+    note(60),
+    bpm(125.0),
+    ns(0),
+    sl(0),
+    file(0),
+    fileoffset(0),
+    peaks(0)
 {
     mtmemzero(data, sizeof(data));
 #	ifdef MTSYSTEM_RESOURCES
@@ -46,20 +61,26 @@ MTSample::MTSample(MTObject *parent, mt_int32 i):
 MTSample::~MTSample()
 {
     if (filename)
-    { si->memfree(filename); }
+    {
+        si->memfree(filename);
+    }
     splfree();
 }
 
-int MTSample::loadfromstream(MTFile *f, int size, void *params)
+int MTSample::loadfromstream(MTFile* f, int size, void* params)
 {
-    void *buffer;
+    void* buffer;
 
     if ((nchannels > 2) || (nchannels == 0) || (depth == 0))
-    { return 0; }
+    {
+        return 0;
+    }
     if (!data[0])
     {
         if (!splalloc(size / (depth * nchannels)))
-        { return 0; }
+        {
+            return 0;
+        }
     };
     buffer = f->getpointer(-1, size);
     if (nchannels == 1)
@@ -67,41 +88,45 @@ int MTSample::loadfromstream(MTFile *f, int size, void *params)
         memcpy(data[0], buffer, ns * depth);
         if (depth == 1)
         {
-            a_delta_decode_8((char *) data[0], ns);
+            a_delta_decode_8((char*) data[0], ns);
         }
         else
-        { a_delta_decode_16((short *) data[0], ns); }
+        {
+            a_delta_decode_16((short*) data[0], ns);
+        }
     }
     else
     {
         memcpy(data[0], buffer, ns * depth);
-        memcpy(data[1], (char *) buffer + ns * depth, ns * depth);
+        memcpy(data[1], (char*) buffer + ns * depth, ns * depth);
         if (depth == 1)
         {
-            a_delta_add_8((char *) data[1], (char *) data[0], ns);
-            a_delta_decode_8((char *) data[0], ns);
-            a_delta_decode_8((char *) data[1], ns);
+            a_delta_add_8((char*) data[1], (char*) data[0], ns);
+            a_delta_decode_8((char*) data[0], ns);
+            a_delta_decode_8((char*) data[1], ns);
         }
         else
         {
-            a_delta_add_16((short *) data[1], (short *) data[0], ns);
-            a_delta_decode_16((short *) data[0], ns);
-            a_delta_decode_16((short *) data[1], ns);
+            a_delta_add_16((short*) data[1], (short*) data[0], ns);
+            a_delta_decode_16((short*) data[0], ns);
+            a_delta_decode_16((short*) data[1], ns);
         };
     };
     f->releasepointer(buffer);
     return size;
 }
 
-int MTSample::savetostream(MTFile *f, void *params)
+int MTSample::savetostream(MTFile* f, void* params)
 {
     return 0;
 }
 
-OscillatorInstance *MTSample::createinstance(int noutputs, sample **outputs, InstrumentInstance *caller)
+OscillatorInstance* MTSample::createinstance(int noutputs, sample** outputs, InstrumentInstance* caller)
 {
     if ((nchannels == 0) || (data[0] == 0))
-    { return 0; }
+    {
+        return 0;
+    }
     return new MTSampleInstance(this, noutputs, outputs, caller);
 }
 
@@ -110,8 +135,13 @@ bool MTSample::changesign()
     int x;
 
     if (depth != 1)
-    { return false; }
-    for(x = 0; x < nchannels; x++) a_changesign((char *) data[x], ns);
+    {
+        return false;
+    }
+    for(x = 0; x < nchannels; x++)
+    {
+        a_changesign((char*) data[x], ns);
+    }
     return true;
 }
 
@@ -125,10 +155,13 @@ bool MTSample::splalloc(int nsamples)
         data[x] = si->memalloc((ns + SAFE_BUFFER * 2) * depth, MTM_ZERO);
         if (!data[x])
         {
-            while(--x >= 0) si->memfree((char *) data[x] - SAFE_BUFFER * depth);
+            while(--x >= 0)
+            {
+                si->memfree((char*) data[x] - SAFE_BUFFER * depth);
+            }
             return false;
         };
-        data[x] = (char *) data[x] + SAFE_BUFFER * depth;
+        data[x] = (char*) data[x] + SAFE_BUFFER * depth;
     };
     return true;
 }
@@ -140,10 +173,12 @@ bool MTSample::splrealloc(int nsamples)
     ns = nsamples;
     for(x = 0; x < nchannels; x++)
     {
-        data[x] = si->memrealloc((char *) data[x] - SAFE_BUFFER * depth, (ns + SAFE_BUFFER * 2) * depth);
+        data[x] = si->memrealloc((char*) data[x] - SAFE_BUFFER * depth, (ns + SAFE_BUFFER * 2) * depth);
         if (!data[x])
-        { return false; }
-        data[x] = (char *) data[x] + SAFE_BUFFER * depth;
+        {
+            return false;
+        }
+        data[x] = (char*) data[x] + SAFE_BUFFER * depth;
     };
     return true;
 }
@@ -152,21 +187,27 @@ bool MTSample::splfree()
 {
     int x;
 
-    for(x = 0; x < nchannels; x++) si->memfree((char *) data[x] - SAFE_BUFFER * depth);
+    for(x = 0; x < nchannels; x++)
+    {
+        si->memfree((char*) data[x] - SAFE_BUFFER * depth);
+    }
     return true;
 }
 
-bool MTSample::buildpeaks(void *process)
+bool MTSample::buildpeaks(void* process)
 {
     return true;
 }
 
 //---------------------------------------------------------------------------
-MTSampleInstance::MTSampleInstance(Oscillator *p, int no, sample **o, InstrumentInstance *caller):
-    OscillatorInstance(p, no, o, caller), flags(0), volvarlng(0), panvarlng(0)
+MTSampleInstance::MTSampleInstance(Oscillator* p, int no, sample** o, InstrumentInstance* caller):
+    OscillatorInstance(p, no, o, caller),
+    flags(0),
+    volvarlng(0),
+    panvarlng(0)
 {
     int x;
-    MTSample &cparent = *(MTSample *) parent;
+    MTSample& cparent = *(MTSample*) parent;
 
     mtmemzero(status, sizeof(status));
     volvar = panxvar = panyvar = panzvar = 0.0;
@@ -185,7 +226,9 @@ MTSampleInstance::MTSampleInstance(Oscillator *p, int no, sample **o, Instrument
         divider *= 128;
     }
     else if (cparent.depth == 2)
-    { divider *= 32768; }
+    {
+        divider *= 32768;
+    }
     for(x = 0; x < nstatus; x++)
     {
         status[x].sc = x % cparent.nchannels;
@@ -209,15 +252,21 @@ bool MTSampleInstance::seek(double offset, int origin, int units)
         offset *= module->playstatus.spb;
     }
     else if ((units & 0xF) == MTIS_MS)
-    { offset *= (double) module->playstatus.coutput->frequency / 1000; }
+    {
+        offset *= (double) module->playstatus.coutput->frequency / 1000;
+    }
     if ((units & MTIS_INNER) == 0)
-    { offset *= pitch; }
+    {
+        offset *= pitch;
+    }
     reverse = a_floattofixed(offset, offseti, offsetd);
     switch (origin)
     {
         case MTIS_BEGIN:
             if (reverse)
-            { return false; }
+            {
+                return false;
+            }
             for(x = 0; x < nstatus; x++)
             {
                 status[x].posi = offseti;
@@ -232,10 +281,12 @@ bool MTSampleInstance::seek(double offset, int origin, int units)
             break;
         case MTIS_END:
             if ((!reverse) && ((offseti | offsetd) != 0))
-            { return false; }
+            {
+                return false;
+            }
             for(x = 0; x < nstatus; x++)
             {
-                status[x].posi = ((MTSample *) parent)->ns;
+                status[x].posi = ((MTSample*) parent)->ns;
                 status[x].posd = 0;
                 a_calcposition(status[x].posi, status[x].posd, offseti, offsetd, 1, reverse);
             };
@@ -244,9 +295,9 @@ bool MTSampleInstance::seek(double offset, int origin, int units)
     return true;
 }
 
-bool MTSampleInstance::process(int offset, int count, bool &silence)
+bool MTSampleInstance::process(int offset, int count, bool& silence)
 {
-    MTSample &cparent = *(MTSample *) parent;
+    MTSample& cparent = *(MTSample*) parent;
     int x, e, ls, le;
     int ccount, coffset, cmax;
     int flags;
@@ -255,7 +306,9 @@ bool MTSampleInstance::process(int offset, int count, bool &silence)
 
     silence = true;
     if (!dspi)
-    { return false; }
+    {
+        return false;
+    }
 //	m = cparent.depth-1;
     flags = cparent.depth - 1;
     if (cparent.loop)
@@ -277,7 +330,9 @@ bool MTSampleInstance::process(int offset, int count, bool &silence)
     {
         x = volvarlng;
         if (x > count)
-        { x = count; }
+        {
+            x = count;
+        }
         volume += volvar * x;
         volvarlng -= x;
     };
@@ -285,7 +340,9 @@ bool MTSampleInstance::process(int offset, int count, bool &silence)
     {
         x = panvarlng;
         if (x > count)
-        { x = count; }
+        {
+            x = count;
+        }
         panx += panxvar * x;
         pany += panyvar * x;
         panz += panzvar * x;
@@ -295,7 +352,7 @@ bool MTSampleInstance::process(int offset, int count, bool &silence)
     e = 0;
     for(x = 0; x < nstatus; x++)
     {
-        ChannelStatus &cstatus = status[x];
+        ChannelStatus& cstatus = status[x];
         coffset = offset;
         cmax = count;
         while(cmax > 0)
@@ -377,7 +434,9 @@ bool MTSampleInstance::process(int offset, int count, bool &silence)
                 };
             };
             if (ccount <= 0)
-            { break; }
+            {
+                break;
+            }
             if ((fabs(cstatus.vol) < VOLUME_THRESOLD) && ((cstatus.volvarlng == 0) || (cstatus.volvar == 0.0)))
             {
                 cstatus.posi = dposi;
@@ -387,7 +446,12 @@ bool MTSampleInstance::process(int offset, int count, bool &silence)
             {
                 if ((cstatus.volvarlng != 0) && (cstatus.volvarlng < ccount))
                 {
-                    dspi->resample[flags](outputs[cstatus.tc] + coffset, (char *) (cparent.data[cstatus.sc]) + (cstatus.posi << flags), cstatus.volvarlng, cstatus);
+                    dspi->resample[flags](
+                        outputs[cstatus.tc] + coffset,
+                        (char*) (cparent.data[cstatus.sc]) + (cstatus.posi << flags),
+                        cstatus.volvarlng,
+                        cstatus
+                    );
 
                     cstatus.vol += cstatus.volvar * cstatus.volvarlng;
                     coffset += cstatus.volvarlng;
@@ -399,7 +463,12 @@ bool MTSampleInstance::process(int offset, int count, bool &silence)
 
                     cstatus.volvarlng = 0;
                 };
-                dspi->resample[flags](outputs[cstatus.tc] + coffset, (char *) (cparent.data[cstatus.sc]) + (cstatus.posi << flags), ccount, cstatus);
+                dspi->resample[flags](
+                    outputs[cstatus.tc] + coffset,
+                    (char*) (cparent.data[cstatus.sc]) + (cstatus.posi << flags),
+                    ccount,
+                    cstatus
+                );
                 if (cstatus.volvarlng >= ccount)
                 {
                     cstatus.vol += cstatus.volvar * ccount;
@@ -411,20 +480,24 @@ bool MTSampleInstance::process(int offset, int count, bool &silence)
                 silence = false;
             };
             if (!cparent.loop)
-            { break; }
+            {
+                break;
+            }
             coffset += ccount;
             cmax -= ccount;
         };
     };
     if (cparent.loop)
-    { return true; }
+    {
+        return true;
+    }
     return (e != nstatus);
 }
 
 void MTSampleInstance::setnote(double n)
 {
     int x;
-    MTSample &cparent = *(MTSample *) parent;
+    MTSample& cparent = *(MTSample*) parent;
     bool reverse;
 
     note = n;
@@ -444,7 +517,9 @@ void MTSampleInstance::setnote(double n)
     {
         reverse = false;
     };
-    pitch = ((double) cparent.frequency / (double) output->frequency) * pow(1.0594630943592952645618252949463, n - ((MTSample *) parent)->note);
+    pitch = ((double) cparent.frequency / (double) output->frequency) * pow(
+        1.0594630943592952645618252949463, n - ((MTSample*) parent)->note
+    );
 //	a_floattofixed(pitch,pitchi,pitchd);
     for(x = 0; x < nstatus; x++)
     {
@@ -459,12 +534,16 @@ void MTSampleInstance::setvolume(double vs, int steps, int curve)
     float dpanx, dpany, dpanz;
 
     if (steps < 0)
-    { return; }
+    {
+        return;
+    }
     if (steps)
     {
         volvar = (vs - volume) / steps;
         if ((panvarlng > 1) && (panvarlng < steps))
-        { steps = panvarlng; }
+        {
+            steps = panvarlng;
+        }
     }
     else
     {
@@ -580,7 +659,7 @@ void MTSampleInstance::setvolume(double vs, int steps, int curve)
     dvol = volume + volvar * volvarlng;
     for(x = 0; x < nstatus; x++)
     {
-        ChannelStatus &cstatus = status[x];
+        ChannelStatus& cstatus = status[x];
         cstatus.volvar = (dvol * cstatus.multiplier - cstatus.vol) / steps;
 //		cstatus.volvar = volvar*cstatus.multiplier;
         cstatus.volvarlng = steps;
@@ -595,8 +674,10 @@ void MTSampleInstance::setpanning(float xs, float ys, float zs, int steps, int c
     bool surround = false;
 
     if (steps < 0)
-    { return; }
-    MTSample &cparent = *(MTSample *) parent;
+    {
+        return;
+    }
+    MTSample& cparent = *(MTSample*) parent;
     if (xs < -1.0)
     {
         xs = 0.0;
@@ -732,7 +813,9 @@ void MTSampleInstance::setpanning(float xs, float ys, float zs, int steps, int c
         if (steps)
         {
             if (volvarlng > steps)
-            { volvarlng = steps; }
+            {
+                volvarlng = steps;
+            }
         }
         else
         {
@@ -747,7 +830,7 @@ void MTSampleInstance::setpanning(float xs, float ys, float zs, int steps, int c
     panvarlng = steps;
     for(x = 0; x < nstatus; x++)
     {
-        ChannelStatus &cstatus = status[x];
+        ChannelStatus& cstatus = status[x];
         cstatus.volvar = (dvol * cstatus.multiplier - cstatus.vol) / steps;
         cstatus.volvarlng = steps;
     };
@@ -761,32 +844,50 @@ double MTSampleInstance::getnote()
 double MTSampleInstance::getvolume(int steps)
 {
     if (!steps)
-    { return volume; }
+    {
+        return volume;
+    }
     if (steps > volvarlng)
-    { steps = volvarlng; }
+    {
+        steps = volvarlng;
+    }
     return volume + volvar * steps;
 }
 
-void MTSampleInstance::getpanning(float *x, float *y, float *z, int steps)
+void MTSampleInstance::getpanning(float* x, float* y, float* z, int steps)
 {
     if (!steps)
     {
         if (x)
-        { *x = panx; }
+        {
+            *x = panx;
+        }
         if (y)
-        { *y = pany; }
+        {
+            *y = pany;
+        }
         if (z)
-        { *z = panz; }
+        {
+            *z = panz;
+        }
         return;
     };
     if (steps > panvarlng)
-    { steps = panvarlng; }
+    {
+        steps = panvarlng;
+    }
     if (x)
-    { *x = panx + panxvar * steps; }
+    {
+        *x = panx + panxvar * steps;
+    }
     if (y)
-    { *y = pany + panyvar * steps; }
+    {
+        *y = pany + panyvar * steps;
+    }
     if (z)
-    { *z = panz + panzvar * steps; }
+    {
+        *z = panz + panzvar * steps;
+    }
 }
 
 float MTSampleInstance::getimportance()

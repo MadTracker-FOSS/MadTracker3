@@ -15,18 +15,22 @@
 #include <MTXAPI/RES/MTObjectsRES.h>
 
 //---------------------------------------------------------------------------
-MTFilter::MTFilter(MTObject *parent, mt_int32 i):
-    Effect(parent, MTO_MTFILTER, i), frequency(4000.0), resonance(0.5)
+MTFilter::MTFilter(MTObject* parent, mt_int32 i):
+    Effect(parent, MTO_MTFILTER, i),
+    frequency(4000.0),
+    resonance(0.5)
 {
 #	ifdef MTSYSTEM_RESOURCES
     res->loadstringf(MTT_effect, name, 255, i + 1);
 #	endif
 }
 
-EffectInstance *MTFilter::createinstance(int noutputs, sample **outputs, int ninputs, sample **inputs, InstrumentInstance *caller)
+EffectInstance* MTFilter::createinstance(int noutputs, sample** outputs, int ninputs, sample** inputs, InstrumentInstance* caller)
 {
     if (ninputs != noutputs)
-    { return 0; }
+    {
+        return 0;
+    }
     if (caller)
     {
         return new MTFilterInstance(this, noutputs, outputs, ninputs, inputs, caller);
@@ -35,29 +39,37 @@ EffectInstance *MTFilter::createinstance(int noutputs, sample **outputs, int nin
     return ei;
 }
 
-void MTFilter::deleteinstance(EffectInstance *i)
+void MTFilter::deleteinstance(EffectInstance* i)
 {
     if (!i)
-    { i = ei; }
+    {
+        i = ei;
+    }
     if (i)
     {
-        delete (MTFilterInstance *) i;
+        delete (MTFilterInstance*) i;
         if (i == ei)
-        { ei = 0; }
+        {
+            ei = 0;
+        }
     };
 }
 
 int MTFilter::getnumparams(int cat)
 {
     if (cat == 0)
-    { return 5; }
+    {
+        return 5;
+    }
     return 0;
 }
 
-const char *MTFilter::getparamname(int cat, int id)
+const char* MTFilter::getparamname(int cat, int id)
 {
     if (cat != 0)
-    { return ""; }
+    {
+        return "";
+    }
     switch (id)
     {
         case 0:
@@ -75,10 +87,12 @@ const char *MTFilter::getparamname(int cat, int id)
     };
 }
 
-double MTFilter::getparam(int cat, int id, char *display)
+double MTFilter::getparam(int cat, int id, char* display)
 {
     if (cat != 0)
-    { return 0.0; }
+    {
+        return 0.0;
+    }
     switch (id)
     {
         case 0:
@@ -107,7 +121,9 @@ double MTFilter::getparam(int cat, int id, char *display)
 void MTFilter::setparam(int cat, int id, double value, int steps)
 {
     if (cat != 0)
-    { return; }
+    {
+        return;
+    }
     switch (id)
     {
         case 0:
@@ -124,16 +140,18 @@ void MTFilter::setparam(int cat, int id, double value, int steps)
             break;
     };
     if (ei)
-    { ei->setparam(cat, id, value, steps); }
+    {
+        ei->setparam(cat, id, value, steps);
+    }
 }
 
 //---------------------------------------------------------------------------
-MTFilterInstance::MTFilterInstance(Effect *p, int no, sample **o, int ni, sample **i, InstrumentInstance *caller):
+MTFilterInstance::MTFilterInstance(Effect* p, int no, sample** o, int ni, sample** i, InstrumentInstance* caller):
     EffectInstance(p, no, o, ni, i, caller)
 {
     int x;
 
-    MTFilter &cp = *(MTFilter *) p;
+    MTFilter& cp = *(MTFilter*) p;
     mtmemzero(&status, sizeof(status));
     for(x = 0; x < ni; x++)
     {
@@ -142,7 +160,7 @@ MTFilterInstance::MTFilterInstance(Effect *p, int no, sample **o, int ni, sample
     };
 }
 
-int MTFilterInstance::process(int ooffset, int ioffset, int count, bool &silence)
+int MTFilterInstance::process(int ooffset, int ioffset, int count, bool& silence)
 {
     int x;
 
@@ -158,7 +176,9 @@ void MTFilterInstance::setparam(int cat, int id, double value, int length)
     int x;
 
     if (cat != 0)
-    { return; }
+    {
+        return;
+    }
     switch (id)
     {
         case 0:

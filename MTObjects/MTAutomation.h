@@ -28,7 +28,7 @@ struct AEnvelope
 
 struct TrackAuto
 {
-    MTObject *target;
+    MTObject* target;
     mt_uint32 param;
     mt_uint32 flags;
     AEnvelope env;
@@ -37,11 +37,11 @@ struct TrackAuto
 class Automation: public MTObject
 {
 public:
-    Automation(MTObject *parent, mt_int32 i);
+    Automation(MTObject* parent, mt_int32 i);
 
     virtual ~Automation();
 
-    MTArray *envelopes;
+    MTArray* envelopes;
 };
 //---------------------------------------------------------------------------
 #endif

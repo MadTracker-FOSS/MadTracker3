@@ -272,41 +272,45 @@ static const unsigned char pr2six[256] = {
     64
 };
 
-int mtbase64decode_len(const char *bufcoded)
+int mtbase64decode_len(const char* bufcoded)
 {
     int nbytesdecoded;
-    register const unsigned char *bufin;
+    register const unsigned char* bufin;
     register int nprbytes;
 
-    bufin = (const unsigned char *) bufcoded;
-    while(pr2six[*(bufin++)] <= 63);
-    nprbytes = (bufin - (const unsigned char *) bufcoded) - 1;
+    bufin = (const unsigned char*) bufcoded;
+    while(pr2six[*(bufin++)] <= 63)
+    {
+    }
+    nprbytes = (bufin - (const unsigned char*) bufcoded) - 1;
     nbytesdecoded = ((nprbytes + 3) / 4) * 3;
     return nbytesdecoded + 1;
 }
 
-int mtbase64decode(char *bufplain, const char *bufcoded)
+int mtbase64decode(char* bufplain, const char* bufcoded)
 {
     int len;
 
-    len = mtbase64decode_binary((unsigned char *) bufplain, bufcoded);
+    len = mtbase64decode_binary((unsigned char*) bufplain, bufcoded);
     bufplain[len] = 0;
     return len;
 }
 
-int mtbase64decode_binary(unsigned char *bufplain, const char *bufcoded)
+int mtbase64decode_binary(unsigned char* bufplain, const char* bufcoded)
 {
     int nbytesdecoded;
-    register const unsigned char *bufin;
-    register unsigned char *bufout;
+    register const unsigned char* bufin;
+    register unsigned char* bufout;
     register int nprbytes;
 
-    bufin = (const unsigned char *) bufcoded;
-    while(pr2six[*(bufin++)] <= 63);
-    nprbytes = (bufin - (const unsigned char *) bufcoded) - 1;
+    bufin = (const unsigned char*) bufcoded;
+    while(pr2six[*(bufin++)] <= 63)
+    {
+    }
+    nprbytes = (bufin - (const unsigned char*) bufcoded) - 1;
     nbytesdecoded = ((nprbytes + 3) / 4) * 3;
-    bufout = (unsigned char *) bufplain;
-    bufin = (const unsigned char *) bufcoded;
+    bufout = (unsigned char*) bufplain;
+    bufin = (const unsigned char*) bufcoded;
     while(nprbytes > 4)
     {
         *(bufout++) = (unsigned char) ((pr2six[*bufin] << 2) | (pr2six[bufin[1]] >> 4));
@@ -338,15 +342,15 @@ int mtbase64encode_len(int len)
     return (((len + 2) / 3) * 4) + 1;
 }
 
-int mtbase64encode(char *encoded, const char *string, int len)
+int mtbase64encode(char* encoded, const char* string, int len)
 {
-    return mtbase64encode_binary(encoded, (const unsigned char *) string, len);
+    return mtbase64encode_binary(encoded, (const unsigned char*) string, len);
 }
 
-int mtbase64encode_binary(char *encoded, const unsigned char *string, int len)
+int mtbase64encode_binary(char* encoded, const unsigned char* string, int len)
 {
     int i;
-    char *p;
+    char* p;
 
     p = encoded;
     for(i = 0; i < len - 2; i += 3)

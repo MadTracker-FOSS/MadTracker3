@@ -11,21 +11,26 @@
 #include "MTDesktop.h"
 
 //---------------------------------------------------------------------------
-extern MTDesktop *desktops[32];
+extern MTDesktop* desktops[32];
 
 extern int ndesktops;
 
 //---------------------------------------------------------------------------
-void MTCT new_control(MTShortcut *, MTControl *c, MTUndo *)
+void MTCT new_control(MTShortcut*, MTControl* c, MTUndo*)
 {
-    MTMenuItem *mi = (MTMenuItem *) c;
-    MTMenu *popup = (MTMenu *) mi->parent;
-    MTWinControl *wctrl;
+    MTMenuItem* mi = (MTMenuItem*) c;
+    MTMenu* popup = (MTMenu*) mi->parent;
+    MTWinControl* wctrl;
 
-    while((popup->caller) && (popup->caller->guiid == MTC_MENU)) popup = (MTMenu *) popup->caller;
+    while((popup->caller) && (popup->caller->guiid == MTC_MENU))
+    {
+        popup = (MTMenu*) popup->caller;
+    }
     if ((!popup->caller) || ((popup->caller->guiid & 2) == 0))
-    { return; }
-    wctrl = (MTWinControl *) popup->caller;
+    {
+        return;
+    }
+    wctrl = (MTWinControl*) popup->caller;
     wctrl->bringtofront(gi->newcontrol(mi->tag, 0, wctrl, popup->mouse.x, popup->mouse.y, 0, 0, 0));
 }
 
@@ -34,18 +39,23 @@ void MTCT new_control(MTShortcut *, MTControl *c, MTUndo *)
 //   MTWinControl
 //     MTDesktop
 //---------------------------------------------------------------------------
-MTDesktop::MTDesktop(int tag, void *p, int l, int t, int w, int h):
-    MTWinControl(MTC_DESKTOP, tag, 0, l, t, w, h), mwnd(p), newctrl(0), ccombo(0)
+MTDesktop::MTDesktop(int tag, void* p, int l, int t, int w, int h):
+    MTWinControl(MTC_DESKTOP, tag, 0, l, t, w, h),
+    mwnd(p),
+    newctrl(0),
+    ccombo(0)
 {
     if (!popup)
     {
-        popup = (MTMenu *) gi->newcontrol(MTC_MENU, 0, this, 0, 0, 0, 0, 0);
+        popup = (MTMenu*) gi->newcontrol(MTC_MENU, 0, this, 0, 0, 0, 0, 0);
         popup->flags |= MTCF_DONTSAVE;
     }
     else
     {
         if (popup->numitems > 0)
-        { popup->additem("|Desktop", 0, 0, false, 0); }
+        {
+            popup->additem("|Desktop", 0, 0, false, 0);
+        }
     };
     desktops[ndesktops++] = this;
     di->adddesktop(this);
@@ -54,13 +64,13 @@ MTDesktop::MTDesktop(int tag, void *p, int l, int t, int w, int h):
         int x, n, type;
         char name[256];
 
-        newctrl = (MTMenu *) gi->newcontrol(MTC_MENU, 0, this, 0, 0, 0, 0, 0);
+        newctrl = (MTMenu*) gi->newcontrol(MTC_MENU, 0, this, 0, 0, 0, 0, 0);
         n = gi->getnumcontrols();
         for(x = 0; x < n; x++)
         {
             if (gi->getcontroltype(x, name, type))
             {
-                MTMenuItem *mi = (MTMenuItem *) newctrl->additem(name, -1, 0, false, 0);
+                MTMenuItem* mi = (MTMenuItem*) newctrl->additem(name, -1, 0, false, 0);
                 mi->tag = type;
                 mi->command = new_control;
             };
@@ -92,15 +102,17 @@ MTDesktop::~MTDesktop()
     };
 }
 
-void MTDesktop::draw(MTRect &rect)
+void MTDesktop::draw(MTRect& rect)
 {
-    void *rgn = getemptyrgn();
+    void* rgn = getemptyrgn();
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     if (&rect)
     {
-        void *crgn = recttorgn(rect);
+        void* crgn = recttorgn(rect);
         intersectrgn(rgn, crgn);
         deletergn(crgn);
     };
@@ -125,10 +137,12 @@ void MTDesktop::draw(MTRect &rect)
         flush(rect);
     }
     else
-    { flush(); }
+    {
+        flush();
+    }
 }
 
-bool MTDesktop::message(MTCMessage &msg)
+bool MTDesktop::message(MTCMessage& msg)
 {
     if (msg.msg == MTCM_ACTION)
     {
@@ -141,7 +155,7 @@ bool MTDesktop::message(MTCMessage &msg)
     }
     else if ((msg.msg == MTCM_CHANGE) && (msg.param1 & MTCF_FOCUSED))
     {
-        MTWinControl &cw = *(MTWinControl *) msg.ctrl;
+        MTWinControl& cw = *(MTWinControl*) msg.ctrl;
         if ((cw.flags & MTCF_FOCUSED) == 0)
         {
             if ((ccombo) && (&cw == ccombo->mlb))
@@ -158,19 +172,23 @@ bool MTDesktop::message(MTCMessage &msg)
             else if (cw.guiid == MTC_MENU)
             {
                 if ((!focused) || (focused->guiid != MTC_MENU))
-                { clearmenu(0); }
+                {
+                    clearmenu(0);
+                }
             };
         };
     };
     if (msg.msg < MTCM_USERINPUT)
     {
         if ((blockinput) || (flags & MTCF_HIDDEN))
-        { return false; }
+        {
+            return false;
+        }
     };
     return MTWinControl::message(msg);
 }
 
-void MTDesktop::setmenu(MTMenu *m)
+void MTDesktop::setmenu(MTMenu* m)
 {
     focus(m);
     m->flags |= MTCF_POPUP;
@@ -178,24 +196,28 @@ void MTDesktop::setmenu(MTMenu *m)
     m->switchflags(MTCF_HIDDEN, false);
 }
 
-void MTDesktop::clearmenu(MTMenu *m)
+void MTDesktop::clearmenu(MTMenu* m)
 {
     while(ncontrols > 0)
     {
-        MTWinControl &cctrl = *(MTWinControl *) controls[0];
-        if ((MTMenu *) &cctrl == m)
-        { break; }
+        MTWinControl& cctrl = *(MTWinControl*) controls[0];
+        if ((MTMenu*) &cctrl == m)
+        {
+            break;
+        }
         if ((cctrl.guiid != MTC_MENU) || ((cctrl.flags & MTCF_POPUP) == 0))
-        { break; }
+        {
+            break;
+        }
         cctrl.switchflags(MTCF_HIDDEN, true);
         cctrl.flags &= (~MTCF_POPUP);
         puttoback(&cctrl);
     };
 }
 
-void MTDesktop::setcombo(MTComboBox *c)
+void MTDesktop::setcombo(MTComboBox* c)
 {
-    MTList *lb = c->mlb;
+    MTList* lb = c->mlb;
     int h;
 
     h = c->dropcount * lb->itemheight;
@@ -207,7 +229,7 @@ void MTDesktop::setcombo(MTComboBox *c)
     lb->switchflags(MTCF_HIDDEN, false);
 }
 
-void MTDesktop::drawover(MTWinControl *wnd, MTRect &rect)
+void MTDesktop::drawover(MTWinControl* wnd, MTRect& rect)
 {
     int x;
     MTRect cr = {0, 0, width, height};
@@ -217,24 +239,30 @@ void MTDesktop::drawover(MTWinControl *wnd, MTRect &rect)
     bool ok = false;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     while(wnd->parent != this)
     {
         wnd = wnd->parent;
         if (wnd == 0)
-        { return; }
+        {
+            return;
+        }
     };
     if (&rect)
     {
         if (!cliprect(cr, rect))
-        { return; }
+        {
+            return;
+        }
     };
     bflags = flags;
     flags |= MTCF_DONTFLUSH;
     clip(cr);
     for(x = ncontrols - 1; x >= 0; x--)
     {
-        MTControl &cctrl = *controls[x];
+        MTControl& cctrl = *controls[x];
         if ((!wasmodal) && (!design))
         {
             signed char cmodal = (cctrl.flags) >> 24;
@@ -247,11 +275,15 @@ void MTDesktop::drawover(MTWinControl *wnd, MTRect &rect)
         if (!ok)
         {
             if (&cctrl == wnd)
-            { ok = true; }
+            {
+                ok = true;
+            }
             continue;
         };
         if (cctrl.flags & MTCF_HIDDEN)
-        { continue; }
+        {
+            continue;
+        }
         cctrl.getrect(cr2, 0);
         if (cliprect(cr2, cr))
         {

@@ -23,8 +23,9 @@
 #include "MTDevDSP.h"
 
 //---------------------------------------------------------------------------
-MTDevDSPDevice::MTDevDSPDevice(const char *dev):
-    buffer(0), bsize(0)
+MTDevDSPDevice::MTDevDSPDevice(const char* dev):
+    buffer(0),
+    bsize(0)
 {
 /*
 	int l;
@@ -63,9 +64,13 @@ MTDevDSPDevice::MTDevDSPDevice(const char *dev):
 MTDevDSPDevice::~MTDevDSPDevice()
 {
     if (f >= 0)
-    { close(f); }
+    {
+        close(f);
+    }
     if (buffer)
-    { si->memfree(buffer); }
+    {
+        si->memfree(buffer);
+    }
 }
 
 bool MTDevDSPDevice::init(float frequency, int nchannels, int bits, double latency)
@@ -73,7 +78,9 @@ bool MTDevDSPDevice::init(float frequency, int nchannels, int bits, double laten
     int status, arg;
 
     if (f < 0)
-    { return false; }
+    {
+        return false;
+    }
     FENTER4("MTDevDSPDevice::init(%f,%d,%d,%f)", frequency, nchannels, bits, latency);
     dbits = bits;
     dchannels = nchannels;
@@ -140,7 +147,9 @@ void MTDevDSPDevice::uninit()
 bool MTDevDSPDevice::play()
 {
     if (f < 0)
-    { return false; }
+    {
+        return false;
+    }
 
     return false;
 }
@@ -148,7 +157,9 @@ bool MTDevDSPDevice::play()
 bool MTDevDSPDevice::stop()
 {
     if (f < 0)
-    { return false; }
+    {
+        return false;
+    }
 
     return false;
 }
@@ -156,15 +167,19 @@ bool MTDevDSPDevice::stop()
 int MTDevDSPDevice::getposition(bool playback)
 {
     if (f < 0)
-    { return -1; }
+    {
+        return -1;
+    }
 
     return 0;
 }
 
-bool MTDevDSPDevice::getdata(int position, int length, void **ptr1, void **ptr2, unsigned long *lng1, unsigned long *lng2)
+bool MTDevDSPDevice::getdata(int position, int length, void** ptr1, void** ptr2, unsigned long* lng1, unsigned long* lng2)
 {
     if (f < 0)
-    { return false; }
+    {
+        return false;
+    }
     *ptr1 = buffer;
     *ptr2 = 0;
     *lng1 = bsize / (dbits * dchannels / 8);
@@ -172,10 +187,12 @@ bool MTDevDSPDevice::getdata(int position, int length, void **ptr1, void **ptr2,
     return true;
 }
 
-bool MTDevDSPDevice::writedata(void *ptr1, void *ptr2, unsigned long lng1, unsigned long lng2)
+bool MTDevDSPDevice::writedata(void* ptr1, void* ptr2, unsigned long lng1, unsigned long lng2)
 {
     if (f < 0)
-    { return false; }
+    {
+        return false;
+    }
     write(f, ptr1, lng1);
     write(f, ptr2, lng2);
     printf("%d", ioctl(f, SOUND_PCM_SYNC, 0));
@@ -198,12 +215,14 @@ MTDevDSPDeviceManager::MTDevDSPDeviceManager():
             strcpy(buf, "/dev/dsp");
         }
         else
-        { sprintf(buf, "/dev/dsp%d", x); }
+        {
+            sprintf(buf, "/dev/dsp%d", x);
+        }
         if (stat(buf, &es) == 0)
         {
             FLOG1("[Audio] Found device: %s"
                       NL, buf);
-            devicename[n] = (char *) si->memalloc(strlen(buf) + 1, 0);
+            devicename[n] = (char*) si->memalloc(strlen(buf) + 1, 0);
             strcpy(devicename[n], buf);
             n++;
         };
@@ -217,23 +236,27 @@ MTDevDSPDeviceManager::~MTDevDSPDeviceManager()
     for(x = 0; x < 16; x++)
     {
         if (devicename[x])
-        { si->memfree(devicename[x]); }
+        {
+            si->memfree(devicename[x]);
+        }
     };
 }
 
-MTAudioDevice *MTDevDSPDeviceManager::newdevice(int id)
+MTAudioDevice* MTDevDSPDeviceManager::newdevice(int id)
 {
     if (devicename[id])
     {
         return new MTDevDSPDevice(devicename[id]);
     }
     else
-    { return 0; }
+    {
+        return 0;
+    }
 }
 
-void MTDevDSPDeviceManager::deldevice(MTAudioDevice *device)
+void MTDevDSPDeviceManager::deldevice(MTAudioDevice* device)
 {
-    delete (MTDevDSPDevice *) device;
+    delete (MTDevDSPDevice*) device;
 }
 //---------------------------------------------------------------------------
 #endif

@@ -22,9 +22,9 @@ class MTConfigFile;
 #include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
 extern "C" {
-MTConfigFile *MTCT mtconfigfind(const char *filename);
-MTConfigFile *MTCT mtconfigopen(const char *filename);
-void MTCT mtconfigclose(MTConfigFile *file);
+MTConfigFile* MTCT mtconfigfind(const char* filename);
+MTConfigFile* MTCT mtconfigopen(const char* filename);
+void MTCT mtconfigclose(MTConfigFile* file);
 }
 //---------------------------------------------------------------------------
 #endif

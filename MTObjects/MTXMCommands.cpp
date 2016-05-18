@@ -19,22 +19,26 @@ static short retrigadd[16] = {0, -1, -2, -4, -8, -16, 0, 0, 0, 1, 2, 4, 8, 16, 0
 static char retrigmul[16] = {0, 0, 0, 0, 0, 0, 11, 8, 0, 0, 0, 0, 0, 0, 24, 32};
 
 //---------------------------------------------------------------------------
-void xmfirstpass(MTPatternInstance *pi, unsigned short command, FirstPass &pass, ColumnStatus &status, int tick, int nticks)
+void xmfirstpass(MTPatternInstance* pi, unsigned short command, FirstPass& pass, ColumnStatus& status, int tick, int nticks)
 {
-    register EffectData &ed = *(EffectData *) &status.data;
+    register EffectData& ed = *(EffectData*) &status.data;
     unsigned char fx = command >> 8;
     register unsigned char param = command & 0xFF;
 
     if (tick)
-    { return; }
+    {
+        return;
+    }
     if (ed.needjump)
     {
-        MTModule &cmod = *pi->module;
+        MTModule& cmod = *pi->module;
         int x, y;
         for(x = 0, y = 0; x < ed.needjump; x++)
         {
             if (x >= pi->module->nsequ[1])
-            { break; }
+            {
+                break;
+            }
             y += ceil(cmod.sequ[1][x].length / A(cmod.patt, MTPattern)[cmod.sequ[1][x].patt]->nbeats);
             if (y >= ed.needjump)
             {
@@ -76,16 +80,18 @@ void xmfirstpass(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
     };
 }
 
-double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass, ColumnStatus &status, int tick, int nticks)
+double xmcommand(MTPatternInstance* pi, unsigned short command, FirstPass& pass, ColumnStatus& status, int tick, int nticks)
 {
-    register EffectData &ed = *(EffectData *) &status.data;
-    NoteData *nd = (NoteData *) &pi->getnotestatus()->data;
+    register EffectData& ed = *(EffectData*) &status.data;
+    NoteData* nd = (NoteData*) &pi->getnotestatus()->data;
     unsigned char fx = command >> 8;
     register mt_uint8 param = command & 0xFF;
     int x;
-    static MTIParamEvent pe[2] = {{0, MTIE_PARAM, 0.0, 0, sizeof(MTIParamEvent)},
-                                  {0, MTIE_PARAM, 0.0, 0, sizeof(MTIParamEvent)}};
-    static MTIParamEvent *cpe = pe;
+    static MTIParamEvent pe[2] = {
+        {0, MTIE_PARAM, 0.0, 0, sizeof(MTIParamEvent)},
+        {0, MTIE_PARAM, 0.0, 0, sizeof(MTIParamEvent)}
+    };
+    static MTIParamEvent* cpe = pe;
 
     switch (fx)
     {
@@ -99,7 +105,7 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
                     pe[0].param = MTIP_NOTE;
                     pe[0].flags = 0;
                     pe[0].dvalue1 = nd->onote;
-                    pi->sendevents(1, (MTIEvent **) &cpe);
+                    pi->sendevents(1, (MTIEvent**) &cpe);
                 };
             }
             else
@@ -116,7 +122,7 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
                         pe[0].dvalue1 += param & 0xF;
                         break;
                 };
-                pi->sendevents(1, (MTIEvent **) &cpe);
+                pi->sendevents(1, (MTIEvent**) &cpe);
                 ed.flags |= EDF_TONEMODIFIED;
             };
             return 1.0 / nticks;
@@ -129,11 +135,13 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
                     param = ed.old[0];
                 }
                 else
-                { ed.old[0] = param; }
+                {
+                    ed.old[0] = param;
+                }
                 pe[0].param = MTIP_NOTE;
                 pe[0].flags = MTIEF_ADD;
                 pe[0].dvalue1 = (double) param / 16;
-                pi->sendevents(1, (MTIEvent **) &cpe);
+                pi->sendevents(1, (MTIEvent**) &cpe);
             };
             return 1.0 / nticks;
 // Portamento down
@@ -145,11 +153,13 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
                     param = ed.old[0];
                 }
                 else
-                { ed.old[0] = param; }
+                {
+                    ed.old[0] = param;
+                }
                 pe[0].param = MTIP_NOTE;
                 pe[0].flags = MTIEF_ADD;
                 pe[0].dvalue1 = -(double) param / 16;
-                pi->sendevents(1, (MTIEvent **) &cpe);
+                pi->sendevents(1, (MTIEvent**) &cpe);
             };
             return 1.0 / nticks;
 // Tone portamento
@@ -161,7 +171,9 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
                     param = ed.old[0];
                 }
                 else
-                { ed.old[0] = param; }
+                {
+                    ed.old[0] = param;
+                }
                 pe[0].param = MTIP_NOTE;
                 pe[0].flags = MTIEF_ADD;
                 if (nd->ninstances)
@@ -169,16 +181,20 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
                     unsigned char note = *pi->getnotedata();
                     double ref = (double) param / 16;
                     if ((note > 0) && (note <= 96))
-                    { nd->dnote = note + 11; }
+                    {
+                        nd->dnote = note + 11;
+                    }
                     pe[0].dvalue1 = nd->dnote - nd->cnote;
                     if (pe[0].dvalue1 < -ref)
                     {
                         pe[0].dvalue1 = -ref;
                     }
                     else if (pe[0].dvalue1 > ref)
-                    { pe[0].dvalue1 = ref; }
+                    {
+                        pe[0].dvalue1 = ref;
+                    }
                     nd->cnote += pe[0].dvalue1;
-                    pi->sendevents(1, (MTIEvent **) &cpe);
+                    pi->sendevents(1, (MTIEvent**) &cpe);
                 };
             };
             return 1.0 / nticks;
@@ -196,23 +212,29 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
                     unsigned char note = *pi->getnotedata();
                     double ref = (double) ed.old[0] / 16;
                     if (note)
-                    { nd->dnote = note + 11; }
+                    {
+                        nd->dnote = note + 11;
+                    }
                     pe[0].dvalue1 = nd->dnote - nd->cnote;
                     if (pe[0].dvalue1 < -ref)
                     {
                         pe[0].dvalue1 = -ref;
                     }
                     else if (pe[0].dvalue1 > ref)
-                    { pe[0].dvalue1 = ref; }
+                    {
+                        pe[0].dvalue1 = ref;
+                    }
                     nd->cnote += pe[0].dvalue1;
-                    pi->sendevents(1, (MTIEvent **) &cpe);
+                    pi->sendevents(1, (MTIEvent**) &cpe);
                 };
                 if (!param)
                 {
                     param = ed.old[1];
                 }
                 else
-                { ed.old[1] = param; }
+                {
+                    ed.old[1] = param;
+                }
                 pe[1].param = MTIP_VOLUME;
                 pe[1].flags = MTIEF_ADD;
                 if (param >> 4)
@@ -223,7 +245,7 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
                 {
                     pe[1].dvalue1 = -/*pass.volume**/((double) (param & 0xF) / 64.0);
                 };
-                pi->sendevents(2, (MTIEvent **) &cpe);
+                pi->sendevents(2, (MTIEvent**) &cpe);
             };
             break;
 // Vibrato + Volume slide
@@ -237,7 +259,7 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
             pe[0].param = MTIP_PANNING;
             pe[0].fvalue1 = (float) (param - 128) / 128;
             pe[0].fvalue2 = pe[0].fvalue3 = 0.0;
-            pi->sendevents(1, (MTIEvent **) &cpe);
+            pi->sendevents(1, (MTIEvent**) &cpe);
             break;
 // Sample offset
         case 0x9:
@@ -246,12 +268,16 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
                 param = ed.old[2];
             }
             else
-            { ed.old[2] = param; }
+            {
+                ed.old[2] = param;
+            }
             for(x = 0; x < nd->ninstances; x++)
             {
-                InstrumentInstance &ci = *nd->lastinstance[x];
+                InstrumentInstance& ci = *nd->lastinstance[x];
                 if (ci.flags & IIF_BACKGROUND)
-                { continue; }
+                {
+                    continue;
+                }
                 ci.seek(param * 256.0, MTIS_BEGIN, MTIS_SAMPLES | MTIS_INNER);
             };
             break;
@@ -264,7 +290,9 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
                     param = ed.old[1];
                 }
                 else
-                { ed.old[1] = param; }
+                {
+                    ed.old[1] = param;
+                }
                 pe[0].param = MTIP_VOLUME;
                 pe[0].flags = MTIEF_ADD;
                 if (param >> 4)
@@ -275,7 +303,7 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
                 {
                     pe[0].dvalue1 = -/*pass.volume**/((double) (param & 0xF) / 64.0);
                 };
-                pi->sendevents(1, (MTIEvent **) &cpe);
+                pi->sendevents(1, (MTIEvent**) &cpe);
             };
             return 1.0 / nticks;
 // Position jump
@@ -287,7 +315,7 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
             pe[0].param = MTIP_VOLUME;
             pe[0].flags = MTIEF_DONTSATURATE;
             pe[0].dvalue1 = /*pass.volume**/((double) param / 64.0);
-            pi->sendevents(1, (MTIEvent **) &cpe);
+            pi->sendevents(1, (MTIEvent**) &cpe);
             break;
 // Pattern break
         case 0xD:
@@ -302,32 +330,40 @@ double xmcommand(MTPatternInstance *pi, unsigned short command, FirstPass &pass,
 // Fine portamento up
                 case 0x1:
                     if (tick)
-                    { break; }
+                    {
+                        break;
+                    }
                     if (!param)
                     {
                         param = ed.old[0];
                     }
                     else
-                    { ed.old[0] = param; }
+                    {
+                        ed.old[0] = param;
+                    }
                     pe[0].param = MTIP_NOTE;
                     pe[0].flags = MTIEF_ADD;
                     pe[0].dvalue1 = (double) param / 16;
-                    pi->sendevents(1, (MTIEvent **) &cpe);
+                    pi->sendevents(1, (MTIEvent**) &cpe);
                     break;
 // Fine portamento down
                 case 0x2:
                     if (tick)
-                    { break; }
+                    {
+                        break;
+                    }
                     if (!param)
                     {
                         param = ed.old[0];
                     }
                     else
-                    { ed.old[0] = param; }
+                    {
+                        ed.old[0] = param;
+                    }
                     pe[0].param = MTIP_NOTE;
                     pe[0].flags = MTIEF_ADD;
                     pe[0].dvalue1 = -(double) param / 16;
-                    pi->sendevents(1, (MTIEvent **) &cpe);
+                    pi->sendevents(1, (MTIEvent**) &cpe);
                     break;
 // Set glissando control
                 case 0x3:

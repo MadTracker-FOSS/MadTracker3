@@ -17,9 +17,17 @@
 //---------------------------------------------------------------------------
 // Track functions
 //---------------------------------------------------------------------------
-Track::Track(MTObject *parent, int i, int sub):
-    Node(parent, MTO_TRACK, i), muted(false), solo(false), empty(true), vol(1.0), panx(0.0), pany(0.0), panz(0.0),
-    nsamples(0), offset(0)
+Track::Track(MTObject* parent, int i, int sub):
+    Node(parent, MTO_TRACK, i),
+    muted(false),
+    solo(false),
+    empty(true),
+    vol(1.0),
+    panx(0.0),
+    pany(0.0),
+    panz(0.0),
+    nsamples(0),
+    offset(0)
 {
     int x, n;
 
@@ -33,7 +41,7 @@ Track::Track(MTObject *parent, int i, int sub):
 #			ifdef MTSYSTEM_RESOURCES
             res->loadstringf(MTT_track, name, 255, id + 1);
 #			endif
-            Node *dest = A(module->master, Track)[0];
+            Node* dest = A(module->master, Track)[0];
             n = dest->noutputs;
             for(x = 0; x < noutputs; x++)
             {
@@ -51,7 +59,7 @@ Track::Track(MTObject *parent, int i, int sub):
 #			endif
             if (output->ndevices)
             {
-                Node *dest = output->device[0]->master;
+                Node* dest = output->device[0]->master;
                 n = dest->noutputs;
                 for(x = 0; x < noutputs; x++)
                 {
@@ -80,12 +88,14 @@ Track::~Track()
             module->trk->a[id] = 0;
         }
         else
-        { module->master->a[id - MAX_TRACKS] = 0; }
+        {
+            module->master->a[id - MAX_TRACKS] = 0;
+        }
     };
     free();
 }
 
-int Track::process(int ooffset, int ioffset, int count, bool &silence)
+int Track::process(int ooffset, int ioffset, int count, bool& silence)
 {
     return 0;
 }
@@ -95,10 +105,14 @@ void Track::alloc()
     int x;
 
     if (!output->ndevices)
-    { return; }
+    {
+        return;
+    }
     lock(MTOL_LOCK, true);
     if (buffer[0])
-    { free(); }
+    {
+        free();
+    }
     nsamples = output->buffersamples * 2;
     if (module)
     {
@@ -108,7 +122,9 @@ void Track::alloc()
             nsamples = output->buffersamples * 2;
         }
         else
-        { nsamples = output->device[0]->master->nsamples; }
+        {
+            nsamples = output->device[0]->master->nsamples;
+        }
     }
     else
     {
@@ -116,7 +132,7 @@ void Track::alloc()
     }
     for(x = 0; x < noutputs; x++)
     {
-        buffer[x] = (sample *) si->memalloc(nsamples * sizeof(sample), MTM_ZERO);
+        buffer[x] = (sample*) si->memalloc(nsamples * sizeof(sample), MTM_ZERO);
     };
     lock(MTOL_LOCK, false);
 }
@@ -124,7 +140,7 @@ void Track::alloc()
 void Track::free()
 {
     int x;
-    sample *old[8];
+    sample* old[8];
 
     lock(MTOL_LOCK, true);
     if (module)
@@ -137,7 +153,10 @@ void Track::free()
         buffer[x] = 0;
     };
     nsamples = 0;
-    for(x = 0; x < noutputs; x++) si->memfree(old[x]);
+    for(x = 0; x < noutputs; x++)
+    {
+        si->memfree(old[x]);
+    }
     lock(MTOL_LOCK, false);
 }
 //---------------------------------------------------------------------------

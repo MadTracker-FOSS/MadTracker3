@@ -15,7 +15,7 @@
 #include <MTXAPI/MTXModule.h>
 
 //---------------------------------------------------------------------------
-void MTCT ri8(sample *source, void *dest, int count, int nchannels, int channel)
+void MTCT ri8(sample* source, void* dest, int count, int nchannels, int channel)
 {
     static const sample f127 = 127.0;
 #if 1
@@ -99,7 +99,7 @@ void MTCT ri8(sample *source, void *dest, int count, int nchannels, int channel)
 #endif
 }
 
-void MTCT ri16(sample *source, void *dest, int count, int nchannels, int channel)
+void MTCT ri16(sample* source, void* dest, int count, int nchannels, int channel)
 {
     static const sample f32767 = 32767.0;
 #if 1
@@ -197,11 +197,11 @@ void generateoutput()
     {
         bool ready;
         int start;
-        char *ptr;
+        char* ptr;
         int lastoffset;
-        void *ptr1, *ptr2;
+        void* ptr1, * ptr2;
         unsigned long lng1, lng2;
-        char *cptr;
+        char* cptr;
         unsigned long clng1, clng2;
         double timeopened;
     } devpos[MAX_AUDIODEVICES];
@@ -213,8 +213,8 @@ void generateoutput()
 // Retrieve playing positions
     for(x = 0; x < output.ndevices; x++)
     {
-        WaveDevice &cdev = *output.device[x];
-        DevPos &cdevpos = devpos[x];
+        WaveDevice& cdev = *output.device[x];
+        DevPos& cdevpos = devpos[x];
         cdevpos.timeopened = cdev.timeopened;
         pos = cdev.device->getposition();
         cdevpos.ready = false;
@@ -225,7 +225,9 @@ void generateoutput()
                 lngc = (int) ((cdevpos.timeopened - devpos[0].timeopened) * output.frequency);
             }
             else
-            { lngc = 0; }
+            {
+                lngc = 0;
+            }
             lngc += output.buffersamples;
             cdevpos.start = (pos + lngc) % cdev.datasamples;
             cdevpos.ready = true;
@@ -233,18 +235,24 @@ void generateoutput()
     };
     for(x = 0; x < output.ndevices; x++)
     {
-        WaveDevice &cdev = *output.device[x];
-        DevPos &cdevpos = devpos[x];
+        WaveDevice& cdev = *output.device[x];
+        DevPos& cdevpos = devpos[x];
         if (cdevpos.ready)
         {
             cdevpos.ready = false;
             lngc = cdevpos.start - cdevpos.lastoffset;
             if (lngc <= 0)
-            { lngc += cdev.datasamples; }
-            if (!cdev.device->getdata(cdevpos.lastoffset, lngc, &cdevpos.ptr1, &cdevpos.ptr2, &cdevpos.lng1, &cdevpos.lng2))
-            { continue; }
+            {
+                lngc += cdev.datasamples;
+            }
+            if (!cdev.device->getdata(
+                cdevpos.lastoffset, lngc, &cdevpos.ptr1, &cdevpos.ptr2, &cdevpos.lng1, &cdevpos.lng2
+            ))
+            {
+                continue;
+            }
             cdevpos.ready = true;
-            cdevpos.cptr = (char *) cdevpos.ptr1;
+            cdevpos.cptr = (char*) cdevpos.ptr1;
             cdevpos.clng1 = cdevpos.lng1;
             cdevpos.clng2 = cdevpos.lng2;
 /*
@@ -264,38 +272,48 @@ void generateoutput()
         minlng = 0x7FFFFFFF;
         for(x = 0; x < output.ndevices; x++)
         {
-            DevPos &cdevpos = devpos[x];
+            DevPos& cdevpos = devpos[x];
             if (cdevpos.clng1)
             {
                 if (cdevpos.clng1 < minlng)
-                { minlng = cdevpos.clng1; }
+                {
+                    minlng = cdevpos.clng1;
+                }
             }
             else
             {
                 if (cdevpos.clng2 < minlng)
-                { minlng = cdevpos.clng2; }
+                {
+                    minlng = cdevpos.clng2;
+                }
             };
         };
         if ((int) minlng <= 0)
-        { break; }
+        {
+            break;
+        }
         if ((lngc) && (minlng < 64))
-        { break; }
+        {
+            break;
+        }
         output.playlng = minlng;
         lngc += minlng;
         for(x = 0; x < output.ndevices; x++)
         {
-            WaveDevice &cdev = *output.device[x];
-            DevPos &cdevpos = devpos[x];
+            WaveDevice& cdev = *output.device[x];
+            DevPos& cdevpos = devpos[x];
             int sl = (cdev.bits * cdev.nchannels) >> 3;
             cdevpos.ptr = cdevpos.cptr;
             if (cdevpos.clng1)
             {
                 if ((cdevpos.clng1 -= minlng) == 0)
                 {
-                    cdevpos.cptr = (char *) cdevpos.ptr2;
+                    cdevpos.cptr = (char*) cdevpos.ptr2;
                 }
                 else
-                { cdevpos.cptr += minlng * sl; }
+                {
+                    cdevpos.cptr += minlng * sl;
+                }
             }
             else
             {
@@ -307,7 +325,7 @@ void generateoutput()
         // Empty master buffer
         for(x = 0; x < output.ndevices; x++)
         {
-            Track &master = *output.device[x]->master;
+            Track& master = *output.device[x]->master;
             for(y = 0; y < master.noutputs; y++)
             {
                 mtmemzero(master.buffer[y], minlng * sizeof(sample));
@@ -318,19 +336,23 @@ void generateoutput()
         x = mtinterface->getnummodules();
         while(x > 0)
         {
-            MTModule *cmod = (MTModule *) mtinterface->getmodule(--x);
+            MTModule* cmod = (MTModule*) mtinterface->getmodule(--x);
             if (cmod->lockread)
-            { continue; }
+            {
+                continue;
+            }
             if (cmod->process(&output))
-            { mix = true; }
+            {
+                mix = true;
+            }
         };
 
 // Render to soundcard
         for(x = 0; x < output.ndevices; x++)
         {
-            DevPos &cdevpos = devpos[x];
-            WaveDevice &cdev = *output.device[x];
-            Track &master = *cdev.master;
+            DevPos& cdevpos = devpos[x];
+            WaveDevice& cdev = *output.device[x];
+            Track& master = *cdev.master;
             int rid = cdev.bits / 8 - 1;
             for(y = 0; y < cdev.nchannels; y++)
             {
@@ -341,16 +363,19 @@ void generateoutput()
         if (recf)
         {
             if (mix)
-            { recf->write(devpos[0].ptr, minlng * (output.device[0]->bits * output.device[0]->nchannels) >> 3); }
+            {
+                recf->write(devpos[0].ptr, minlng * (output.device[0]->bits * output.device[0]->nchannels) >> 3);
+            }
         };
 #		endif
-    } while(minlng);
+    }
+    while(minlng);
 
 // Unlock devices
     for(x = 0; x < output.ndevices; x++)
     {
-        WaveDevice &cdev = *output.device[x];
-        DevPos &cdevpos = devpos[x];
+        WaveDevice& cdev = *output.device[x];
+        DevPos& cdevpos = devpos[x];
         cdevpos.lastoffset = cdevpos.start;
         int sl = (cdev.bits * cdev.nchannels) >> 3;
         if ((cdevpos.ready) && (cdevpos.ptr1))

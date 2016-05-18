@@ -84,9 +84,9 @@
 //---------------------------------------------------------------------------
 void md5transform(unsigned int state[4], const unsigned char block[64]);
 
-void encode(unsigned char *output, const unsigned int *input, unsigned int len);
+void encode(unsigned char* output, const unsigned int* input, unsigned int len);
 
-void decode(unsigned int *output, const unsigned char *input, unsigned int len);
+void decode(unsigned int* output, const unsigned char* input, unsigned int len);
 
 static unsigned char PADDING[64] = {
     0x80,
@@ -156,7 +156,7 @@ static unsigned char PADDING[64] = {
 };
 
 //---------------------------------------------------------------------------
-void md5init(MD5_CTX *context)
+void md5init(MD5_CTX* context)
 {
     context->count[0] = context->count[1] = 0;
     context->state[0] = 0x67452301;
@@ -165,7 +165,7 @@ void md5init(MD5_CTX *context)
     context->state[3] = 0x10325476;
 }
 
-void md5update(MD5_CTX *context, const unsigned char *input, unsigned int inputLen)
+void md5update(MD5_CTX* context, const unsigned char* input, unsigned int inputLen)
 {
     unsigned int i, idx, partLen;
 
@@ -193,7 +193,7 @@ void md5update(MD5_CTX *context, const unsigned char *input, unsigned int inputL
     memcpy(&context->buffer[idx], &input[i], inputLen - i);
 }
 
-void md5final(unsigned char digest[16], MD5_CTX *context)
+void md5final(unsigned char digest[16], MD5_CTX* context)
 {
     unsigned char bits[8];
     unsigned int idx, padLen;
@@ -201,8 +201,8 @@ void md5final(unsigned char digest[16], MD5_CTX *context)
     encode(bits, context->count, 8);
     idx = (unsigned int) ((context->count[0] >> 3) & 0x3f);
     padLen = (idx < 56) ? (56 - idx) : (120 - idx);
-    md5update(context, (const unsigned char *) PADDING, padLen);
-    md5update(context, (const unsigned char *) bits, 8);
+    md5update(context, (const unsigned char*) PADDING, padLen);
+    md5update(context, (const unsigned char*) bits, 8);
     encode(digest, context->state, 16);
     memset(context, 0, sizeof(*context));
 }
@@ -289,7 +289,7 @@ void md5transform(unsigned int state[4], const unsigned char block[64])
     memset(x, 0, sizeof(x));
 }
 
-void encode(unsigned char *output, const unsigned int *input, unsigned int len)
+void encode(unsigned char* output, const unsigned int* input, unsigned int len)
 {
     unsigned int i, j, k;
 
@@ -303,7 +303,7 @@ void encode(unsigned char *output, const unsigned int *input, unsigned int len)
     };
 }
 
-void decode(unsigned int *output, const unsigned char *input, unsigned int len)
+void decode(unsigned int* output, const unsigned char* input, unsigned int len)
 {
     unsigned int i, j;
 
@@ -314,17 +314,19 @@ void decode(unsigned int *output, const unsigned char *input, unsigned int len)
 }
 
 //---------------------------------------------------------------------------
-void md5(char *dest, const char *src, int size, char *password)
+void md5(char* dest, const char* src, int size, char* password)
 {
     int x;
-    char *e;
+    char* e;
     MD5_CTX context;
     unsigned char digest[16];
 
     if (size == 0)
-    { size = strlen(src); }
+    {
+        size = strlen(src);
+    }
     md5init(&context);
-    md5update(&context, (const unsigned char *) src, size);
+    md5update(&context, (const unsigned char*) src, size);
     md5final(digest, &context);
     e = dest;
     for(x = 0; x < 16; x++)
@@ -336,14 +338,16 @@ void md5(char *dest, const char *src, int size, char *password)
 }
 
 //---------------------------------------------------------------------------
-void md5b(unsigned char *dest, const char *src, int size, char *password)
+void md5b(unsigned char* dest, const char* src, int size, char* password)
 {
     MD5_CTX context;
 
     if (size == 0)
-    { size = strlen(src); }
+    {
+        size = strlen(src);
+    }
     md5init(&context);
-    md5update(&context, (const unsigned char *) src, size);
+    md5update(&context, (const unsigned char*) src, size);
     md5final(dest, &context);
 }
 //---------------------------------------------------------------------------

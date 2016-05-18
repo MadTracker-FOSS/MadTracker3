@@ -25,7 +25,7 @@ class MTPattManager;
 class MTPattManager: public MTCustomWinBehaviours
 {
 public:
-    MTPattern *patt;
+    MTPattern* patt;
     bool selecting;
     int otrack;
     int oline;
@@ -40,23 +40,23 @@ public:
     MTPoint cursor;
     int ccol, cpos;
 
-    MTPattManager(MTCustomWinControl *control);
+    MTPattManager(MTCustomWinControl* control);
 
     void MTCT ondestroy();
 
     void MTCT onsetbounds(int l, int t, int w, int h);
 
-    bool MTCT oncheckbounds(int &l, int &t, int &w, int &h);
+    bool MTCT oncheckbounds(int& l, int& t, int& w, int& h);
 
-    void MTCT ondraw(MTRect &rect);
+    void MTCT ondraw(MTRect& rect);
 
-    bool MTCT onmessage(MTCMessage &msg);
+    bool MTCT onmessage(MTCMessage& msg);
 
-    void *MTCT ongetoffsetrgn(int type);
+    void* MTCT ongetoffsetrgn(int type);
 
     void MTCT onoffset(int ox, int oy);
 
-    virtual void MTCT setpattern(MTPattern *newpatt);
+    virtual void MTCT setpattern(MTPattern* newpatt);
 
     virtual void MTCT setcursor(int l, int t, int p);
 
@@ -66,7 +66,7 @@ public:
 
     virtual void MTCT sethighlight(MTPoint value);
 
-    virtual void MTCT getsel(MTRect &sel);
+    virtual void MTCT getsel(MTRect& sel);
 
     virtual void MTCT setsel(MTRect value);
 
@@ -76,14 +76,14 @@ public:
 
     virtual void MTCT setselend(MTPoint value);
 
-    virtual int MTCT clienttodata(MTPoint &pos);
+    virtual int MTCT clienttodata(MTPoint& pos);
 
-    virtual void MTCT datatoclient(MTPoint &pos);
+    virtual void MTCT datatoclient(MTPoint& pos);
 
     virtual void MTCT stepit();
 
 private:
-    MTScroller *hs, *vs;
+    MTScroller* hs, * vs;
     int width, height;
     int tw, cw;
     int colwidth[MAX_PATT_TRACKS][MAX_PATT_COLS];
@@ -104,11 +104,11 @@ private:
 
     void MTCT drawcells(int t, int l, int w, int h);
 
-    void MTCT getposrect(int l, int h, MTRect &r);
+    void MTCT getposrect(int l, int h, MTRect& r);
 
-    void MTCT gettrackrect(int t, int w, MTRect &r);
+    void MTCT gettrackrect(int t, int w, MTRect& r);
 
-    void MTCT getcellsrect(int t, int l, int w, int h, MTRect &r);
+    void MTCT getcellsrect(int t, int l, int w, int h, MTRect& r);
 
     void MTCT checkcolors();
 };

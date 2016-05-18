@@ -15,7 +15,7 @@ struct RefreshStruct
 {
     int id;
     RefreshProc proc;
-    void *param;
+    void* param;
 };
 
 // Simple enough, this is the splash screen that appears for a short while whenever the program is
@@ -23,13 +23,13 @@ struct RefreshStruct
 class MTSplashLogo: public MTCustomWinBehaviours
 {
 public:
-    MTSplashLogo(MTCustomWinControl *control);
+    MTSplashLogo(MTCustomWinControl* control);
 
     void MTCT ondestroy();
 
-    void MTCT ondraw(MTRect &rect);
+    void MTCT ondraw(MTRect& rect);
 
-    bool MTCT onmessage(MTCMessage &msg);
+    bool MTCT onmessage(MTCMessage& msg);
 
     void MTCT setalpha(int alpha, int interval, int increment);
 
@@ -51,24 +51,24 @@ void stopInterface();
 void showInterface();
 
 //---------------------------------------------------------------------------
-void loadmodule(const char *filename);
+void loadmodule(const char* filename);
 
-void setmodule(void *module);
+void setmodule(void* module);
 
 //---------------------------------------------------------------------------
-extern void *wnd;
+extern void* wnd;
 
-extern MTDesktop *mtdsk;
+extern MTDesktop* mtdsk;
 
-extern MTResources *mtres, *skinres;
+extern MTResources* mtres, * skinres;
 
-extern Skin *skin;
+extern Skin* skin;
 
-extern MTImageList *sysimages;
+extern MTImageList* sysimages;
 
-extern MTModule *cmodule;
+extern MTModule* cmodule;
 
-extern MTArray *refreshprocs;
+extern MTArray* refreshprocs;
 
 extern bool candesign;
 

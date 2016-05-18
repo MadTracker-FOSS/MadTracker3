@@ -20,20 +20,22 @@
 //---------------------------------------------------------------------------
 // Microsoft Wave
 //---------------------------------------------------------------------------
-bool loadWAV(MTObject *object, char *filename, void *process)
+bool loadWAV(MTObject* object, char* filename, void* process)
 {
-    MTFile *f;
-    MTSample &sample = *(MTSample *) object;
+    MTFile* f;
+    MTSample& sample = *(MTSample*) object;
     int tmpl, size, size2, incl;
     char tmpc[512];
-    char *e;
-    RIFFfmt *fmt;
-    void *data;
+    char* e;
+    RIFFfmt* fmt;
+    void* data;
 
     if ((f = si->fileopen(filename, MTF_READ | MTF_SHAREREAD)) == 0)
-    { return false; }
+    {
+        return false;
+    }
     size = f->length();
-    RIFF &criff = *(RIFF *) f->getpointer(-1, sizeof(RIFF));
+    RIFF& criff = *(RIFF*) f->getpointer(-1, sizeof(RIFF));
     if ((criff.riffid != FOURCC('R', 'I', 'F', 'F')) || (criff.wave.waveid != FOURCC('W', 'A', 'V', 'E')))
     {
         f->releasepointer(&criff);
@@ -41,20 +43,26 @@ bool loadWAV(MTObject *object, char *filename, void *process)
     };
     f->releasepointer(&criff);
     f->seek(12, MTF_CURRENT);
-    sample.filename = (char *) si->memalloc(strlen(filename) + 1, 0);
+    sample.filename = (char*) si->memalloc(strlen(filename) + 1, 0);
     strcpy(sample.filename, filename);
     e = strrchr(filename, '/');
     if (!e)
-    { e = strrchr(filename, '\\'); }
+    {
+        e = strrchr(filename, '\\');
+    }
     if (e)
     {
         strcpy(tmpc, e + 1);
     }
     else
-    { strcpy(tmpc, filename); }
+    {
+        strcpy(tmpc, filename);
+    }
     tmpl = (int) strchr(tmpc, '.') - (int) tmpc;
     if (tmpl > 31)
-    { tmpl = 31; }
+    {
+        tmpl = 31;
+    }
     tmpc[tmpl] = '\0';
     strcpy(sample.name, tmpc);
     while(!f->eof())
@@ -64,7 +72,7 @@ bool loadWAV(MTObject *object, char *filename, void *process)
         switch (tmpl)
         {
             case FOURCC('f', 'm', 't', ' '):
-                fmt = (RIFFfmt *) f->getpointer(f->pos() - 8, sizeof(RIFFfmt));
+                fmt = (RIFFfmt*) f->getpointer(f->pos() - 8, sizeof(RIFFfmt));
                 f->seek(size, MTF_CURRENT);
                 if (fmt->tag != 1)
                 {
@@ -82,7 +90,9 @@ bool loadWAV(MTObject *object, char *filename, void *process)
                 break;
             case FOURCC('d', 'a', 't', 'a'):
                 if (!sample.splalloc(size / sample.sl))
-                { goto error; }
+                {
+                    goto error;
+                }
                 sample.fileoffset = f->pos();
                 sample.length = size;
                 sample.ns = size / sample.sl;
@@ -90,13 +100,17 @@ bool loadWAV(MTObject *object, char *filename, void *process)
                 data = f->getpointer(-1, size);
                 if (sample.depth == 1)
                 {
-                    a_deinterleave_8((char **) sample.data, (char *) data, sample.nchannels, sample.ns);
+                    a_deinterleave_8((char**) sample.data, (char*) data, sample.nchannels, sample.ns);
                 }
                 else
-                { a_deinterleave_16((short **) sample.data, (short *) data, sample.nchannels, sample.ns); }
+                {
+                    a_deinterleave_16((short**) sample.data, (short*) data, sample.nchannels, sample.ns);
+                }
 //			f->read(sample.data[0],size);
                 if (sample.depth == 1)
-                { sample.changesign(); }
+                {
+                    sample.changesign();
+                }
                 break;
             case FOURCC('L', 'I', 'S', 'T'):
                 incl = 0;
@@ -109,7 +123,9 @@ bool loadWAV(MTObject *object, char *filename, void *process)
                         f->read(&tmpl, 4);
                         f->read(&size2, 4);
                         if (size2 & 1)
-                        { size2++; }
+                        {
+                            size2++;
+                        }
                         incl += size2 + 8;
                         switch (tmpl)
                         {
@@ -131,12 +147,14 @@ bool loadWAV(MTObject *object, char *filename, void *process)
                     };
                 }
                 else
-                { f->seek(size, MTF_CURRENT); }
+                {
+                    f->seek(size, MTF_CURRENT);
+                }
                 break;
             case FOURCC('s', 'm', 'p', 'l'):
                 f->read(&tmpc, size);
-                sample.loops = *(int *) &tmpc[44];
-                sample.loope = *(int *) &tmpc[48];
+                sample.loops = *(int*) &tmpc[44];
+                sample.loope = *(int*) &tmpc[48];
                 break;
             default:
                 f->seek(size, MTF_CURRENT);

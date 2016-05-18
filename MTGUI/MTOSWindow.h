@@ -11,21 +11,21 @@
 class MTOSWindow: public MTControl
 {
 public:
-    MTOSWindow(int tg, MTWinControl *p, int l, int t, int w, int h);
+    MTOSWindow(int tg, MTWinControl* p, int l, int t, int w, int h);
 
     ~MTOSWindow();
 
     void MTCT setbounds(int l, int t, int w, int h);
 
-    void MTCT draw(MTRect &rect);
+    void MTCT draw(MTRect& rect);
 
-    bool MTCT message(MTCMessage &);
+    bool MTCT message(MTCMessage&);
 
     virtual void MTCT setcompatible(bool compatible);
 
-    virtual void *MTCT getoshandle();
+    virtual void* MTCT getoshandle();
 
-    virtual bool MTCT patchoscode(void *lib);
+    virtual bool MTCT patchoscode(void* lib);
 
 private:
     friend void initOSWindow();

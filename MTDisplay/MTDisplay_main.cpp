@@ -19,7 +19,7 @@ BOOL APIENTRY DllMain(HANDLE hModule,DWORD ul_reason_for_call,LPVOID lpReserved)
 }
 #else
 
-int main(int argc, const char *argv[])
+int main(int argc, const char* argv[])
 {
     return 0;
 }

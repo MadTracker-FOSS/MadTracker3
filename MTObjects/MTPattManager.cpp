@@ -15,9 +15,21 @@
 #include <MTXAPI/RES/MTObjectsRES.h>
 
 //---------------------------------------------------------------------------
-MTPattManager::MTPattManager(MTCustomWinControl *control):
-    MTCustomWinBehaviours(control), hs(0), vs(0), patt(0), selecting(false), otrack(0), oline(0), pattx(0), patty(0),
-    ccol(0), cpos(0), tw(0), drag(false), clpb(-1)
+MTPattManager::MTPattManager(MTCustomWinControl* control):
+    MTCustomWinBehaviours(control),
+    hs(0),
+    vs(0),
+    patt(0),
+    selecting(false),
+    otrack(0),
+    oline(0),
+    pattx(0),
+    patty(0),
+    ccol(0),
+    cpos(0),
+    tw(0),
+    drag(false),
+    clpb(-1)
 {
     int tmp, ah;
 
@@ -28,8 +40,8 @@ MTPattManager::MTPattManager(MTCustomWinControl *control):
     height = parent->height;
     updatemetrics();
     skin->getcontrolsize(MTC_SCROLLER, 0, tmp, ah);
-    hs = (MTScroller *) gi->newcontrol(MTC_SCROLLER, 0, parent, pattx, height - ah, width - pattx, 0, 0);
-    vs = (MTScroller *) gi->newcontrol(MTC_SCROLLER, 0, parent, pattx - ah, patty, 0, height - patty - ah, 0);
+    hs = (MTScroller*) gi->newcontrol(MTC_SCROLLER, 0, parent, pattx, height - ah, width - pattx, 0, 0);
+    vs = (MTScroller*) gi->newcontrol(MTC_SCROLLER, 0, parent, pattx - ah, patty, 0, height - patty - ah, 0);
     parent->hs = hs;
     parent->vs = vs;
     vs->type = MTST_VBAR;
@@ -59,9 +71,13 @@ void MTPattManager::onsetbounds(int l, int t, int w, int h)
     int ontracks, onlines;
 
     if (w > 0)
-    { width = w; }
+    {
+        width = w;
+    }
     if (h > 0)
-    { height = h; }
+    {
+        height = h;
+    }
     ontracks = ntracks;
     onlines = nlines;
     updatemetrics(true);
@@ -77,7 +93,7 @@ void MTPattManager::onsetbounds(int l, int t, int w, int h)
     };
 }
 
-bool MTPattManager::oncheckbounds(int &l, int &t, int &w, int &h)
+bool MTPattManager::oncheckbounds(int& l, int& t, int& w, int& h)
 {
     bool ok = true;
 
@@ -94,7 +110,7 @@ bool MTPattManager::oncheckbounds(int &l, int &t, int &w, int &h)
     return ok;
 }
 
-void MTPattManager::ondraw(MTRect &rect)
+void MTPattManager::ondraw(MTRect& rect)
 {
     int x, y, w, h, ch, tw;
     MTRect r;
@@ -123,9 +139,13 @@ void MTPattManager::ondraw(MTRect &rect)
         r.left = pattx;
         r.right = pattx + cw;
         if (rect.left >= r.left)
-        { r.left = rect.left; }
+        {
+            r.left = rect.left;
+        }
         if (rect.right < r.right)
-        { r.right = rect.right; }
+        {
+            r.right = rect.right;
+        }
         if (r.right > r.left)
         {
             r.left -= pattx;
@@ -137,7 +157,9 @@ void MTPattManager::ondraw(MTRect &rect)
             {
                 tw += cellwidth[y];
                 if ((tw >= r.left) && (x < 0))
-                { x = y - otrack; }
+                {
+                    x = y - otrack;
+                }
                 if (tw >= r.right)
                 {
                     w = y - otrack;
@@ -145,15 +167,23 @@ void MTPattManager::ondraw(MTRect &rect)
                 };
             };
             if (x < 0)
-            { x = 0; }
+            {
+                x = 0;
+            }
             if ((rect.top < patty) && (rect.bottom >= 0))
-            { drawtrack(x, w - x + 1); }
+            {
+                drawtrack(x, w - x + 1);
+            }
             r.top = patty;
             r.bottom = patty + ch;
             if (rect.top >= r.top)
-            { r.top = rect.top; }
+            {
+                r.top = rect.top;
+            }
             if (rect.bottom < r.bottom)
-            { r.bottom = rect.bottom; }
+            {
+                r.bottom = rect.bottom;
+            }
             if (r.bottom > r.top)
             {
                 y = (r.top - patty) / cellheight;
@@ -165,15 +195,17 @@ void MTPattManager::ondraw(MTRect &rect)
     };
 }
 
-bool MTPattManager::onmessage(MTCMessage &msg)
+bool MTPattManager::onmessage(MTCMessage& msg)
 {
     int x, c, n, coffset;
-    unsigned char *cdata;
+    unsigned char* cdata;
     MTPoint mp = {msg.x, msg.y};
     MTPoint mp2;
 
     if (!patt)
-    { return false; }
+    {
+        return false;
+    }
     c = clienttodata(mp);
     coffset = 0;
     switch (msg.msg)
@@ -184,7 +216,9 @@ bool MTPattManager::onmessage(MTCMessage &msg)
             if (msg.y < patty)
             {
                 if (mp.x < 0)
-                { return true; }
+                {
+                    return true;
+                }
                 int bh;
                 skin->getcontrolsize(MTC_STATUS, 0, x, bh);
                 mp2 = mp;
@@ -201,7 +235,9 @@ bool MTPattManager::onmessage(MTCMessage &msg)
                         patt->tracks[mp.x].solo ^= true;
                     }
                     else
-                    { patt->tracks[mp.x].rec ^= true; }
+                    {
+                        patt->tracks[mp.x].rec ^= true;
+                    }
                     if (parent->parent)
                     {
                         MTCMessage msg = {MTCM_CHANGE, 0, parent};
@@ -226,8 +262,11 @@ bool MTPattManager::onmessage(MTCMessage &msg)
                 };
                 for(x = 0; x < mp.x; x++)
                 {
-                    TrackInfo &ti = patt->tracks[x];
-                    for(n = 0; n < ti.ncolumns; n++) coffset += colsize[x][n];
+                    TrackInfo& ti = patt->tracks[x];
+                    for(n = 0; n < ti.ncolumns; n++)
+                    {
+                        coffset += colsize[x][n];
+                    }
                 };
                 cdata = patt->data + mp.y * patt->linesize + coffset;
                 if (c >= 0)
@@ -256,7 +295,9 @@ bool MTPattManager::onmessage(MTCMessage &msg)
             break;
         case MTCM_MOUSEMOVE:
             if (parent->processmessage(msg))
-            { return true; }
+            {
+                return true;
+            }
             if ((!hs->slide) && (!vs->slide))
             {
                 if ((!drag) && (m.x >= 0) && (gi->isdragged(msg.p, m)))
@@ -275,7 +316,9 @@ bool MTPattManager::onmessage(MTCMessage &msg)
             break;
         case MTCM_KEYDOWN:
             if (!patt)
-            { return false; }
+            {
+                return false;
+            }
             if ((msg.s) && (msg.s->group == peksgroup))
             {
                 switch (msg.s->user)
@@ -315,10 +358,16 @@ bool MTPattManager::onmessage(MTCMessage &msg)
         case MTCM_CHAR:
             for(x = 0; x < cursor.x; x++)
             {
-                TrackInfo &ti = patt->tracks[x];
-                for(n = 0; n < ti.ncolumns; n++) coffset += colsize[x][n];
+                TrackInfo& ti = patt->tracks[x];
+                for(n = 0; n < ti.ncolumns; n++)
+                {
+                    coffset += colsize[x][n];
+                }
             };
-            for(n = 0; n < ccol; n++) coffset += colsize[cursor.x][n];
+            for(n = 0; n < ccol; n++)
+            {
+                coffset += colsize[cursor.x][n];
+            }
             cdata = patt->data + cursor.y * patt->linesize + coffset;
             patt->tracks[cursor.x].cols[ccol].handler->onmessage(this, msg, cpos, cdata);
             break;
@@ -329,10 +378,10 @@ bool MTPattManager::onmessage(MTCMessage &msg)
     return false;
 }
 
-void *MTPattManager::ongetoffsetrgn(int type)
+void* MTPattManager::ongetoffsetrgn(int type)
 {
     MTRect r = {pattx, patty, pattx + cw, patty + nlines * cellheight};
-    void *rgn, *op;
+    void* rgn, * op;
 
     rgn = recttorgn(r);
     if (type == 0)
@@ -363,7 +412,7 @@ void MTPattManager::onoffset(int ox, int oy)
     oline = vs->pos - ((nlines - 1) >> 1);
 }
 
-void MTPattManager::setpattern(MTPattern *newpatt)
+void MTPattManager::setpattern(MTPattern* newpatt)
 {
     int t, x, n;
 
@@ -374,7 +423,7 @@ void MTPattManager::setpattern(MTPattern *newpatt)
         x = 0;
         for(t = 0; t < patt->ntracks; t++)
         {
-            TrackInfo &ti = patt->tracks[t];
+            TrackInfo& ti = patt->tracks[t];
             for(n = 0; n < ti.ncolumns; n++)
             {
                 colwidth[t][n] = ti.cols[n].handler->getwidth(skin->fontwidth);
@@ -407,7 +456,10 @@ void MTPattManager::setcursor(int l, int t, int p)
                 if (ccol-- == 0)
                 {
                     t--;
-                    while(t < 0) t += patt->ntracks;
+                    while(t < 0)
+                    {
+                        t += patt->ntracks;
+                    }
                     ccol = patt->tracks[t].ncolumns - 1;
                 };
                 cpos = colncpos[t][ccol] - 1;
@@ -419,7 +471,9 @@ void MTPattManager::setcursor(int l, int t, int p)
                 {
                     t++;
                     if (t >= patt->ntracks)
-                    { t %= patt->ntracks; }
+                    {
+                        t %= patt->ntracks;
+                    }
                     ccol = 0;
                 };
             }
@@ -428,12 +482,22 @@ void MTPattManager::setcursor(int l, int t, int p)
                 cpos = p;
             };
         };
-        while(t < 0) t += patt->ntracks;
+        while(t < 0)
+        {
+            t += patt->ntracks;
+        }
         if (t >= patt->ntracks)
-        { t %= patt->ntracks; }
-        while(l < 0) l += patt->nlines;
+        {
+            t %= patt->ntracks;
+        }
+        while(l < 0)
+        {
+            l += patt->nlines;
+        }
         if (l >= patt->nlines)
-        { l %= patt->nlines; }
+        {
+            l %= patt->nlines;
+        }
         cursor.x = t;
         cursor.y = l;
         if (parent->parent)
@@ -446,13 +510,17 @@ void MTPattManager::setcursor(int l, int t, int p)
             setotrack(t);
         }
         else if (t >= otrack + ntracks)
-        { setotrack(t - ntracks + 1); }
+        {
+            setotrack(t - ntracks + 1);
+        }
         if (l < oline)
         {
             setoline(l);
         }
         else if (l >= oline + nlines)
-        { setoline(l - nlines + 1); }
+        {
+            setoline(l - nlines + 1);
+        }
         if (parent->parent)
         {
             getcellsrect(cursor.x - otrack, cursor.y - oline, 1, 1, msg.dr);
@@ -466,9 +534,13 @@ void MTPattManager::setotrack(int value)
     if (patt)
     {
         if (value > patt->ntracks - ntracks)
-        { value = patt->ntracks - ntracks; }
+        {
+            value = patt->ntracks - ntracks;
+        }
         if (value < 0)
-        { value = 0; }
+        {
+            value = 0;
+        }
     }
     else
     {
@@ -484,9 +556,13 @@ void MTPattManager::setoline(int value)
     if (patt)
     {
         if (value > patt->nlines - 1 - nu)
-        { value = patt->nlines - 1 - nu; }
+        {
+            value = patt->nlines - 1 - nu;
+        }
         if (value < -nu)
-        { value = -nu; }
+        {
+            value = -nu;
+        }
         vs->setposition(value + nu);
     }
     else
@@ -516,7 +592,7 @@ void MTPattManager::sethighlight(MTPoint value)
     };
 }
 
-void MTPattManager::getsel(MTRect &sel)
+void MTPattManager::getsel(MTRect& sel)
 {
     MTRect r = {selstart.x, selstart.y, selend.x, selend.y};
 
@@ -534,25 +610,33 @@ void MTPattManager::setsel(MTRect value)
         value.left = 0;
     }
     else if (value.left >= patt->ntracks)
-    { value.left = patt->ntracks - 1; }
+    {
+        value.left = patt->ntracks - 1;
+    }
     if (value.top < 0)
     {
         value.top = 0;
     }
     else if (value.top >= patt->nlines)
-    { value.top = patt->nlines - 1; }
+    {
+        value.top = patt->nlines - 1;
+    }
     if (value.right < 0)
     {
         value.right = 0;
     }
     else if (value.right >= patt->ntracks)
-    { value.right = patt->ntracks - 1; }
+    {
+        value.right = patt->ntracks - 1;
+    }
     if (value.bottom < 0)
     {
         value.bottom = 0;
     }
     else if (value.bottom >= patt->nlines)
-    { value.bottom = patt->nlines - 1; }
+    {
+        value.bottom = patt->nlines - 1;
+    }
     s = selstart;
     e = selend;
     pminmax(s, e);
@@ -565,7 +649,9 @@ void MTPattManager::setsel(MTRect value)
         MTCMessage msg = {MTCM_CHANGE, 0, parent};
         getcellsrect(s.x - otrack, s.y - oline, e.x - s.x + 1, e.y - s.y + 1, msg.dr);
         parent->parent->message(msg);
-        getcellsrect(value.left - otrack, value.top - oline, value.right - value.left + 1, value.bottom - value.top + 1, msg.dr);
+        getcellsrect(
+            value.left - otrack, value.top - oline, value.right - value.left + 1, value.bottom - value.top + 1, msg.dr
+        );
         parent->parent->message(msg);
     };
 }
@@ -588,19 +674,25 @@ void MTPattManager::setselstart(MTPoint value)
     MTPoint s, e;
 
     if (!patt)
-    { return; }
+    {
+        return;
+    }
     if (value.x < 0)
     {
         value.x = 0;
     }
     else if (value.x >= patt->ntracks)
-    { value.x = patt->ntracks - 1; }
+    {
+        value.x = patt->ntracks - 1;
+    }
     if (value.y < 0)
     {
         value.y = 0;
     }
     else if (value.y >= patt->nlines)
-    { value.y = patt->nlines - 1; }
+    {
+        value.y = patt->nlines - 1;
+    }
     s = selstart;
     e = selend;
     pminmax(s, e);
@@ -624,19 +716,25 @@ void MTPattManager::setselend(MTPoint value)
     bool in1, in2;
 
     if (!patt)
-    { return; }
+    {
+        return;
+    }
     if (value.x < 0)
     {
         value.x = 0;
     }
     else if (value.x >= patt->ntracks)
-    { value.x = patt->ntracks - 1; }
+    {
+        value.x = patt->ntracks - 1;
+    }
     if (value.y < 0)
     {
         value.y = 0;
     }
     else if (value.y >= patt->nlines)
-    { value.y = patt->nlines - 1; }
+    {
+        value.y = patt->nlines - 1;
+    }
     if (selecting)
     {
         if (value.x < otrack)
@@ -644,13 +742,17 @@ void MTPattManager::setselend(MTPoint value)
             setotrack(value.x);
         }
         else if (value.x >= ntracks + otrack)
-        { setotrack(value.x - ntracks + 1); }
+        {
+            setotrack(value.x - ntracks + 1);
+        }
         if (value.y < oline)
         {
             setoline(value.y);
         }
         else if (value.y >= nlines + oline)
-        { setoline(value.y - nlines + 1); }
+        {
+            setoline(value.y - nlines + 1);
+        }
     };
     s = selstart;
     e = selend;
@@ -661,16 +763,24 @@ void MTPattManager::setselend(MTPoint value)
     pminmax(ns, ne);
     minx = s.x;
     if (ns.x < minx)
-    { minx = ns.x; }
+    {
+        minx = ns.x;
+    }
     maxx = e.x;
     if (ne.x > maxx)
-    { maxx = ne.x; }
+    {
+        maxx = ne.x;
+    }
     miny = s.y;
     if (ns.y < miny)
-    { miny = ns.y; }
+    {
+        miny = ns.y;
+    }
     maxy = e.y;
     if (ne.y > maxy)
-    { maxy = ne.y; }
+    {
+        maxy = ne.y;
+    }
     if (parent->parent)
     {
         MTCMessage msg = {MTCM_CHANGE, 0, parent};
@@ -690,7 +800,7 @@ void MTPattManager::setselend(MTPoint value)
     };
 }
 
-int MTPattManager::clienttodata(MTPoint &pos)
+int MTPattManager::clienttodata(MTPoint& pos)
 {
     int x;
     int c = 0;
@@ -710,19 +820,23 @@ int MTPattManager::clienttodata(MTPoint &pos)
             {
                 if (x < cellwidth[pos.x])
                 {
-                    TrackInfo &ti = patt->tracks[pos.x];
+                    TrackInfo& ti = patt->tracks[pos.x];
                     for(c = 0; (c < ti.ncolumns) && (x >= colwidth[pos.x][c]); c++)
                     {
                         x -= colwidth[pos.x][c];
                     };
                     if (c == ti.ncolumns)
-                    { c = -1; }
+                    {
+                        c = -1;
+                    }
                     break;
                 };
                 x -= cellwidth[pos.x];
             };
             if (pos.x >= patt->ntracks)
-            { pos.x = -1; }
+            {
+                pos.x = -1;
+            }
         };
         pos.y = pos.y - patty;
         if (pos.y < 0)
@@ -733,7 +847,9 @@ int MTPattManager::clienttodata(MTPoint &pos)
         {
             pos.y = (pos.y / cellheight) + oline;
             if (pos.y >= patt->nlines)
-            { pos.y = -1; }
+            {
+                pos.y = -1;
+            }
         };
         return c;
     }
@@ -745,7 +861,7 @@ int MTPattManager::clienttodata(MTPoint &pos)
     };
 }
 
-void MTPattManager::datatoclient(MTPoint &pos)
+void MTPattManager::datatoclient(MTPoint& pos)
 {
     int x, t;
 
@@ -753,7 +869,10 @@ void MTPattManager::datatoclient(MTPoint &pos)
     {
         x = pos.x;
         pos.x = pattx;
-        for(t = otrack; t < otrack + x; t++) pos.x += cellwidth[t];
+        for(t = otrack; t < otrack + x; t++)
+        {
+            pos.x += cellwidth[t];
+        }
         pos.y = (pos.y - oline) * cellheight + patty;
     }
     else
@@ -811,7 +930,9 @@ void MTPattManager::updatemetrics(bool passive)
         for(x = otrack; x < patt->ntracks; x++)
         {
             if (w < cellwidth[x])
-            { break; }
+            {
+                break;
+            }
             ntracks++;
             w -= cellwidth[x];
             cw += cellwidth[x];
@@ -833,7 +954,9 @@ void MTPattManager::updatescroller(bool passive)
     int nu = (nlines - 1) >> 1;
 
     if ((!hs) || (!vs))
-    { return; }
+    {
+        return;
+    }
     hs->os = (ntracks > 0) ? cw / ntracks : 0;
     vs->os = cellheight;
     hs->page = ntracks;
@@ -868,10 +991,12 @@ void MTPattManager::drawpos(int l, int h)
     int bx = 0;
     int by, ah;
     int state = 0;
-    MTBitmap *b;
+    MTBitmap* b;
 
     if (!patt)
-    { return; }
+    {
+        return;
+    }
     if (l < 0)
     {
         if (l + h > 0)
@@ -880,7 +1005,9 @@ void MTPattManager::drawpos(int l, int h)
             l = 0;
         }
         else
-        { return; }
+        {
+            return;
+        }
     };
     if (l + h > nlines)
     {
@@ -889,7 +1016,9 @@ void MTPattManager::drawpos(int l, int h)
             return;
         }
         else
-        { h = nlines - l; }
+        {
+            h = nlines - l;
+        }
     };
 
     by = patty + l * cellheight;
@@ -906,7 +1035,9 @@ void MTPattManager::drawpos(int l, int h)
                 return;
             }
             else
-            { h = y - l; }
+            {
+                h = y - l;
+            }
         };
     };
     z = l + oline;
@@ -915,7 +1046,9 @@ void MTPattManager::drawpos(int l, int h)
         for(y = 0; y < h; y++)
         {
             if ((l + y >= nlines) || (z >= patt->nlines))
-            { break; }
+            {
+                break;
+            }
             if (z >= 0)
             {
                 b->fill(bx, by, pattx - ah, cellheight, colors[0][z % patt->lpb]);
@@ -933,7 +1066,9 @@ void MTPattManager::drawpos(int l, int h)
                     skin->drawhex(z, zeroes, 3, b, nx, by, skin->getcolor(SC_PATT_TEXT1 + state));
                 }
                 else
-                { skin->drawdec(z, zeroes, 3, b, nx, by, skin->getcolor(SC_PATT_TEXT1 + state)); }
+                {
+                    skin->drawdec(z, zeroes, 3, b, nx, by, skin->getcolor(SC_PATT_TEXT1 + state));
+                }
             };
             z++;
             by += cellheight;
@@ -946,10 +1081,10 @@ void MTPattManager::drawtrack(int t, int w)
     int x, y, ol, l, r;
     int bw, bh;
     MTRect cr;
-    char *end;
+    char* end;
     char nullname = 0;
     int bx, by, w2;
-    MTBitmap *b;
+    MTBitmap* b;
     MTPoint pt[3];
     char tracks[4];
 
@@ -961,7 +1096,9 @@ void MTPattManager::drawtrack(int t, int w)
             t = 0;
         }
         else
-        { return; }
+        {
+            return;
+        }
     };
     if (t + w > ntracks)
     {
@@ -970,7 +1107,9 @@ void MTPattManager::drawtrack(int t, int w)
             return;
         }
         else
-        { w = ntracks - t; }
+        {
+            w = ntracks - t;
+        }
     };
     bx = pattx;
     w2 = 0;
@@ -995,7 +1134,9 @@ void MTPattManager::drawtrack(int t, int w)
                 t = -otrack;
             }
             else
-            { return; }
+            {
+                return;
+            }
         };
         x = patt->ntracks - otrack;
         if (t + w > x)
@@ -1005,7 +1146,9 @@ void MTPattManager::drawtrack(int t, int w)
                 return;
             }
             else
-            { w = x - t; }
+            {
+                w = x - t;
+            }
         };
     };
     skin->getcontrolsize(MTC_STATUS, 0, bw, bh);
@@ -1051,7 +1194,7 @@ void MTPattManager::drawtrack(int t, int w)
             end = &nullname;
             if (patt->parent)
             {
-                MTModule &cmodule = *(MTModule *) patt->parent;
+                MTModule& cmodule = *(MTModule*) patt->parent;
                 if (A(cmodule.trk, Track)[patt->tracks[y].id])
                 {
                     end = A(cmodule.trk, Track)[patt->tracks[y].id]->name;
@@ -1099,7 +1242,7 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
     int px, py;
     int bx, by;
     int fw = skin->fontwidth / 2;
-    MTBitmap *b;
+    MTBitmap* b;
     MTRect r, r2;
     ColumnDrawState cstate;
 
@@ -1111,7 +1254,9 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
             t = 0;
         }
         else
-        { return; }
+        {
+            return;
+        }
     };
     if (l < 0)
     {
@@ -1121,7 +1266,9 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
             l = 0;
         }
         else
-        { return; }
+        {
+            return;
+        }
     };
     if (t + w > ntracks)
     {
@@ -1130,7 +1277,9 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
             return;
         }
         else
-        { w = ntracks - t; }
+        {
+            w = ntracks - t;
+        }
     };
     if (l + h > nlines)
     {
@@ -1139,7 +1288,9 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
             return;
         }
         else
-        { h = nlines - l; }
+        {
+            h = nlines - l;
+        }
     };
     bx = pattx;
     w2 = 0;
@@ -1162,7 +1313,9 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
                 t = -otrack;
             }
             else
-            { return; }
+            {
+                return;
+            }
         };
         if (l < -oline)
         {
@@ -1172,7 +1325,9 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
                 l = -oline;
             }
             else
-            { return; }
+            {
+                return;
+            }
         };
         x = patt->ntracks - otrack;
         y = patt->nlines - oline;
@@ -1183,7 +1338,9 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
                 return;
             }
             else
-            { w = x - t; }
+            {
+                w = x - t;
+            }
         };
         if (l + h > y)
         {
@@ -1192,7 +1349,9 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
                 return;
             }
             else
-            { h = y - l; }
+            {
+                h = y - l;
+            }
         };
     };
     by = patty + l * cellheight;
@@ -1209,8 +1368,11 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
         coffset = 0;
         for(x = 0; x < t + otrack; x++)
         {
-            TrackInfo &ti = patt->tracks[x];
-            for(n = 0; n < ti.ncolumns; n++) coffset += colsize[x][n];
+            TrackInfo& ti = patt->tracks[x];
+            for(n = 0; n < ti.ncolumns; n++)
+            {
+                coffset += colsize[x][n];
+            }
         };
         getsel(r2);
         r2.left -= otrack + t;
@@ -1221,22 +1383,38 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
         {
             r.left = r.right = px + 2;
             if ((l + y >= nlines) || (l + y + oline >= patt->nlines))
-            { break; }
-            unsigned char *cdata = patt->data + (y + l + oline) * patt->linesize + coffset;
+            {
+                break;
+            }
+            unsigned char* cdata = patt->data + (y + l + oline) * patt->linesize + coffset;
             for(x = 0, ct = t + otrack; x < w; x++, ct++)
             {
-                TrackInfo &ti = patt->tracks[ct];
+                TrackInfo& ti = patt->tracks[ct];
                 if ((t + x >= ntracks) || (t + x + otrack >= patt->ntracks))
-                { break; }
+                {
+                    break;
+                }
                 cstate.flags &= (~CDS_SELECTED);
                 if ((x >= r2.left) && (x <= r2.right) && (y >= r2.top) && (y <= r2.bottom))
                 {
                     cstate.flags |= CDS_SELECTED;
-                    b->fill(r.right - 2, r.top, cellwidth[t + x + otrack], r.bottom - r.top, colors[1][(l + y + oline) % patt->lpb]);
+                    b->fill(
+                        r.right - 2,
+                        r.top,
+                        cellwidth[t + x + otrack],
+                        r.bottom - r.top,
+                        colors[1][(l + y + oline) % patt->lpb]
+                    );
                 }
                 else
                 {
-                    b->fill(r.right - 2, r.top, cellwidth[t + x + otrack], r.bottom - r.top, colors[0][(l + y + oline) % patt->lpb]);
+                    b->fill(
+                        r.right - 2,
+                        r.top,
+                        cellwidth[t + x + otrack],
+                        r.bottom - r.top,
+                        colors[0][(l + y + oline) % patt->lpb]
+                    );
                 };
                 for(n = 0; n < ti.ncolumns; n++)
                 {
@@ -1247,7 +1425,9 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
                         cstate.cursor = cpos;
                     }
                     else
-                    { cstate.cursor = -1; }
+                    {
+                        cstate.cursor = -1;
+                    }
                     ti.cols[n].handler->drawcolumn(b, r, cdata, cstate);
                     cdata += colsize[ct][n];
                     r.right += fw;
@@ -1279,7 +1459,7 @@ void MTPattManager::drawcells(int t, int l, int w, int h)
     };
 }
 
-void MTPattManager::getposrect(int l, int h, MTRect &r)
+void MTPattManager::getposrect(int l, int h, MTRect& r)
 {
     r.left = 0;
     r.top = patty + l * cellheight;
@@ -1287,26 +1467,38 @@ void MTPattManager::getposrect(int l, int h, MTRect &r)
     r.bottom = r.top + h * cellheight;
 }
 
-void MTPattManager::gettrackrect(int t, int w, MTRect &r)
+void MTPattManager::gettrackrect(int t, int w, MTRect& r)
 {
     int x;
 
     r.left = pattx;
-    for(x = otrack; x < otrack + t; x++) r.left += cellwidth[x];
+    for(x = otrack; x < otrack + t; x++)
+    {
+        r.left += cellwidth[x];
+    }
     r.right = r.left;
-    for(x = otrack + t; x < otrack + t + w; x++) r.right += cellwidth[x];
+    for(x = otrack + t; x < otrack + t + w; x++)
+    {
+        r.right += cellwidth[x];
+    }
     r.top = 0;
     r.bottom = patty;
 }
 
-void MTPattManager::getcellsrect(int t, int l, int w, int h, MTRect &r)
+void MTPattManager::getcellsrect(int t, int l, int w, int h, MTRect& r)
 {
     int x;
 
     r.left = pattx;
-    for(x = otrack; x < otrack + t; x++) r.left += cellwidth[x];
+    for(x = otrack; x < otrack + t; x++)
+    {
+        r.left += cellwidth[x];
+    }
     r.right = r.left;
-    for(; x < otrack + t + w; x++) r.right += cellwidth[x];
+    for(; x < otrack + t + w; x++)
+    {
+        r.right += cellwidth[x];
+    }
     r.top = patty + l * cellheight;
     r.bottom = r.top + h * cellheight;
 }
@@ -1316,7 +1508,9 @@ void MTPattManager::checkcolors()
     int x;
 
     if ((!patt) || (patt->lpb == clpb))
-    { return; }
+    {
+        return;
+    }
     clpb = patt->lpb;
     colors[0][0] = skin->getcolor(SC_PATT_BACK3);
     colors[0][1] = skin->getcolor(SC_PATT_BACK1);

@@ -30,57 +30,57 @@ class MTWrapper;
 struct HotControl
 {
     char hotkey;
-    MTControl *ctrl;
+    MTControl* ctrl;
 };
 
 class MTWindow: public MTWinControl
 {
 public:
     int style;
-    char *caption;
+    char* caption;
     int imageindex;
-    MTWrapper *wrapper;
+    MTWrapper* wrapper;
     bool modified;
     MTRect br;
     int btnx, btny, btnw, btnh, btno, btnd;
 
-    MTWindow(int tg, MTWinControl *p, int l, int t, int w, int h, int s);
+    MTWindow(int tg, MTWinControl* p, int l, int t, int w, int h, int s);
 
     ~MTWindow();
 
-    int MTCT loadfromstream(MTFile *f, int size, int flags);
+    int MTCT loadfromstream(MTFile* f, int size, int flags);
 
-    int MTCT savetostream(MTFile *f, int flags);
+    int MTCT savetostream(MTFile* f, int flags);
 
     int MTCT getnumproperties(int id);
 
-    bool MTCT getpropertytype(int id, char **name, int &flags);
+    bool MTCT getpropertytype(int id, char** name, int& flags);
 
-    bool MTCT getproperty(int id, void *value);
+    bool MTCT getproperty(int id, void* value);
 
-    bool MTCT setproperty(int id, void *value);
+    bool MTCT setproperty(int id, void* value);
 
-    bool MTCT checkbounds(int &l, int &t, int &w, int &h);
+    bool MTCT checkbounds(int& l, int& t, int& w, int& h);
 
-    void MTCT getrect(MTRect &r, int client);
+    void MTCT getrect(MTRect& r, int client);
 
     void MTCT switchflags(int f, bool set);
 
-    void MTCT draw(MTRect &rect);
+    void MTCT draw(MTRect& rect);
 
-    bool MTCT message(MTCMessage &msg);
+    bool MTCT message(MTCMessage& msg);
 
-    void MTCT setparent(MTWinControl *parent);
+    void MTCT setparent(MTWinControl* parent);
 
     void MTCT updateregions();
 
     virtual void MTCT setstyle(int s);
 
-    virtual void MTCT setcaption(const char *c);
+    virtual void MTCT setcaption(const char* c);
 
-    virtual void MTCT addhotkey(MTControl *ctrl, char hotkey);
+    virtual void MTCT addhotkey(MTControl* ctrl, char hotkey);
 
-    virtual void MTCT delhotkey(MTControl *ctrl);
+    virtual void MTCT delhotkey(MTControl* ctrl);
 
     virtual void MTCT setminsize(int width, int height);
 
@@ -93,9 +93,9 @@ private:
 
     int minsize[2], maxsize[2];
     MTRect prev;
-    MTResources *res;
+    MTResources* res;
     int resid;
-    MTArray *hotcontrols;
+    MTArray* hotcontrols;
 
     void MTCT updateborders();
 };

@@ -54,12 +54,12 @@ struct IGEN
 //---------------------------------------------------------------------------
 // Sound Font 2
 //---------------------------------------------------------------------------
-bool loadSF2(MTObject *object, char *filename, void *process)
+bool loadSF2(MTObject* object, char* filename, void* process)
 {
-    MTInstrument &instr = *(MTInstrument *) object;
-    MTSample *sample;
+    MTInstrument& instr = *(MTInstrument*) object;
+    MTSample* sample;
     int spldata, oldseek;
-    MTFile *f;
+    MTFile* f;
     int x, y, tmpl, size, size2, incl;
     SHDR shdr;
     IGEN igen;
@@ -81,9 +81,11 @@ bool loadSF2(MTObject *object, char *filename, void *process)
     } splinfo[MAX_GRPS];
 
     if ((f = si->fileopen(filename, MTF_READ | MTF_SHAREREAD)) == 0)
-    { return false; }
+    {
+        return false;
+    }
     size = f->length();
-    RIFF &criff = *(RIFF *) f->getpointer(-1, sizeof(RIFF));
+    RIFF& criff = *(RIFF*) f->getpointer(-1, sizeof(RIFF));
     if ((criff.riffid != FOURCC('R', 'I', 'F', 'F')) || (criff.wave.waveid != FOURCC('s', 'f', 'b', 'k')))
     {
         f->releasepointer(&criff);
@@ -107,7 +109,9 @@ bool loadSF2(MTObject *object, char *filename, void *process)
                         f->read(&tmpl, 4);
                         f->read(&size2, 4);
                         if (size2 & 1)
-                        { size2++; }
+                        {
+                            size2++;
+                        }
                         incl += size2 + 8;
                         switch (tmpl)
                         {
@@ -134,7 +138,9 @@ bool loadSF2(MTObject *object, char *filename, void *process)
                         f->read(&tmpl, 4);
                         f->read(&size2, 4);
                         if (size2 & 1)
-                        { size2++; }
+                        {
+                            size2++;
+                        }
                         incl += size2 + 8;
                         switch (tmpl)
                         {
@@ -153,7 +159,9 @@ bool loadSF2(MTObject *object, char *filename, void *process)
                         f->read(&tmpl, 4);
                         f->read(&size2, 4);
                         if (size2 & 1)
-                        { size2++; }
+                        {
+                            size2++;
+                        }
                         incl += size2 + 8;
                         switch (tmpl)
                         {
@@ -180,7 +188,9 @@ bool loadSF2(MTObject *object, char *filename, void *process)
                                 for(x = 0; x < nbags; x++)
                                 {
                                     if (x == MAX_GRPS)
-                                    { break; }
+                                    {
+                                        break;
+                                    }
                                     f->seek(bags[x].ioffset * 4, MTF_BEGIN);
                                     first = true;
                                     end = false;
@@ -201,7 +211,9 @@ bool loadSF2(MTObject *object, char *filename, void *process)
                                                 for(y = igen.amount.ranges.lo - 11; y <= igen.amount.ranges.hi - 11; y++)
                                                 {
                                                     if ((y >= 0) && (y < 96))
-                                                    { instr.range[0][y] = x; }
+                                                    {
+                                                        instr.range[0][y] = x;
+                                                    }
                                                 };
                                                 break;
                                             case 44: // Vol range
@@ -240,9 +252,11 @@ bool loadSF2(MTObject *object, char *filename, void *process)
                                     f->read(&shdr, sizeof(SHDR));
                                     if ((strcmp(shdr.samplename, "EOS") != 0) && (instr.acceptoscillator()))
                                     {
-                                        sample = (MTSample *) oi->newobject(MTO_MTSAMPLE, instr.parent, -1);
+                                        sample = (MTSample*) oi->newobject(MTO_MTSAMPLE, instr.parent, -1);
                                         if (!sample)
-                                        { goto error; }
+                                        {
+                                            goto error;
+                                        }
                                         tmpl = instr.addoscillator(sample);
                                         y = 0;
                                         for(x = 0; x < MAX_GRPS; x++)
@@ -275,7 +289,9 @@ bool loadSF2(MTObject *object, char *filename, void *process)
                                         instr.grp[tmpl].pitch = splinfo[y].pitch;
                                         sample->length = shdr.end - shdr.start;
                                         if (sample->length < 0)
-                                        { sample->length = 0; }
+                                        {
+                                            sample->length = 0;
+                                        }
                                         sample->splalloc(sample->length / sample->sl);
                                         oldseek = f->seek(1, MTF_CURRENT);
                                         f->seek(spldata + shdr.start * 2, MTF_BEGIN);
@@ -297,7 +313,9 @@ bool loadSF2(MTObject *object, char *filename, void *process)
             };
         }
         else
-        { f->seek(size, MTF_CURRENT); }
+        {
+            f->seek(size, MTF_CURRENT);
+        }
     };
     delete f;
     return true;
@@ -306,7 +324,9 @@ bool loadSF2(MTObject *object, char *filename, void *process)
     for(x = 0; x < MAX_GRPS; x++)
     {
         if (instr.grp[x].spl)
-        { delete instr.grp[x].spl; }
+        {
+            delete instr.grp[x].spl;
+        }
     };
     delete f;
     return false;

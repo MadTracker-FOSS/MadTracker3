@@ -19,7 +19,7 @@
 #include <MTXAPI/MTXSystem2.h>
 
 //---------------------------------------------------------------------------
-static const char *dspname = {"MadTracker DSP"};
+static const char* dspname = {"MadTracker DSP"};
 
 static const int dspversion = 0x30000;
 
@@ -29,11 +29,11 @@ static const MTXKey dspkey = {0, 0, 0, 0};
 
 MTXInterfaces i;
 
-MTDSPInterface *dspi;
+MTDSPInterface* dspi;
 
-MTInterface *mtinterface;
+MTInterface* mtinterface;
 
-MTSystemInterface *si;
+MTSystemInterface* si;
 
 #endif
 
@@ -52,9 +52,11 @@ MTDSPInterface::MTDSPInterface()
 
 bool MTDSPInterface::init()
 {
-    si = (MTSystemInterface *) mtinterface->getinterface(systemtype);
+    si = (MTSystemInterface*) mtinterface->getinterface(systemtype);
     if (!si)
-    { return false; }
+    {
+        return false;
+    }
     ENTER("MTDSPInterface::init");
     LOGD("%s - [DSP] Initializing..."
              NL);
@@ -120,10 +122,10 @@ bool MTDSPInterface::init()
     splinemodulate = a_splinemodulate;
 #	ifdef _DEBUG
     char file[256];
-    MTFile *f;
+    MTFile* f;
     MTShaper s;
-    MTShape *sh;
-    sample *p;
+    MTShape* sh;
+    sample* p;
     int x;
     short v;
     s.add(0, 64, 0.5, 192, 0.75);
@@ -167,12 +169,12 @@ void MTDSPInterface::stop()
 {
 }
 
-void MTDSPInterface::processcmdline(void *params)
+void MTDSPInterface::processcmdline(void* params)
 {
 
 }
 
-void MTDSPInterface::showusage(void *out)
+void MTDSPInterface::showusage(void* out)
 {
 
 }
@@ -185,13 +187,15 @@ int MTDSPInterface::config(int command, int param)
 #ifndef MTBUILTIN
 extern "C" {
 
-MTEXPORT MTXInterfaces *MTCT MTXMain(MTInterface *mti)
+MTEXPORT MTXInterfaces* MTCT MTXMain(MTInterface* mti)
 {
     mtinterface = mti;
     if (!dspi)
-    { dspi = new MTDSPInterface(); }
+    {
+        dspi = new MTDSPInterface();
+    }
     i.ninterfaces = 1;
-    i.interfaces[0] = (MTXInterface *) dspi;
+    i.interfaces[0] = (MTXInterface*) dspi;
     return &i;
 }
 

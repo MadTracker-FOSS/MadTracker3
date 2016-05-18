@@ -22,12 +22,12 @@ MTMemoryHook::MTMemoryHook()
 {
 }
 
-MTFile *MTMemoryHook::fileopen(const char *url, int flags)
+MTFile* MTMemoryHook::fileopen(const char* url, int flags)
 {
     // FIXME: This function deals with strings like crap. -flibit
 
-    const char *e, *a;
-    void *ptr;
+    const char* e, * a;
+    void* ptr;
     int length;
 
     e = strstr(url, "//");
@@ -35,7 +35,9 @@ MTFile *MTMemoryHook::fileopen(const char *url, int flags)
     {
         e = strchr(url, ':');
         if (!e)
-        { return 0; }
+        {
+            return 0;
+        }
         e++;
     }
     else
@@ -55,41 +57,47 @@ MTFile *MTMemoryHook::fileopen(const char *url, int flags)
     };
     if (a[0])
     {
-        ptr = (void *) strtol(a, 0, 16);
+        ptr = (void*) strtol(a, 0, 16);
     }
     else
-    { ptr = 0; }
+    {
+        ptr = 0;
+    }
     return new MTMemoryFile(ptr, length, flags);
 }
 
-MTFolder *MTMemoryHook::folderopen(char *url)
+MTFolder* MTMemoryHook::folderopen(char* url)
 {
     return 0;
 }
 
-bool MTMemoryHook::filecopy(char *source, char *dest)
+bool MTMemoryHook::filecopy(char* source, char* dest)
 {
     return false;
 }
 
-bool MTMemoryHook::filerename(char *source, char *dest)
+bool MTMemoryHook::filerename(char* source, char* dest)
 {
     return false;
 }
 
-bool MTMemoryHook::filedelete(char *url)
+bool MTMemoryHook::filedelete(char* url)
 {
     return false;
 }
 
-void MTMemoryHook::filetype(const char *url, char *type, int length)
+void MTMemoryHook::filetype(const char* url, char* type, int length)
 {
     return;
 }
 
 //---------------------------------------------------------------------------
-MTMemoryFile::MTMemoryFile(void *mem, int length, int access):
-    maccess(access), cpos(0), al(length), l(0), subclassed(false)
+MTMemoryFile::MTMemoryFile(void* mem, int length, int access):
+    maccess(access),
+    cpos(0),
+    al(length),
+    l(0),
+    subclassed(false)
 {
     if (mem)
     {
@@ -103,12 +111,17 @@ MTMemoryFile::MTMemoryFile(void *mem, int length, int access):
         autosize = true;
         autofree = true;
     };
-    c = (char *) m;
+    c = (char*) m;
 }
 
-MTMemoryFile::MTMemoryFile(MTFile *parent, int start, int end, int access):
-    maccess(access), c((char *) ((MTMemoryFile *) parent)->m), cpos(0), al(end - start), l(end - start),
-    subclassed(true), autosize(false)
+MTMemoryFile::MTMemoryFile(MTFile* parent, int start, int end, int access):
+    maccess(access),
+    c((char*) ((MTMemoryFile*) parent)->m),
+    cpos(0),
+    al(end - start),
+    l(end - start),
+    subclassed(true),
+    autosize(false)
 {
     c += start;
     m = c;
@@ -117,48 +130,64 @@ MTMemoryFile::MTMemoryFile(MTFile *parent, int start, int end, int access):
 MTMemoryFile::~MTMemoryFile()
 {
     if ((!subclassed) && (autofree) && (m))
-    { mtmemfree(m); }
+    {
+        mtmemfree(m);
+    }
 }
 
-int MTMemoryFile::read(void *buffer, int size)
+int MTMemoryFile::read(void* buffer, int size)
 {
     int read;
 
     if ((cpos >= l) || ((maccess & MTF_READ) == 0))
-    { return 0; }
+    {
+        return 0;
+    }
     if (cpos + size > l)
     {
         read = l - cpos;
     }
     else
-    { read = size; }
+    {
+        read = size;
+    }
     if (read <= 0)
-    { return 0; }
+    {
+        return 0;
+    }
     memcpy(buffer, c, read);
     cpos += read;
     c += read;
     return read;
 }
 
-int MTMemoryFile::readln(char *buffer, int maxsize)
+int MTMemoryFile::readln(char* buffer, int maxsize)
 {
     int read = 0;
     int x;
-    char *e;
+    char* e;
 
     if ((cpos >= l) || ((maccess & MTF_READ) == 0))
-    { return 0; }
+    {
+        return 0;
+    }
     maxsize--;
     if (cpos + maxsize > l)
-    { maxsize = l - cpos; }
+    {
+        maxsize = l - cpos;
+    }
     if (maxsize <= 0)
-    { return 0; }
+    {
+        return 0;
+    }
     for(x = 0, e = c; x < maxsize; x++, e++)
     {
         if ((*e == 0) || (*e == '\r') || (*e == '\n'))
         {
             if (x > 0)
-            { memcpy(buffer, c, x); }
+            {
+                memcpy(buffer, c, x);
+            }
             buffer[x] = 0;
             read = x + 1;
             if (*e++ == '\r')
@@ -208,23 +237,31 @@ done:
 	return read;
 }
 */
-int MTMemoryFile::write(const void *buffer, int size)
+int MTMemoryFile::write(const void* buffer, int size)
 {
     if ((maccess & MTF_WRITE) == 0)
-    { return 0; }
+    {
+        return 0;
+    }
     if ((!autosize) && (cpos + size > l))
-    { size = l - cpos; }
+    {
+        size = l - cpos;
+    }
     if (size <= 0)
-    { return 0; }
+    {
+        return 0;
+    }
     if ((autosize) && (cpos + size > al))
     {
         al = ((al + size + 16383) >> 14) << 14;
         m = mtmemrealloc(m, al);
-        c = (char *) m + cpos;
+        c = (char*) m + cpos;
     };
     memcpy(c, buffer, size);
     if (cpos + size > l)
-    { l = cpos + size; }
+    {
+        l = cpos + size;
+    }
     cpos += size;
     c += size;
     return size;
@@ -254,14 +291,14 @@ int MTMemoryFile::seek(int pos, int origin)
         {
             al = ((al + 32767) >> 14) << 14;
             m = mtmemrealloc(m, al);
-            c = (char *) m + cpos;
+            c = (char*) m + cpos;
         }
         else
         {
             cpos = l;
         };
     };
-    c = (char *) m + cpos;
+    c = (char*) m + cpos;
     return cpos;
 }
 
@@ -270,16 +307,20 @@ int MTMemoryFile::length()
     return l;
 }
 
-void *MTMemoryFile::getpointer(int offset, int size)
+void* MTMemoryFile::getpointer(int offset, int size)
 {
     if (offset < 0)
-    { return c; }
+    {
+        return c;
+    }
     if (offset >= l)
-    { return 0; }
-    return (char *) m + offset;
+    {
+        return 0;
+    }
+    return (char*) m + offset;
 }
 
-void MTMemoryFile::releasepointer(void *mem)
+void MTMemoryFile::releasepointer(void* mem)
 {
 }
 
@@ -299,23 +340,23 @@ bool MTMemoryFile::seteof()
     {
         l = cpos;
         m = mtmemrealloc(m, l);
-        c = (char *) m + cpos;
+        c = (char*) m + cpos;
         return true;
     };
     return false;
 }
 
-bool MTMemoryFile::gettime(int *modified, int *accessed)
+bool MTMemoryFile::gettime(int* modified, int* accessed)
 {
     return false;
 }
 
-bool MTMemoryFile::settime(int *modified, int *accessed)
+bool MTMemoryFile::settime(int* modified, int* accessed)
 {
     return false;
 }
 
-MTFile *MTMemoryFile::subclass(int start, int length, int access)
+MTFile* MTMemoryFile::subclass(int start, int length, int access)
 {
     return new MTMemoryFile(this, start, length, access);
 }

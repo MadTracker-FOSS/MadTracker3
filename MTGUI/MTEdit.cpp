@@ -16,31 +16,31 @@
 #include <MTXAPI/MTXInput.h>
 
 //---------------------------------------------------------------------------
-void MTCT edit_undo(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT edit_undo(MTShortcut* s, MTControl* c, MTUndo*)
 {
-    MTEdit *edit = (MTEdit *) ((MTMenu *) ((MTMenuItem *) c)->parent)->caller;
+    MTEdit* edit = (MTEdit*) ((MTMenu*) ((MTMenuItem*) c)->parent)->caller;
     edit->undo();
 }
 
-void MTCT edit_cut(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT edit_cut(MTShortcut* s, MTControl* c, MTUndo*)
 {
 }
 
-void MTCT edit_copy(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT edit_copy(MTShortcut* s, MTControl* c, MTUndo*)
 {
 }
 
-void MTCT edit_paste(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT edit_paste(MTShortcut* s, MTControl* c, MTUndo*)
 {
 }
 
-void MTCT edit_delete(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT edit_delete(MTShortcut* s, MTControl* c, MTUndo*)
 {
 }
 
-void MTCT edit_select(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT edit_select(MTShortcut* s, MTControl* c, MTUndo*)
 {
-    MTEdit *edit = (MTEdit *) ((MTMenu *) ((MTMenuItem *) c)->parent)->caller;
+    MTEdit* edit = (MTEdit*) ((MTMenu*) ((MTMenuItem*) c)->parent)->caller;
     edit->setselstart(0);
     edit->setselend(-1);
 }
@@ -49,31 +49,48 @@ void MTCT edit_select(MTShortcut *s, MTControl *c, MTUndo *)
 // MTControl
 //   MTEdit
 //---------------------------------------------------------------------------
-MTEdit::MTEdit(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTControl(MTC_EDIT, tag, p, l, t, w, h), maxlength(0), password(false), lblank(0), rblank(0), md(false),
-    focused(false), isnew(false), cursor(0), offset(0), selstart(0), selend(0), mss(0), mse(0), oldtext(0),
-    oldselstart(0), oldselend(0), timer(0)
+MTEdit::MTEdit(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTControl(MTC_EDIT, tag, p, l, t, w, h),
+    maxlength(0),
+    password(false),
+    lblank(0),
+    rblank(0),
+    md(false),
+    focused(false),
+    isnew(false),
+    cursor(0),
+    offset(0),
+    selstart(0),
+    selend(0),
+    mss(0),
+    mse(0),
+    oldtext(0),
+    oldselstart(0),
+    oldselend(0),
+    timer(0)
 {
     if (parent)
     {
         if (!popup)
         {
-            popup = (MTMenu *) gi->newcontrol(MTC_MENU, 0, parent->dsk, 0, 0, 0, 0, 0);
+            popup = (MTMenu*) gi->newcontrol(MTC_MENU, 0, parent->dsk, 0, 0, 0, 0, 0);
             popup->flags |= MTCF_DONTSAVE;
         }
         else
         {
             if (popup->numitems > 0)
-            { popup->additem("|Edit", 0, 0, false, 0); }
+            {
+                popup->additem("|Edit", 0, 0, false, 0);
+            }
         };
-        ((MTMenuItem *) popup->additem("&Undo", -1, 0, false, 0))->command = edit_undo;
+        ((MTMenuItem*) popup->additem("&Undo", -1, 0, false, 0))->command = edit_undo;
         popup->additem("|", -1, 0, false, 0);
-        ((MTMenuItem *) popup->additem("Cu&t", -1, 0, false, 0))->command = edit_cut;
-        ((MTMenuItem *) popup->additem("&Copy", -1, 0, false, 0))->command = edit_copy;
-        ((MTMenuItem *) popup->additem("&Paste", -1, 0, false, 0))->command = edit_paste;
-        ((MTMenuItem *) popup->additem("&Delete", -1, 0, false, 0))->command = edit_delete;
+        ((MTMenuItem*) popup->additem("Cu&t", -1, 0, false, 0))->command = edit_cut;
+        ((MTMenuItem*) popup->additem("&Copy", -1, 0, false, 0))->command = edit_copy;
+        ((MTMenuItem*) popup->additem("&Paste", -1, 0, false, 0))->command = edit_paste;
+        ((MTMenuItem*) popup->additem("&Delete", -1, 0, false, 0))->command = edit_delete;
         popup->additem("|", -1, 0, false, 0);
-        ((MTMenuItem *) popup->additem("Select A&ll", -1, 0, false, 0))->command = edit_select;
+        ((MTMenuItem*) popup->additem("Select A&ll", -1, 0, false, 0))->command = edit_select;
     };
     flags |= MTCF_ACCEPTINPUT;
     if ((w == 0) || (h == 0))
@@ -82,10 +99,14 @@ MTEdit::MTEdit(int tag, MTWinControl *p, int l, int t, int w, int h):
         height = 22;
     };
     if (width < 16)
-    { width = 16; }
+    {
+        width = 16;
+    }
     if (height < 16)
-    { height = 16; }
-    text = (char *) si->memalloc(1024, MTM_ZERO);
+    {
+        height = 16;
+    }
+    text = (char*) si->memalloc(1024, MTM_ZERO);
     if (candesign)
     {
         gi->setcontrolname(this, "edit");
@@ -97,12 +118,16 @@ MTEdit::~MTEdit()
 {
     si->memfree(text);
     if (oldtext)
-    { si->memfree(oldtext); }
+    {
+        si->memfree(oldtext);
+    }
     if (timer)
-    { gi->deltimer(this, timer); }
+    {
+        gi->deltimer(this, timer);
+    }
 }
 
-int MTEdit::loadfromstream(MTFile *f, int size, int flags)
+int MTEdit::loadfromstream(MTFile* f, int size, int flags)
 {
     int csize = MTControl::loadfromstream(f, size, flags);
     int l, x;
@@ -122,7 +147,7 @@ int MTEdit::loadfromstream(MTFile *f, int size, int flags)
     return csize + l + 4;
 }
 
-int MTEdit::savetostream(MTFile *f, int flags)
+int MTEdit::savetostream(MTFile* f, int flags)
 {
     int csize = MTControl::savetostream(f, flags);
     int l = strlen(text) + 1;
@@ -147,40 +172,50 @@ int MTEdit::savetostream(MTFile *f, int flags)
 int MTEdit::getnumproperties(int id)
 {
     if (id == -1)
-    { return EditNP; }
+    {
+        return EditNP;
+    }
     if (id < ControlNP)
-    { return MTControl::getnumproperties(id); }
+    {
+        return MTControl::getnumproperties(id);
+    }
     return 0;
 }
 
-bool MTEdit::getpropertytype(int id, char **name, int &flags)
+bool MTEdit::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[3] = {"Text", "MaxLength", "Password"};
+    static char* propname[3] = {"Text", "MaxLength", "Password"};
     static int propflags[3] = {MTP_TEXT, MTP_INT, MTP_BOOL};
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getpropertytype(id, name, flags); }
+    {
+        return MTControl::getpropertytype(id, name, flags);
+    }
     if (id >= EditNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id - ControlNP];
     flags = propflags[id - ControlNP];
     return true;
 }
 
-bool MTEdit::getproperty(int id, void *value)
+bool MTEdit::getproperty(int id, void* value)
 {
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getproperty(id, value); }
+    {
+        return MTControl::getproperty(id, value);
+    }
     switch (id - ControlNP)
     {
         case 0:
-            strcpy((char *) value, text);
+            strcpy((char*) value, text);
             break;
         case 1:
-            *(int *) value = maxlength;
+            *(int*) value = maxlength;
             break;
         case 2:
-            *(int *) value = password;
+            *(int*) value = password;
             break;
         default:
             return false;
@@ -188,30 +223,42 @@ bool MTEdit::getproperty(int id, void *value)
     return true;
 }
 
-bool MTEdit::setproperty(int id, void *value)
+bool MTEdit::setproperty(int id, void* value)
 {
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::setproperty(id, value); }
+    {
+        return MTControl::setproperty(id, value);
+    }
     if (window)
-    { window->modified = true; }
+    {
+        window->modified = true;
+    }
     switch (id - ControlNP)
     {
         case 0:
-            settext((const char *) value);
+            settext((const char*) value);
             return true;
         case 1:
-            maxlength = *(int *) value;
+            maxlength = *(int*) value;
             if (maxlength < 0)
-            { maxlength = 0; }
+            {
+                maxlength = 0;
+            }
             if (maxlength > 1023)
-            { maxlength = 1023; }
+            {
+                maxlength = 1023;
+            }
             if ((password) && (maxlength > 32))
-            { maxlength = 32; }
+            {
+                maxlength = 32;
+            }
             break;
         case 2:
-            password = *(int *) value != 0;
+            password = *(int*) value != 0;
             if ((password) && (maxlength > 32))
-            { maxlength = 32; }
+            {
+                maxlength = 32;
+            }
             break;
         default:
             return false;
@@ -224,36 +271,44 @@ bool MTEdit::setproperty(int id, void *value)
     return true;
 }
 
-void MTEdit::draw(MTRect &rect)
+void MTEdit::draw(MTRect& rect)
 {
     int x = left;
     int y = top;
-    MTBitmap *b;
+    MTBitmap* b;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     MTRect cr = {0, 0, width, height};
     preparedraw(&b, x, y);
     if (&rect)
     {
         if (!cliprect(cr, rect))
-        { goto exit; }
+        {
+            goto exit;
+        }
     };
     skin->drawcontrol(this, cr, b, x, y);
     exit:
     if (guiid == MTC_EDIT)
-    { MTControl::draw(rect); }
+    {
+        MTControl::draw(rect);
+    }
 }
 
-bool MTEdit::message(MTCMessage &msg)
+bool MTEdit::message(MTCMessage& msg)
 {
     int l;
     int max = maxlength - 1;
-    char *r;
+    char* r;
     static unsigned char keys[256];
 
     if (max < 0)
-    { max = 1023; }
+    {
+        max = 1023;
+    }
     switch (msg.msg)
     {
         case MTCM_ENTER:
@@ -265,7 +320,9 @@ bool MTEdit::message(MTCMessage &msg)
             break;
         case MTCM_MOUSEDOWN:
             if (msg.button != DB_LEFT)
-            { break; }
+            {
+                break;
+            }
             if (msg.buttons & DB_DOUBLE)
             {
                 setselstart(0);
@@ -281,11 +338,15 @@ bool MTEdit::message(MTCMessage &msg)
                         l = skin->gettextextent(this, 0, strlen(text) - offset, msg.x - lblank - 4);
                     }
                     else
-                    { l = skin->gettextextent(this, &text[offset], -1, msg.x - lblank - 4); }
+                    {
+                        l = skin->gettextextent(this, &text[offset], -1, msg.x - lblank - 4);
+                    }
                     setcursor(offset + l);
                 }
                 else
-                { focused = true; }
+                {
+                    focused = true;
+                }
             };
             break;
         case MTCM_MOUSEMOVE:
@@ -298,12 +359,16 @@ bool MTEdit::message(MTCMessage &msg)
                         l = offset + skin->gettextextent(this, 0, strlen(text) - offset, msg.x - lblank - 4);
                     }
                     else
-                    { l = offset + skin->gettextextent(this, &text[offset], -1, msg.x - lblank - 4); }
+                    {
+                        l = offset + skin->gettextextent(this, &text[offset], -1, msg.x - lblank - 4);
+                    }
                 }
                 else
                 {
                     if (offset == 0)
-                    { break; }
+                    {
+                        break;
+                    }
                     MTPoint ts;
                     skin->gettextsize(this, (password) ? 0 : text, offset, &ts);
                     ts.x -= lblank;
@@ -318,7 +383,9 @@ bool MTEdit::message(MTCMessage &msg)
                             l = skin->gettextextent(this, 0, strlen(text), ts.x + msg.x - 4);
                         }
                         else
-                        { l = skin->gettextextent(this, text, -1, ts.x + msg.x - 4); }
+                        {
+                            l = skin->gettextextent(this, text, -1, ts.x + msg.x - 4);
+                        }
                     };
                 };
                 setselend(l);
@@ -329,14 +396,18 @@ bool MTEdit::message(MTCMessage &msg)
             break;
         case MTCM_CHAR:
             if (msg.key < KB_SPACE)
-            { break; }
+            {
+                break;
+            }
             l = strlen(text);
             if (l == max)
-            { break; }
+            {
+                break;
+            }
             modify();
             if (mss == l)
             {
-                strcat(text, (char *) &msg.key);
+                strcat(text, (char*) &msg.key);
                 setcursor(cursor + 1);
             }
             else
@@ -349,18 +420,24 @@ bool MTEdit::message(MTCMessage &msg)
             return true;
         case MTCM_KEYDOWN:
             if (MTControl::message(msg))
-            { return true; }
+            {
+                return true;
+            }
             switch (msg.key)
             {
                 case KB_DELETE:
                     if (mss == mse)
                     {
                         if (mss == strlen(text))
-                        { break; }
+                        {
+                            break;
+                        }
                         r = &text[mss + 1];
                     }
                     else
-                    { r = &text[mse]; }
+                    {
+                        r = &text[mse];
+                    }
                     modify();
                     memmove(&text[mss], r, strlen(r) + 1);
                     setcursor(mss);
@@ -370,7 +447,9 @@ bool MTEdit::message(MTCMessage &msg)
                     if (mss == mse)
                     {
                         if (mss == 0)
-                        { break; }
+                        {
+                            break;
+                        }
                         modify();
                         memmove(&text[mss - 1], r, strlen(r) + 1);
                         setcursor(mss - 1);
@@ -388,7 +467,9 @@ bool MTEdit::message(MTCMessage &msg)
                         setselend(0);
                     }
                     else
-                    { setcursor(0); }
+                    {
+                        setcursor(0);
+                    }
                     return true;
                 case KB_END:
                     if (msg.buttons & DB_SHIFT)
@@ -396,13 +477,17 @@ bool MTEdit::message(MTCMessage &msg)
                         setselend(-1);
                     }
                     else
-                    { setcursor(-1); }
+                    {
+                        setcursor(-1);
+                    }
                     return true;
                 case KB_LEFT:
                     if (msg.buttons & DB_SHIFT)
                     {
                         if (selend)
-                        { setselend(selend - 1); }
+                        {
+                            setselend(selend - 1);
+                        }
                     }
                     else
                     {
@@ -413,17 +498,23 @@ bool MTEdit::message(MTCMessage &msg)
                                 setcursor(mss - 1);
                             }
                             else
-                            { setcursor(mss); }
+                            {
+                                setcursor(mss);
+                            }
                         }
                         else
-                        { setcursor(0); }
+                        {
+                            setcursor(0);
+                        }
                     };
                     return true;
                 case KB_RIGHT:
                     if (msg.buttons & DB_SHIFT)
                     {
                         if (selend < strlen(text))
-                        { setselend(selend + 1); }
+                        {
+                            setselend(selend + 1);
+                        }
                     }
                     else
                     {
@@ -434,10 +525,14 @@ bool MTEdit::message(MTCMessage &msg)
                                 setcursor(mse + 1);
                             }
                             else
-                            { setcursor(mse); }
+                            {
+                                setcursor(mse);
+                            }
                         }
                         else
-                        { setcursor(mse); }
+                        {
+                            setcursor(mse);
+                        }
                     };
                     return true;
             };
@@ -454,7 +549,7 @@ bool MTEdit::message(MTCMessage &msg)
     return MTControl::message(msg);
 }
 
-void MTEdit::settext(const char *t)
+void MTEdit::settext(const char* t)
 {
     int l;
 
@@ -485,9 +580,13 @@ void MTEdit::setselstart(int ss)
         ss = 0;
     }
     else if (ss > strlen(text))
-    { ss = strlen(text); }
+    {
+        ss = strlen(text);
+    }
     if (selstart == ss)
-    { return; }
+    {
+        return;
+    }
     selstart = ss;
     if (selstart > selend)
     {
@@ -509,9 +608,13 @@ void MTEdit::setselstart(int ss)
 void MTEdit::setselend(int se)
 {
     if ((se < 0) || (se > strlen(text)))
-    { se = strlen(text); }
+    {
+        se = strlen(text);
+    }
     if (selend == se)
-    { return; }
+    {
+        return;
+    }
     selend = se;
     if (selstart > selend)
     {
@@ -525,10 +628,12 @@ void MTEdit::setselend(int se)
     };
     cursor = se;
     if (cursor < offset)
-    { offset = cursor; }
+    {
+        offset = cursor;
+    }
     if (parent)
     {
-        char *tmp = &text[offset];
+        char* tmp = &text[offset];
         MTPoint ts;
         if (password)
         {
@@ -539,7 +644,9 @@ void MTEdit::setselend(int se)
                 {
                     offset = cursor - nc;
                     if (offset > strlen(text))
-                    { offset = strlen(text); }
+                    {
+                        offset = strlen(text);
+                    }
                 };
             };
         }
@@ -552,7 +659,9 @@ void MTEdit::setselend(int se)
                 {
                     offset = cursor - nc;
                     if (offset > strlen(text))
-                    { offset = strlen(text); }
+                    {
+                        offset = strlen(text);
+                    }
                 };
             };
         };
@@ -564,7 +673,9 @@ void MTEdit::setselend(int se)
 void MTEdit::setcursor(int c)
 {
     if ((c < 0) || (c > strlen(text)))
-    { c = strlen(text); }
+    {
+        c = strlen(text);
+    }
     cursor = c;
     selstart = c;
     selend = c;
@@ -574,11 +685,13 @@ void MTEdit::setcursor(int c)
     {
         offset = cursor - 8;
         if (offset < 0)
-        { offset = 0; }
+        {
+            offset = 0;
+        }
     };
     if (parent)
     {
-        char *tmp = &text[offset];
+        char* tmp = &text[offset];
         MTPoint ts;
         if (password)
         {
@@ -589,7 +702,9 @@ void MTEdit::setcursor(int c)
                 {
                     offset = cursor - nc;
                     if (offset > strlen(text))
-                    { offset = strlen(text); }
+                    {
+                        offset = strlen(text);
+                    }
                 };
             };
         }
@@ -602,7 +717,9 @@ void MTEdit::setcursor(int c)
                 {
                     offset = cursor - nc;
                     if (offset > strlen(text))
-                    { offset = strlen(text); }
+                    {
+                        offset = strlen(text);
+                    }
                 };
             };
         };
@@ -612,13 +729,13 @@ void MTEdit::setcursor(int c)
 
 void MTEdit::undo()
 {
-    char *newtext;
+    char* newtext;
     int newselstart, newselend;
 
     isnew = false;
     if (oldtext)
     {
-        newtext = (char *) si->memalloc(strlen(text) + 1, 0);
+        newtext = (char*) si->memalloc(strlen(text) + 1, 0);
         strcpy(newtext, text);
         strcpy(text, oldtext);
         si->memfree(oldtext);
@@ -632,7 +749,7 @@ void MTEdit::undo()
     }
     else if (text[0])
     {
-        oldtext = (char *) si->memalloc(strlen(text) + 1, 0);
+        oldtext = (char*) si->memalloc(strlen(text) + 1, 0);
         strcpy(oldtext, text);
         oldselstart = selstart;
         oldselend = selend;
@@ -647,15 +764,19 @@ void MTEdit::modify()
     if (!isnew)
     {
         if (oldtext)
-        { si->memfree(oldtext); }
-        oldtext = (char *) si->memalloc(strlen(text) + 1, 0);
+        {
+            si->memfree(oldtext);
+        }
+        oldtext = (char*) si->memalloc(strlen(text) + 1, 0);
         strcpy(oldtext, text);
         oldselstart = selstart;
         oldselend = selend;
     };
     isnew = true;
     if (timer)
-    { gi->deltimer(this, timer); }
+    {
+        gi->deltimer(this, timer);
+    }
     timer = gi->ctrltimer(this, 0, 2000, false);
 }
 
@@ -664,8 +785,11 @@ void MTEdit::modify()
 //   MTEdit
 //     MTComboBox
 //---------------------------------------------------------------------------
-MTComboBox::MTComboBox(int id, int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTEdit(tag, p, l, t, w, h), dropcount(8), mlb(0), modified(false)
+MTComboBox::MTComboBox(int id, int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTEdit(tag, p, l, t, w, h),
+    dropcount(8),
+    mlb(0),
+    modified(false)
 {
     int tmp;
 
@@ -683,32 +807,42 @@ MTComboBox::~MTComboBox()
 int MTComboBox::getnumproperties(int id)
 {
     if (id == -1)
-    { return ComboNP; }
+    {
+        return ComboNP;
+    }
     if (id < EditNP)
-    { return MTEdit::getnumproperties(id); }
+    {
+        return MTEdit::getnumproperties(id);
+    }
     return 0;
 }
 
-bool MTComboBox::getpropertytype(int id, char **name, int &flags)
+bool MTComboBox::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[1] = {"View"};
+    static char* propname[1] = {"View"};
     static int propflags[1] = {MTP_FLAGS};
 
     if ((id < EditNP) || ((id & 0xFF00) && ((id >> 8) < EditNP)))
-    { return MTEdit::getpropertytype(id, name, flags); }
+    {
+        return MTEdit::getpropertytype(id, name, flags);
+    }
     if (id >= ComboNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id - EditNP];
     flags = propflags[id - EditNP];
     return true;
 }
 
-bool MTComboBox::getproperty(int id, void *value)
+bool MTComboBox::getproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < EditNP) || ((id & 0xFF00) && ((id >> 8) < EditNP)))
-    { return MTEdit::getproperty(id, value); }
+    {
+        return MTEdit::getproperty(id, value);
+    }
     switch (id - EditNP)
     {
         case 0:
@@ -720,14 +854,18 @@ bool MTComboBox::getproperty(int id, void *value)
     return true;
 }
 
-bool MTComboBox::setproperty(int id, void *value)
+bool MTComboBox::setproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < EditNP) || ((id & 0xFF00) && ((id >> 8) < EditNP)))
-    { return MTEdit::setproperty(id, value); }
+    {
+        return MTEdit::setproperty(id, value);
+    }
     if (window)
-    { window->modified = true; }
+    {
+        window->modified = true;
+    }
     switch (id - EditNP)
     {
         case 0:
@@ -744,7 +882,7 @@ bool MTComboBox::setproperty(int id, void *value)
     return true;
 }
 
-bool MTComboBox::checkbounds(int &l, int &t, int &w, int &h)
+bool MTComboBox::checkbounds(int& l, int& t, int& w, int& h)
 {
     bool ok = true;
 
@@ -756,24 +894,26 @@ bool MTComboBox::checkbounds(int &l, int &t, int &w, int &h)
     return ok & MTEdit::checkbounds(l, t, w, h);
 }
 
-void MTComboBox::draw(MTRect &rect)
+void MTComboBox::draw(MTRect& rect)
 {
     int x = left;
     int y = top;
-    MTBitmap *b;
+    MTBitmap* b;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     preparedraw(&b, x, y);
     lblank = (mlb->viewflags & MTVF_IMAGES) ? sysimages.iw + 2 : 0;
     MTEdit::draw(rect);
     MTControl::draw(rect);
 }
 
-bool MTComboBox::message(MTCMessage &msg)
+bool MTComboBox::message(MTCMessage& msg)
 {
     int l, x;
-    char *caption;
+    char* caption;
 
     switch (msg.msg)
     {
@@ -781,20 +921,28 @@ bool MTComboBox::message(MTCMessage &msg)
             if (msg.x >= width - 2 - rblank)
             {
                 if (guitick != popuptick)
-                { pulldown(); }
+                {
+                    pulldown();
+                }
                 return true;
             };
             break;
         case MTCM_ACTION:
             if ((mlb->selected >= 0) || (msg.param1 == 2))
-            { setitem(mlb->selected); }
+            {
+                setitem(mlb->selected);
+            }
             if ((msg.param1 < 2) && (parent))
-            { parent->focus(this); }
+            {
+                parent->focus(this);
+            }
             return true;
         case MTCM_CHAR:
             MTEdit::message(msg);
             if (msg.key < KB_SPACE)
-            { break; }
+            {
+                break;
+            }
             modified = true;
             l = strlen(text);
             if ((l > 2) && (selstart == selend) && (selstart == cursor) && (selstart == l))
@@ -811,18 +959,26 @@ bool MTComboBox::message(MTCMessage &msg)
             return true;
         case MTCM_KEYDOWN:
             if (MTEdit::message(msg))
-            { return true; }
+            {
+                return true;
+            }
             if (msg.key == KB_DOWN)
-            { pulldown(); }
+            {
+                pulldown();
+            }
             if (mlb->message(msg))
-            { return true; }
+            {
+                return true;
+            }
             return false;
         case MTCM_LEAVE:
             if (modified)
             {
                 x = mlb->searchitem(text, 0);
                 if (x >= 0)
-                { mlb->setitem(x); }
+                {
+                    mlb->setitem(x);
+                }
                 modified = false;
             };
             break;
@@ -846,7 +1002,9 @@ void MTComboBox::pulldown()
     {
         x = mlb->searchitem(text, 0);
         if (x >= 0)
-        { mlb->setitem(x); }
+        {
+            mlb->setitem(x);
+        }
         modified = false;
     };
     if ((parent) && (parent->dsk))
@@ -865,14 +1023,14 @@ int MTComboBox::getselected()
     return mlb->selected;
 }
 
-bool MTComboBox::getiteminfo(int id, char **caption, int *imageindex, int *flags, bool *editable)
+bool MTComboBox::getiteminfo(int id, char** caption, int* imageindex, int* flags, bool* editable)
 {
     return mlb->getiteminfo(id, caption, imageindex, flags, editable);
 }
 
 void MTComboBox::setitem(int id)
 {
-    char *c = 0;
+    char* c = 0;
 
     mlb->setitem(id);
     if (id < 0)
@@ -889,11 +1047,13 @@ void MTComboBox::setitem(int id)
     if (mlb->getiteminfo(id, &c, 0, 0, 0))
     {
         if (c)
-        { settext(c); }
+        {
+            settext(c);
+        }
     };
 }
 
-int MTComboBox::searchitem(const char *search, char **caption)
+int MTComboBox::searchitem(const char* search, char** caption)
 {
     return mlb->searchitem(search, caption);
 }
@@ -904,22 +1064,22 @@ int MTComboBox::searchitem(const char *search, char **caption)
 //     MTComboBox
 //       MTUserComboBox
 //---------------------------------------------------------------------------
-MTUserComboBox::MTUserComboBox(int tag, MTWinControl *p, int l, int t, int w, int h):
+MTUserComboBox::MTUserComboBox(int tag, MTWinControl* p, int l, int t, int w, int h):
     MTComboBox(MTC_USERCOMBOBOX, tag, p, l, t, w, h)
 {
     p = p->dsk;
     if (p)
     {
-        mlb = (MTList *) gi->newcontrol(MTC_FILELISTBOX, 0, p, 0, 0, 64, 64, 0);
+        mlb = (MTList*) gi->newcontrol(MTC_FILELISTBOX, 0, p, 0, 0, 64, 64, 0);
         mlb->owner = this;
         mlb->switchflags(MTCF_DONTSAVE | MTCF_HIDDEN, true);
-        ((MTDesktop *) p)->puttoback(mlb);
+        ((MTDesktop*) p)->puttoback(mlb);
     };
 }
 
 void MTUserComboBox::setnumitems(int n)
 {
-    ((MTUserList *) mlb)->setnumitems(n);
+    ((MTUserList*) mlb)->setnumitems(n);
 }
 
 //---------------------------------------------------------------------------
@@ -928,32 +1088,32 @@ void MTUserComboBox::setnumitems(int n)
 //     MTComboBox
 //       MTItemComboBox
 //---------------------------------------------------------------------------
-MTItemComboBox::MTItemComboBox(int tag, MTWinControl *p, int l, int t, int w, int h):
+MTItemComboBox::MTItemComboBox(int tag, MTWinControl* p, int l, int t, int w, int h):
     MTComboBox(MTC_ITEMCOMBOBOX, tag, p, l, t, w, h)
 {
     p = p->dsk;
     if (p)
     {
-        mlb = (MTList *) gi->newcontrol(MTC_LISTBOX, 0, p, 0, 0, 64, 64, 0);
+        mlb = (MTList*) gi->newcontrol(MTC_LISTBOX, 0, p, 0, 0, 64, 64, 0);
         mlb->owner = this;
         mlb->switchflags(MTCF_DONTSAVE | MTCF_HIDDEN, true);
-        ((MTDesktop *) p)->puttoback(mlb);
+        ((MTDesktop*) p)->puttoback(mlb);
     };
 }
 
-int MTItemComboBox::loadfromstream(MTFile *f, int size, int flags)
+int MTItemComboBox::loadfromstream(MTFile* f, int size, int flags)
 {
     int csize = MTComboBox::loadfromstream(f, size, flags);
-    MTItemView *clv = (MTItemView *) mlb;
+    MTItemView* clv = (MTItemView*) mlb;
 
     csize += clv->loadfromstream(f, size, 1);
     return csize;
 }
 
-int MTItemComboBox::savetostream(MTFile *f, int flags)
+int MTItemComboBox::savetostream(MTFile* f, int flags)
 {
     int csize = MTComboBox::savetostream(f, flags);
-    MTItemView *clv = (MTItemView *) mlb;
+    MTItemView* clv = (MTItemView*) mlb;
 
     csize += clv->savetostream(f, 1);
     return csize;
@@ -964,39 +1124,49 @@ int MTItemComboBox::savetostream(MTFile *f, int flags)
 int MTItemComboBox::getnumproperties(int id)
 {
     if (id == -1)
-    { return ItemComboNP; }
+    {
+        return ItemComboNP;
+    }
     if (id < ComboNP)
-    { return MTComboBox::getnumproperties(id); }
+    {
+        return MTComboBox::getnumproperties(id);
+    }
     return 0;
 }
 
-bool MTItemComboBox::getpropertytype(int id, char **name, int &flags)
+bool MTItemComboBox::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[2] = {"Folder", "Items"};
+    static char* propname[2] = {"Folder", "Items"};
     static int propflags[2] = {MTP_BOOL, MTP_ITEMS};
 
     if ((id < ComboNP) || ((id & 0xFF00) && ((id >> 8) < ComboNP)))
-    { return MTComboBox::getpropertytype(id, name, flags); }
+    {
+        return MTComboBox::getpropertytype(id, name, flags);
+    }
     if (id >= ItemComboNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id - ComboNP];
     flags = propflags[id - ComboNP];
     return true;
 }
 
-bool MTItemComboBox::getproperty(int id, void *value)
+bool MTItemComboBox::getproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ComboNP) || ((id & 0xFF00) && ((id >> 8) < ComboNP)))
-    { return MTComboBox::getproperty(id, value); }
+    {
+        return MTComboBox::getproperty(id, value);
+    }
     switch (id - ComboNP)
     {
         case 0:
             iv = 0;
             break;
         case 2:
-            *(MTList **) value = mlb;
+            *(MTList**) value = mlb;
             break;
         default:
             return false;
@@ -1004,14 +1174,18 @@ bool MTItemComboBox::getproperty(int id, void *value)
     return true;
 }
 
-bool MTItemComboBox::setproperty(int id, void *value)
+bool MTItemComboBox::setproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ComboNP) || ((id & 0xFF00) && ((id >> 8) < ComboNP)))
-    { return MTComboBox::setproperty(id, value); }
+    {
+        return MTComboBox::setproperty(id, value);
+    }
     if (window)
-    { window->modified = true; }
+    {
+        window->modified = true;
+    }
     switch (id - ComboNP)
     {
         case 0:
@@ -1032,43 +1206,43 @@ bool MTItemComboBox::setproperty(int id, void *value)
     return true;
 }
 
-MTItem *MTItemComboBox::additem(const char *caption, int image, int flags, bool editable, void *data)
+MTItem* MTItemComboBox::additem(const char* caption, int image, int flags, bool editable, void* data)
 {
-    return ((MTListBox *) mlb)->additem(caption, image, flags, editable, data);
+    return ((MTListBox*) mlb)->additem(caption, image, flags, editable, data);
 }
 
-void MTItemComboBox::removeitem(MTItem *item)
+void MTItemComboBox::removeitem(MTItem* item)
 {
-    ((MTListBox *) mlb)->removeitem(item);
+    ((MTListBox*) mlb)->removeitem(item);
 }
 
 void MTItemComboBox::clearitems()
 {
-    ((MTListBox *) mlb)->clearitems();
+    ((MTListBox*) mlb)->clearitems();
 }
 
 void MTItemComboBox::beginupdate()
 {
-    ((MTListBox *) mlb)->beginupdate();
+    ((MTListBox*) mlb)->beginupdate();
 }
 
 void MTItemComboBox::endupdate()
 {
-    ((MTListBox *) mlb)->endupdate();
+    ((MTListBox*) mlb)->endupdate();
 }
 
 void MTItemComboBox::sort(int f)
 {
-    ((MTListBox *) mlb)->sort(f);
+    ((MTListBox*) mlb)->sort(f);
 }
 
-MTItem *MTItemComboBox::getitem(int id)
+MTItem* MTItemComboBox::getitem(int id)
 {
-    return ((MTListBox *) mlb)->getitem(id);
+    return ((MTListBox*) mlb)->getitem(id);
 }
 
-MTItem *MTItemComboBox::getitemfromtag(int tag)
+MTItem* MTItemComboBox::getitemfromtag(int tag)
 {
-    return ((MTListBox *) mlb)->getitemfromtag(tag);
+    return ((MTListBox*) mlb)->getitemfromtag(tag);
 }
 //---------------------------------------------------------------------------

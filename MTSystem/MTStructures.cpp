@@ -24,26 +24,26 @@
 // as std::vector<T> foo; foo.reserve(itemsize); does the exact same thing and removes the pointer from
 // application code. vector<T> with prereserved capacity has no execution overhead
 // over T[] or std::array<T,n>.
-MTArray *mtarraycreate(int allocby, int itemsize)
+MTArray* mtarraycreate(int allocby, int itemsize)
 {
     return new MTArray(allocby, itemsize);
 }
 
 // Same as above.
-void mtarraydelete(MTArray *array)
+void mtarraydelete(MTArray* array)
 {
     delete array;
 }
 
 // Factory function for a hash table. As with MTArray, is not needed in C++ as the constructor
 // of std::unordered_map already does this job.
-MTHash *mthashcreate(int allocby)
+MTHash* mthashcreate(int allocby)
 {
     return new MTHash(allocby);
 }
 
 // Nothing too interesting here, same as with MTArray.
-void mthashdelete(MTHash *hash)
+void mthashdelete(MTHash* hash)
 {
     delete hash;
 }
@@ -55,10 +55,16 @@ void mthashdelete(MTHash *hash)
 // allows us to reserve space for a few elements in advance. However, as stated above, constructor and
 // reserve() in std::vector already do this job.
 MTArray::MTArray(int allocby, int itemsize):
-    nitems(0), a(0), mallocby(allocby), na(0), _is(itemsize)
+    nitems(0),
+    a(0),
+    mallocby(allocby),
+    na(0),
+    _is(itemsize)
 {
     if (mallocby <= 0)
-    { mallocby = 4; }
+    {
+        mallocby = 4;
+    }
     countid = mtlocalalloc(); // very much not useful.
 }
 
@@ -68,7 +74,9 @@ MTArray::~MTArray()
 {
     mtlocalfree(countid);
     if (a)
-    { mtmemfree(a); }
+    {
+        mtmemfree(a);
+    }
 }
 
 // From the interface, this should replace the element at "at" in the array
@@ -76,7 +84,7 @@ MTArray::~MTArray()
 // The implementation is a bit confusing though and it's unclear what the return value represents.
 // I would guess that it's the position of the new item.
 //TODO find out what this code actually does.
-int MTArray::additem(int at, void *item)
+int MTArray::additem(int at, void* item)
 {
     int cat;
 //	int x;  // Moved to proper scopes.
@@ -93,11 +101,11 @@ int MTArray::additem(int at, void *item)
             }
             if (a)
             {
-                a = (void **) mtmemrealloc(a, 4 * na);
+                a = (void**) mtmemrealloc(a, 4 * na);
             }
             else
             {
-                a = (void **) mtmemalloc(4 * na, MTM_ZERO);
+                a = (void**) mtmemalloc(4 * na, MTM_ZERO);
             }
         };
         if ((at >= 0) && (at < nitems - 1))
@@ -133,9 +141,9 @@ int MTArray::additem(int at, void *item)
         };
         if ((at >= 0) && (at < nitems - 1))
         {
-            char *sp, *dp;
+            char* sp, * dp;
             cat = at;
-            dp = (char *) d + (nitems - 1) * _is;
+            dp = (char*) d + (nitems - 1) * _is;
             sp = dp - _is;
             for(auto x = nitems - 1; x >= cat + 1; x--)
             {
@@ -143,7 +151,7 @@ int MTArray::additem(int at, void *item)
                 sp -= _is;
                 dp -= _is;
             };
-            memcpy((char *) d + cat * _is, item, _is);
+            memcpy((char*) d + cat * _is, item, _is);
         };
     };
     return cat;
@@ -162,38 +170,54 @@ int MTArray::additems(int at, int count)
     {
         if (nitems > na)
         {
-            while(nitems > na) na += mallocby;
+            while(nitems > na)
+            {
+                na += mallocby;
+            }
             if (a)
             {
-                a = (void **) mtmemrealloc(a, 4 * na);
+                a = (void**) mtmemrealloc(a, 4 * na);
             }
             else
-            { a = (void **) mtmemalloc(4 * na, MTM_ZERO); }
+            {
+                a = (void**) mtmemalloc(4 * na, MTM_ZERO);
+            }
         };
         if ((at >= 0) && (at < nitems - count))
         {
             cat = at;
-            for(x = nitems - 1; x >= cat + count; x--) a[x] = a[x - count];
-            for(x = cat; x < cat + count; x++) a[x] = 0;
+            for(x = nitems - 1; x >= cat + count; x--)
+            {
+                a[x] = a[x - count];
+            }
+            for(x = cat; x < cat + count; x++)
+            {
+                a[x] = 0;
+            }
         };
     }
     else
     {
         if (nitems > na)
         {
-            while(nitems > na) na += mallocby;
+            while(nitems > na)
+            {
+                na += mallocby;
+            }
             if (d)
             {
                 d = mtmemrealloc(d, _is * na);
             }
             else
-            { d = mtmemalloc(_is * na, MTM_ZERO); }
+            {
+                d = mtmemalloc(_is * na, MTM_ZERO);
+            }
         };
         if ((at >= 0) && (at < nitems - count))
         {
-            char *sp, *dp;
+            char* sp, * dp;
             cat = at;
-            dp = (char *) d + (nitems - 1) * _is;
+            dp = (char*) d + (nitems - 1) * _is;
             sp = dp - count * _is;
             for(x = nitems - 1; x >= cat + count; x--)
             {
@@ -201,7 +225,7 @@ int MTArray::additems(int at, int count)
                 sp -= _is;
                 dp -= _is;
             };
-            mtmemzero((char *) d + cat * _is, count * _is);
+            mtmemzero((char*) d + cat * _is, count * _is);
         };
     };
     return cat;
@@ -214,14 +238,23 @@ void MTArray::delitems(int from, int count)
     nitems -= count;
     if (_is == 0)
     {
-        for(x = from; x < nitems; x++) a[x] = a[x + count];
-        for(x = nitems; x < nitems + count; x++) a[x] = 0;
+        for(x = from; x < nitems; x++)
+        {
+            a[x] = a[x + count];
+        }
+        for(x = nitems; x < nitems + count; x++)
+        {
+            a[x] = 0;
+        }
         if (nitems < na - mallocby)
         {
-            while(nitems < na - mallocby) na -= mallocby;
+            while(nitems < na - mallocby)
+            {
+                na -= mallocby;
+            }
             if (na)
             {
-                a = (void **) mtmemrealloc(a, 4 * na);
+                a = (void**) mtmemrealloc(a, 4 * na);
             }
             else
             {
@@ -232,8 +265,8 @@ void MTArray::delitems(int from, int count)
     }
     else
     {
-        char *sp, *dp;
-        dp = (char *) d + from * _is;
+        char* sp, * dp;
+        dp = (char*) d + from * _is;
         sp = dp + count * _is;
         for(x = from; x < nitems; x++)
         {
@@ -241,10 +274,13 @@ void MTArray::delitems(int from, int count)
             sp += _is;
             dp += _is;
         };
-        mtmemzero((char *) d + nitems * _is, count * _is);
+        mtmemzero((char*) d + nitems * _is, count * _is);
         if (nitems < na - mallocby)
         {
-            while(nitems < na - mallocby) na -= mallocby;
+            while(nitems < na - mallocby)
+            {
+                na -= mallocby;
+            }
             if (na)
             {
                 d = mtmemrealloc(d, _is * na);
@@ -268,7 +304,7 @@ void MTArray::delitems(int from, int count)
 //}
 
 // vector's push_back()
-int MTArray::push(void *item)
+int MTArray::push(void* item)
 {
     int at;
 
@@ -277,13 +313,18 @@ int MTArray::push(void *item)
     {
         if (nitems > na)
         {
-            while(nitems > na) na += mallocby;
+            while(nitems > na)
+            {
+                na += mallocby;
+            }
             if (a)
             {
-                a = (void **) mtmemrealloc(a, 4 * na);
+                a = (void**) mtmemrealloc(a, 4 * na);
             }
             else
-            { a = (void **) mtmemalloc(4 * na, MTM_ZERO); }
+            {
+                a = (void**) mtmemalloc(4 * na, MTM_ZERO);
+            }
         };
         a[at] = item;
     }
@@ -291,26 +332,33 @@ int MTArray::push(void *item)
     {
         if (nitems > na)
         {
-            while(nitems > na) na += mallocby;
+            while(nitems > na)
+            {
+                na += mallocby;
+            }
             if (d)
             {
                 d = mtmemrealloc(d, _is * na);
             }
             else
-            { d = mtmemalloc(_is * na, MTM_ZERO); }
+            {
+                d = mtmemalloc(_is * na, MTM_ZERO);
+            }
         };
-        memcpy((char *) d + at * _is, item, _is);
+        memcpy((char*) d + at * _is, item, _is);
     };
     return at;
 }
 
 // vector's pop_back()
-void *MTArray::pop()
+void* MTArray::pop()
 {
-    void *item;
+    void* item;
 
     if (nitems < 1)
-    { return 0; }
+    {
+        return 0;
+    }
     nitems--;
     if (_is == 0)
     {
@@ -318,10 +366,13 @@ void *MTArray::pop()
         a[nitems] = 0;
         if (nitems < na - mallocby)
         {
-            while(nitems < na - mallocby) na -= mallocby;
+            while(nitems < na - mallocby)
+            {
+                na -= mallocby;
+            }
             if (na)
             {
-                a = (void **) mtmemrealloc(a, 4 * na);
+                a = (void**) mtmemrealloc(a, 4 * na);
             }
             else
             {
@@ -332,14 +383,17 @@ void *MTArray::pop()
     }
     else
     {
-        item = (void *) ((char *) d + nitems * _is);
-        mtmemzero((char *) d + nitems * _is, _is);
+        item = (void*) ((char*) d + nitems * _is);
+        mtmemzero((char*) d + nitems * _is, _is);
         if (nitems < na - mallocby)
         {
-            while(nitems < na - mallocby) na -= mallocby;
+            while(nitems < na - mallocby)
+            {
+                na -= mallocby;
+            }
             if (na)
             {
-                d = (void **) mtmemrealloc(d, _is * na);
+                d = (void**) mtmemrealloc(d, _is * na);
             }
             else
             {
@@ -352,40 +406,52 @@ void *MTArray::pop()
 }
 
 // find(begin(vec),end(vec),item)
-int MTArray::getitemid(void *item)
+int MTArray::getitemid(void* item)
 {
     int x;
 
     if ((_is > 0) || (nitems < 1))
-    { return -1; }
+    {
+        return -1;
+    }
     for(x = 0; x < nitems; x++)
     {
         if (a[x] == item)
-        { return x; }
+        {
+            return x;
+        }
     };
     return -1;
 }
 
 // vec.remove(begin(vec),end(vec),item))
-void MTArray::remove(void *item)
+void MTArray::remove(void* item)
 {
     int x;
 
     if ((_is > 0) || (nitems < 1))
-    { return; }
+    {
+        return;
+    }
     for(x = 0; x < nitems; x++)
     {
         if (a[x] == item)
         {
-            for(; x < nitems - 1; x++) a[x] = a[x + 1];
+            for(; x < nitems - 1; x++)
+            {
+                a[x] = a[x + 1];
+            }
             nitems--;
             a[nitems] = 0;
             if (nitems < na - mallocby)
             {
-                while(nitems < na - mallocby) na -= mallocby;
+                while(nitems < na - mallocby)
+                {
+                    na -= mallocby;
+                }
                 if (na)
                 {
-                    a = (void **) mtmemrealloc(a, 4 * na);
+                    a = (void**) mtmemrealloc(a, 4 * na);
                 }
                 else
                 {
@@ -405,7 +471,7 @@ void MTArray::remove(void *item)
 // clearobject and delitem. clearobject is non-trivial,
 // delitem references the global pointer si.
 // This is going to be ugly.
-void MTArray::clear(bool deldata, ItemProc proc, void *param)
+void MTArray::clear(bool deldata, ItemProc proc, void* param)
 {
     int x;
 
@@ -413,11 +479,17 @@ void MTArray::clear(bool deldata, ItemProc proc, void *param)
     {
         if (proc)
         {
-            for(x = 0; x < nitems; x++) proc(a[x], param);
+            for(x = 0; x < nitems; x++)
+            {
+                proc(a[x], param);
+            }
         };
         if ((!_is) && (deldata))
         {
-            for(x = 0; x < nitems; x++) mtmemfree(a[x]);
+            for(x = 0; x < nitems; x++)
+            {
+                mtmemfree(a[x]);
+            }
         };
         mtmemfree(a);
         a = 0;
@@ -433,18 +505,22 @@ void MTArray::reset()
 }
 
 // Iterator increment and item return, it seems.
-void *MTArray::next()
+void* MTArray::next()
 {
     int count = (int) mtlocalget(countid);
     if (count >= nitems)
-    { return 0; }
-    mtlocalset(countid, (void *) (count + 1));
+    {
+        return 0;
+    }
+    mtlocalset(countid, (void*) (count + 1));
     if (_is == 0)
     {
         return a[count];
     }
     else
-    { return (char *) d + (count) * _is; }
+    {
+        return (char*) d + (count) * _is;
+    }
 }
 
 // QS implementation, found in vector via std::sort.
@@ -453,7 +529,7 @@ void *MTArray::next()
 void MTArray::quicksort(int lo, int hi, SortProc proc)
 {
     int pi, lo2, hi2;
-    void *t, *p;
+    void* t, * p;
 
     if (lo < hi)
     {
@@ -476,21 +552,32 @@ void MTArray::quicksort(int lo, int hi, SortProc proc)
             hi2 = hi;
             do
             {
-                while((lo2 < hi2) && (proc(a[lo2], p) <= 0)) lo2++;
-                while(proc(a[hi2], p) > 0) hi2--;
+                while((lo2 < hi2) && (proc(a[lo2], p) <= 0))
+                {
+                    lo2++;
+                }
+                while(proc(a[hi2], p) > 0)
+                {
+                    hi2--;
+                }
                 if (lo2 < hi2)
                 {
                     t = a[lo2];
                     a[lo2] = a[hi2];
                     a[hi2] = t;
                 };
-            } while(lo2 < hi2);
+            }
+            while(lo2 < hi2);
             a[lo] = a[hi2];
             a[hi2] = p;
             if (lo < hi2 - 1)
-            { quicksort(lo, hi2 - 1, proc); }
+            {
+                quicksort(lo, hi2 - 1, proc);
+            }
             if (hi2 + 1 < hi)
-            { quicksort(hi2 + 1, hi, proc); }
+            {
+                quicksort(hi2 + 1, hi, proc);
+            }
         };
     };
 }
@@ -500,17 +587,32 @@ void MTArray::quicksort(int lo, int hi, SortProc proc)
 // I'm assuming the f stands for "fixed size"?
 void MTArray::quicksortf(int lo, int hi, SortProc proc)
 {
+    /**
+     * This function is a prime example of why C++ is a much less scary language than C is.
+     * The C++ equivalent of both this and the former function is
+     *
+     * std::stable_sort( std::begin(array), std::end(array) );
+     *
+     * optionally with a comparator function; by default it compares by operator<.
+     *
+     * Whereas THIS function doesn't even know the type or size of what it's sorting,
+     * std::stable_sort is type-safe and will never fail as long as <array> is an iterable range
+     * (read: a stdlib container or C-style array)
+     */
+
     int lo2, hi2;
-    char *clo, *chi, *cpi, *clo2, *chi2;
+    char* clo, * chi, * cpi, * clo2, * chi2;
     static char t[4096];
     static char t2[4096];
 
     if (_is > 4096)
-    { return; }
+    {
+        return;
+    }
     if (lo < hi)
     {
-        clo = (char *) d + lo * _is;
-        chi = (char *) d + hi * _is;
+        clo = (char*) d + lo * _is;
+        chi = (char*) d + hi * _is;
         if (hi - lo == 1)
         {
             if (proc(clo, chi) > 0)
@@ -522,7 +624,7 @@ void MTArray::quicksortf(int lo, int hi, SortProc proc)
         }
         else
         {
-            cpi = (char *) d + ((lo + hi) >> 1) * _is;
+            cpi = (char*) d + ((lo + hi) >> 1) * _is;
             memcpy(t, cpi, _is);
             memcpy(cpi, clo, _is);
             memcpy(clo, t, _is);
@@ -530,23 +632,34 @@ void MTArray::quicksortf(int lo, int hi, SortProc proc)
             hi2 = hi;
             do
             {
-                while((lo2 < hi2) && (proc((char *) d + lo2 * _is, t) <= 0)) lo2++;
-                while(proc((char *) d + hi2 * _is, t) > 0) hi2--;
-                clo2 = (char *) d + lo2 * _is;
-                chi2 = (char *) d + hi2 * _is;
+                while((lo2 < hi2) && (proc((char*) d + lo2 * _is, t) <= 0))
+                {
+                    lo2++;
+                }
+                while(proc((char*) d + hi2 * _is, t) > 0)
+                {
+                    hi2--;
+                }
+                clo2 = (char*) d + lo2 * _is;
+                chi2 = (char*) d + hi2 * _is;
                 if (lo2 < hi2)
                 {
                     memcpy(t2, clo2, _is);
                     memcpy(clo2, chi2, _is);
                     memcpy(chi2, t2, _is);
                 };
-            } while(lo2 < hi2);
+            }
+            while(lo2 < hi2);
             memcpy(clo, chi2, _is);
             memcpy(chi2, t, _is);
             if (lo < hi2 - 1)
-            { quicksortf(lo, hi2 - 1, proc); }
+            {
+                quicksortf(lo, hi2 - 1, proc);
+            }
             if (hi2 + 1 < hi)
-            { quicksortf(hi2 + 1, hi, proc); }
+            {
+                quicksortf(hi2 + 1, hi, proc);
+            }
         };
     };
 }
@@ -556,22 +669,30 @@ void MTArray::quicksortf(int lo, int hi, SortProc proc)
 void MTArray::sort(SortProc proc)
 {
     if (nitems < 2)
-    { return; }
+    {
+        return;
+    }
     if (_is == 0)
     {
         quicksort(0, nitems - 1, proc);
     }
     else
-    { quicksortf(0, nitems - 1, proc); }
+    {
+        quicksortf(0, nitems - 1, proc);
+    }
 }
 
 //---------------------------------------------------------------------------
 MTHash::MTHash(int allocby):
-    nitems(0), hash(0), // pointer, not int
-    mallocby(allocby), na(0)
+    nitems(0),
+    hash(0), // pointer, not int
+    mallocby(allocby),
+    na(0)
 {
     if (mallocby <= 0)
-    { mallocby = 4; }
+    {
+        mallocby = 4;
+    }
     countid = mtlocalalloc();
 }
 
@@ -582,12 +703,18 @@ MTHash::~MTHash()
     mtlocalfree(countid);
     if (hash)
     {
-        for(x = 0; x < nitems; x++) mtmemfree(hash[x].ckey);
+        for(x = 0; x < nitems; x++)
+        {
+            mtmemfree(hash[x].ckey);
+        }
         mtmemfree(hash);
     };
 }
 
-int MTHash::additem(const char *key, void *data)
+// equivalent of std::unordered_map's function insert({key,value});
+// or operator[](key)=value;
+// for a unordered_map<std::string,Foo>;
+int MTHash::additem(const char* key, void* data)
 {
     int chash = nitems;
     unsigned int hkey[4];
@@ -598,14 +725,18 @@ int MTHash::additem(const char *key, void *data)
         na += mallocby;
         if (hash)
         {
-            hash = (MTHashData *) mtmemrealloc(hash, sizeof(MTHashData) * na);
+            hash = (MTHashData*) mtmemrealloc(hash, sizeof(MTHashData) * na);
         }
         else
-        { hash = (MTHashData *) mtmemalloc(sizeof(MTHashData) * na, MTM_ZERO); }
+        {
+            hash = (MTHashData*) mtmemalloc(sizeof(MTHashData) * na, MTM_ZERO);
+        }
     };
     if (!hash)
-    { return -1; }
-    md5b((unsigned char *) hkey, key);
+    {
+        return -1;
+    }
+    md5b((unsigned char*) hkey, key);
     hkey[0] = ((hkey[0] ^ hkey[1]) ^ hkey[2]) ^ hkey[3];
     if (getitem(hkey[0]))
     {
@@ -614,13 +745,14 @@ int MTHash::additem(const char *key, void *data)
         return -1;
     };
     hash[chash].key = hkey[0];
-    hash[chash].ckey = (char *) mtmemalloc(strlen(key) + 1);
+    hash[chash].ckey = (char*) mtmemalloc(strlen(key) + 1);
     strcpy(hash[chash].ckey, key);
     hash[chash].data = data;
     return chash;
 }
 
-int MTHash::additem(int key, void *data)
+// see above. this is just the unordered_map<int,Foo> case.
+int MTHash::additem(int key, void* data)
 {
     int chash = nitems;
 
@@ -630,13 +762,17 @@ int MTHash::additem(int key, void *data)
         na += mallocby;
         if (hash)
         {
-            hash = (MTHashData *) mtmemrealloc(hash, sizeof(MTHashData) * na);
+            hash = (MTHashData*) mtmemrealloc(hash, sizeof(MTHashData) * na);
         }
         else
-        { hash = (MTHashData *) mtmemalloc(sizeof(MTHashData) * na, MTM_ZERO); }
+        {
+            hash = (MTHashData*) mtmemalloc(sizeof(MTHashData) * na, MTM_ZERO);
+        }
     };
     if (!hash)
-    { return -1; }
+    {
+        return -1;
+    }
     if (getitem(key))
     {
         LOGD("%s - [System] Warning: Key already in hash!"
@@ -648,12 +784,15 @@ int MTHash::additem(int key, void *data)
     return chash;
 }
 
-void MTHash::delitem(const char *key, bool deldata, ItemProc proc, void *param)
+// Another function provided by unordered_map - erase(key&);
+// I'm worried about the "delete data" flag though. Aparrently, if that's on
+// the object is not only removed from the container, but also destroyed?
+void MTHash::delitem(const char* key, bool deldata, ItemProc proc, void* param)
 {
     int x;
     unsigned int hkey[4];
 
-    md5b((unsigned char *) hkey, key);
+    md5b((unsigned char*) hkey, key);
     hkey[0] = ((hkey[0] ^ hkey[1]) ^ hkey[2]) ^ hkey[3];
     for(x = 0; x < nitems; x++)
     {
@@ -665,12 +804,15 @@ void MTHash::delitem(const char *key, bool deldata, ItemProc proc, void *param)
     };
 }
 
-void MTHash::delitem(int key, bool deldata, ItemProc proc, void *param)
+// KeyType=int version of the above.
+void MTHash::delitem(int key, bool deldata, ItemProc proc, void* param)
 {
     int x;
 
     if (!hash)
-    { return; }
+    {
+        return;
+    }
     for(x = 0; x < nitems; x++)
     {
         if (hash[x].key == key)
@@ -681,17 +823,21 @@ void MTHash::delitem(int key, bool deldata, ItemProc proc, void *param)
     };
 }
 
-void MTHash::delitemfromid(int id, bool deldata, ItemProc proc, void *param)
+void MTHash::delitemfromid(int id, bool deldata, ItemProc proc, void* param)
 {
     int x = id;
 
     if (!hash)
-    { return; }
+    {
+        return;
+    }
     mtmemfree(hash[id].ckey);
     if (deldata)
     {
         if (proc)
-        { proc(hash[id].data, param); }
+        {
+            proc(hash[id].data, param);
+        }
         mtmemfree(hash[id].data);
     };
     while(x < nitems - 1)
@@ -708,7 +854,7 @@ void MTHash::delitemfromid(int id, bool deldata, ItemProc proc, void *param)
         na -= mallocby;
         if (na)
         {
-            hash = (MTHashData *) mtmemrealloc(hash, sizeof(MTHashData) * na);
+            hash = (MTHashData*) mtmemrealloc(hash, sizeof(MTHashData) * na);
         }
         else
         {
@@ -718,102 +864,129 @@ void MTHash::delitemfromid(int id, bool deldata, ItemProc proc, void *param)
     };
 }
 
-void *MTHash::getitem(const char *key)
+void* MTHash::getitem(const char* key)
 {
     int x;
     unsigned int hkey[4];
-    MTHashData *c;
+    MTHashData* c;
 
     if (!hash)
-    { return 0; }
-    md5b((unsigned char *) hkey, key);
+    {
+        return 0;
+    }
+    md5b((unsigned char*) hkey, key);
     hkey[0] = ((hkey[0] ^ hkey[1]) ^ hkey[2]) ^ hkey[3];
     c = hash;
     x = nitems;
     while(x-- > 0)
     {
         if (c->key == hkey[0])
-        { return c->data; }
+        {
+            return c->data;
+        }
         c++;
     };
     return 0;
 }
 
-void *MTHash::getitem(int key)
+void* MTHash::getitem(int key)
 {
     int x;
-    MTHashData *c;
+    MTHashData* c;
 
     if (!hash)
-    { return 0; }
+    {
+        return 0;
+    }
     c = hash;
     x = nitems;
     while(x-- > 0)
     {
         if (c->key == key)
-        { return c->data; }
+        {
+            return c->data;
+        }
         c++;
     };
     return 0;
 }
 
-void *MTHash::getitemfromid(int id)
+void* MTHash::getitemfromid(int id)
 {
     if (!hash)
-    { return 0; }
+    {
+        return 0;
+    }
     return hash[id].data;
 }
 
-int MTHash::getitemid(void *item)
+int MTHash::getitemid(void* item)
 {
     int x;
-    MTHashData *c;
+    MTHashData* c;
 
     if (!hash)
-    { return -1; }
+    {
+        return -1;
+    }
     c = hash;
     x = nitems;
     while(x-- > 0)
     {
         if (c->data == item)
-        { return nitems - x + 1; }
+        {
+            return nitems - x + 1;
+        }
         c++;
     };
     return -1;
 }
 
-const char *MTHash::getitemkey(void *item)
+const char* MTHash::getitemkey(void* item)
 {
     int x;
-    MTHashData *c;
+    MTHashData* c;
 
     if (!hash)
-    { return 0; }
+    {
+        return 0;
+    }
     c = hash;
     x = nitems;
     while(x-- > 0)
     {
         if (c->data == item)
-        { return c->ckey; }
+        {
+            return c->ckey;
+        }
         c++;
     };
     return 0;
 }
 
-void MTHash::clear(bool deldata, ItemProc proc, void *param)
+void MTHash::clear(bool deldata, ItemProc proc, void* param)
 {
     int x;
 
     if (hash)
     {
-        for(x = 0; x < nitems; x++) mtmemfree(hash[x].ckey);
+        for(x = 0; x < nitems; x++)
+        {
+            mtmemfree(hash[x].ckey);
+        }
         if (proc)
         {
-            for(x = 0; x < nitems; x++) proc(hash[x].data, param);
+            for(x = 0; x < nitems; x++)
+            {
+                proc(hash[x].data, param);
+            }
         };
         if (deldata)
         {
-            for(x = 0; x < nitems; x++) mtmemfree(hash[x].data);
+            for(x = 0; x < nitems; x++)
+            {
+                mtmemfree(hash[x].data);
+            }
         };
         mtmemfree(hash);
         hash = 0;
@@ -827,12 +1000,14 @@ void MTHash::reset()
     mtlocalset(countid, 0);
 }
 
-void *MTHash::next()
+void* MTHash::next()
 {
     int count = (int) mtlocalget(countid);
     if ((count >= nitems) || (!hash))
-    { return 0; }
-    mtlocalset(countid, (void *) (count + 1));
+    {
+        return 0;
+    }
+    mtlocalset(countid, (void*) (count + 1));
     return hash[count].data;
 }
 //---------------------------------------------------------------------------

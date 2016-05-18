@@ -16,6 +16,6 @@
 #include "MTObject.h"
 
 //---------------------------------------------------------------------------
-bool loadSF2(MTObject *object, char *filename, void *process);
+bool loadSF2(MTObject* object, char* filename, void* process);
 //---------------------------------------------------------------------------
 #endif

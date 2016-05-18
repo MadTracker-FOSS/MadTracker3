@@ -37,13 +37,13 @@ struct TrackAuto
 {
     int flags;
     int fx;
-    TrackEnvelopes *trkenv;
+    TrackEnvelopes* trkenv;
 };
 
 class Automation: public MTObject
 {
 public:
-    Automation(MTObject *parent, mt_int32 i);
+    Automation(MTObject* parent, mt_int32 i);
 
     virtual ~Automation();
 

@@ -23,12 +23,12 @@ static const int mt3type = FOURCC('X', 'M', 'T', '3');
 struct MTExtension
 {
     int id;
-    MTXInterfaces *i;
-    void *library;
-    char *filename;
+    MTXInterfaces* i;
+    void* library;
+    char* filename;
     bool loaded;
     bool system;
-    void *start, *end;
+    void* start, * end;
 };
 
 class MT3Interface: public MTInterface
@@ -38,46 +38,46 @@ public:
 
     virtual ~MT3Interface(); // made virtual, because unloadExtensions() "delete"s an instance of this type.
 
-    MTXInterface *MTCT getinterface(int id);
+    MTXInterface* MTCT getinterface(int id);
 
-    MTPreferences *MTCT getprefs();
+    MTPreferences* MTCT getprefs();
 
-    void *MTCT getcurrentuser();
+    void* MTCT getcurrentuser();
 
     int MTCT getnummodules();
 
-    void *MTCT getmodule(int id);
+    void* MTCT getmodule(int id);
 
-    void MTCT addmodule(void *module);
+    void MTCT addmodule(void* module);
 
-    void MTCT delmodule(void *module);
+    void MTCT delmodule(void* module);
 
-    void MTCT setmodule(void *module);
+    void MTCT setmodule(void* module);
 
     bool MTCT addchannel();
 
-    void MTCT notify(void *object, int notify, int param);
+    void MTCT notify(void* object, int notify, int param);
 
-    bool MTCT editobject(void *object, bool newwindow);
+    bool MTCT editobject(void* object, bool newwindow);
 
-    void *MTCT getconf(const char *name, bool user);
+    void* MTCT getconf(const char* name, bool user);
 
-    void MTCT releaseconf(void *conf);
+    void MTCT releaseconf(void* conf);
 
-    int MTCT addrefreshproc(RefreshProc proc, void *param);
+    int MTCT addrefreshproc(RefreshProc proc, void* param);
 
     void MTCT delrefreshproc(int id);
 
-    char *MTCT getextension(void *ptr);
+    char* MTCT getextension(void* ptr);
 
     bool MTCT canclose();
 
-    void *MTCT getconsole();
+    void* MTCT getconsole();
 
-    int MTCT processinput(const char *input);
+    int MTCT processinput(const char* input);
 
 private:
-    MTFile *console;
+    MTFile* console;
 };
 
 //---------------------------------------------------------------------------
@@ -100,22 +100,22 @@ void uninitSystem();
 //---------------------------------------------------------------------------
 extern int next;
 
-extern MTExtension *ext[MAX_EXTENSIONS];
+extern MTExtension* ext[MAX_EXTENSIONS];
 
-extern MT3Interface *mi;
+extern MT3Interface* mi;
 
-extern MTSystemInterface *si;
+extern MTSystemInterface* si;
 
-extern MTObjectsInterface *oi;
+extern MTObjectsInterface* oi;
 
-extern MTDisplayInterface *di;
+extern MTDisplayInterface* di;
 
-extern MTGUIInterface *gi;
+extern MTGUIInterface* gi;
 
-extern MTAudioInterface *ai;
+extern MTAudioInterface* ai;
 
-extern MTDSPInterface *dspi;
+extern MTDSPInterface* dspi;
 
-extern MTWindow *lastseq, *lastpw, *lastiw, *lastow, *lastaw;
+extern MTWindow* lastseq, * lastpw, * lastiw, * lastow, * lastaw;
 //---------------------------------------------------------------------------
 #endif

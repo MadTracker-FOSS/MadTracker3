@@ -18,14 +18,14 @@ struct OS_PROCS
 {
     HWND wnd;
     WNDPROC proc;
-    MTOSWindow *oswnd;
+    MTOSWindow* oswnd;
 };
 
-MTHash *procs;
+MTHash* procs;
 
 HDC lastdc;
 
-OS_PROCS *lastproc;
+OS_PROCS* lastproc;
 
 //---------------------------------------------------------------------------
 void initOSWindow()
@@ -55,19 +55,25 @@ void uninitOSWindow()
 // MTControl
 //   MTOSWindow
 //---------------------------------------------------------------------------
-MTOSWindow::MTOSWindow(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTControl(MTC_OSWINDOW, tag, p, l, t, w, h), compat(false), active(true), lastwnd(0), dc(0), b(0)
+MTOSWindow::MTOSWindow(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTControl(MTC_OSWINDOW, tag, p, l, t, w, h),
+    compat(false),
+    active(true),
+    lastwnd(0),
+    dc(0),
+    b(0)
 {
-    OS_PROCS *osproc = 0;
+    OS_PROCS* osproc = 0;
     MTPoint op = {left, top};
 
     flags |= (MTCF_ACCEPTINPUT | MTCF_NOTIFYPOS);
     if ((!p) || (!p->dsk) || (!p->dsk->mwnd))
-    { return; }
+    {
+        return;
+    }
     parent->toscreen(op);
-    wnd = CreateWindowEx((compat) ?
-                         0 :
-                         WS_EX_TRANSPARENT, "MT3OSWindow", "", WS_POPUP, op.x, op.y, width, height, (HWND)
+    wnd = CreateWindowEx(
+        (compat) ? 0 : WS_EX_TRANSPARENT, "MT3OSWindow", "", WS_POPUP, op.x, op.y, width, height, (HWND)
     p->dsk->mwnd, 0, instance, 0);
     osproc = mtnew(OS_PROCS);
     osproc->wnd = wnd;
@@ -104,11 +110,13 @@ void MTOSWindow::setbounds(int l, int t, int w, int h)
     int oldh = height;
     int bflags = flags;
     MTPoint p;
-    void *rgn;
-    OS_PROCS *osproc;
+    void* rgn;
+    OS_PROCS* osproc;
 
     if (!compat)
-    { flags |= MTCF_DONTDRAW; }
+    {
+        flags |= MTCF_DONTDRAW;
+    }
     MTControl::setbounds(l, t, w, h);
     if ((width != oldw) || (height != oldh))
     {
@@ -127,7 +135,7 @@ void MTOSWindow::setbounds(int l, int t, int w, int h)
     if (!compat)
     {
         procs->reset();
-        while((osproc = (OS_PROCS *) procs->next()))
+        while((osproc = (OS_PROCS*) procs->next()))
         {
             if (osproc->oswnd == this)
             {
@@ -143,9 +151,9 @@ void MTOSWindow::setbounds(int l, int t, int w, int h)
     };
 }
 
-void MTOSWindow::draw(MTRect &rect)
+void MTOSWindow::draw(MTRect& rect)
 {
-    MTBitmap *mb;
+    MTBitmap* mb;
     int ox = left;
     int oy = top;
     HDC ddc;
@@ -154,7 +162,9 @@ void MTOSWindow::draw(MTRect &rect)
     if ((!compat) || (!active))
     {
         if (&rect)
-        { cliprect(r, rect); }
+        {
+            cliprect(r, rect);
+        }
         preparedraw(&mb, ox, oy);
         ddc = (HDC)
         mb->open(0);
@@ -164,11 +174,11 @@ void MTOSWindow::draw(MTRect &rect)
     MTControl::draw(rect);
 }
 
-bool MTOSWindow::message(MTCMessage &msg)
+bool MTOSWindow::message(MTCMessage& msg)
 {
     int wm, delta;
     MTPoint p;
-    void *rgn;
+    void* rgn;
 
     if (msg.msg == MTCM_POSCHANGED)
     {
@@ -222,7 +232,9 @@ bool MTOSWindow::message(MTCMessage &msg)
                 wm = WM_RBUTTONDOWN;
             }
             else
-            { wm = WM_MBUTTONDOWN; }
+            {
+                wm = WM_MBUTTONDOWN;
+            }
             if (msg.buttons & DB_DOUBLE)
             {
                 SendMessage(wnd, wm, lastwparam, msg.x | (msg.y << 16));
@@ -235,7 +247,9 @@ bool MTOSWindow::message(MTCMessage &msg)
                     wm = WM_RBUTTONDBLCLK;
                 }
                 else
-                { wm = WM_MBUTTONDBLCLK; }
+                {
+                    wm = WM_MBUTTONDBLCLK;
+                }
             };
             SendMessage(wnd, wm, lastwparam, msg.x | (msg.y << 16));
             break;
@@ -249,7 +263,9 @@ bool MTOSWindow::message(MTCMessage &msg)
                 wm = WM_RBUTTONUP;
             }
             else
-            { wm = WM_MBUTTONUP; }
+            {
+                wm = WM_MBUTTONUP;
+            }
             SendMessage(wnd, wm, lastwparam, msg.x | (msg.y << 16));
             break;
         case MTCM_MOUSEWHEEL:
@@ -274,15 +290,17 @@ void MTOSWindow::setcompatible(bool compatible)
     compat = compatible;
     SetWindowLong(wnd, GWL_EXSTYLE, (compat) ? 0 : WS_EX_TRANSPARENT);
     if ((compat) && (active))
-    { ShowWindow(wnd, SW_NORMAL); }
+    {
+        ShowWindow(wnd, SW_NORMAL);
+    }
 }
 
-void *MTOSWindow::getoshandle()
+void* MTOSWindow::getoshandle()
 {
     return wnd;
 }
 
-bool MTOSWindow::patchoscode(void *lib)
+bool MTOSWindow::patchoscode(void* lib)
 {
     static int search[] = {
         (int) GetDC,
@@ -312,26 +330,29 @@ bool MTOSWindow::patchoscode(void *lib)
     };
     const nsearch = sizeof(search) / sizeof(int);
     int x, c;
-    char *s, *e;
-    char *p, *m;
+    char* s, * e;
+    char* p, * m;
 
-    si->getlibmemoryrange(lib, 0, (void **) &s, (int *) &e);
+    si->getlibmemoryrange(lib, 0, (void**) &s, (int*) &e);
     if (!VirtualProtect(s, (int) e, PAGE_EXECUTE_READWRITE, (DWORD * ) & x))
     {
         MEMORY_BASIC_INFORMATION meminfo;
         FLOGD1("%s - [VST] WARNING: VirtualProtect error %d!"
                    NL, GetLastError());
         x = VirtualQuery(s, &meminfo, sizeof(meminfo));
-        if (x > 0) DUMP(&meminfo, x, 0);
+        if (x > 0)
+            DUMP(&meminfo, x, 0);
         return false;
     };
     if (x & PAGE_EXECUTE_READWRITE)
-    { return true; }
+    {
+        return true;
+    }
     e += (int) s;
     for(x = 0; x < nsearch; x++)
     {
         c = 0;
-        m = (char *) &search[x];
+        m = (char*) &search[x];
         for(p = s; p < e; p++)
         {
             retry:
@@ -339,16 +360,18 @@ bool MTOSWindow::patchoscode(void *lib)
             {
                 if (++c == 4)
                 {
-                    *(int *) (p - 3) = replace[x];
-                    m = (char *) &search[x];
+                    *(int*) (p - 3) = replace[x];
+                    m = (char*) &search[x];
                     c = 0;
                 }
                 else
-                { m++; }
+                {
+                    m++;
+                }
             }
             else if (c > 0)
             {
-                m = (char *) &search[x];
+                m = (char*) &search[x];
                 c = 0;
                 goto retry;
             };
@@ -371,9 +394,9 @@ long lparam
 
 )
 {
-MTOSWindow *oswnd;
+MTOSWindow* oswnd;
 
-OS_PROCS *osproc = 0;
+OS_PROCS* osproc = 0;
 
 HWND fwd;
 
@@ -383,7 +406,7 @@ POINT p;
 
 FENTER4("MTOSWindow::CustomProc(%.8X,%.8X,%.8X,%.8X)", wnd, msg, wparam, lparam);
 
-osproc = (OS_PROCS *) procs->getitem((int) wnd);
+osproc = (OS_PROCS*) procs->getitem((int) wnd);
 
 if (!osproc){
 LEAVE();
@@ -410,7 +433,7 @@ l = GetWindowLong((HWND)
 lparam,GWL_STYLE);
 if (
 
-l &(WS_CAPTION
+l& (WS_CAPTION
 
 |WS_POPUP|WS_BORDER|WS_THICKFRAME|WS_VSCROLL|WS_HSCROLL|WS_DLGFRAME)) break;
 
@@ -596,7 +619,7 @@ MTOSWindow::mGetDC(HWND
 
 hWnd)
 {
-OS_PROCS *osproc = (OS_PROCS *) procs->getitem((int) hWnd);
+OS_PROCS* osproc = (OS_PROCS*) procs->getitem((int) hWnd);
 
 if ((!osproc) || (osproc->oswnd->compat)) return
 
@@ -622,7 +645,7 @@ HRGN hrgnClip, DWORD
 
 flags)
 {
-OS_PROCS *osproc = (OS_PROCS *) procs->getitem((int) hWnd);
+OS_PROCS* osproc = (OS_PROCS*) procs->getitem((int) hWnd);
 
 if ((!osproc) || (osproc->oswnd->compat)) return
 
@@ -646,7 +669,7 @@ MTOSWindow::mGetWindowDC(HWND
 
 hWnd)
 {
-OS_PROCS *osproc = (OS_PROCS *) procs->getitem((int) hWnd);
+OS_PROCS* osproc = (OS_PROCS*) procs->getitem((int) hWnd);
 
 if ((!osproc) || (osproc->oswnd->compat)) return
 
@@ -672,7 +695,7 @@ HDC hDC
 
 )
 {
-OS_PROCS *osproc = (OS_PROCS *) procs->getitem((int) hWnd);
+OS_PROCS* osproc = (OS_PROCS*) procs->getitem((int) hWnd);
 
 if ((!osproc) || (osproc->oswnd->compat)) return
 
@@ -697,7 +720,7 @@ LPPAINTSTRUCT lpPaint
 
 )
 {
-OS_PROCS *osproc = (OS_PROCS *) procs->getitem((int) hWnd);
+OS_PROCS* osproc = (OS_PROCS*) procs->getitem((int) hWnd);
 
 if ((!osproc) || (osproc->oswnd->compat)) return
 
@@ -712,7 +735,7 @@ lpPaint->
 
 hdc = osproc->oswnd->dc;
 
-RECT &r = lpPaint->rcPaint;
+RECT& r = lpPaint->rcPaint;
 
 r.
 
@@ -742,7 +765,7 @@ CONST PAINTSTRUCT
 
 *lpPaint)
 {
-OS_PROCS *osproc = (OS_PROCS *) procs->getitem((int) hWnd);
+OS_PROCS* osproc = (OS_PROCS*) procs->getitem((int) hWnd);
 
 if ((!osproc) || (osproc->oswnd->compat)) return
 
@@ -772,7 +795,7 @@ LPRECT lpRect, BOOL
 
 bErase)
 {
-OS_PROCS *osproc = (OS_PROCS *) procs->getitem((int) hWnd);
+OS_PROCS* osproc = (OS_PROCS*) procs->getitem((int) hWnd);
 
 if ((!osproc) || (osproc->oswnd->compat)) return
 
@@ -783,7 +806,7 @@ if (!lpRect) return
 
 TRUE;
 
-RECT &r = *lpRect;
+RECT& r = *lpRect;
 
 r.
 
@@ -813,7 +836,7 @@ HRGN hRgn, BOOL
 
 bErase)
 {
-OS_PROCS *osproc = (OS_PROCS *) procs->getitem((int) hWnd);
+OS_PROCS* osproc = (OS_PROCS*) procs->getitem((int) hWnd);
 
 if ((!osproc) || (osproc->oswnd->compat)) return
 
@@ -836,7 +859,7 @@ MTOSWindow::mSetCapture(HWND
 
 hWnd)
 {
-OS_PROCS *osproc = (OS_PROCS *) procs->getitem((int) hWnd);
+OS_PROCS* osproc = (OS_PROCS*) procs->getitem((int) hWnd);
 
 if ((!osproc) || (osproc->oswnd->compat)) return
 

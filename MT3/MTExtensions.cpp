@@ -31,7 +31,7 @@
 #include <iostream>
 
 //---------------------------------------------------------------------------
-static const char *mt3name = {"MadTracker"};
+static const char* mt3name = {"MadTracker"};
 
 static const int mt3version = 0x30000;
 
@@ -39,39 +39,39 @@ MTXKey mt3key = {0, 0, 0, 0};
 
 int next;
 
-MTExtension *ext[MAX_EXTENSIONS];
+MTExtension* ext[MAX_EXTENSIONS];
 
-MT3Interface *mi;
+MT3Interface* mi;
 
-MTSystemInterface *si;
+MTSystemInterface* si;
 
-MTObjectsInterface *oi;
+MTObjectsInterface* oi;
 
-MTDisplayInterface *di;
+MTDisplayInterface* di;
 
-MTGUIInterface *gi;
+MTGUIInterface* gi;
 
-MTAudioInterface *ai;
+MTAudioInterface* ai;
 
-MTDSPInterface *dspi;
+MTDSPInterface* dspi;
 
-MTWindow *lastseq, *lastpw, *lastiw, *lastow, *lastaw;
+MTWindow* lastseq, * lastpw, * lastiw, * lastow, * lastaw;
 
 //---------------------------------------------------------------------------
-bool MTCT editwindowproc(MTWinControl *window, MTCMessage &msg)
+bool MTCT editwindowproc(MTWinControl* window, MTCMessage& msg)
 {
-    MTWindow *last = 0;
+    MTWindow* last = 0;
     int x;
 
     if (msg.msg == MTCM_DESTROY)
     {
-        MTWinControl &cparent = *window->parent;
+        MTWinControl& cparent = *window->parent;
         for(x = 0; x < cparent.ncontrols; x++)
         {
-            MTWindow &cwindow = *(MTWindow *) cparent.controls[x];
+            MTWindow& cwindow = *(MTWindow*) cparent.controls[x];
             if ((&cwindow != window) && (cwindow.guiid == MTC_WINDOW) && ((cwindow.tag & MTO_TYPEMASK) == (window->tag & MTO_TYPEMASK)))
             {
-                last = (MTWindow *) cparent.controls[x];
+                last = (MTWindow*) cparent.controls[x];
                 break;
             };
         };
@@ -113,36 +113,36 @@ MT3Interface::~MT3Interface()
     delete console;
 }
 
-MTXInterface *MT3Interface::getinterface(int id)
+MTXInterface* MT3Interface::getinterface(int id)
 {
-    extern void *instance;
+    extern void* instance;
 
     switch (id)
     {
         case 0:
-            return (MTXInterface *) instance;
+            return (MTXInterface*) instance;
         case systemtype:
-            return (MTXInterface *) si;
+            return (MTXInterface*) si;
         case objectstype:
-            return (MTXInterface *) oi;
+            return (MTXInterface*) oi;
         case displaytype:
-            return (MTXInterface *) di;
+            return (MTXInterface*) di;
         case guitype:
-            return (MTXInterface *) gi;
+            return (MTXInterface*) gi;
         case audiotype:
-            return (MTXInterface *) ai;
+            return (MTXInterface*) ai;
         case dsptype:
-            return (MTXInterface *) dspi;
+            return (MTXInterface*) dspi;
     };
     return 0;
 }
 
-MTPreferences *MT3Interface::getprefs()
+MTPreferences* MT3Interface::getprefs()
 {
     return &prefs;
 }
 
-void *MT3Interface::getcurrentuser()
+void* MT3Interface::getcurrentuser()
 {
     return &cuser;
 }
@@ -155,12 +155,14 @@ int MT3Interface::getnummodules()
     for(x = 0; x < 16; x++)
     {
         if (module[x])
-        { n++; }
+        {
+            n++;
+        }
     }
     return n;
 }
 
-void *MT3Interface::getmodule(int id)
+void* MT3Interface::getmodule(int id)
 {
     int x;
     int n = 0;
@@ -174,13 +176,15 @@ void *MT3Interface::getmodule(int id)
                 return module[x];
             }
             else
-            { n++; }
+            {
+                n++;
+            }
         };
     };
     return 0;
 }
 
-void MT3Interface::addmodule(void *m)
+void MT3Interface::addmodule(void* m)
 {
     int x;
 
@@ -189,7 +193,7 @@ void MT3Interface::addmodule(void *m)
     {
         if (module[x] == 0)
         {
-            module[x] = (MTModule *) m;
+            module[x] = (MTModule*) m;
             ::setmodule(m);
             break;
         };
@@ -197,14 +201,14 @@ void MT3Interface::addmodule(void *m)
     LEAVE();
 }
 
-void MT3Interface::delmodule(void *m)
+void MT3Interface::delmodule(void* m)
 {
     int x;
 
     FENTER1("MT3Interface::delmodule(%.8X)", module);
     for(x = 0; x < 16; x++)
     {
-        if (module[x] == (void *) m)
+        if (module[x] == (void*) m)
         {
             module[x] = 0;
             break;
@@ -213,7 +217,7 @@ void MT3Interface::delmodule(void *m)
     LEAVE();
 }
 
-void MT3Interface::setmodule(void *module)
+void MT3Interface::setmodule(void* module)
 {
     FENTER1("MT3Interface::setmodule(%.8X)", module);
     ::setmodule(module);
@@ -225,21 +229,26 @@ bool MT3Interface::addchannel()
     int x, i, mi, mc, ndel;
     int totchan;
     double tot, max, cpupchan;
-    InstrumentInstance *c[16];
+    InstrumentInstance* c[16];
 
     ENTER("MT3Interface::addchannel");
-    MTTRY if (output)
-        { output->lock->lock(); }
+    MTTRY
+        if (output)
+        {
+            output->lock->lock();
+        }
         totchan = 0;
         tot = 0.0;
         max = (output) ? output->maxcpu : 0.75;
         for(x = 0; x < 16; x++)
         {
-            MTModule &cmodule = *module[x];
+            MTModule& cmodule = *module[x];
             if ((&cmodule) && (!cmodule.lockread))
             {
                 if (cmodule.cpu)
-                { tot += cmodule.cpu->getcpu(0); }
+                {
+                    tot += cmodule.cpu->getcpu(0);
+                }
                 totchan += cmodule.playstatus.nchannels;
             };
         };
@@ -251,16 +260,20 @@ bool MT3Interface::addchannel()
         while(tot >= max)
         {
             if (cpupchan <= 0.0)
-            { break; }
+            {
+                break;
+            }
             mc = -1;
             for(x = 0; x < 16; x++)
             {
-                MTModule &cmodule = *module[x];
+                MTModule& cmodule = *module[x];
                 if ((&cmodule) && (!cmodule.lockread))
                 {
                     c[x] = cmodule.getlessimportantchannel(&i);
                     if (i < mi)
-                    { mc = x; }
+                    {
+                        mc = x;
+                    }
                 };
             };
             if (mc >= 0)
@@ -268,22 +281,31 @@ bool MT3Interface::addchannel()
                 module[mc]->delchannel(c[mc]);
             }
             else
-            { break; }
+            {
+                break;
+            }
             tot -= cpupchan;
             if (++ndel == 8)
-            { break; }
-        }; MTCATCH mc = 0; MTEND
+            {
+                break;
+            }
+        };
+    MTCATCH
+        mc = 0;
+    MTEND
     if (output)
-    { output->lock->unlock(); }
+    {
+        output->lock->unlock();
+    }
     LEAVE();
     return (mc >= 0);
 }
 
-void MT3Interface::notify(void *object, int notify, int param)
+void MT3Interface::notify(void* object, int notify, int param)
 {
     int x;
-    MTObject &cobject = *(MTObject *) object;
-    MTWindow *window;
+    MTObject& cobject = *(MTObject*) object;
+    MTWindow* window;
 
     FENTER3("MT3Interface::notify(%.8X,%d,%d)", object, notify, param);
 #	if defined(_DEBUG) && defined(_DEBUG_NOTIFY)
@@ -339,11 +361,13 @@ void MT3Interface::notify(void *object, int notify, int param)
             {
                 case MTO_MODULE:
                     if (cmodule == &cobject)
-                    { cmodule = 0; }
+                    {
+                        cmodule = 0;
+                    }
                     window = lastseq;
                     for(x = 0; x < 16; x++)
                     {
-                        if (module[x] == (MTModule *) &cobject)
+                        if (module[x] == (MTModule*) &cobject)
                         {
                             module[x] = 0;
                             break;
@@ -370,26 +394,30 @@ void MT3Interface::notify(void *object, int notify, int param)
             };
         case MTN_NEW:
             if (cobject.parent)
-            { cobject.parent->setmodified(1, (cobject.objecttype & MTO_TYPEMASK) | MTOM_ADDDELETE); }
+            {
+                cobject.parent->setmodified(1, (cobject.objecttype & MTO_TYPEMASK) | MTOM_ADDDELETE);
+            }
             break;
     };
     LEAVE();
 }
 
-bool MT3Interface::editobject(void *object, bool newwindow)
+bool MT3Interface::editobject(void* object, bool newwindow)
 {
-    MTObject &cobject = *(MTObject *) object;
-    MTWindow *window;
+    MTObject& cobject = *(MTObject*) object;
+    MTWindow* window;
     int type;
     bool created = false;
 
     if ((!object) || (!gi))
-    { return false; }
+    {
+        return false;
+    }
     FENTER2("MT3Interface::editobject(%.8X,%d)", object, newwindow);
     switch (cobject.objecttype & MTO_TYPEMASK)
     {
         case MTO_MODULE:
-            setmodule((MTModule *) object);
+            setmodule((MTModule*) object);
             window = lastseq;
             type = MTW_sequencer;
             break;
@@ -423,9 +451,11 @@ bool MT3Interface::editobject(void *object, bool newwindow)
         };
         window->messageproc = editwindowproc;
         window->flags |= MTCF_FREEONCLOSE;
-        MTTabControl *tabs = (MTTabControl *) window->getcontrolfromuid(1);
+        MTTabControl* tabs = (MTTabControl*) window->getcontrolfromuid(1);
         if ((tabs) && (tabs->guiid == MTC_TABCONTROL))
-        { tabs->setautohidetabs(true); }
+        {
+            tabs->setautohidetabs(true);
+        }
         created = true;
     };
     if (oi->editobject(&cobject, window))
@@ -459,15 +489,17 @@ bool MT3Interface::editobject(void *object, bool newwindow)
     else
     {
         if (created)
-        { gi->deletewindow(window); }
+        {
+            gi->deletewindow(window);
+        }
         LEAVE();
         return false;
     };
 }
 
-void *MT3Interface::getconf(const char *name, bool user)
+void* MT3Interface::getconf(const char* name, bool user)
 {
-    _MTConf *cconf = 0;
+    _MTConf* cconf = 0;
     char buf[1024];
 
     strcpy(buf, prefs.syspath[(user) ? SP_USERCONFIG : SP_CONFIG]);
@@ -475,8 +507,8 @@ void *MT3Interface::getconf(const char *name, bool user)
     strcat(buf, ".conf");
     if (confs)
     {
-        _MTConf *econf;
-        cconf = (_MTConf *) confs->getitem(buf);
+        _MTConf* econf;
+        cconf = (_MTConf*) confs->getitem(buf);
         if (cconf)
         {
             if (si->sync_inc(&cconf->refcount) <= 0)
@@ -488,7 +520,7 @@ void *MT3Interface::getconf(const char *name, bool user)
             };
         };
         confs->reset();
-        while((econf = (_MTConf *) confs->next()))
+        while((econf = (_MTConf*) confs->next()))
         {
             if ((econf->refcount == 0) && (econf->lastuse < si->syscounter() - 60000))
             {
@@ -512,7 +544,7 @@ void *MT3Interface::getconf(const char *name, bool user)
     };
     if (cconf == 0)
     {
-        MTConfigFile *conf = si->configopen(buf);
+        MTConfigFile* conf = si->configopen(buf);
         if (conf)
         {
             cconf = mtnew(_MTConf);
@@ -521,40 +553,46 @@ void *MT3Interface::getconf(const char *name, bool user)
             confs->additem(buf, cconf);
         }
         else
-        { return 0; }
+        {
+            return 0;
+        }
     };
     cconf->lastuse = si->syscounter();
     return cconf->conf;
 }
 
-void MT3Interface::releaseconf(void *conf)
+void MT3Interface::releaseconf(void* conf)
 {
     if (confs)
     {
-        MTConfigFile &cconf = *(MTConfigFile *) conf;
-        _MTConf *econf;
-        econf = (_MTConf *) confs->getitem((char *) cconf.getfilename());
+        MTConfigFile& cconf = *(MTConfigFile*) conf;
+        _MTConf* econf;
+        econf = (_MTConf*) confs->getitem((char*) cconf.getfilename());
         if (econf)
         {
             si->sync_dec(&econf->refcount);
         }
         else
-        { si->configclose((MTConfigFile *) conf); }
+        {
+            si->configclose((MTConfigFile*) conf);
+        }
     }
     else
     {
-        si->configclose((MTConfigFile *) conf);
+        si->configclose((MTConfigFile*) conf);
     };
 }
 
-int MT3Interface::addrefreshproc(RefreshProc proc, void *param)
+int MT3Interface::addrefreshproc(RefreshProc proc, void* param)
 {
     static int rpid;
 
     if (!refreshprocs)
-    { return -1; }
+    {
+        return -1;
+    }
     FENTER2("MT3Interface::addrefreshproc(%.8X,%.8X)", proc, param);
-    RefreshStruct *rs = mtnew(RefreshStruct);
+    RefreshStruct* rs = mtnew(RefreshStruct);
     rs->id = rpid;
     rs->proc = proc;
     rs->param = param;
@@ -567,11 +605,11 @@ int MT3Interface::addrefreshproc(RefreshProc proc, void *param)
 void MT3Interface::delrefreshproc(int id)
 {
     int x = 0;
-    RefreshStruct *rs;
+    RefreshStruct* rs;
 
     FENTER1("MT3Interface::delrefreshproc(%d)", id);
     refreshprocs->reset();
-    while((rs = (RefreshStruct *) refreshprocs->next()))
+    while((rs = (RefreshStruct*) refreshprocs->next()))
     {
         if (rs->id == id)
         {
@@ -587,19 +625,21 @@ void MT3Interface::delrefreshproc(int id)
     LEAVE();
 }
 
-char *MT3Interface::getextension(void *ptr)
+char* MT3Interface::getextension(void* ptr)
 {
     int x;
-    char *e;
+    char* e;
 
     for(x = 0; x < next; x++)
     {
-        MTExtension &cext = *ext[x];
+        MTExtension& cext = *ext[x];
         if ((ptr >= cext.start) && (ptr < cext.end))
         {
             e = strrchr(cext.filename, '/');
             if (!e)
-            { return cext.filename; }
+            {
+                return cext.filename;
+            }
             return e + 1;
         };
     };
@@ -615,9 +655,11 @@ bool MT3Interface::canclose()
     {
         for(x = 0; x < mtdsk->ncontrols; x++)
         {
-            MTWindow &cwnd = *(MTWindow *) mtdsk->controls[x];
+            MTWindow& cwnd = *(MTWindow*) mtdsk->controls[x];
             if (cwnd.guiid != MTC_WINDOW)
-            { continue; }
+            {
+                continue;
+            }
             if (cwnd.modified)
             {
                 modified = true;
@@ -628,19 +670,27 @@ bool MT3Interface::canclose()
         {
             res = si->dialog("Save last UI changes?", "", MTD_YESNOCANCEL, MTD_QUESTION, 10000);
             if (res == MTDR_TIMEOUT)
-            { res = 0; }
+            {
+                res = 0;
+            }
             if ((res == MTDR_CANCEL) || (res == 2))
-            { return false; }
+            {
+                return false;
+            }
             if (res == 0)
             {
                 gi->setmouseshape(DCUR_WORKING);
                 for(x = 0; x < mtdsk->ncontrols; x++)
                 {
-                    MTWindow &cwnd = *(MTWindow *) mtdsk->controls[x];
+                    MTWindow& cwnd = *(MTWindow*) mtdsk->controls[x];
                     if (cwnd.guiid != MTC_WINDOW)
-                    { continue; }
+                    {
+                        continue;
+                    }
                     if (cwnd.modified)
-                    { gi->savewindow(&cwnd); }
+                    {
+                        gi->savewindow(&cwnd);
+                    }
                 };
                 gi->restoremouseshape();
             };
@@ -649,14 +699,50 @@ bool MT3Interface::canclose()
     return true;
 }
 
-void *MT3Interface::getconsole()
+void* MT3Interface::getconsole()
 {
     return console;
 }
 
-int MT3Interface::processinput(const char *input)
+//NOTE This is the only processinput(const char*) implementation that actually does anything.
+int MT3Interface::processinput(const char* input)
 {
-    char *param;
+    /**
+     * What this function does:
+     * Take input string, split it at the first space character, look at the first word.
+     * If the first word is "open" or "load", load module from filename given by 2nd word.
+     * If the first word is "exit" or "quit", terminate the program.
+     * If either of the two applied, return 1.
+     * Otherwise, do nothing and return 0.
+     */
+
+    /**
+     * POSSIBLE REFACTOR:
+     * void MTInterface::processinput(std::string const& input)
+     * {
+     *      // using posai-StringUtils or an equivalent string utility lib
+     *      // see https://github.com/xenonbirds/posai-StringUtils
+     *
+     *      auto words = str::split(input," ");
+     *      if (!words.empty())
+     *      {
+     *          auto command = str::lowercase(words[0]);
+     *          if (command == "open" || command == "load")
+     *          {
+     *              if (words.size()<2)
+     *                  throw std::illegal_argument("OPEN command needs filename parameter");
+     *
+     *              MTApp.loadModule(words[1]); // or similar
+     *          }
+     *          else if (command == "quit" || command == "exit")
+     *          {
+     *              MTApp.setRunning(false); // or similar
+     *          }
+     *      }
+     * }
+     */
+
+    char* param;
     char command[256];
 
     mtmemzero(command, sizeof(command));
@@ -669,17 +755,22 @@ int MT3Interface::processinput(const char *input)
     if ((stricmp(command, "open") == 0) || (stricmp(command, "load") == 0))
     {
         if (param)
-        { loadmodule(param); }
+        {
+            loadmodule(param);
+        }
         return 1;
     }
     else if ((stricmp(command, "exit") == 0) || (stricmp(command, "quit") == 0))
     {
-#		ifdef _WIN32
+#ifdef _WIN32
         PostQuitMessage(0);
-#		else
-        extern bool running;
+#else
+        extern bool running; // GOD. WHY. This is the global variable from mt3.cpp where the main function lies.
         running = false;
-#		endif
+        // Fulltext search tells me that this is the only time "running" is ever referenced anywhere other than
+        // the main source file. So we can probably encapsulate it into a class "MT3App" or sth. which represents
+        // the application being executed.
+#endif
         return 1;
     }
     else
@@ -689,16 +780,18 @@ int MT3Interface::processinput(const char *input)
 }
 
 //---------------------------------------------------------------------------
-MTExtension *addextension()
+MTExtension* addextension()
 {
     if (next == MAX_EXTENSIONS)
-    { return 0; }
-    ext[next] = (MTExtension *) calloc(1, sizeof(MTExtension));
+    {
+        return 0;
+    }
+    ext[next] = (MTExtension*) calloc(1, sizeof(MTExtension));
     ext[next]->id = next;
     return ext[next++];
 }
 
-void delextension(MTExtension *dext)
+void delextension(MTExtension* dext)
 {
     ext[dext->id] = ext[next - 1];
     ext[dext->id]->id = dext->id;
@@ -708,31 +801,31 @@ void delextension(MTExtension *dext)
 
 //FIXME This fails (and thus, segfaults) in the current build system.
 // The directory "Extensions" does not exist after the build.
-bool loadExtension(const char *file)
+bool loadExtension(const char* file)
 {
-    MTXMainCall *mtxmain;
-    MTXInterfaces *xis;
+    MTXMainCall* mtxmain;
+    MTXInterfaces* xis;
     int x;
 
 #	ifdef _WIN32
     HINSTANCE hi = LoadLibrary(file);
 #	else
-    void *hi = dlopen(file, RTLD_LAZY);
+    void* hi = dlopen(file, RTLD_LAZY);
 #	endif
     if (hi)
     {
 #		ifdef _WIN32
         mtxmain = (MTXMainCall*)GetProcAddress(hi,"MTXMain");
 #		else
-        mtxmain = (MTXMainCall *) dlsym(hi, "MTXMain");
+        mtxmain = (MTXMainCall*) dlsym(hi, "MTXMain");
         // dlsym is from POSIX header dlfcn.h, which deals with dynamic linking.
         // what the shitnuggets.
 #		endif
         if (mtxmain)
         {
-            MTExtension *cext = addextension();
-            cext->library = (void *) hi;
-            cext->filename = (char *) malloc(strlen(file) + 1);
+            MTExtension* cext = addextension();
+            cext->library = (void*) hi;
+            cext->filename = (char*) malloc(strlen(file) + 1);
             strcpy(cext->filename, file);
             xis = mtxmain(mi);
             cext->i = xis;
@@ -742,26 +835,26 @@ bool loadExtension(const char *file)
             cext->end = hi;
             for(x = 0; x < xis->ninterfaces; x++)
             {
-                MTXInterface *xi = xis->interfaces[x];
+                MTXInterface* xi = xis->interfaces[x];
                 switch (xi->type)
                 {
                     case systemtype:
-                        si = (MTSystemInterface *) xi;
+                        si = (MTSystemInterface*) xi;
                         break;
                     case objectstype:
-                        oi = (MTObjectsInterface *) xi;
+                        oi = (MTObjectsInterface*) xi;
                         break;
                     case displaytype:
-                        di = (MTDisplayInterface *) xi;
+                        di = (MTDisplayInterface*) xi;
                         break;
                     case guitype:
-                        gi = (MTGUIInterface *) xi;
+                        gi = (MTGUIInterface*) xi;
                         break;
                     case audiotype:
-                        ai = (MTAudioInterface *) xi;
+                        ai = (MTAudioInterface*) xi;
                         break;
                     case dsptype:
-                        dspi = (MTDSPInterface *) xi;
+                        dspi = (MTDSPInterface*) xi;
                         break;
                     default:
                         cext->system = false;
@@ -801,17 +894,17 @@ bool loadExtension(const char *file)
 }
 
 //TODO Use platform-independant mechanisms in this function. Maybe boost::filesystem, maybe std::fstream is already enough.
-void loadDirectory(const char *dir)
+void loadDirectory(const char* dir)
 {
     char find[512];
-    char *e, *ext;
+    char* e, * ext;
 #ifdef _WIN32
     WIN32_FIND_DATA fd;
     HANDLE fh;
     bool ok;
 #else
-    DIR *d;
-    struct dirent *de;
+    DIR* d;
+    struct dirent* de;
     struct stat s;
 #endif
 
@@ -862,7 +955,9 @@ void loadDirectory(const char *dir)
             {
                 ext = strrchr(de->d_name, '.'); // find last '.' in d_name
                 if (stricmp(ext, ".mtx") == 0) // defined as strcasecmp.
-                { loadExtension(find); }
+                {
+                    loadExtension(find);
+                }
             };
         };
     };
@@ -918,30 +1013,34 @@ bool initExtensions()
     bool ok2;
     bool ok3 = true;
     bool required = false;
-    char *error, *e;
-    static const char *sok = {"OK --"NL};
-    static const char *sfailed = {"FAILED --"NL};
+    char* error, * e;
+    static const char* sok = {"OK --"NL};
+    static const char* sfailed = {"FAILED --"NL};
 
     ENTER("initExtensions");
     displayok = audiook = 0;
-    error = (char *) si->memalloc(1024, 0);
+    error = (char*) si->memalloc(1024, 0);
     strcpy(error, "The following extensions could not be initialized:"NL);
     LOGD("Found extensions:"
              NL);
     for(x = 0; x < next; x++)
     {
-        MTExtension &cext = *ext[x];
+        MTExtension& cext = *ext[x];
         e = strrchr(cext.filename, '/');
         if (!e)
-        { e = strrchr(cext.filename, '\\'); }
+        {
+            e = strrchr(cext.filename, '\\');
+        }
         if (!e)
         {
             e = cext.filename;
         }
         else
-        { e++; }
+        {
+            e++;
+        }
         si->getlibmemoryrange(cext.start, 0, &cext.start, &y);
-        cext.end = (char *) cext.start + y;
+        cext.end = (char*) cext.start + y;
         FLOG3("%s (%.8X - %.8X):"
                   NL, e, cext.start, cext.end);
         for(y = 0; y < cext.i->ninterfaces; y++)
@@ -960,7 +1059,10 @@ bool initExtensions()
     ok2 = false;
     if (di)
     {
-        MTTRY ok2 = di->init(); MTCATCH MTEND
+        MTTRY
+            ok2 = di->init();
+        MTCATCH
+        MTEND
     };
     if (!ok2)
     {
@@ -969,14 +1071,19 @@ bool initExtensions()
         strcat(error, "MTXDisplay (*)"NL);
     }
     else
-    { displayok++; }
+    {
+        displayok++;
+    }
     LOG("-- Display ");
     LOG((ok2) ? sok : sfailed);
 
     ok2 = false;
     if (gi)
     {
-        MTTRY ok2 = gi->init(); MTCATCH MTEND
+        MTTRY
+            ok2 = gi->init();
+        MTCATCH
+        MTEND
     };
     if (!ok2)
     {
@@ -985,7 +1092,9 @@ bool initExtensions()
         strcat(error, "MTXGUI (*)"NL);
     }
     else
-    { displayok++; }
+    {
+        displayok++;
+    }
     LOG("-- GUI ");
     LOG((ok2) ? sok : sfailed);
 
@@ -1007,7 +1116,9 @@ bool initExtensions()
 #		endif
     };
     if (displayok == 2)
-    { ok &= startInterface(); }
+    {
+        ok &= startInterface();
+    }
 
 #	ifdef _WIN32
     if (exitasap) goto start;
@@ -1016,7 +1127,10 @@ bool initExtensions()
     ok2 = false;
     if (oi)
     {
-        MTTRY ok2 = oi->init(); MTCATCH MTEND
+        MTTRY
+            ok2 = oi->init();
+        MTCATCH
+        MTEND
     };
     if (!ok2)
     {
@@ -1030,28 +1144,38 @@ bool initExtensions()
     ok2 = false;
     if (ai)
     {
-        MTTRY ok2 = ai->init(); MTCATCH MTEND
+        MTTRY
+            ok2 = ai->init();
+        MTCATCH
+        MTEND
     };
     if (!ok2)
     {
         strcat(error, "MTXAudio"NL);
     }
     else
-    { audiook++; }
+    {
+        audiook++;
+    }
     LOG("-- Audio ");
     LOG((ok2) ? sok : sfailed);
 
     ok2 = false;
     if (ai)
     {
-        MTTRY ok2 = dspi->init(); MTCATCH MTEND
+        MTTRY
+            ok2 = dspi->init();
+        MTCATCH
+        MTEND
     };
     if (!ok2)
     {
         strcat(error, "MTXDSP"NL);
     }
     else
-    { audiook++; }
+    {
+        audiook++;
+    }
     LOG("-- DSP ");
     LOG((ok2) ? sok : sfailed);
 
@@ -1065,19 +1189,24 @@ bool initExtensions()
 
     for(x = 0; x < next; x++)
     {
-        MTExtension &cext = *ext[x];
+        MTExtension& cext = *ext[x];
         if (!cext.system)
         {
             for(y = 0; y < cext.i->ninterfaces; y++)
             {
                 ok2 = false;
-                MTTRY ok2 = cext.i->interfaces[y]->init(); MTCATCH MTEND
+                MTTRY
+                    ok2 = cext.i->interfaces[y]->init();
+                MTCATCH
+                MTEND
                 if (!ok2)
                 {
                     ok3 = false;
                     e = strrchr(cext.filename, '\\');
                     if (!e)
-                    { e = strrchr(cext.filename, '/'); }
+                    {
+                        e = strrchr(cext.filename, '/');
+                    }
                     if (e)
                     {
                         e++;
@@ -1097,7 +1226,12 @@ bool initExtensions()
     {
         strcat(error, "(*) = Required extensions"NL);
         if (required)
-        { strcat(error, "One or more required extensions could not be found or initialized!"NL"You should re-install MadTracker."); }
+        {
+            strcat(
+                error,
+                "One or more required extensions could not be found or initialized!"NL"You should re-install MadTracker."
+            );
+        }
         si->dialog(error, "MadTracker", MTD_OK, (required) ? (MTD_ERROR | MTD_MODAL) : MTD_EXCLAMATION, 0);
     };
     si->memfree(error);
@@ -1114,15 +1248,23 @@ bool startExtensions()
              NL);
     for(x = 0; x < next; x++)
     {
-        MTExtension &cext = *ext[x];
+        MTExtension& cext = *ext[x];
         for(y = 0; y < cext.i->ninterfaces; y++)
         {
             if ((cext.i->interfaces[y]->status & MTX_INITIALIZED) == 0)
-            { continue; }
+            {
+                continue;
+            }
             if (cext.i->interfaces[y] == gi)
-            { continue; }
-            MTTRY cext.i->interfaces[y]->start(); MTCATCH FLOGD1("%s - ERROR: Exception while starting '%s'!"
-                                                                     NL, cext.i->interfaces[y]->name); MTEND
+            {
+                continue;
+            }
+            MTTRY
+                cext.i->interfaces[y]->start();
+            MTCATCH
+                FLOGD1("%s - ERROR: Exception while starting '%s'!"
+                           NL, cext.i->interfaces[y]->name);
+            MTEND
         };
     };
 
@@ -1141,22 +1283,30 @@ void stopExtensions()
     for(x = 0; x < 16; x++)
     {
         if (module[x])
-        { module[x]->play(PLAY_STOP); }
+        {
+            module[x]->play(PLAY_STOP);
+        }
     };
     LOGD("%s - Stopping extensions..."
              NL);
     for(x = next - 1; x >= 0; x--)
     {
-        MTExtension &cext = *ext[x];
+        MTExtension& cext = *ext[x];
         for(y = cext.i->ninterfaces - 1; y >= 0; y--)
         {
-            MTXInterface *ci = cext.i->interfaces[y];
+            MTXInterface* ci = cext.i->interfaces[y];
             if ((ci == gi) || (ci == si))
-            { continue; }
-            MTTRY ci->stop(); MTCATCH LOGD("%s - ERROR: Exception while stopping '");
+            {
+                continue;
+            }
+            MTTRY
+                ci->stop();
+            MTCATCH
+                LOGD("%s - ERROR: Exception while stopping '");
                 LOG(cext.i->interfaces[y]->name);
                 LOG("'!"
-                        NL); MTEND
+                        NL);
+            MTEND
         };
     };
     LOGD("%s - Stopping interface..."
@@ -1174,39 +1324,73 @@ void uninitExtensions()
              NL);
     for(x = next - 1; x >= 0; x--)
     {
-        MTExtension &cext = *ext[x];
+        MTExtension& cext = *ext[x];
         if (!cext.system)
         {
             for(y = cext.i->ninterfaces - 1; y >= 0; y--)
             {
-                MTTRY if (cext.i->interfaces[y]->status & MTX_INITIALIZED)
+                MTTRY
+                    if (cext.i->interfaces[y]->status & MTX_INITIALIZED)
                     {
                         cext.i->interfaces[y]->uninit();
-                    }; MTCATCH LOGD("%s - ERROR: Exception while uninitializing '");
+                    };
+                MTCATCH
+                    LOGD("%s - ERROR: Exception while uninitializing '");
                     LOG(cext.i->interfaces[y]->name);
                     LOG("'!"
-                            NL); MTEND
+                            NL);
+                MTEND
             };
         };
     };
-    MTTRY if ((dspi) && (dspi->status & MTX_INITIALIZED))
-        { dspi->uninit(); }MTCATCH LOGD("%s - ERROR: Exception while uninitializing MTDSP!"
-                                            NL); MTEND
-    MTTRY if ((ai) && (ai->status & MTX_INITIALIZED))
-        { ai->uninit(); }MTCATCH LOGD("%s - ERROR: Exception while uninitializing MTAudio!"
-                                          NL); MTEND
+    MTTRY
+        if ((dspi) && (dspi->status & MTX_INITIALIZED))
+        {
+            dspi->uninit();
+        }
+    MTCATCH
+        LOGD("%s - ERROR: Exception while uninitializing MTDSP!"
+                 NL);
+    MTEND
+    MTTRY
+        if ((ai) && (ai->status & MTX_INITIALIZED))
+        {
+            ai->uninit();
+        }
+    MTCATCH
+        LOGD("%s - ERROR: Exception while uninitializing MTAudio!"
+                 NL);
+    MTEND
     LOGD("%s - Uninitializing interface..."
              NL);
     uninitInterface();
-    MTTRY if ((gi) && (gi->status & MTX_INITIALIZED))
-        { gi->uninit(); }MTCATCH LOGD("%s - ERROR: Exception while uninitializing MTGUI!"
-                                          NL); MTEND
-    MTTRY if ((di) && (di->status & MTX_INITIALIZED))
-        { di->uninit(); }MTCATCH LOGD("%s - ERROR: Exception while uninitializing MTDisplay!"
-                                          NL); MTEND
-    MTTRY if ((oi) && (oi->status & MTX_INITIALIZED))
-        { oi->uninit(); }MTCATCH LOGD("%s - ERROR: Exception while uninitializing MTObjects!"
-                                          NL); MTEND
+    MTTRY
+        if ((gi) && (gi->status & MTX_INITIALIZED))
+        {
+            gi->uninit();
+        }
+    MTCATCH
+        LOGD("%s - ERROR: Exception while uninitializing MTGUI!"
+                 NL);
+    MTEND
+    MTTRY
+        if ((di) && (di->status & MTX_INITIALIZED))
+        {
+            di->uninit();
+        }
+    MTCATCH
+        LOGD("%s - ERROR: Exception while uninitializing MTDisplay!"
+                 NL);
+    MTEND
+    MTTRY
+        if ((oi) && (oi->status & MTX_INITIALIZED))
+        {
+            oi->uninit();
+        }
+    MTCATCH
+        LOGD("%s - ERROR: Exception while uninitializing MTObjects!"
+                 NL);
+    MTEND
     LEAVE();
 }
 
@@ -1215,7 +1399,9 @@ bool initSystem()
     try
     {
         if (si)
-        { return si->init(); }
+        {
+            return si->init();
+        }
     }
     catch(...)
     {
@@ -1233,7 +1419,9 @@ void uninitSystem()
     try
     {
         if ((si) && (si->status & MTX_INITIALIZED))
-        { si->uninit(); }
+        {
+            si->uninit();
+        }
     }
     catch(...)
     {

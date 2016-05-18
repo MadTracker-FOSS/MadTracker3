@@ -82,40 +82,52 @@ struct MTIEvent;
 class Instrument: public MTObject
 {
 public:
-    Instrument(MTObject *parent, mt_uint32 type, mt_int32 i):
+    Instrument(MTObject* parent, mt_uint32 type, mt_int32 i):
         MTObject(parent, type, i)
-    { };
+    {
+    };
 
     virtual ~Instrument()
-    { };
+    {
+    };
 
-    virtual InstrumentInstance *MTCT createinstance(Track *track, PatternInstance *caller, InstrumentInstance *previous) = 0;
+    virtual InstrumentInstance* MTCT createinstance(Track* track, PatternInstance* caller, InstrumentInstance* previous) = 0;
 
     virtual void MTCT preprocess(int count)
-    { };
+    {
+    };
 
     virtual void MTCT postprocess(int count)
-    { };
+    {
+    };
 
     virtual void MTCT prebuffer(int count)
-    { };
+    {
+    };
 
     virtual void MTCT postbuffer(int count)
-    { };
+    {
+    };
 
     virtual bool MTCT acceptoscillator()
-    { return false; };
+    {
+        return false;
+    };
 
-    virtual int MTCT addoscillator(Oscillator *o)
-    { return -1; };
+    virtual int MTCT addoscillator(Oscillator* o)
+    {
+        return -1;
+    };
 
-    virtual int MTCT deloscillator(Oscillator *o)
-    { return -1; };
+    virtual int MTCT deloscillator(Oscillator* o)
+    {
+        return -1;
+    };
 };
 
 struct MTIEvent
 {
-    MTObject *source;
+    MTObject* source;
     int type;
     double offset;
     int flags;
@@ -125,7 +137,7 @@ struct MTIEvent
 
 struct MTINoteEvent
 {
-    MTObject *source;
+    MTObject* source;
     int type;
     double offset;
     int flags;
@@ -142,7 +154,7 @@ struct MTINoteEvent
 
 struct MTIParamEvent
 {
-    MTObject *source;
+    MTObject* source;
     int type;
     double offset;
     int flags;
@@ -178,10 +190,10 @@ public:
     int id;
     int flags;
     int cpu;
-    MTModule *module;
-    Instrument *parent;
-    Track *track;
-    PatternInstance *caller;
+    MTModule* module;
+    Instrument* parent;
+    Track* track;
+    PatternInstance* caller;
     int layer;
     double note;
     double cpos;
@@ -191,7 +203,7 @@ public:
     float gpanx, gpany, gpanz;
     float mpanx, mpany, mpanz;
 
-    InstrumentInstance(Instrument *p, Track *t, PatternInstance *c, int l, InstrumentInstance *previous)
+    InstrumentInstance(Instrument* p, Track* t, PatternInstance* c, int l, InstrumentInstance* previous)
     {
         flags = 0;
         cpu = 0;
@@ -218,11 +230,11 @@ public:
 
     virtual void MTCT process(int count) = 0;
 
-    virtual void MTCT sendevents(int nevents, MTIEvent **events) = 0;
+    virtual void MTCT sendevents(int nevents, MTIEvent** events) = 0;
 
     virtual float MTCT getimportance() = 0;
 
-    virtual void MTCT changecaller(PatternInstance *newcaller)
+    virtual void MTCT changecaller(PatternInstance* newcaller)
     {
         caller = newcaller;
     };
@@ -252,7 +264,7 @@ enum
 // Insrtument group
 struct Group
 {
-    Oscillator *spl;
+    Oscillator* spl;
     double vol;
     float panx, pany, panz;
     mt_int8 pitch;
@@ -274,14 +286,14 @@ class InstrumentType: public ObjectType
 public:
     InstrumentType();
 
-    MTObject *MTCT create(MTObject *parent, mt_int32 id, void *param);
+    MTObject* MTCT create(MTObject* parent, mt_int32 id, void* param);
 };
 
 // Instrument class
 class MTInstrument: public Instrument
 {
 public:
-    MTInstrument(MTObject *parent, mt_int32 i);
+    MTInstrument(MTObject* parent, mt_int32 i);
 
     ~MTInstrument();
 
@@ -290,22 +302,22 @@ public:
     unsigned char vibtype, vibsweep, vibdepth, vibrate;
     double fadeout;
     unsigned short nna;
-    MTFilter *filter;
+    MTFilter* filter;
     unsigned short cutoff;
     unsigned char resonance, attack, decay, tpb;
     IEnvelope env[8];
     Group grp[MAX_GRPS];
     unsigned char range[8][96];
 
-    InstrumentInstance *MTCT createinstance(Track *track, PatternInstance *caller, InstrumentInstance *previous);
+    InstrumentInstance* MTCT createinstance(Track* track, PatternInstance* caller, InstrumentInstance* previous);
 
-    void MTCT enumchildren(MTObjectEnum enumproc, void *data);
+    void MTCT enumchildren(MTObjectEnum enumproc, void* data);
 
     bool MTCT acceptoscillator();
 
-    int MTCT addoscillator(Oscillator *o);
+    int MTCT addoscillator(Oscillator* o);
 
-    int MTCT deloscillator(Oscillator *o);
+    int MTCT deloscillator(Oscillator* o);
 
     virtual void MTCT setfilter(bool active);
 };
@@ -327,16 +339,16 @@ struct EnvStatus
 class MTInstrumentInstance: public InstrumentInstance
 {
 public:
-    OscillatorInstance *osc[1];
+    OscillatorInstance* osc[1];
     unsigned char grp[1];
     double fadeout;
     mt_uint32 iflags;
     unsigned short nna;
     EnvStatus envs[8];
-    MTFilterInstance *filter;
-    sample *buffer[8];
+    MTFilterInstance* filter;
+    sample* buffer[8];
 
-    MTInstrumentInstance(Instrument *p, Track *t, PatternInstance *c, int l, InstrumentInstance *previous);
+    MTInstrumentInstance(Instrument* p, Track* t, PatternInstance* c, int l, InstrumentInstance* previous);
 
     ~MTInstrumentInstance();
 
@@ -346,7 +358,7 @@ public:
 
     void MTCT process(int count);
 
-    void MTCT sendevents(int nevents, MTIEvent **events);
+    void MTCT sendevents(int nevents, MTIEvent** events);
 
     float MTCT getimportance();
 
@@ -358,10 +370,10 @@ private:
 
     double getvolume(double delay = 0.0, bool needfadeout = true);
 
-    void getpanning(float *x, float *y, float *z, double delay = 0.0);
+    void getpanning(float* x, float* y, float* z, double delay = 0.0);
 };
 
 //---------------------------------------------------------------------------
-extern InstrumentType *instrumenttype;
+extern InstrumentType* instrumenttype;
 //---------------------------------------------------------------------------
 #endif

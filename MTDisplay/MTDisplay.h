@@ -23,8 +23,8 @@ struct MTDisplayPreferences
 
 struct MTDevice
 {
-    char *devicename;
-    MTDisplayDeviceManager *manager;
+    char* devicename;
+    MTDisplayDeviceManager* manager;
     int id;
 };
 
@@ -46,11 +46,17 @@ inline int combinecolor(int color1, int color2)
     g2 >>= 8;
     b2 >>= 16;
     if (r2 & 0x80)
-    { r2++; }
+    {
+        r2++;
+    }
     if (g2 & 0x80)
-    { g2++; }
+    {
+        g2++;
+    }
     if (b2 & 0x80)
-    { b2++; }
+    {
+        b2++;
+    }
     r1 *= r2;
     g1 *= g2;
     b1 *= b2;
@@ -58,24 +64,24 @@ inline int combinecolor(int color1, int color2)
 }
 
 //---------------------------------------------------------------------------
-extern MTDisplayInterface *di;
+extern MTDisplayInterface* di;
 
-extern MTInterface *mtinterface;
+extern MTInterface* mtinterface;
 
-extern MTSystemInterface *si;
+extern MTSystemInterface* si;
 
-extern MTGUIInterface *gi;
+extern MTGUIInterface* gi;
 
 extern MTDisplayPreferences displayprefs;
 
-extern MTBitmap *skinbmp[16];
+extern MTBitmap* skinbmp[16];
 
-extern MTDesktop *desktops[32];
+extern MTDesktop* desktops[32];
 
 extern int ndesktops;
 
-extern MTBitmap *screen;
+extern MTBitmap* screen;
 
-extern MTDisplayDevice *cdevive;
+extern MTDisplayDevice* cdevive;
 //---------------------------------------------------------------------------
 #endif

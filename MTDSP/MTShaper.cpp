@@ -28,16 +28,22 @@ MTShaper::~MTShaper()
     for(x = 0; x < 16; x++)
     {
         if (l[x].type == MTSHAPE_BUFFER)
-        { si->memfree(l[x].data); }
+        {
+            si->memfree(l[x].data);
+        }
     };
 }
 
 void MTShaper::add(int layer, int x1, int x2, sample y)
 {
     if ((layer < 0) || (layer >= SHAPER_LAYERS))
-    { return; }
+    {
+        return;
+    }
     if (l[layer].type == MTSHAPE_BUFFER)
-    { si->memfree(l[layer].data); }
+    {
+        si->memfree(l[layer].data);
+    }
     l[layer].type = MTSHAPE_FLAT;
     l[layer].x1 = x1;
     l[layer].x2 = x2;
@@ -47,9 +53,13 @@ void MTShaper::add(int layer, int x1, int x2, sample y)
 void MTShaper::add(int layer, int x1, sample y1, int x2, sample y2)
 {
     if ((layer < 0) || (layer >= SHAPER_LAYERS))
-    { return; }
+    {
+        return;
+    }
     if (l[layer].type == MTSHAPE_BUFFER)
-    { si->memfree(l[layer].data); }
+    {
+        si->memfree(l[layer].data);
+    }
     l[layer].type = MTSHAPE_LINEAR;
     l[layer].x1 = x1;
     l[layer].y1 = y1;
@@ -60,9 +70,13 @@ void MTShaper::add(int layer, int x1, sample y1, int x2, sample y2)
 void MTShaper::add(int layer, int x1, sample y1, int x2, sample y2, int x3, sample y3, int x4, sample y4)
 {
     if ((layer < 0) || (layer >= SHAPER_LAYERS))
-    { return; }
+    {
+        return;
+    }
     if (l[layer].type == MTSHAPE_BUFFER)
-    { si->memfree(l[layer].data); }
+    {
+        si->memfree(l[layer].data);
+    }
     l[layer].type = MTSHAPE_SPLINE;
     l[layer].x1 = x1;
     l[layer].y1 = y1;
@@ -74,22 +88,26 @@ void MTShaper::add(int layer, int x1, sample y1, int x2, sample y2, int x3, samp
     l[layer].y4 = y4;
 }
 
-void MTShaper::add(int layer, int x1, int x2, sample *data)
+void MTShaper::add(int layer, int x1, int x2, sample* data)
 {
     if ((layer < 0) || (layer >= SHAPER_LAYERS))
-    { return; }
+    {
+        return;
+    }
     if (l[layer].type == MTSHAPE_BUFFER)
-    { si->memfree(l[layer].data); }
+    {
+        si->memfree(l[layer].data);
+    }
     l[layer].type = MTSHAPE_BUFFER;
-    l[layer].data = (sample *) si->memalloc((x2 - x1) * s_sample, 0);
+    l[layer].data = (sample*) si->memalloc((x2 - x1) * s_sample, 0);
     dspi->replacebuffer(l[layer].data, data, x2 - x1);
     memcpy(l[layer].data, data, (x2 - x1) * s_sample);
 }
 
-MTShape *MTShaper::get(int from, int to, int accept)
+MTShape* MTShaper::get(int from, int to, int accept)
 {
-    MTShape *res = 0;
-    sample *c, *e;
+    MTShape* res = 0;
+    sample* c, * e;
     sample v, i;
     int x, _from, _to;
 
@@ -97,25 +115,35 @@ MTShape *MTShaper::get(int from, int to, int accept)
     {
         res = mtnew(MTShape);
         res->type = MTSHAPE_BUFFER;
-        res->data = (sample *) si->memalloc(s_sample * (to - from), 0);
+        res->data = (sample*) si->memalloc(s_sample * (to - from), 0);
         res->x1 = from;
         res->x2 = to;
         c = res->data;
         e = res->data + to - from;
-        while(c < e) *c++ = 1;
+        while(c < e)
+        {
+            *c++ = 1;
+        }
         for(x = 0; x < 16; x++)
         {
-            MTShape &cl = l[x];
+            MTShape& cl = l[x];
             switch (cl.type)
             {
                 case MTSHAPE_FLAT:
                     if ((cl.x1 < to) && (cl.x2 > from))
                     {
                         if (cl.x1 > from)
-                        { c += cl.x1 - from; }
+                        {
+                            c += cl.x1 - from;
+                        }
                         if (cl.x2 < to)
-                        { e -= to - cl.x2; }
-                        while(c < e) *c++ *= cl.y1;
+                        {
+                            e -= to - cl.x2;
+                        }
+                        while(c < e)
+                        {
+                            *c++ *= cl.y1;
+                        }
                     };
                     break;
                 case MTSHAPE_LINEAR:
@@ -128,9 +156,13 @@ MTShape *MTShaper::get(int from, int to, int accept)
                             c += cl.x1 - from;
                         }
                         else
-                        { v += i * (from - cl.x1); }
+                        {
+                            v += i * (from - cl.x1);
+                        }
                         if (cl.x2 < to)
-                        { e -= to - cl.x2; }
+                        {
+                            e -= to - cl.x2;
+                        }
                         while(c < e)
                         {
                             *c++ *= v;
@@ -147,7 +179,20 @@ MTShape *MTShaper::get(int from, int to, int accept)
                     {
                         _from = (cl.x2 > from) ? cl.x2 : from;
                         _to = (cl.x3 < to) ? cl.x3 : to;
-                        dspi->splinemodulate(res->data + _from - from, _to - _from, cl.x1, cl.y1, cl.x2, cl.y2, cl.x3, cl.y3, cl.x4, cl.y4, _from, _to);
+                        dspi->splinemodulate(
+                            res->data + _from - from,
+                            _to - _from,
+                            cl.x1,
+                            cl.y1,
+                            cl.x2,
+                            cl.y2,
+                            cl.x3,
+                            cl.y3,
+                            cl.x4,
+                            cl.y4,
+                            _from,
+                            _to
+                        );
                     };
                     break;
                 case MTSHAPE_BUFFER:
@@ -166,7 +211,7 @@ MTShape *MTShaper::get(int from, int to, int accept)
     return res;
 }
 
-void MTShaper::del(MTShape *s)
+void MTShaper::del(MTShape* s)
 {
     si->memfree(s->data);
     si->memfree(s);
@@ -178,12 +223,14 @@ void MTShaper::flush(int to)
 
     for(x = 0; x < 16; x++)
     {
-        MTShape &cl = l[x];
+        MTShape& cl = l[x];
         switch (cl.type)
         {
             case MTSHAPE_FLAT:
                 if (cl.x2 <= to)
-                { cl.type = MTSHAPE_EMPTY; }
+                {
+                    cl.type = MTSHAPE_EMPTY;
+                }
                 break;
             case MTSHAPE_LINEAR:
                 if (cl.x2 <= to)
@@ -204,7 +251,9 @@ void MTShaper::flush(int to)
                 break;
             case MTSHAPE_SPLINE:
                 if (cl.x4 <= to)
-                { cl.type = MTSHAPE_EMPTY; }
+                {
+                    cl.type = MTSHAPE_EMPTY;
+                }
                 break;
             case MTSHAPE_BUFFER:
                 if (cl.x2 <= to)

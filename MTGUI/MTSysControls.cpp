@@ -27,7 +27,7 @@ MTImageList::MTImageList()
 {
 }
 
-void MTImageList::setmetrics(MTSQMetrics *m)
+void MTImageList::setmetrics(MTSQMetrics* m)
 {
     mm = *m;
     if ((mm.nx > 0) && (mm.ny > 0))
@@ -41,10 +41,12 @@ void MTImageList::setmetrics(MTSQMetrics *m)
     };
 }
 
-void MTImageList::drawimage(int id, MTBitmap *dest, int x, int y, int opacity)
+void MTImageList::drawimage(int id, MTBitmap* dest, int x, int y, int opacity)
 {
     if ((id < 0) || (id >= mm.nx * mm.ny))
-    { return; }
+    {
+        return;
+    }
     if (opacity >= 255)
     {
         dest->skinblta(x, y, iw, ih, mm.a, mm.nx, mm.ny, id);
@@ -62,9 +64,18 @@ void MTImageList::drawimage(int id, MTBitmap *dest, int x, int y, int opacity)
 // MTControl
 //   MTSlider
 //---------------------------------------------------------------------------
-MTSlider::MTSlider(int tag, MTWinControl *p, int l, int t, int type):
-    MTControl(MTC_SLIDER, tag, p, l, t, 16, 16), type(type), orientation(0), minpos(0), maxpos(256), value(128),
-    mincr(2), morigx(0), morigy(0), ctimer(0), ctouch(-1)
+MTSlider::MTSlider(int tag, MTWinControl* p, int l, int t, int type):
+    MTControl(MTC_SLIDER, tag, p, l, t, 16, 16),
+    type(type),
+    orientation(0),
+    minpos(0),
+    maxpos(256),
+    value(128),
+    mincr(2),
+    morigx(0),
+    morigy(0),
+    ctimer(0),
+    ctouch(-1)
 {
     flags |= (MTCF_TRANSPARENT | MTCF_ACCEPTINPUT);
     cm = skin->getslider(type, orientation);
@@ -80,7 +91,7 @@ MTSlider::MTSlider(int tag, MTWinControl *p, int l, int t, int type):
     gi->setcontrolname(this, "slider");
 }
 
-int MTSlider::loadfromstream(MTFile *f, int size, int flags)
+int MTSlider::loadfromstream(MTFile* f, int size, int flags)
 {
     type = -1;
     int csize = MTControl::loadfromstream(f, size, flags);
@@ -99,7 +110,7 @@ int MTSlider::loadfromstream(MTFile *f, int size, int flags)
     return csize + 8;
 }
 
-int MTSlider::savetostream(MTFile *f, int flags)
+int MTSlider::savetostream(MTFile* f, int flags)
 {
     int csize = MTControl::savetostream(f, flags);
 
@@ -113,32 +124,42 @@ int MTSlider::savetostream(MTFile *f, int flags)
 int MTSlider::getnumproperties(int id)
 {
     if (id == -1)
-    { return SliderNP; }
+    {
+        return SliderNP;
+    }
     if (id < ControlNP)
-    { return MTControl::getnumproperties(id); }
+    {
+        return MTControl::getnumproperties(id);
+    }
     if (id == ControlNP)
     {
         return 4;
     }
     else if (id == ControlNP + 1)
-    { return 2; }
+    {
+        return 2;
+    }
     return 0;
 }
 
-bool MTSlider::getpropertytype(int id, char **name, int &flags)
+bool MTSlider::getpropertytype(int id, char** name, int& flags)
 {
-    static char *propname[2] = {"Type", "Orientation"};
+    static char* propname[2] = {"Type", "Orientation"};
     static int propflags[2] = {MTP_LIST, MTP_LIST};
-    static char *subname[4] = {"Slider", "Knob", "Volume", "Vu-meter"};
-    static char *subname2[2] = {"Horizontal", "Vertical"};
+    static char* subname[4] = {"Slider", "Knob", "Volume", "Vu-meter"};
+    static char* subname2[2] = {"Horizontal", "Vertical"};
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getpropertytype(id, name, flags); }
+    {
+        return MTControl::getpropertytype(id, name, flags);
+    }
     if ((id >> 8) == ControlNP)
     {
         id &= 0xFF;
         if (id >= 4)
-        { return false; }
+        {
+            return false;
+        }
         *name = subname[id];
         flags = -1;
         return true;
@@ -147,24 +168,30 @@ bool MTSlider::getpropertytype(int id, char **name, int &flags)
     {
         id &= 0xFF;
         if (id >= 2)
-        { return false; }
+        {
+            return false;
+        }
         *name = subname2[id];
         flags = -1;
         return true;
     };
     if (id >= SliderNP)
-    { return false; }
+    {
+        return false;
+    }
     *name = propname[id - ControlNP];
     flags = propflags[id - ControlNP];
     return true;
 }
 
-bool MTSlider::getproperty(int id, void *value)
+bool MTSlider::getproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::getproperty(id, value); }
+    {
+        return MTControl::getproperty(id, value);
+    }
     switch (id - ControlNP)
     {
         case 0:
@@ -179,14 +206,18 @@ bool MTSlider::getproperty(int id, void *value)
     return true;
 }
 
-bool MTSlider::setproperty(int id, void *value)
+bool MTSlider::setproperty(int id, void* value)
 {
-    int &iv = *(int *) value;
+    int& iv = *(int*) value;
 
     if ((id < ControlNP) || ((id & 0xFF00) && ((id >> 8) < ControlNP)))
-    { return MTControl::setproperty(id, value); }
+    {
+        return MTControl::setproperty(id, value);
+    }
     if (window)
-    { window->modified = true; }
+    {
+        window->modified = true;
+    }
     switch (id - ControlNP)
     {
         case 0:
@@ -233,26 +264,28 @@ void MTSlider::setbounds(int l, int t, int w, int h)
     MTControl::setbounds(l, t, w, h);
 }
 
-void MTSlider::draw(MTRect &rect)
+void MTSlider::draw(MTRect& rect)
 {
     int x = left;
     int y = top;
-    MTBitmap *b;
+    MTBitmap* b;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     preparedraw(&b, x, y);
     skin->drawcontrol(this, rect, b, x, y);
     MTControl::draw(rect);
 }
 
-bool MTSlider::message(MTCMessage &msg)
+bool MTSlider::message(MTCMessage& msg)
 {
     int b;
 
     if (type != 3)
     {
-        MTBSLM &btn = cm->a;
+        MTBSLM& btn = cm->a;
         switch (msg.msg)
         {
             case MTCM_MOUSEDOWN:
@@ -276,9 +309,13 @@ bool MTSlider::message(MTCMessage &msg)
                                     ctouch = 1;
                                 }
                                 else
-                                { ctouch = 2; }
+                                {
+                                    ctouch = 2;
+                                }
                                 if (ctouch != 1)
-                                { ctimer = gi->ctrltimer(this, 0, 50, true); }
+                                {
+                                    ctimer = gi->ctrltimer(this, 0, 50, true);
+                                }
                                 return true;
                             }
                             else
@@ -295,9 +332,13 @@ bool MTSlider::message(MTCMessage &msg)
                                     ctouch = 1;
                                 }
                                 else
-                                { ctouch = 2; }
+                                {
+                                    ctouch = 2;
+                                }
                                 if (ctouch != 1)
-                                { ctimer = gi->ctrltimer(this, 0, 50, true); }
+                                {
+                                    ctimer = gi->ctrltimer(this, 0, 50, true);
+                                }
                                 return true;
                             };
                         };
@@ -332,7 +373,9 @@ bool MTSlider::message(MTCMessage &msg)
                     {
                         cincr >>= 1;
                         if (cincr == 0)
-                        { cincr = 1; }
+                        {
+                            cincr = 1;
+                        }
                     };
                     if (cm->orientation == SKIN_HORIZ)
                     {
@@ -362,7 +405,9 @@ bool MTSlider::message(MTCMessage &msg)
                     setvalue(value + ((maxpos - minpos) >> 4));
                 }
                 else
-                { setvalue(value - ((maxpos - minpos) >> 4)); }
+                {
+                    setvalue(value - ((maxpos - minpos) >> 4));
+                }
                 return true;
         };
     };
@@ -374,10 +419,14 @@ void MTSlider::setminmax(int newmin, int newmax)
     minpos = newmin;
     maxpos = newmax;
     if (maxpos < minpos)
-    { maxpos = minpos; }
+    {
+        maxpos = minpos;
+    }
     mincr = (maxpos - minpos) / 128;
     if (mincr <= 0)
-    { mincr = 1; }
+    {
+        mincr = 1;
+    }
     if (value < minpos)
     {
         setvalue(minpos);
@@ -399,9 +448,13 @@ void MTSlider::setvalue(int newvalue)
     {
         value = newvalue;
         if (value > maxpos)
-        { value = maxpos; }
+        {
+            value = maxpos;
+        }
         if (value < minpos)
-        { value = minpos; }
+        {
+            value = minpos;
+        }
         MTCMessage msg = {MTCM_TOUCHED, 0, this};
         parent->message(msg);
     };
@@ -411,8 +464,9 @@ void MTSlider::setvalue(int newvalue)
 // MTControl
 //   MTOscillo
 //---------------------------------------------------------------------------
-MTOscillo::MTOscillo(int tag, MTWinControl *p, int l, int t, int w, int h, Track *trk):
-    MTControl(MTC_OSCILLO, tag, p, l, t, w, h), mtrk(trk)
+MTOscillo::MTOscillo(int tag, MTWinControl* p, int l, int t, int w, int h, Track* trk):
+    MTControl(MTC_OSCILLO, tag, p, l, t, w, h),
+    mtrk(trk)
 {
     if ((w == 0) || (h == 0))
     {
@@ -422,19 +476,21 @@ MTOscillo::MTOscillo(int tag, MTWinControl *p, int l, int t, int w, int h, Track
     gi->setcontrolname(this, "oscillo");
 }
 
-void MTOscillo::draw(MTRect &rect)
+void MTOscillo::draw(MTRect& rect)
 {
     int x = left;
     int y = top;
-    MTBitmap *b;
+    MTBitmap* b;
     int z;
-    char *bits, *lines;
+    char* bits, * lines;
     int pitch, mh2, mtop, last, color;
-    int *start, *pos, *end;
+    int* start, * pos, * end;
     float sy;
 
     if (flags & MTCF_CANTDRAW)
-    { return; }
+    {
+        return;
+    }
     preparedraw(&b, x, y);
     b->fill(x, y, width, height, skin->getcolor(SC_EDIT_BACKGROUND));
     skin->drawframe(b, x, y, width, height);
@@ -504,7 +560,7 @@ void MTOscillo::draw(MTRect &rect)
     MTControl::draw(rect);
 }
 
-void MTOscillo::settrack(Track *trk)
+void MTOscillo::settrack(Track* trk)
 {
     mtrk = trk;
 }

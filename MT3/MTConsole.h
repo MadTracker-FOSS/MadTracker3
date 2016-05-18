@@ -11,24 +11,24 @@
 class MTConsole: public MTFile
 {
 public:
-    MTConsole(MTInterface *mti);
+    MTConsole(MTInterface* mti);
 
-    MTConsole(MTFile *parent, int start, int end, int access);
+    MTConsole(MTFile* parent, int start, int end, int access);
 
     ~MTConsole();
 
-    int MTCT read(void *buffer, int size);
+    int MTCT read(void* buffer, int size);
 
-    int MTCT readln(char *buffer, int maxsize);
+    int MTCT readln(char* buffer, int maxsize);
 
 //	int MTCT reads(char *buffer,int maxsize);
-    int MTCT write(const void *buffer, int size);
+    int MTCT write(const void* buffer, int size);
 
     int MTCT seek(int pos, int origin);
 
-    void *MTCT getpointer(int offset, int size);
+    void* MTCT getpointer(int offset, int size);
 
-    void MTCT releasepointer(void *mem);
+    void MTCT releasepointer(void* mem);
 
     int MTCT length();
 
@@ -38,13 +38,13 @@ public:
 
     bool MTCT seteof();
 
-    bool MTCT gettime(int *modified, int *accessed);
+    bool MTCT gettime(int* modified, int* accessed);
 
-    bool MTCT settime(int *modified, int *accessed);
+    bool MTCT settime(int* modified, int* accessed);
 
-    MTFile *MTCT subclass(int start, int length, int access);
+    MTFile* MTCT subclass(int start, int length, int access);
 
-    virtual int MTCT userinput(const char *input);
+    virtual int MTCT userinput(const char* input);
 };
 //---------------------------------------------------------------------------
 #endif

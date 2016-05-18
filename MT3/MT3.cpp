@@ -40,7 +40,7 @@
 #include "MTData.h"
 
 //---------------------------------------------------------------------------
-void *instance; // This one is going to be really problematic.
+void* instance; // This one is going to be really problematic.
 //---------------------------------------------------------------------------
 #ifdef _WIN32
 #include "MTInterface.h"
@@ -81,23 +81,23 @@ Otherwise, click on \"Cancel\" to exit gracefully.","MadTracker - Fatal Error",M
 
 // Let's see if anything at all breaks from this being no longer a global variable.
 // Update: Yup. Linker errors in MTData.cpp. They have been marked with FIXMEs.
-const char *argv0;
+const char* argv0;
 
-char *cmdline;
+char* cmdline;
 
 bool running = true;
 
 //NOTE: There are multiple main functions throughout the code. This might be because all submodules were originally builds of their own.
-int main(int argc, const char *argv[])
+int main(int argc, const char* argv[])
 {
     // The temporaries x and l were moved to the scopes where they're actually used.
     // Really no point in declaring them ahead of time and making the code less readable;
     // C++ int initialization rules take care of everything either way.
 
     char input[4096];       // standard-fare input buffer
-    MTConsole *console;     // User I/O, actually on console? (it's on windows, so probably not always)
+    MTConsole* console;     // User I/O, actually on console? (it's on windows, so probably not always)
 
-    instance = (void *) getpid(); // this is a unistd.h function. huh. does it exist on windows? No it doesn't.
+    instance = (void*) getpid(); // this is a unistd.h function. huh. does it exist on windows? No it doesn't.
 
     argv0 = argv[0];        // program name; actually read from some other places. IDE has lots of trouble tracking this.
 
@@ -110,7 +110,7 @@ int main(int argc, const char *argv[])
             l += strlen(argv[x]) + 1; // this counts the terminating \0 too, so it becomes the actual array size.
         }
 
-        cmdline = (char *) calloc(1, l); // i hate you. Anyway, this allocates space for the global command line string.
+        cmdline = (char*) calloc(1, l); // i hate you. Anyway, this allocates space for the global command line string.
         for(int x = 1; x < argc - 1; x++)
         { // now processing all arguments up until the last one.
             // so we read out an argument (without the \0) and append it to cmdline, then add a " " at the back
@@ -138,7 +138,7 @@ int main(int argc, const char *argv[])
 		si->eventdelete(e[1]);
 		LOGD("%s - End"NL);
 */
-        console = (MTConsole *) mi->getconsole(); // getconsole returns void*. Should be a polymorphic/composite class instead.
+        console = (MTConsole*) mi->getconsole(); // getconsole returns void*. Should be a polymorphic/composite class instead.
         if (console)
         {
             fputs("Entering console..."NL, stdout);

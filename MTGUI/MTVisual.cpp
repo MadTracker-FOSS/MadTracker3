@@ -17,8 +17,11 @@
 //   MTWinControl
 //     MTVisual
 //---------------------------------------------------------------------------
-MTVisual::MTVisual(int tag, MTWinControl *p, int l, int t, int w, int h):
-    MTWinControl(MTC_VISUAL, tag, p, l, t, w, h), mtype(0), module(0), ntracks(0)
+MTVisual::MTVisual(int tag, MTWinControl* p, int l, int t, int w, int h):
+    MTWinControl(MTC_VISUAL, tag, p, l, t, w, h),
+    mtype(0),
+    module(0),
+    ntracks(0)
 {
     gi->setcontrolname(this, "visual");
     mtmemzero(oscillo, sizeof(oscillo));
@@ -43,25 +46,29 @@ void MTVisual::setbounds(int l, int t, int w, int h)
     draw(NORECT);
 }
 
-void MTVisual::draw(MTRect &rect)
+void MTVisual::draw(MTRect& rect)
 {
     MTRect cr = {0, 0, width, height};
 
     if (&rect)
     {
         if (!cliprect(cr, rect))
-        { goto exit; }
+        {
+            goto exit;
+        }
     };
     exit:
     MTWinControl::draw(rect);
 }
 
-void MTVisual::setmodule(MTModule *newmodule)
+void MTVisual::setmodule(MTModule* newmodule)
 {
     int x;
 
     if (newmodule == module)
-    { return; }
+    {
+        return;
+    }
     for(x = 0; x < ntracks; x++)
     {
         if (oscillo[x])
@@ -73,7 +80,9 @@ void MTVisual::setmodule(MTModule *newmodule)
     ntracks = 0;
     module = newmodule;
     if (mtype == 1)
-    { update(); }
+    {
+        update();
+    }
 }
 
 void MTVisual::settype(int type)
@@ -108,7 +117,9 @@ void MTVisual::update()
             lasttrack = (int) ceil((float) nt / ndiv);
             owidth = width / lasttrack;
             if ((float) owidth / oheight >= 1)
-            { break; }
+            {
+                break;
+            }
         };
         ox = 0;
         oy = 0;
@@ -118,7 +129,9 @@ void MTVisual::update()
         {
             if (!oscillo[x])
             {
-                oscillo[x] = (MTOscillo *) gi->newcontrol(MTC_OSCILLO, x, this, ox, oy, owidth, oheight, module->trk->a[x]);
+                oscillo[x] = (MTOscillo*) gi->newcontrol(
+                    MTC_OSCILLO, x, this, ox, oy, owidth, oheight, module->trk->a[x]
+                );
                 oscillo[x]->direct = true;
             }
             else

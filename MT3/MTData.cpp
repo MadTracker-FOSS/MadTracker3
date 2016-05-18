@@ -30,17 +30,17 @@
 //---------------------------------------------------------------------------
 MTPreferences prefs;
 
-MTModule *module[16];
+MTModule* module[16];
 
-WaveOutput *output;
+WaveOutput* output;
 
 MTUser cuser = {0, 0, "Unregistered User", "", "", "", "", ""};
 
-MTConfigFile *globalconf, *userconf;
+MTConfigFile* globalconf, * userconf;
 
-MTFile *outmsg;
+MTFile* outmsg;
 
-MTHash *confs;
+MTHash* confs;
 
 bool wantreset = false;
 
@@ -59,7 +59,7 @@ int newmodule() // According to CLion, this function is unused.
     {
         if (module[x] == 0)
         {
-            module[x] = (MTModule *) oi->newobject(MTO_MODULE, 0, x);
+            module[x] = (MTModule*) oi->newobject(MTO_MODULE, 0, x);
             LEAVE();
             return x;
         };
@@ -69,12 +69,12 @@ int newmodule() // According to CLion, this function is unused.
 }
 
 //---------------------------------------------------------------------------
-void startbackup(char *filename, bool save, int &time) // According to CLion, this function is unused.
+void startbackup(char* filename, bool save, int& time) // According to CLion, this function is unused.
 //
 //	First part of a file backuping
 //
 {
-    MTFile *f;
+    MTFile* f;
     char backup[512], backup2[512];
 
     FENTER3("startbackup(%s,%d,&%d)", filename, save, time);
@@ -108,12 +108,12 @@ void startbackup(char *filename, bool save, int &time) // According to CLion, th
     LEAVE();
 }
 
-void finishbackup(char *filename, bool revert, int &time) // According to CLion, this function is unused.
+void finishbackup(char* filename, bool revert, int& time) // According to CLion, this function is unused.
 //
 //	Second part of a file backuping
 //
 {
-    MTFile *f;
+    MTFile* f;
     char backup[512], backup2[512];
 
     FENTER3("finishbackup(%s,%d,&%d)", filename, revert, time);
@@ -145,7 +145,9 @@ void finishbackup(char *filename, bool revert, int &time) // According to CLion,
 void initConsole()
 {
     if (!si)
-    { return; }
+    {
+        return;
+    }
 #	ifdef _WIN32
     outmsg = si->fileopen("mem://",MTF_READ|MTF_WRITE);
 #	else
@@ -156,39 +158,48 @@ void initConsole()
 void uninitConsole()
 {
     if ((si) && (outmsg))
-    { si->fileclose(outmsg); }
+    {
+        si->fileclose(outmsg);
+    }
 }
 
-bool processCommandline(const char *cmd)
+bool processCommandline(const char* cmd)
 {
     static char pcmd[1024];
-    char *e, *e2, *p, *v;
-    MTArray *pa;
+    char* e, * e2, * p, * v;
+    MTArray* pa;
     int x, y;
     bool showhelp = false;
-    const char *usage1 = {
+    const char* usage1 = {
         "MadTracker 3 - Copyright (C) 1998-2006 Yannick Delwiche."NL\
 ""NL\
 "Usage: mt3.exe [OPTION]... [FILE]..."NL\
 ""NL\
 "  -h, --help        Display this help and exit"NL
     };
-    const char *usage2 = {NL"Visit http://www.madtracker.org for more information."NL};
+    const char* usage2 = {NL"Visit http://www.madtracker.org for more information."NL};
 
     if (!si)
-    { return false; }
+    {
+        return false;
+    }
     strncpy(pcmd, cmd, sizeof(pcmd));
     pcmd[sizeof(pcmd) - 1] = 0;
     e = pcmd;
     pa = si->arraycreate(8, sizeof(MTCLParam));
     while((e) && (*e))
     {
-        while(((*e == ' ') || (*e == '\t')) && (*e)) e++;
+        while(((*e == ' ') || (*e == '\t')) && (*e))
+        {
+            e++;
+        }
         p = e;
         if (*p == '-')
         {
             if (*++p == '-')
-            { p++; }
+            {
+                p++;
+            }
             e = strchr(p, ' ');
             v = strchr(p, '=');
             if ((v) && ((v < e) || (!e)))
@@ -199,17 +210,23 @@ bool processCommandline(const char *cmd)
                     *v++ = 0;
                     e2 = strchr(v, '"');
                     if (e2)
-                    { e = e2; }
+                    {
+                        e = e2;
+                    }
                 };
                 if (e)
-                { *e++ = 0; }
+                {
+                    *e++ = 0;
+                }
                 MTCLParam np = {p, v};
                 pa->push(&np);
             }
             else
             {
                 if (e)
-                { *e++ = 0; }
+                {
+                    *e++ = 0;
+                }
                 MTCLParam np = {p, 0};
                 pa->push(&np);
             };
@@ -219,19 +236,23 @@ bool processCommandline(const char *cmd)
             v = p;
             e = strchr(v, ' ');
             if (e)
-            { *e++ = 0; }
+            {
+                *e++ = 0;
+            }
             MTCLParam np = {0, v};
             pa->push(&np);
         };
     };
     if (pa->nitems > 0)
     {
-        MTCLParam *np;
+        MTCLParam* np;
         pa->reset();
-        while((np = (MTCLParam *) pa->next()))
+        while((np = (MTCLParam*) pa->next()))
         {
             if (!np->name)
-            { continue; }
+            {
+                continue;
+            }
             if ((strcmp(np->name, "h") == 0) || (strcmp(np->name, "help") == 0))
             {
                 showhelp = true;
@@ -241,36 +262,42 @@ bool processCommandline(const char *cmd)
         if (showhelp)
         {
             if (outmsg)
-            { outmsg->write(usage1, strlen(usage1)); }
+            {
+                outmsg->write(usage1, strlen(usage1));
+            }
         };
         if ((!showhelp) || (outmsg))
         {
             for(x = 0; x < next; x++)
             {
-                MTExtension &cext = *ext[x];
+                MTExtension& cext = *ext[x];
                 for(y = cext.i->ninterfaces - 1; y >= 0; y--)
                 {
-                    MTXInterface *ci = cext.i->interfaces[y];
+                    MTXInterface* ci = cext.i->interfaces[y];
                     if (showhelp)
                     {
                         ci->showusage(outmsg);
                     }
                     else
-                    { ci->processcmdline(pa); }
+                    {
+                        ci->processcmdline(pa);
+                    }
                 };
             };
         };
         if ((showhelp) && (outmsg))
-        { outmsg->write(usage2, strlen(usage2)); }
+        {
+            outmsg->write(usage2, strlen(usage2));
+        }
     };
     si->arraydelete(pa);
     return showhelp;
 }
 
 //---------------------------------------------------------------------------
-void MTCT ConfDelete(void *item, void *param)
+void MTCT ConfDelete(void* item, void* param)
 {
-    si->configclose(((_MTConf *) item)->conf);
+    si->configclose(((_MTConf*) item)->conf);
 }
 
 //---------------------------------------------------------------------------
@@ -281,22 +308,22 @@ bool init()
 {
     // This one is pretty much as bad as it sounds.
 
-    char *cmd, *e;
+    char* cmd, * e;
     char applpath[512], userpath[512];
 
     // We start off with using enum constants as array indices. Yikes!
     //TODO Don't. Use std::map or sth.
-    prefs.syspath[SP_ROOT] = (char *) malloc(512);
-    prefs.syspath[SP_USER] = (char *) malloc(512);
-    prefs.syspath[SP_CONFIG] = (char *) malloc(512);
-    prefs.syspath[SP_USERCONFIG] = (char *) malloc(512);
-    prefs.syspath[SP_EXTENSIONS] = (char *) malloc(512);
-    prefs.syspath[SP_SKINS] = (char *) malloc(512);
-    prefs.syspath[SP_INTERFACE] = (char *) malloc(512);
-    prefs.syspath[SP_HELP] = (char *) malloc(512);
+    prefs.syspath[SP_ROOT] = (char*) malloc(512);
+    prefs.syspath[SP_USER] = (char*) malloc(512);
+    prefs.syspath[SP_CONFIG] = (char*) malloc(512);
+    prefs.syspath[SP_USERCONFIG] = (char*) malloc(512);
+    prefs.syspath[SP_EXTENSIONS] = (char*) malloc(512);
+    prefs.syspath[SP_SKINS] = (char*) malloc(512);
+    prefs.syspath[SP_INTERFACE] = (char*) malloc(512);
+    prefs.syspath[SP_HELP] = (char*) malloc(512);
 
-    prefs.path[UP_TEMP] = (char *) malloc(512);
-    prefs.path[UP_CACHE] = (char *) malloc(512);
+    prefs.path[UP_TEMP] = (char*) malloc(512);
+    prefs.path[UP_CACHE] = (char*) malloc(512);
 
 #	ifdef _WIN32
     bool quote = false;
@@ -342,14 +369,14 @@ bool init()
     // So that's why they're global? Are you shitting me?
     // Update: There is no reason to keep this the way it is, especially seeing how IDEs have enormeous problems
     // tracking symbol usage through "extern". This needs refactoring, badly.
-    extern const char *argv0;
-    extern char *cmdline;
+    extern const char* argv0;
+    extern char* cmdline;
 
-    const char *binpath = getenv("_");
+    const char* binpath = getenv("_");
 //		const char *b1 = strrchr(binpath,'/')+1;  //strrchr segfaults here if binpath is null, which happens in detatched shells (e.g. in an IDE)
     // Fix (2016-02-10 irrenhaus3)
     // (read "Fix" = "delegates the segfault to the higher-up function which ALSO does no error checks".)
-    const char *b1 = nullptr;
+    const char* b1 = nullptr;
     if (binpath)
     {
         std::clog << "mt3 Bin. Path: " << binpath << "\n";
@@ -373,16 +400,23 @@ bool init()
         binpath = argv0; //FIXME This line throws linker errors when argv0 is un-globaled in MT3.cpp
     }
     else if (!strstr(argv0, b1)) //FIXME This line throws linker errors when argv0 is un-globaled in MT3.cpp
-    { binpath = argv0; } //FIXME This line throws linker errors when argv0 is un-globaled in MT3.cpp
+    {
+        binpath = argv0;
+    } //FIXME This line throws linker errors when argv0 is un-globaled in MT3.cpp
     l = readlink(binpath, applpath, sizeof(applpath) - 1);
     if (l == -1)
     {
         strcpy(applpath, binpath);
     }
     else
-    { applpath[l] = 0; }
+    {
+        applpath[l] = 0;
+    }
     e = strchr(applpath, 0) - 1;
-    while(*e != '/') *e-- = 0;
+    while(*e != '/')
+    {
+        *e-- = 0;
+    }
     cmd = cmdline;
     strcpy(userpath, getenv("HOME"));
     e = strchr(userpath, 0);
@@ -467,10 +501,12 @@ void uninit()
 //
 {
     int x;
-    MTModule *del[16];
+    MTModule* del[16];
 
     if (!si)
-    { return; } // TODO Can this pointer ever be null without fucking everything up? Does it have to be global?
+    {
+        return;
+    } // TODO Can this pointer ever be null without fucking everything up? Does it have to be global?
     LOGD("%s - Uninitializing..."
              NL);
     mtmemzero(del, sizeof(del)); // A custom nulling routine? Smells bad. Update: Actually this just calls memset.
@@ -478,7 +514,10 @@ void uninit()
     si->stop();
     stopExtensions();
     MTTRY // Most worthless macro ever. It's just "try{"
-        if (output) output->lock->lock();
+        if (output)
+        {
+            output->lock->lock();
+        }
         for(x = 0; x < 16; x++)
         {
             if (module[x])
@@ -486,18 +525,25 @@ void uninit()
                 del[x] = module[x];
                 module[x] = 0;
             };
-        }; MTCATCH // and this is "} catch(...) {"
+        };
+    MTCATCH // and this is "} catch(...) {"
     MTEND // and this is "}". Why anyone would rather type MTEND than } is beyond me.
     // Update: maybe not THAT worthless? They do different stuff on windows, because windows seems to really suck at try/catch.
-    if (output) output->lock->unlock();
+    if (output)
+    {
+        output->lock->unlock();
+    }
 
-    MTTRY for(x = 0; x < 16; x++)
+    MTTRY
+        for(x = 0; x < 16; x++)
         {
             if (del[x])
             {
                 oi->deleteobject(del[x]);
             };
-        }; MTCATCH MTEND
+        };
+    MTCATCH
+    MTEND
 
     uninitExtensions();
     si->configclose(globalconf);

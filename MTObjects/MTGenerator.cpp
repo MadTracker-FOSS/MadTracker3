@@ -14,7 +14,7 @@
 #include "MTGenerator.h"
 
 //---------------------------------------------------------------------------
-GeneratorType *generatortype;
+GeneratorType* generatortype;
 
 //---------------------------------------------------------------------------
 GeneratorType::GeneratorType()
@@ -23,7 +23,7 @@ GeneratorType::GeneratorType()
     description = "Generator";
 }
 
-MTObject *GeneratorType::create(MTObject *parent, mt_int32 id, void *param)
+MTObject* GeneratorType::create(MTObject* parent, mt_int32 id, void* param)
 {
     return new MTGenerator(parent, id);
 }
@@ -31,7 +31,7 @@ MTObject *GeneratorType::create(MTObject *parent, mt_int32 id, void *param)
 //---------------------------------------------------------------------------
 // MTGenerator functions
 //---------------------------------------------------------------------------
-MTGenerator::MTGenerator(MTObject *parent, mt_int32 i):
+MTGenerator::MTGenerator(MTObject* parent, mt_int32 i):
     Oscillator(parent, MTO_MTSAMPLE, i)
 {
 
@@ -42,24 +42,25 @@ MTGenerator::~MTGenerator()
 
 }
 
-int MTGenerator::loadfromstream(MTFile *f, int size, void *params)
+int MTGenerator::loadfromstream(MTFile* f, int size, void* params)
 {
     return 0;
 }
 
-int MTGenerator::savetostream(MTFile *f, void *params)
+int MTGenerator::savetostream(MTFile* f, void* params)
 {
     return 0;
 }
 
-OscillatorInstance *MTGenerator::createinstance(int noutputs, sample **outputs, InstrumentInstance *caller)
+OscillatorInstance* MTGenerator::createinstance(int noutputs, sample** outputs, InstrumentInstance* caller)
 {
     return new MTGeneratorInstance(this, noutputs, outputs, caller);
 }
 
 //---------------------------------------------------------------------------
-MTGeneratorInstance::MTGeneratorInstance(Oscillator *p, int no, sample **o, InstrumentInstance *caller):
-    OscillatorInstance(p, no, o, caller), cphase(0.0)
+MTGeneratorInstance::MTGeneratorInstance(Oscillator* p, int no, sample** o, InstrumentInstance* caller):
+    OscillatorInstance(p, no, o, caller),
+    cphase(0.0)
 {
 }
 
@@ -68,11 +69,11 @@ bool MTGeneratorInstance::seek(double offset, int origin, int units)
     return true;
 }
 
-bool MTGeneratorInstance::process(int offset, int count, bool &silence)
+bool MTGeneratorInstance::process(int offset, int count, bool& silence)
 {
     int x, i;
     double _phase;
-    sample *cp[8];
+    sample* cp[8];
 
     if (silence)
     {
@@ -94,14 +95,18 @@ bool MTGeneratorInstance::process(int offset, int count, bool &silence)
         };
     };
     if (volume == 0.0)
-    { silence = true; }
+    {
+        silence = true;
+    }
     return true;
 }
 
 void MTGeneratorInstance::setnote(double n)
 {
     note = n;
-    pitch = ((double) (440.0 * 2.0 * PI) / (double) output->frequency) * pow(1.0594630943592952645618252949463, note - 69);
+    pitch = ((double) (440.0 * 2.0 * PI) / (double) output->frequency) * pow(
+        1.0594630943592952645618252949463, note - 69
+    );
 }
 
 void MTGeneratorInstance::setvolume(double vs, int steps, int curve)
@@ -124,7 +129,7 @@ double MTGeneratorInstance::getvolume(int steps)
     return 0.0;
 }
 
-void MTGeneratorInstance::getpanning(float *x, float *y, float *z, int steps)
+void MTGeneratorInstance::getpanning(float* x, float* y, float* z, int steps)
 {
 
 }

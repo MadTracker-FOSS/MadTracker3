@@ -30,31 +30,31 @@ class GeneratorType: public ObjectType
 public:
     GeneratorType();
 
-    MTObject *MTCT create(MTObject *parent, mt_int32 id, void *param);
+    MTObject* MTCT create(MTObject* parent, mt_int32 id, void* param);
 };
 
 class MTGenerator: public Oscillator
 {
 public:
-    MTGenerator(MTObject *parent, mt_int32 i);
+    MTGenerator(MTObject* parent, mt_int32 i);
 
     ~MTGenerator();
 
-    int MTCT loadfromstream(MTFile *f, int size, void *params);
+    int MTCT loadfromstream(MTFile* f, int size, void* params);
 
-    int MTCT savetostream(MTFile *f, void *params);
+    int MTCT savetostream(MTFile* f, void* params);
 
-    OscillatorInstance *MTCT createinstance(int noutputs, sample **outputs, InstrumentInstance *caller);
+    OscillatorInstance* MTCT createinstance(int noutputs, sample** outputs, InstrumentInstance* caller);
 };
 
 class MTGeneratorInstance: public OscillatorInstance
 {
 public:
-    MTGeneratorInstance(Oscillator *p, int no, sample **o, InstrumentInstance *caller);
+    MTGeneratorInstance(Oscillator* p, int no, sample** o, InstrumentInstance* caller);
 
     bool MTCT seek(double offset, int origin, int units);
 
-    bool MTCT process(int offset, int count, bool &silence);
+    bool MTCT process(int offset, int count, bool& silence);
 
     void MTCT setnote(double n);
 
@@ -66,7 +66,7 @@ public:
 
     double MTCT getvolume(int steps = 0);
 
-    void MTCT getpanning(float *x, float *y, float *z, int steps = 0);
+    void MTCT getpanning(float* x, float* y, float* z, int steps = 0);
 
     float MTCT getimportance();
 
@@ -75,6 +75,6 @@ private:
 };
 
 //---------------------------------------------------------------------------
-extern GeneratorType *generatortype;
+extern GeneratorType* generatortype;
 //---------------------------------------------------------------------------
 #endif

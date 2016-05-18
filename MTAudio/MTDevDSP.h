@@ -19,7 +19,7 @@
 class MTDevDSPDevice: public MTAudioDevice
 {
 public:
-    MTDevDSPDevice(const char *dev);
+    MTDevDSPDevice(const char* dev);
 
     ~MTDevDSPDevice();
 
@@ -33,13 +33,13 @@ public:
 
     int MTCT getposition(bool playback = false);
 
-    bool MTCT getdata(int position, int length, void **ptr1, void **ptr2, unsigned long *lng1, unsigned long *lng2);
+    bool MTCT getdata(int position, int length, void** ptr1, void** ptr2, unsigned long* lng1, unsigned long* lng2);
 
-    bool MTCT writedata(void *ptr1, void *ptr2, unsigned long lng1, unsigned long lng2);
+    bool MTCT writedata(void* ptr1, void* ptr2, unsigned long lng1, unsigned long lng2);
 
 private:
     int f;
-    void *buffer;
+    void* buffer;
     int bsize, dbits, dchannels, drate;
 };
 
@@ -50,9 +50,9 @@ public:
 
     ~MTDevDSPDeviceManager();
 
-    MTAudioDevice *MTCT newdevice(int id);
+    MTAudioDevice* MTCT newdevice(int id);
 
-    void MTCT deldevice(MTAudioDevice *device);
+    void MTCT deldevice(MTAudioDevice* device);
 };
 //---------------------------------------------------------------------------
 #endif

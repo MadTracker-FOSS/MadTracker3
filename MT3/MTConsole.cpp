@@ -15,11 +15,11 @@
 #include <stdio.h>
 
 //---------------------------------------------------------------------------
-MTConsole::MTConsole(MTInterface *mti)
+MTConsole::MTConsole(MTInterface* mti)
 {
 }
 
-MTConsole::MTConsole(MTFile *parent, int start, int end, int access)
+MTConsole::MTConsole(MTFile* parent, int start, int end, int access)
 {
 }
 
@@ -27,7 +27,7 @@ MTConsole::~MTConsole()
 {
 }
 
-int MTConsole::read(void *buffer, int size)
+int MTConsole::read(void* buffer, int size)
 {
     int read = 0;
 
@@ -37,24 +37,29 @@ int MTConsole::read(void *buffer, int size)
     return read;
 }
 
-int MTConsole::readln(char *buffer, int maxsize)
+int MTConsole::readln(char* buffer, int maxsize)
 {
     int read = 0;
 
 #	ifndef _WIN32
-    char *e;
+    char* e;
     fwrite("> ", 1, 2, stdout);
     if (fgets(buffer, maxsize, stdin))
     {
         e = strchr(buffer, 0);
         if (*--e == '\n')
         {
-            while((*e == '\r') || (*e == '\n')) *e-- = 0;
+            while((*e == '\r') || (*e == '\n'))
+            {
+                *e-- = 0;
+            }
         };
         read = strlen(buffer);
     }
     else
-    { read = 0; }
+    {
+        read = 0;
+    }
 #	endif
     return read;
 }
@@ -67,7 +72,7 @@ int MTConsole::reads(char *buffer,int maxsize)
 	return read;
 }
 */
-int MTConsole::write(const void *buffer, int size)
+int MTConsole::write(const void* buffer, int size)
 {
 #	ifdef _WIN32
     size = 0;
@@ -87,12 +92,12 @@ int MTConsole::length()
     return -1;
 }
 
-void *MTConsole::getpointer(int offset, int size)
+void* MTConsole::getpointer(int offset, int size)
 {
     return 0;
 }
 
-void MTConsole::releasepointer(void *mem)
+void MTConsole::releasepointer(void* mem)
 {
 }
 
@@ -111,22 +116,22 @@ bool MTConsole::seteof()
     return false;
 }
 
-bool MTConsole::gettime(int *modified, int *accessed)
+bool MTConsole::gettime(int* modified, int* accessed)
 {
     return false;
 }
 
-bool MTConsole::settime(int *modified, int *accessed)
+bool MTConsole::settime(int* modified, int* accessed)
 {
     return false;
 }
 
-MTFile *MTConsole::subclass(int start, int length, int access)
+MTFile* MTConsole::subclass(int start, int length, int access)
 {
     return 0;
 }
 
-int MTConsole::userinput(const char *input)
+int MTConsole::userinput(const char* input)
 {
     int x, y;
     bool ok = false;
@@ -138,31 +143,40 @@ int MTConsole::userinput(const char *input)
     }
     for(x = 0; x < next; x++)
     {
-        MTExtension &cext = *ext[x];
+        MTExtension& cext = *ext[x];
         if (!cext.system)
         {
             for(y = 0; y < cext.i->ninterfaces; y++)
             {
-                MTTRY if (cext.i->interfaces[y]->status & MTX_INITIALIZED)
+                MTTRY
+                    if (cext.i->interfaces[y]->status & MTX_INITIALIZED)
                     {
                         if (cext.i->interfaces[y]->processinput(input) != 0)
-                        { ok = true; }
-                    }; MTCATCH LOGD("%s - ERROR: Exception while processing input in '");
+                        {
+                            ok = true;
+                        }
+                    };
+                MTCATCH
+                    LOGD("%s - ERROR: Exception while processing input in '");
                     LOG(cext.i->interfaces[y]->name);
                     LOG("'!"
-                            NL); MTEND
+                            NL);
+                MTEND
             };
         };
     };
     if (!ok)
     {
         char buf[256];
-        const char *e = strchr(input, ' ');
+        const char* e = strchr(input, ' ');
         if (e)
         {
+            // pointer arithmetiXX. bah.
             x = e - input;
             if (x > sizeof(cmd) - 1)
-            { x = sizeof(cmd) - 1; }
+            {
+                x = sizeof(cmd) - 1;
+            }
             strncpy(cmd, input, x);
             cmd[x] = 0;
         }

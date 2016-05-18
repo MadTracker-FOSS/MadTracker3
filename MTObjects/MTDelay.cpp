@@ -15,7 +15,7 @@
 #include <MTXAPI/RES/MTObjectsRES.h>
 
 //---------------------------------------------------------------------------
-DelayType *delaytype;
+DelayType* delaytype;
 
 //---------------------------------------------------------------------------
 DelayType::DelayType()
@@ -25,14 +25,16 @@ DelayType::DelayType()
 }
 
 
-MTObject *DelayType::create(MTObject *parent, mt_int32 id, void *param)
+MTObject* DelayType::create(MTObject* parent, mt_int32 id, void* param)
 {
     return new MTDelay(parent, id);
 }
 
 //---------------------------------------------------------------------------
-MTDelay::MTDelay(MTObject *parent, mt_int32 i):
-    Effect(parent, MTO_MTDELAY, i), ntaps(0), monomerge(false)
+MTDelay::MTDelay(MTObject* parent, mt_int32 i):
+    Effect(parent, MTO_MTDELAY, i),
+    ntaps(0),
+    monomerge(false)
 {
 #	ifdef MTSYSTEM_RESOURCES
     res->loadstringf(MTT_effect, name, 255, i + 1);
@@ -54,7 +56,7 @@ MTDelay::~MTDelay()
     };
 }
 
-void MTDelay::notify(MTObject *source, int message, int param1, void *param2)
+void MTDelay::notify(MTObject* source, int message, int param1, void* param2)
 {
     int csize = nsamples;
 
@@ -65,14 +67,16 @@ void MTDelay::notify(MTObject *source, int message, int param1, void *param2)
     }
     else if (message == MTN_TEMPO)
     {
-        _bpm = *(double *) param2;
+        _bpm = *(double*) param2;
     };
 }
 
-EffectInstance *MTDelay::createinstance(int noutputs, sample **outputs, int ninputs, sample **inputs, InstrumentInstance *caller)
+EffectInstance* MTDelay::createinstance(int noutputs, sample** outputs, int ninputs, sample** inputs, InstrumentInstance* caller)
 {
     if (ninputs != noutputs)
-    { return 0; }
+    {
+        return 0;
+    }
     if (caller)
     {
         return new MTDelayInstance(this, noutputs, outputs, ninputs, inputs, caller);
@@ -81,32 +85,42 @@ EffectInstance *MTDelay::createinstance(int noutputs, sample **outputs, int ninp
     return ei;
 }
 
-void MTDelay::deleteinstance(EffectInstance *i)
+void MTDelay::deleteinstance(EffectInstance* i)
 {
     if (!i)
-    { i = ei; }
+    {
+        i = ei;
+    }
     if (i)
     {
-        delete (MTDelayInstance *) i;
+        delete (MTDelayInstance*) i;
         if (i == ei)
-        { ei = 0; }
+        {
+            ei = 0;
+        }
     };
 }
 
 int MTDelay::getnumparams(int cat)
 {
     if (cat == -1)
-    { return 16; }
+    {
+        return 16;
+    }
     if (cat == 0)
-    { return 2; }
+    {
+        return 2;
+    }
     if (cat > 16)
-    { return 0; }
+    {
+        return 0;
+    }
     return 16;
 }
 
-const char *MTDelay::getparamname(int cat, int id)
+const char* MTDelay::getparamname(int cat, int id)
 {
-    static const char *pname[16] = {
+    static const char* pname[16] = {
         "Flags",
         "Delay",
         "Volume",
@@ -127,30 +141,44 @@ const char *MTDelay::getparamname(int cat, int id)
     if (cat == 0)
     {
         if (id == 0)
-        { return "Number of taps"; }
+        {
+            return "Number of taps";
+        }
         if (id == 1)
-        { return "Merge taps to mono"; }
+        {
+            return "Merge taps to mono";
+        }
         return "";
     };
     if ((cat < 0) || (cat > 16))
-    { return ""; }
+    {
+        return "";
+    }
     if ((id < 0) || (id >= 16))
-    { return ""; }
+    {
+        return "";
+    }
     return pname[id];
 }
 
-double MTDelay::getparam(int cat, int id, char *display)
+double MTDelay::getparam(int cat, int id, char* display)
 {
     if (cat == 0)
     {
         if (id == 0)
-        { return ntaps; }
+        {
+            return ntaps;
+        }
         if (id == 1)
-        { return monomerge; }
+        {
+            return monomerge;
+        }
         return 0.0;
     };
     if ((cat < 1) || (cat > 16))
-    { return 0.0; }
+    {
+        return 0.0;
+    }
     cat--;
     switch (id)
     {
@@ -207,7 +235,9 @@ void MTDelay::setparam(int cat, int id, double value, int steps)
         return;
     };
     if ((cat < 1) || (cat > 16))
-    { return; }
+    {
+        return;
+    }
     cat--;
     switch (id)
     {
@@ -264,13 +294,17 @@ void MTDelay::setparam(int cat, int id, double value, int steps)
     };
     cat++;
     if (ei)
-    { ei->setparam(cat, id, value, steps); }
+    {
+        ei->setparam(cat, id, value, steps);
+    }
 }
 
-void MTDelay::settap(int tap, int flags, float delay, float volume, float feedback, Effect *effect)
+void MTDelay::settap(int tap, int flags, float delay, float volume, float feedback, Effect* effect)
 {
     if ((tap < 0) || (tap >= DELAY_MAX_TAPS))
-    { return; }
+    {
+        return;
+    }
     taps[tap].flags = flags;
     taps[tap].delay = delay;
     taps[tap].volume = volume;
@@ -278,11 +312,15 @@ void MTDelay::settap(int tap, int flags, float delay, float volume, float feedba
     if (taps[tap].effect != effect)
     {
         if (taps[tap].effect)
-        { oi->deleteobject(taps[tap].effect); }
+        {
+            oi->deleteobject(taps[tap].effect);
+        }
         taps[tap].effect = effect;
     };
     if (tap >= ntaps)
-    { ntaps = tap + 1; }
+    {
+        ntaps = tap + 1;
+    }
 }
 
 void MTDelay::setbuffer(int nsamples)
@@ -293,14 +331,14 @@ void MTDelay::setbuffer(int nsamples)
     cpos = 0;
     if (monomerge)
     {
-        buffer[0] = (sample *) si->memrealloc(buffer[0], nsamples * sizeof(sample));
+        buffer[0] = (sample*) si->memrealloc(buffer[0], nsamples * sizeof(sample));
         x = 1;
     }
     else
     {
         for(x = 0; x < ninputs; x++)
         {
-            buffer[x] = (sample *) si->memrealloc(buffer[x], nsamples * sizeof(sample));
+            buffer[x] = (sample*) si->memrealloc(buffer[x], nsamples * sizeof(sample));
         };
     };
     for(; x < 8; x++)
@@ -314,11 +352,11 @@ void MTDelay::setbuffer(int nsamples)
 }
 
 //---------------------------------------------------------------------------
-MTDelayInstance::MTDelayInstance(Effect *p, int no, sample **o, int ni, sample **i, InstrumentInstance *caller):
+MTDelayInstance::MTDelayInstance(Effect* p, int no, sample** o, int ni, sample** i, InstrumentInstance* caller):
     EffectInstance(p, no, o, ni, i, caller)
 {
     int x;
-    MTDelay &cp = *(MTDelay *) p;
+    MTDelay& cp = *(MTDelay*) p;
 
     for(x = 0; x < DELAY_MAX_TAPS; x++)
     {
@@ -328,13 +366,15 @@ MTDelayInstance::MTDelayInstance(Effect *p, int no, sample **o, int ni, sample *
     };
 }
 
-int MTDelayInstance::process(int ooffset, int ioffset, int count, bool &silence)
+int MTDelayInstance::process(int ooffset, int ioffset, int count, bool& silence)
 {
     int x, y, t, d;
-    MTDelay &cp = *(MTDelay *) parent;
+    MTDelay& cp = *(MTDelay*) parent;
 
     if ((noutputs == 0) || (ninputs != noutputs))
-    { return 0; }
+    {
+        return 0;
+    }
 // Delay buffer
     if (cp.monomerge)
     {
@@ -416,46 +456,67 @@ int MTDelayInstance::process(int ooffset, int ioffset, int count, bool &silence)
                 continue;
         };
         if (d <= 0)
-        { continue; }
+        {
+            continue;
+        }
         register float cf = ct.feedback;
         if (cp.monomerge)
-        { cf /= noutputs; }
+        {
+            cf /= noutputs;
+        }
         y = 0;
         for(x = 0; x < noutputs; x++)
         {
-            register sample *i, *f, *o;
+            register sample* i, * f, * o;
             register int l = count;
             register int c;
-            sample *is, *ie;
+            sample* is, * ie;
             i = cp.buffer[y] + (cp.cpos - d);
             f = cp.buffer[y] + cp.cpos;
             is = cp.buffer[y];
             ie = cp.buffer[y] + cp.nsamples;
             if (i < is)
-            { i = ie - (is - i); }
+            {
+                i = ie - (is - i);
+            }
             o = outputs[x] + ooffset;
             while(l > 0)
             {
                 c = l;
                 if (c > ie - i)
-                { c = ie - i; }
+                {
+                    c = ie - i;
+                }
                 if (c > ie - f)
-                { c = ie - f; }
+                {
+                    c = ie - f;
+                }
                 dspi->addbuffermul2(o, f, i, ct.volume, cf, c);
 //				dspi->addbufferslide2(o,f,i,ct.volume,ct.feedback,-ct.volume/c,-ct.feedback/c,c);
                 o += c;
                 i += c;
-                while(i >= ie) i -= cp.nsamples;
-                while(f >= ie) f -= cp.nsamples;
+                while(i >= ie)
+                {
+                    i -= cp.nsamples;
+                }
+                while(f >= ie)
+                {
+                    f -= cp.nsamples;
+                }
                 l -= c;
             };
             if (!cp.monomerge)
-            { y++; }
+            {
+                y++;
+            }
         };
     };
 
     cp.cpos += count;
-    while(cp.cpos >= cp.nsamples) cp.cpos -= cp.nsamples;
+    while(cp.cpos >= cp.nsamples)
+    {
+        cp.cpos -= cp.nsamples;
+    }
 
     return 0;
 }

@@ -17,7 +17,7 @@
 //---------------------------------------------------------------------------
 // Automation functions
 //---------------------------------------------------------------------------
-Automation::Automation(MTObject *parent, mt_int32 i):
+Automation::Automation(MTObject* parent, mt_int32 i):
     MTObject(parent, MTO_AUTOMATION, i)
 {
     envelopes = si->arraycreate(8, sizeof(TrackAuto));
@@ -38,7 +38,9 @@ Automation::~Automation()
             for(x = 0; x < MAX_SEQUENCES; x++)
             {
                 if (module->sequ[y][x].patt == (id | 0x1000))
-                { module->sequ[y][x].patt = 0xFFFF; }
+                {
+                    module->sequ[y][x].patt = 0xFFFF;
+                }
             }
         };
     };

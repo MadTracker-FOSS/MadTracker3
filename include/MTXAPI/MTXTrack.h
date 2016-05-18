@@ -23,7 +23,7 @@ class Track;
 class Track: public Node
 {
 public:
-    Track(MTObject *parent, mt_int32 i, int sub = 0);
+    Track(MTObject* parent, mt_int32 i, int sub = 0);
 
     virtual ~Track();
 
@@ -32,7 +32,7 @@ public:
     bool empty;
     double vol;
     float panx, pany, panz;
-    sample *buffer[8];
+    sample* buffer[8];
     int nsamples;
     int offset;
 

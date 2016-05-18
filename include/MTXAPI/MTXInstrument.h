@@ -74,40 +74,52 @@ class InstrumentInstance;
 class Instrument: public MTObject
 {
 public:
-    Instrument(MTObject *parent, mt_uint32 type, mt_int32 i):
+    Instrument(MTObject* parent, mt_uint32 type, mt_int32 i):
         MTObject(parent, type, i)
-    { };
+    {
+    };
 
     virtual ~Instrument()
-    { };
+    {
+    };
 
-    virtual InstrumentInstance *MTCT createinstance(Track *track, PatternInstance *caller, InstrumentInstance *previous) = 0;
+    virtual InstrumentInstance* MTCT createinstance(Track* track, PatternInstance* caller, InstrumentInstance* previous) = 0;
 
     virtual void MTCT preprocess(int count)
-    { };
+    {
+    };
 
     virtual void MTCT postprocess(int count)
-    { };
+    {
+    };
 
     virtual void MTCT prebuffer(int count)
-    { };
+    {
+    };
 
     virtual void MTCT postbuffer(int count)
-    { };
+    {
+    };
 
     virtual bool MTCT acceptoscillator()
-    { return false; };
+    {
+        return false;
+    };
 
-    virtual int MTCT addoscillator(Oscillator *o)
-    { return -1; };
+    virtual int MTCT addoscillator(Oscillator* o)
+    {
+        return -1;
+    };
 
-    virtual int MTCT deloscillator(Oscillator *o)
-    { return -1; };
+    virtual int MTCT deloscillator(Oscillator* o)
+    {
+        return -1;
+    };
 };
 
 struct MTIEvent
 {
-    MTObject *source;
+    MTObject* source;
     int type;
     double offset;
     int flags;
@@ -117,7 +129,7 @@ struct MTIEvent
 
 struct MTINoteEvent
 {
-    MTObject *source;
+    MTObject* source;
     int type;
     double offset;
     int flags;
@@ -134,7 +146,7 @@ struct MTINoteEvent
 
 struct MTIParamEvent
 {
-    MTObject *source;
+    MTObject* source;
     int type;
     double offset;
     int flags;
@@ -158,10 +170,10 @@ public:
     int id;
     int flags;
     int cpu;
-    MTModule *module;
-    Instrument *parent;
-    Track *track;
-    PatternInstance *caller;
+    MTModule* module;
+    Instrument* parent;
+    Track* track;
+    PatternInstance* caller;
     int layer;
     double note;
     double cpos;
@@ -171,7 +183,7 @@ public:
     float gpanx, gpany, gpanz;
     float mpanx, mpany, mpanz;
 
-    InstrumentInstance(Instrument *p, Track *t, PatternInstance *c, int l, InstrumentInstance *previous)
+    InstrumentInstance(Instrument* p, Track* t, PatternInstance* c, int l, InstrumentInstance* previous)
     {
         flags = 0;
         cpu = 0;
@@ -198,11 +210,11 @@ public:
 
     virtual void MTCT process(int count) = 0;
 
-    virtual void MTCT sendevents(int nevents, MTIEvent **events) = 0;
+    virtual void MTCT sendevents(int nevents, MTIEvent** events) = 0;
 
     virtual float MTCT getimportance() = 0;
 
-    virtual void MTCT changecaller(PatternInstance *newcaller)
+    virtual void MTCT changecaller(PatternInstance* newcaller)
     {
         caller = newcaller;
     };

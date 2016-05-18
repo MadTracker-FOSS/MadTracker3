@@ -16,9 +16,9 @@
 #include <MTXAPI/RES/MT3RES.h>
 
 //---------------------------------------------------------------------------
-extern MTGUIInterface *gi;
+extern MTGUIInterface* gi;
 
-MTWC_main *w_main;
+MTWC_main* w_main;
 //---------------------------------------------------------------------------
 //	User includes, variables and functions
 //---------------------------------------------------------------------------
@@ -27,22 +27,22 @@ MTWC_main *w_main;
 #include <stdlib.h>
 
 //---------------------------------------------------------------------------
-extern MT3Interface *mi;
+extern MT3Interface* mi;
 //---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
 //	Wrapper class code
 //---------------------------------------------------------------------------
-MTWC_main::MTWC_main(MTWindow *w):
+MTWC_main::MTWC_main(MTWindow* w):
     MTWrapper(w)
 {
 // FIXME
-    toolbar = (MTToolBar *) gi->newcontrol(MTC_TOOLBAR, 0, wthis, 0, 0, 512, 32, 0);
-    mfile = (MTButton *) wthis->getcontrolfromuid(MTC_mfile);
-    medit = (MTButton *) wthis->getcontrolfromuid(MTC_medit);
-    mmodule = (MTButton *) wthis->getcontrolfromuid(MTC_mmodule);
-    mwindow = (MTButton *) wthis->getcontrolfromuid(MTC_mwindow);
-    mhelp = (MTButton *) wthis->getcontrolfromuid(MTC_mhelp);
+    toolbar = (MTToolBar*) gi->newcontrol(MTC_TOOLBAR, 0, wthis, 0, 0, 512, 32, 0);
+    mfile = (MTButton*) wthis->getcontrolfromuid(MTC_mfile);
+    medit = (MTButton*) wthis->getcontrolfromuid(MTC_medit);
+    mmodule = (MTButton*) wthis->getcontrolfromuid(MTC_mmodule);
+    mwindow = (MTButton*) wthis->getcontrolfromuid(MTC_mwindow);
+    mhelp = (MTButton*) wthis->getcontrolfromuid(MTC_mhelp);
     w->wrapper = this;
 //---------------------------------------------------------------------------
 //	User construction code
@@ -55,8 +55,8 @@ MTWC_main::MTWC_main(MTWindow *w):
     mmodule->setparent(toolbar);
     mwindow->setparent(toolbar);
     mhelp->setparent(toolbar);
-    MTMenu *menu = (MTMenu *) gi->newcontrol(MTC_MENU, 0, mtdsk, 0, 0, 0, 0, 0);
-    MTMenu *submenu = (MTMenu *) gi->newcontrol(MTC_MENU, 0, mtdsk, 0, 0, 0, 0, 0);
+    MTMenu* menu = (MTMenu*) gi->newcontrol(MTC_MENU, 0, mtdsk, 0, 0, 0, 0, 0);
+    MTMenu* submenu = (MTMenu*) gi->newcontrol(MTC_MENU, 0, mtdsk, 0, 0, 0, 0, 0);
     menu->flags |= MTCF_DONTSAVE;
     submenu->flags |= MTCF_DONTSAVE;
     submenu->additem("Module", -1, 0, false, 0);
@@ -66,7 +66,7 @@ MTWC_main::MTWC_main(MTWindow *w):
     submenu->additem("Pattern", -1, 0, false, 0);
     submenu->additem("Instrument", -1, 0, false, 0);
     submenu->additem("Oscillator", -1, 0, false, 0);
-    ((MTMenuItem *) menu->additem("New", -1, 0, false, 0))->submenu = submenu;
+    ((MTMenuItem*) menu->additem("New", -1, 0, false, 0))->submenu = submenu;
     menu->additem("Load...", -1, 0, false, 0);
     menu->additem("Save", -1, 0, false, 0);
     menu->additem("Save As...", -1, 0, false, 0);
@@ -87,7 +87,7 @@ MTWC_main::~MTWC_main()
 
 }
 
-bool MTWC_main::onmessage(MTCMessage &msg)
+bool MTWC_main::onmessage(MTCMessage& msg)
 {
 //---------------------------------------------------------------------------
 //	User messages handler
@@ -96,7 +96,9 @@ bool MTWC_main::onmessage(MTCMessage &msg)
     {
         case MTCM_MOUSEDOWN:
             if (msg.button != DB_LEFT)
-            { break; }
+            {
+                break;
+            }
             if (msg.y < 0)
             {
                 gi->getmousepos(mo);
@@ -106,7 +108,9 @@ bool MTWC_main::onmessage(MTCMessage &msg)
             break;
         case MTCM_MOUSEUP:
             if (msg.button != DB_LEFT)
-            { break; }
+            {
+                break;
+            }
             if (moving)
             {
                 moving = triggered = false;
@@ -128,7 +132,9 @@ bool MTWC_main::onmessage(MTCMessage &msg)
                         mwo.top -= mo.y;
                     }
                     else
-                    { return true; }
+                    {
+                        return true;
+                    }
                 };
                 gi->windowmove(wthis->dsk->mwnd, mwo.left + mo2.x, mwo.top + mo2.y, false);
                 si->syswait(10);

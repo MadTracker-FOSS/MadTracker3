@@ -27,26 +27,26 @@
 #include <MTXAPI/RES/MT3RES.h>
 
 //---------------------------------------------------------------------------
-void MTCT designmode(MTShortcut *, MTControl *, MTUndo *);
+void MTCT designmode(MTShortcut*, MTControl*, MTUndo*);
 
 //---------------------------------------------------------------------------
-void *wnd;
+void* wnd;
 
-MTDesktop *mtdsk;
+MTDesktop* mtdsk;
 
-MTTabControl *mtdock;
+MTTabControl* mtdock;
 
-MTWindow *mtmain, *mtmain2;
+MTWindow* mtmain, * mtmain2;
 
-MTResources *mtres, *skinres;
+MTResources* mtres, * skinres;
 
-Skin *skin;
+Skin* skin;
 
-MTImageList *sysimages;
+MTImageList* sysimages;
 
-MTThread *refreshthread;
+MTThread* refreshthread;
 
-MTEvent *refreshevent;
+MTEvent* refreshevent;
 
 bool candesign = false;
 
@@ -54,23 +54,23 @@ bool canrefresh = false;
 
 int dragx, dragy;
 
-MTModule *cmodule;
+MTModule* cmodule;
 
-MTBitmap *logo;
+MTBitmap* logo;
 
-MTCustomWinControl *mtlogo;
+MTCustomWinControl* mtlogo;
 
-MTSplashLogo *mtsplash;
+MTSplashLogo* mtsplash;
 
 int logotime = 5;
 
-MTTimer *logotimer;
+MTTimer* logotimer;
 
-MTArray *refreshprocs;
+MTArray* refreshprocs;
 
 #ifdef _DEBUG
 
-char *help;
+char* help;
 
 MTShortcut s_openres = {MTSF_CONTROL | MTSF_UICONTROL, 'O', 0, 0, "Load a resources"};
 
@@ -85,7 +85,7 @@ MTShortcut s_reset = {MTSF_CONTROL | MTSF_UICONTROL, 'R', 0, 0, "Reset"};
 MTShortcut s_design = {MTSF_CONTROL | MTSF_ALT, 'D', 0, designmode, "Design mode"};
 
 //---------------------------------------------------------------------------
-void MTCT designmode(MTShortcut *, MTControl *, MTUndo *)
+void MTCT designmode(MTShortcut*, MTControl*, MTUndo*)
 {
     bool d;
 
@@ -96,18 +96,20 @@ void MTCT designmode(MTShortcut *, MTControl *, MTUndo *)
     };
 }
 
-int MTCT loadprocess(MTThread *thread, void *param)
+int MTCT loadprocess(MTThread* thread, void* param)
 {
-    MTProcess *p = (MTProcess *) thread;
+    MTProcess* p = (MTProcess*) thread;
 
     FENTER2("loadprocess(%.8X,%.8X)", thread, param);
-    if (!oi->loadobject((MTModule *) param, (char *) p->data, (void *) p))
-    { thread->result = -1; }
+    if (!oi->loadobject((MTModule*) param, (char*) p->data, (void*) p))
+    {
+        thread->result = -1;
+    }
     LEAVE();
     return 0;
 }
 
-void MTCT loadprogress(MTProcess *process, void *param, float p)
+void MTCT loadprogress(MTProcess* process, void* param, float p)
 {
     int x;
     bool locked = false;
@@ -120,18 +122,24 @@ void MTCT loadprogress(MTProcess *process, void *param, float p)
     }
     else if (p == -1.0)
     {
-        MTModule *m = (MTModule *) param;
+        MTModule* m = (MTModule*) param;
         m->lock(MTOL_LOCK, false);
         if (process->result < 0)
         {
-            MTTRY oi->deleteobject(m); MTCATCH MTEND
+            MTTRY
+                oi->deleteobject(m);
+            MTCATCH
+            MTEND
             si->memfree(process->data);
             LEAVE();
             return;
         };
         if (gi)
-        { setmodule(m); }
-        MTTRY if (output)
+        {
+            setmodule(m);
+        }
+        MTTRY
+            if (output)
             {
                 output->lock->lock();
                 locked = true;
@@ -140,7 +148,7 @@ void MTCT loadprogress(MTProcess *process, void *param, float p)
             {
                 if ((module[x]) && (module[x] != m))
                 {
-                    MTModule *oldmodule = module[x];
+                    MTModule* oldmodule = module[x];
                     module[x] = 0;
                     if (locked)
                     {
@@ -149,34 +157,49 @@ void MTCT loadprogress(MTProcess *process, void *param, float p)
                     };
                     oi->deleteobject(oldmodule);
                 };
-            }; MTCATCH MTEND
+            };
+        MTCATCH
+        MTEND
         if (locked)
-        { output->lock->unlock(); }
+        {
+            output->lock->unlock();
+        }
         mi->editobject(m, false);
         si->memfree(process->data);
     };
     LEAVE();
 }
 
-void loadmodule(const char *filename)
+void loadmodule(const char* filename)
 {
     int x;
-    char *file;
+    char* file;
 
     if (!oi)
-    { return; }
+    {
+        return;
+    }
     FENTER1("loadmodule(%s)", filename);
-    MTTRY if (output)
-        { output->lock->lock(); }
+    MTTRY
+        if (output)
+        {
+            output->lock->lock();
+        }
         for(x = 0; x < 16; x++)
         {
             if (module[x] == 0)
-            { break; }
+            {
+                break;
+            }
         };
-        module[x] = (MTModule *) oi->newobject(MTO_MODULE, 0, 0, 0, true); MTCATCH MTEND
+        module[x] = (MTModule*) oi->newobject(MTO_MODULE, 0, 0, 0, true);
+    MTCATCH
+    MTEND
     if (output)
-    { output->lock->unlock(); }
-    file = (char *) si->memalloc(strlen(filename) + 1, 0);
+    {
+        output->lock->unlock();
+    }
+    file = (char*) si->memalloc(strlen(filename) + 1, 0);
     strcpy(file, filename);
     si->processcreate(loadprocess, module[x], MTP_LOADMODULE, MTT_LOWER, file, loadprogress, false, "Load Module");
     LEAVE();
@@ -184,7 +207,7 @@ void loadmodule(const char *filename)
 
 #ifdef _DEBUG
 
-void MTCT openresources(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT openresources(MTShortcut* s, MTControl* c, MTUndo*)
 {
 #	if defined(__linux__) || defined(__APPLE__)
 #warning Unimplemented function: void MTCT openresources(MTShortcut*, MTControl*, MTUndo*)
@@ -236,7 +259,7 @@ void MTCT openresources(MTShortcut *s, MTControl *c, MTUndo *)
 #	endif
 }
 
-void MTCT openskin(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT openskin(MTShortcut* s, MTControl* c, MTUndo*)
 {
 #	if defined(__linux__) || defined(__APPLE__)
 #warning Unimplemented function: void MTCT openskin(MTShortcut*, MTControl*, MTUndo*)
@@ -275,7 +298,7 @@ void MTCT openskin(MTShortcut *s, MTControl *c, MTUndo *)
 #	endif
 }
 
-void MTCT playmodule(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT playmodule(MTShortcut* s, MTControl* c, MTUndo*)
 {
 #	if defined(__linux__) || defined(__APPLE__)
 #warning Unimplemented function: void MTCT playmodule(MTShortcut*, MTControl*, MTUndo*)
@@ -302,26 +325,28 @@ void MTCT playmodule(MTShortcut *s, MTControl *c, MTUndo *)
 #	endif
 }
 
-void MTCT reset(MTShortcut *, MTControl *, MTUndo *)
+void MTCT reset(MTShortcut*, MTControl*, MTUndo*)
 {
     wantreset = true;
 }
 
-void MTCT showall(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT showall(MTShortcut* s, MTControl* c, MTUndo*)
 {
     int x;
 
     FENTER2("showall(%.8X,%.8X)", s, c);
     for(x = 0; x < mtdsk->ncontrols; x++)
     {
-        MTControl &cctrl = *mtdsk->controls[x];
+        MTControl& cctrl = *mtdsk->controls[x];
         if (cctrl.guiid == MTC_WINDOW)
-        { cctrl.switchflags(MTCF_HIDDEN, false); }
+        {
+            cctrl.switchflags(MTCF_HIDDEN, false);
+        }
     };
     LEAVE();
 }
 
-void MTCT setresolution(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT setresolution(MTShortcut* s, MTControl* c, MTUndo*)
 {
 #	if defined(__linux__) || defined(__APPLE__)
 #warning Unimplemented function: void MTCT setresolution(MTShortut*, MTControl*, MTUndo*)
@@ -339,13 +364,15 @@ void MTCT setresolution(MTShortcut *s, MTControl *c, MTUndo *)
 
 #endif
 
-bool MTCT msgproc(MTWinControl *window, MTCMessage &msg)
+bool MTCT msgproc(MTWinControl* window, MTCMessage& msg)
 {
 #	ifdef _DEBUG
     if (msg.msg == MTCM_KEYDOWN)
     {
         if (msg.repeat)
-        { return false; }
+        {
+            return false;
+        }
         if (msg.buttons & DB_CONTROL)
         {
             if ((msg.key >= KB_NUMPAD0) && (msg.key <= KB_NUMPAD9))
@@ -365,7 +392,12 @@ bool MTCT msgproc(MTWinControl *window, MTCMessage &msg)
     {
         if (mtlogo)
         {
-            mtlogo->setbounds((window->width - mtlogo->width) / 2, (window->height - mtlogo->height) / 2, mtlogo->width, mtlogo->height);
+            mtlogo->setbounds(
+                (window->width - mtlogo->width) / 2,
+                (window->height - mtlogo->height) / 2,
+                mtlogo->width,
+                mtlogo->height
+            );
         };
     };
     if (window == mtdsk)
@@ -399,9 +431,9 @@ bool MTCT msgproc(MTWinControl *window, MTCMessage &msg)
     return false;
 }
 
-int MTCT refreshsync(MTSync *sync)
+int MTCT refreshsync(MTSync* sync)
 {
-    RefreshStruct *rs;
+    RefreshStruct* rs;
     static MTCMessage msg = {MTCM_REFRESH};
 
     FENTER1("refreshsync(%.8X)", sync);
@@ -410,7 +442,7 @@ int MTCT refreshsync(MTSync *sync)
         lastseq->message(msg);
     };
     refreshprocs->reset();
-    while((rs = (RefreshStruct *) refreshprocs->next()))
+    while((rs = (RefreshStruct*) refreshprocs->next()))
     {
         rs->proc(rs->param);
     };
@@ -420,14 +452,16 @@ int MTCT refreshsync(MTSync *sync)
 
 MTSync rsync = {refreshsync};
 
-int MTCT refreshproc(MTThread *thread, void *param)
+int MTCT refreshproc(MTThread* thread, void* param)
 {
     while((!thread->terminated) && (canrefresh))
     {
         if (refreshevent->wait(500))
         {
             if (!canrefresh)
-            { break; }
+            {
+                break;
+            }
             gi->synchronize(&rsync);
         };
     };
@@ -435,20 +469,20 @@ int MTCT refreshproc(MTThread *thread, void *param)
     return 0;
 }
 
-void setmodule(void *module)
+void setmodule(void* module)
 {
     MTCMessage msg = {MTCM_CHANGE};
-    MTButton *bstop, *bplaypause, *brecord;
+    MTButton* bstop, * bplaypause, * brecord;
 
     FENTER1("setmodule(%.8X)", module);
-    cmodule = (MTModule *) module;
+    cmodule = (MTModule*) module;
     msg.ctrl = w_main2->list1;
     mtmain2->message(msg);
     msg.ctrl = w_main2->list2;
     mtmain2->message(msg);
-    bstop = (MTButton *) mtmain2->getcontrolfromuid(MTC_bstop);
-    bplaypause = (MTButton *) mtmain2->getcontrolfromuid(MTC_bplaypause);
-    brecord = (MTButton *) mtmain2->getcontrolfromuid(MTC_brecord);
+    bstop = (MTButton*) mtmain2->getcontrolfromuid(MTC_bstop);
+    bplaypause = (MTButton*) mtmain2->getcontrolfromuid(MTC_bplaypause);
+    brecord = (MTButton*) mtmain2->getcontrolfromuid(MTC_brecord);
     if (cmodule)
     {
         bstop->switchflags(MTCF_DISABLED, false);
@@ -466,14 +500,14 @@ void setmodule(void *module)
     LEAVE();
 }
 
-int MTCT logosync(MTSync *)
+int MTCT logosync(MTSync*)
 {
     mtsplash->setalpha(0, 20, 16);
     mtsplash = 0;
     return 0;
 }
 
-void MTCT logoproc(MTTimer *timer, int param)
+void MTCT logoproc(MTTimer* timer, int param)
 {
     MTSync sync;
 
@@ -483,8 +517,9 @@ void MTCT logoproc(MTTimer *timer, int param)
     logotimer = 0;
 }
 
-MTSplashLogo::MTSplashLogo(MTCustomWinControl *control):
-    MTCustomWinBehaviours(control), timer(0)
+MTSplashLogo::MTSplashLogo(MTCustomWinControl* control):
+    MTCustomWinBehaviours(control),
+    timer(0)
 {
     control->flags |= MTCF_TRANSPARENT | MTCF_STAYONTOP | MTCF_GHOST;
     control->flags &= (~MTCF_BORDER);
@@ -505,15 +540,17 @@ void MTSplashLogo::ondestroy()
     };
 }
 
-void MTSplashLogo::ondraw(MTRect &rect)
+void MTSplashLogo::ondraw(MTRect& rect)
 {
-    MTBitmap *b;
+    MTBitmap* b;
     MTRect r = {0, 0, parent->width, parent->height};
     int x = 0;
     int y = 0;
 
     if (&rect)
-    { r = rect; }
+    {
+        r = rect;
+    }
     x = parent->left + (parent->width - logo->width) / 2;
     y = parent->top + (parent->height - logo->height) / 2;
     parent->parent->preparedraw(&b, x, y);
@@ -527,11 +564,13 @@ void MTSplashLogo::ondraw(MTRect &rect)
         logo->blt(b, x, y, logo->width, logo->height, 0, 0);
     }
     else
-    { logo->blendblt(b, x, y, logo->width, logo->height, 0, 0, parent->tag); }
+    {
+        logo->blendblt(b, x, y, logo->width, logo->height, 0, 0, parent->tag);
+    }
     b->unclip();
 }
 
-bool MTSplashLogo::onmessage(MTCMessage &msg)
+bool MTSplashLogo::onmessage(MTCMessage& msg)
 {
     MTRect r;
     MTCMessage cmsg = {MTCM_CHANGE, 0, mtlogo};
@@ -544,13 +583,17 @@ bool MTSplashLogo::onmessage(MTCMessage &msg)
             {
                 parent->tag += increment;
                 if (parent->tag > destalpha)
-                { parent->tag = destalpha; }
+                {
+                    parent->tag = destalpha;
+                }
             }
             else
             {
                 parent->tag -= increment;
                 if (parent->tag < destalpha)
-                { parent->tag = destalpha; }
+                {
+                    parent->tag = destalpha;
+                }
             };
             if (parent->tag == destalpha)
             {
@@ -575,28 +618,34 @@ bool MTSplashLogo::onmessage(MTCMessage &msg)
 void MTSplashLogo::setalpha(int alpha, int interval, int increment)
 {
     if ((destalpha == alpha) || (destalpha == 0))
-    { return; }
+    {
+        return;
+    }
     destalpha = alpha;
     this->interval = interval;
     this->increment = increment;
     if (parent->tag == destalpha)
-    { return; }
+    {
+        return;
+    }
     if (!timer)
-    { timer = gi->ctrltimer(parent, 0, interval, true, true); }
+    {
+        timer = gi->ctrltimer(parent, 0, interval, true, true);
+    }
 }
 
 bool initInterface()
 {
     int x, y, size;
     MTRect cr;
-    MTBitmap *screen;
-    MTConfigFile *conf;
+    MTBitmap* screen;
+    MTConfigFile* conf;
 
     ENTER("initInterface");
 // Read the configuration
     refreshprocs = si->arraycreate(4, sizeof(RefreshStruct));
 
-    if ((conf = (MTConfigFile *) mi->getconf("Global", true)))
+    if ((conf = (MTConfigFile*) mi->getconf("Global", true)))
     {
         if (conf->setsection("MT3"))
         {
@@ -607,7 +656,7 @@ bool initInterface()
         };
         mi->releaseconf(conf);
     };
-    if ((conf = (MTConfigFile *) mi->getconf("Global", false)))
+    if ((conf = (MTConfigFile*) mi->getconf("Global", false)))
     {
         if (conf->setsection("MT3"))
         {
@@ -645,20 +694,24 @@ bool initInterface()
     {
         gi->getwindowrect(wnd, cr, true);
     };
-    mtdsk = (MTDesktop *) gi->newcontrol(MTC_DESKTOP, 0, (MTWinControl *) wnd, 0, 0, cr.right - cr.left, cr.bottom - cr.top, 0);
+    mtdsk = (MTDesktop*) gi->newcontrol(
+        MTC_DESKTOP, 0, (MTWinControl*) wnd, 0, 0, cr.right - cr.left, cr.bottom - cr.top, 0
+    );
     mtdsk->messageproc = msgproc;
     gi->monitordesktop(mtdsk);
     mtdsk->draw(NORECT);
 // Initialize the skin
     skin = gi->getskin();
-    sysimages = (MTImageList *) gi->getimagelist(0);
+    sysimages = (MTImageList*) gi->getimagelist(0);
     if (exitasap)
     {
         LEAVE();
         return true;
     };
 // Create the dock
-    mtdock = (MTTabControl *) gi->newcontrol(MTC_TABCONTROL, 0, mtdsk, 0, 160, mtdsk->width, mtdsk->height - 160 - 200, 0);
+    mtdock = (MTTabControl*) gi->newcontrol(
+        MTC_TABCONTROL, 0, mtdsk, 0, 160, mtdsk->width, mtdsk->height - 160 - 200, 0
+    );
     mtdock->flags |= MTCF_DONTSAVE;
     mtdock->align = MTCA_CLIENT;
 // Load the resources
@@ -675,7 +728,9 @@ bool initInterface()
     logo->param = &logo;
     cr.left = (cr.right - cr.left - logo->width) / 2;
     cr.top = (cr.bottom - cr.top - logo->height) / 2;
-    mtlogo = (MTCustomWinControl *) gi->newcontrol(MTC_CUSTOMWINCTRL, 0, mtdsk, cr.left, cr.top, logo->width, logo->height, 0);
+    mtlogo = (MTCustomWinControl*) gi->newcontrol(
+        MTC_CUSTOMWINCTRL, 0, mtdsk, cr.left, cr.top, logo->width, logo->height, 0
+    );
     mtlogo->flags |= MTCF_DONTSAVE;
     mtsplash = new MTSplashLogo(mtlogo);
     mtlogo->behaviours = mtsplash;
@@ -701,8 +756,8 @@ bool initInterface()
     gi->loadwindow(mtres, MTW_file, mtdsk);
 
 #	ifdef _DEBUG
-    MTResources *res;
-    char *e;
+    MTResources* res;
+    char* e;
     int type, uid;
 
     res = si->resfind("Debug.mtr", candesign);
@@ -718,24 +773,28 @@ bool initInterface()
                     gi->loadwindow(res, uid, mtdsk);
                     break;
                 case MTR_TEXT:
-                    help = (char *) si->memalloc(size + 1, 0);
-                    e = (char *) res->getresource(type, uid, &size);
+                    help = (char*) si->memalloc(size + 1, 0);
+                    e = (char*) res->getresource(type, uid, &size);
                     if (e)
-                    { strcpy(help, e); }
+                    {
+                        strcpy(help, e);
+                    }
                     res->releaseresource(e);
                     break;
             };
         };
         si->resclose(res);
     };
-    MTMenu &cmenu = *mtdsk->popup;
-    MTMenuItem *m_openres, *m_openskin, *m_playmod, *m_reset;
+    MTMenu& cmenu = *mtdsk->popup;
+    MTMenuItem* m_openres, * m_openskin, * m_playmod, * m_reset;
     if (candesign)
-    { ((MTMenuItem *) cmenu.additem("Design Mode", -1, 0, false, 0))->command = designmode; }
-    m_openres = (MTMenuItem *) cmenu.additem("Load Resources...", -1, 0, false, 0);
-    m_openskin = (MTMenuItem *) cmenu.additem("Load Skin...", -1, 0, false, 0);
-    m_playmod = (MTMenuItem *) cmenu.additem("Play a Module...", -1, 0, false, 0);
-    m_reset = (MTMenuItem *) cmenu.additem("Reset", -1, 0, false, 0);
+    {
+        ((MTMenuItem*) cmenu.additem("Design Mode", -1, 0, false, 0))->command = designmode;
+    }
+    m_openres = (MTMenuItem*) cmenu.additem("Load Resources...", -1, 0, false, 0);
+    m_openskin = (MTMenuItem*) cmenu.additem("Load Skin...", -1, 0, false, 0);
+    m_playmod = (MTMenuItem*) cmenu.additem("Play a Module...", -1, 0, false, 0);
+    m_reset = (MTMenuItem*) cmenu.additem("Reset", -1, 0, false, 0);
     m_openres->command = openresources;
     m_openskin->command = openskin;
     m_playmod->command = playmodule;
@@ -748,21 +807,23 @@ bool initInterface()
     m_openskin->shortcut = &s_openskin;
     m_playmod->shortcut = &s_playmod;
     m_reset->shortcut = &s_reset;
-    ((MTMenuItem *) cmenu.additem("Show All Windows", -1, 0, false, 0))->command = showall;
-    MTMenuItem &mmenu = *(MTMenuItem *) cmenu.additem("Resolution", -1, 0, false, 0);
-    MTMenu &menu = *(MTMenu *) gi->newcontrol(MTC_MENU, 0, mtdsk, 0, 0, 0, 0, 0);
+    ((MTMenuItem*) cmenu.additem("Show All Windows", -1, 0, false, 0))->command = showall;
+    MTMenuItem& mmenu = *(MTMenuItem*) cmenu.additem("Resolution", -1, 0, false, 0);
+    MTMenu& menu = *(MTMenu*) gi->newcontrol(MTC_MENU, 0, mtdsk, 0, 0, 0, 0, 0);
     menu.flags |= MTCF_DONTSAVE;
     mmenu.submenu = &menu;
-    ((MTMenuItem *) menu.additem("640x480", -1, 0, false, 0))->command = setresolution;
-    ((MTMenuItem *) menu.additem("800x600", -1, 0, false, (void *) 1))->command = setresolution;
-    ((MTMenuItem *) menu.additem("1024x768", -1, 0, false, (void *) 2))->command = setresolution;
+    ((MTMenuItem*) menu.additem("640x480", -1, 0, false, 0))->command = setresolution;
+    ((MTMenuItem*) menu.additem("800x600", -1, 0, false, (void*) 1))->command = setresolution;
+    ((MTMenuItem*) menu.additem("1024x768", -1, 0, false, (void*) 2))->command = setresolution;
     gi->registershortcut(&s_openres);
     gi->registershortcut(&s_openskin);
     gi->registershortcut(&s_playmod);
     gi->registershortcut(&s_reset);
 #	endif
     if (candesign)
-    { gi->registershortcut(&s_design); }
+    {
+        gi->registershortcut(&s_design);
+    }
     logotimer = si->timercreate(logotime, 100, false, 0, logoproc);
 
     mtdsk->flags &= (~MTCF_DONTDRAW);
@@ -778,7 +839,7 @@ bool initInterface()
 
     for(x = 0; x < next; x++)
     {
-        MTExtension &cext = *ext[x];
+        MTExtension& cext = *ext[x];
         for(y = 0; y < cext.i->ninterfaces; y++)
         {
 //			cext.i->interfaces[y]->config(0,(int)mtdsk);	//FIXME Ticks off -fpermissive.
@@ -804,11 +865,15 @@ void uninitInterface()
     if (wnd)
     {
         if (di)
-        { gi->deletewindow(wnd); }
+        {
+            gi->deletewindow(wnd);
+        }
         wnd = 0;
     };
     if (mtdsk)
-    { mtdsk->flags |= (MTCF_DONTDRAW | MTCF_DONTFLUSH); }
+    {
+        mtdsk->flags |= (MTCF_DONTDRAW | MTCF_DONTFLUSH);
+    }
     if (mtdock)
     {
         gi->delcontrol(mtdock);
@@ -885,7 +950,9 @@ void stopInterface()
         refreshthread = 0;
     };
     if (gi)
-    { gi->stop(); }
+    {
+        gi->stop();
+    }
     LEAVE();
 }
 
@@ -897,9 +964,11 @@ void showInterface()
     mtdsk->flags |= MTCF_DONTDRAW | MTCF_DONTFLUSH;
     for(x = 0; x < mtdsk->ncontrols; x++)
     {
-        MTControl &cctrl = *mtdsk->controls[x];
+        MTControl& cctrl = *mtdsk->controls[x];
         if (cctrl.guiid == MTC_WINDOW)
-        { cctrl.switchflags(MTCF_HIDDEN, false); }
+        {
+            cctrl.switchflags(MTCF_HIDDEN, false);
+        }
     };
     mtdsk->flags &= (~(MTCF_DONTDRAW | MTCF_DONTFLUSH));
     mtdsk->draw(NORECT);

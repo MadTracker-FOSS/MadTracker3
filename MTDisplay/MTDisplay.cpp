@@ -28,7 +28,7 @@
 #include <MTXAPI/MTXSystem2.h>
 
 //---------------------------------------------------------------------------
-static const char *disname = {"MadTracker Display Core"};
+static const char* disname = {"MadTracker Display Core"};
 
 static const int displayversion = 0x30000;
 
@@ -36,39 +36,39 @@ static const MTXKey displaykey = {0, 0, 0, 0};
 
 MTXInterfaces i;
 
-MTDisplayInterface *di;
+MTDisplayInterface* di;
 
-MTInterface *mtinterface;
+MTInterface* mtinterface;
 
-MTSystemInterface *si;
+MTSystemInterface* si;
 
-MTGUIInterface *gi;
+MTGUIInterface* gi;
 
 MTDisplayPreferences displayprefs = {0, false, -0.5f, -0.5f, 0.0f, 0.0f};
 
-MTBitmap *skinbmp[16];
+MTBitmap* skinbmp[16];
 
-MTBitmap *screen;
+MTBitmap* screen;
 
 int cdisplaytype = -1;
 
-MTDesktop *desktops[32];
+MTDesktop* desktops[32];
 
 int ndesktops;
 
-MTGDIDeviceManager *gdimanager;
+MTGDIDeviceManager* gdimanager;
 
 #ifndef NODIRECTX
 
-MTDXDeviceManager *dxmanager;
+MTDXDeviceManager* dxmanager;
 
 #endif
 
-MTDisplayDevice *cdevice;
+MTDisplayDevice* cdevice;
 
-MTDisplayDeviceManager *cmanager;
+MTDisplayDeviceManager* cmanager;
 
-MTDevice *devices[MAX_DISPLAYDEVICES];
+MTDevice* devices[MAX_DISPLAYDEVICES];
 
 int ndevices;
 
@@ -86,23 +86,25 @@ MTDisplayInterface::MTDisplayInterface():
 bool MTDisplayInterface::init()
 {
     int x;
-    MTConfigFile *conf;
+    MTConfigFile* conf;
     char device[64];
 
-    si = (MTSystemInterface *) mtinterface->getinterface(systemtype);
+    si = (MTSystemInterface*) mtinterface->getinterface(systemtype);
     if (!si)
-    { return false; }
+    {
+        return false;
+    }
     ENTER("MTDisplayInterface::init");
     LOGD("%s - [Display] Initializing..."
              NL);
-    gi = (MTGUIInterface *) mtinterface->getinterface(guitype);
+    gi = (MTGUIInterface*) mtinterface->getinterface(guitype);
     gdimanager = new MTGDIDeviceManager();
     adddevicemanager(gdimanager);
 #ifndef NODIRECTX
     dxmanager = new MTDXDeviceManager();
     adddevicemanager(dxmanager);
 #endif
-    if ((conf = (MTConfigFile *) mtinterface->getconf("Global", false)))
+    if ((conf = (MTConfigFile*) mtinterface->getconf("Global", false)))
     {
         if (conf->setsection("MTDisplay"))
         {
@@ -126,10 +128,18 @@ bool MTDisplayInterface::init()
                 };
             };
             conf->getparameter("Fullscreen", &displayprefs.fullscreen, MTCT_BOOLEAN, sizeof(displayprefs.fullscreen));
-            conf->getparameter("TexelAdjustX", &displayprefs.texeladjustx, MTCT_FLOAT, sizeof(displayprefs.texeladjustx));
-            conf->getparameter("TexelAdjustY", &displayprefs.texeladjusty, MTCT_FLOAT, sizeof(displayprefs.texeladjusty));
-            conf->getparameter("SkinTexelAdjustX", &displayprefs.skintexeladjustx, MTCT_FLOAT, sizeof(displayprefs.skintexeladjustx));
-            conf->getparameter("SkinTexelAdjustY", &displayprefs.skintexeladjusty, MTCT_FLOAT, sizeof(displayprefs.skintexeladjusty));
+            conf->getparameter(
+                "TexelAdjustX", &displayprefs.texeladjustx, MTCT_FLOAT, sizeof(displayprefs.texeladjustx)
+            );
+            conf->getparameter(
+                "TexelAdjustY", &displayprefs.texeladjusty, MTCT_FLOAT, sizeof(displayprefs.texeladjusty)
+            );
+            conf->getparameter(
+                "SkinTexelAdjustX", &displayprefs.skintexeladjustx, MTCT_FLOAT, sizeof(displayprefs.skintexeladjustx)
+            );
+            conf->getparameter(
+                "SkinTexelAdjustY", &displayprefs.skintexeladjusty, MTCT_FLOAT, sizeof(displayprefs.skintexeladjusty)
+            );
         };
         mtinterface->releaseconf(conf);
     };
@@ -146,7 +156,9 @@ void MTDisplayInterface::uninit()
              NL);
     status &= (~MTX_INITIALIZED);
     if (gi)
-    { gi->freedisplay(); }
+    {
+        gi->freedisplay();
+    }
     if (screen)
     {
         delbitmap(screen);
@@ -171,25 +183,35 @@ void MTDisplayInterface::uninit()
 
 #ifdef _DEBUG
 
-void MTCT menusetdevice(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT menusetdevice(MTShortcut* s, MTControl* c, MTUndo*)
 {
     if (!c)
-    { return; }
+    {
+        return;
+    }
     if (gi)
-    { gi->setmouseshape(DCUR_WORKING); }
+    {
+        gi->setmouseshape(DCUR_WORKING);
+    }
     di->setdevice(c->tag);
     if (gi)
-    { gi->restoremouseshape(); }
+    {
+        gi->restoremouseshape();
+    }
 }
 
-void MTCT menusetfullscreen(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT menusetfullscreen(MTShortcut* s, MTControl* c, MTUndo*)
 {
     displayprefs.fullscreen = !displayprefs.fullscreen;
     if (gi)
-    { gi->setmouseshape(DCUR_WORKING); }
+    {
+        gi->setmouseshape(DCUR_WORKING);
+    }
     di->setdevice(-1);
     if (gi)
-    { gi->restoremouseshape(); }
+    {
+        gi->restoremouseshape();
+    }
 }
 
 #endif
@@ -198,24 +220,26 @@ void MTDisplayInterface::start()
 {
 #ifdef _DEBUG
     int x;
-    MTDesktop *dsk = 0;
-    MTMenuItem *item;
-    MTMenu *menu;
+    MTDesktop* dsk = 0;
+    MTMenuItem* item;
+    MTMenu* menu;
     if (gi)
-    { dsk = gi->getdesktop(0); }
+    {
+        dsk = gi->getdesktop(0);
+    }
     if (dsk)
     {
-        menu = (MTMenu *) gi->newcontrol(MTC_MENU, 0, dsk, 0, 0, 0, 0, 0);
+        menu = (MTMenu*) gi->newcontrol(MTC_MENU, 0, dsk, 0, 0, 0, 0, 0);
         dsk->popup->additem("|MTDisplay", 0, 0, false, 0);
-        item = (MTMenuItem *) dsk->popup->additem("Graphical Device", 60, 0, false, 0);
+        item = (MTMenuItem*) dsk->popup->additem("Graphical Device", 60, 0, false, 0);
         item->submenu = menu;
         for(x = 0; x < ndevices; x++)
         {
-            item = (MTMenuItem *) menu->additem(devices[x]->devicename, 60, 0, false, 0);
+            item = (MTMenuItem*) menu->additem(devices[x]->devicename, 60, 0, false, 0);
             item->tag = x;
             item->command = menusetdevice;
         };
-        item = (MTMenuItem *) dsk->popup->additem("Fullscreen", 60, 0, false, 0);
+        item = (MTMenuItem*) dsk->popup->additem("Fullscreen", 60, 0, false, 0);
         item->command = menusetfullscreen;
     };
 #endif
@@ -225,12 +249,12 @@ void MTDisplayInterface::stop()
 {
 }
 
-void MTDisplayInterface::processcmdline(void *params)
+void MTDisplayInterface::processcmdline(void* params)
 {
 
 }
 
-void MTDisplayInterface::showusage(void *out)
+void MTDisplayInterface::showusage(void* out)
 {
 
 }
@@ -238,7 +262,9 @@ void MTDisplayInterface::showusage(void *out)
 int MTDisplayInterface::config(int command, int param)
 {
     if (command < 0)
-    { return (int) &displayprefs; }
+    {
+        return (int) &displayprefs;
+    }
     return 0;
 }
 
@@ -247,10 +273,12 @@ int MTDisplayInterface::getnumdevices()
     return ndevices;
 }
 
-const char *MTDisplayInterface::getdevicename(int id)
+const char* MTDisplayInterface::getdevicename(int id)
 {
     if ((id < 0) || (id >= ndevices))
-    { return 0; }
+    {
+        return 0;
+    }
     return devices[id]->devicename;
 }
 
@@ -258,13 +286,15 @@ void MTDisplayInterface::setdevice(int id, bool silent)
 {
     int x;
     bool oldfullscreen = displayprefs.fullscreen;
-    MTDisplayDevice *newdevice;
-    MTDisplayDeviceManager *newmanager;
+    MTDisplayDevice* newdevice;
+    MTDisplayDeviceManager* newmanager;
     MTCMessage msg = {MTCM_NOTIFY, 0, 0, 1};
 
     FENTER2("MTDisplayInterface::setdevice(%d,%d)", id, silent);
     if (gi)
-    { gi->setmouseshape(DCUR_WORKING); }
+    {
+        gi->setmouseshape(DCUR_WORKING);
+    }
     if (id >= 0)
     {
         displayprefs.device = id;
@@ -274,7 +304,9 @@ void MTDisplayInterface::setdevice(int id, bool silent)
         if (cdevice)
         {
             if ((!silent) && (gi))
-            { gi->freedisplay(); }
+            {
+                gi->freedisplay();
+            }
             if (screen)
             {
                 delbitmap(screen);
@@ -287,7 +319,9 @@ void MTDisplayInterface::setdevice(int id, bool silent)
         id = displayprefs.device;
     };
     if ((id < 0) || (id >= ndevices))
-    { id = 0; }
+    {
+        id = 0;
+    }
     retry:
     LOGD("%s - [Display] Changing device: ");
     LOG(devices[id]->devicename);
@@ -297,14 +331,18 @@ void MTDisplayInterface::setdevice(int id, bool silent)
         desktops[x]->flags |= MTCF_DONTDRAW | MTCF_DONTFLUSH;
     };
     if ((!silent) && (gi))
-    { gi->freedisplay(); }
+    {
+        gi->freedisplay();
+    }
     if (screen)
     {
         delbitmap(screen);
         screen = 0;
     };
     if (cdevice)
-    { cdevice->uninit(); }
+    {
+        cdevice->uninit();
+    }
     newmanager = devices[id]->manager;
     newdevice = newmanager->newdevice(devices[id]->id);
     if (newdevice)
@@ -358,10 +396,12 @@ void MTDisplayInterface::setdevice(int id, bool silent)
     else
     {
         if (gi)
-        { gi->setdisplay(screen); }
+        {
+            gi->setdisplay(screen);
+        }
         for(x = 0; x < ndesktops; x++)
         {
-            MTDesktop &cdsk = *desktops[x];
+            MTDesktop& cdsk = *desktops[x];
             cdsk.message(msg);
             HWND wnd = (HWND) cdsk.mwnd;
             if (wnd)
@@ -375,23 +415,29 @@ void MTDisplayInterface::setdevice(int id, bool silent)
         };
     };
     if (gi)
-    { gi->restoremouseshape(); }
+    {
+        gi->restoremouseshape();
+    }
     LEAVE();
 }
 
-bool MTDisplayInterface::adddevicemanager(MTDisplayDeviceManager *manager)
+bool MTDisplayInterface::adddevicemanager(MTDisplayDeviceManager* manager)
 {
     int x, y;
 
     if (ndevices == MAX_DISPLAYDEVICES)
-    { return false; }
+    {
+        return false;
+    }
     FENTER1("MTDisplayInterface::adddevicemanager(%.8X)", manager);
     y = ndevices;
     for(x = 0; x < MAX_DISPLAYDEVICES, y < MAX_DISPLAYDEVICES; x++)
     {
         if (!manager->devicename[x])
-        { break; }
-        MTDevice *cdevice = mtnew(MTDevice);
+        {
+            break;
+        }
+        MTDevice* cdevice = mtnew(MTDevice);
         cdevice->devicename = manager->devicename[x];
         cdevice->id = x;
         cdevice->manager = manager;
@@ -402,7 +448,7 @@ bool MTDisplayInterface::adddevicemanager(MTDisplayDeviceManager *manager)
     return true;
 }
 
-void MTDisplayInterface::deldevicemanager(MTDisplayDeviceManager *manager)
+void MTDisplayInterface::deldevicemanager(MTDisplayDeviceManager* manager)
 {
     int x, y;
 
@@ -413,7 +459,10 @@ void MTDisplayInterface::deldevicemanager(MTDisplayDeviceManager *manager)
         {
             si->memfree(devices[x]);
             ndevices--;
-            for(y = x; y < ndevices; y++) devices[y] = devices[y + 1];
+            for(y = x; y < ndevices; y++)
+            {
+                devices[y] = devices[y + 1];
+            }
             devices[ndevices] = 0;
             x--;
         };
@@ -421,52 +470,52 @@ void MTDisplayInterface::deldevicemanager(MTDisplayDeviceManager *manager)
     LEAVE();
 }
 
-MTBitmap *MTDisplayInterface::newbitmap(int flags, int w, int h)
+MTBitmap* MTDisplayInterface::newbitmap(int flags, int w, int h)
 {
     return cdevice->newbitmap(flags, w, h);
 }
 
-MTBitmap *MTDisplayInterface::newresbitmap(int flags, MTResources *res, int resid, int colorkey)
+MTBitmap* MTDisplayInterface::newresbitmap(int flags, MTResources* res, int resid, int colorkey)
 {
     return cdevice->newresbitmap(flags, res, resid, colorkey);
 }
 
-MTBitmap *MTDisplayInterface::newfilebitmap(int flags, const char *filename, int colorkey)
+MTBitmap* MTDisplayInterface::newfilebitmap(int flags, const char* filename, int colorkey)
 {
     return cdevice->newfilebitmap(flags, filename, colorkey);
 }
 
-MTBitmap *MTDisplayInterface::newbmpbitmap(int flags, MTBitmap &orig, int colorkey)
+MTBitmap* MTDisplayInterface::newbmpbitmap(int flags, MTBitmap& orig, int colorkey)
 {
     return cdevice->newbmpbitmap(flags, orig, colorkey);
 }
 
-void MTDisplayInterface::setskinbitmap(int bmpid, MTBitmap *newskin)
+void MTDisplayInterface::setskinbitmap(int bmpid, MTBitmap* newskin)
 {
     skinbmp[bmpid] = newskin;
 }
 
-MTMask *MTDisplayInterface::newmask(int w, int h)
+MTMask* MTDisplayInterface::newmask(int w, int h)
 {
     return cdevice->newmask(w, h);
 }
 
-void MTDisplayInterface::delbitmap(MTBitmap *bmp)
+void MTDisplayInterface::delbitmap(MTBitmap* bmp)
 {
     cdevice->delbitmap(bmp);
 }
 
-void MTDisplayInterface::delmask(MTMask *mask)
+void MTDisplayInterface::delmask(MTMask* mask)
 {
     cdevice->delmask(mask);
 }
 
-void MTDisplayInterface::adddesktop(MTWinControl *dsk)
+void MTDisplayInterface::adddesktop(MTWinControl* dsk)
 {
-    desktops[ndesktops++] = (MTDesktop *) dsk;
+    desktops[ndesktops++] = (MTDesktop*) dsk;
 }
 
-void MTDisplayInterface::deldesktop(MTWinControl *dsk)
+void MTDisplayInterface::deldesktop(MTWinControl* dsk)
 {
     int x;
 
@@ -481,24 +530,32 @@ void MTDisplayInterface::deldesktop(MTWinControl *dsk)
     desktops[ndesktops] = 0;
 }
 
-MTWinControl *MTDisplayInterface::getdefaultdesktop()
+MTWinControl* MTDisplayInterface::getdefaultdesktop()
 {
     if (ndesktops == 1)
-    { return desktops[0]; }
+    {
+        return desktops[0];
+    }
     return 0;
 }
 
 void MTDisplayInterface::checkbitmaps()
 {
     if (gi)
-    { gi->setmouseshape(DCUR_WORKING); }
+    {
+        gi->setmouseshape(DCUR_WORKING);
+    }
     if (cdevice)
-    { cdevice->checkbitmaps(); }
+    {
+        cdevice->checkbitmaps();
+    }
     if (gi)
-    { gi->restoremouseshape(); }
+    {
+        gi->restoremouseshape();
+    }
 }
 
-MTBitmap *MTDisplayInterface::getscreen()
+MTBitmap* MTDisplayInterface::getscreen()
 {
     return screen;
 }
@@ -506,24 +563,30 @@ MTBitmap *MTDisplayInterface::getscreen()
 void MTDisplayInterface::setfocus(bool focused)
 {
     if (cdevice)
-    { cdevice->setfocus(focused); }
+    {
+        cdevice->setfocus(focused);
+    }
 }
 
 void MTDisplayInterface::sync()
 {
     if (cdevice)
-    { cdevice->sync(); }
+    {
+        cdevice->sync();
+    }
 }
 //---------------------------------------------------------------------------
 extern "C" {
 
-MTXInterfaces *MTCT MTXMain(MTInterface *mti)
+MTXInterfaces* MTCT MTXMain(MTInterface* mti)
 {
-    mtinterface = (MTInterface *) mti;
+    mtinterface = (MTInterface*) mti;
     if (!di)
-    { di = new MTDisplayInterface(); }
+    {
+        di = new MTDisplayInterface();
+    }
     i.ninterfaces = 1;
-    i.interfaces[0] = (MTXInterface *) di;
+    i.interfaces[0] = (MTXInterface*) di;
     return &i;
 }
 

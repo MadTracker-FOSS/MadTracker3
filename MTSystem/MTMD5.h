@@ -48,8 +48,8 @@ struct MD5_CTX
 };
 //---------------------------------------------------------------------------
 extern "C" {
-void md5(char *dest, const char *src, int size = 0, char *password = 0);
-void md5b(unsigned char *dest, const char *src, int size = 0, char *password = 0);
+void md5(char* dest, const char* src, int size = 0, char* password = 0);
+void md5b(unsigned char* dest, const char* src, int size = 0, char* password = 0);
 }
 //---------------------------------------------------------------------------
 #endif

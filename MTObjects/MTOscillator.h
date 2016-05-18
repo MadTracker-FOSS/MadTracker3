@@ -32,33 +32,34 @@ class Oscillator: public MTObject
 public:
     float quality;
 
-    Oscillator(MTObject *parent, mt_uint32 type, mt_int32 i):
+    Oscillator(MTObject* parent, mt_uint32 type, mt_int32 i):
         MTObject(parent, type, i)
     {
         quality = 0.125;
     };
 
     virtual ~Oscillator()
-    { };
+    {
+    };
 
-    virtual OscillatorInstance *MTCT createinstance(int noutputs, sample **outputs, InstrumentInstance *caller) = 0;
+    virtual OscillatorInstance* MTCT createinstance(int noutputs, sample** outputs, InstrumentInstance* caller) = 0;
 };
 
 class OscillatorInstance
 {
 public:
     int id;
-    MTModule *module;
-    Oscillator *parent;
+    MTModule* module;
+    Oscillator* parent;
     int noutputs;
-    sample **outputs;
+    sample** outputs;
     double note;
     double pitch;
     double volume;
     float panx, pany, panz;
     float quality;
 
-    OscillatorInstance(Oscillator *p, int no, sample **o, InstrumentInstance *caller)
+    OscillatorInstance(Oscillator* p, int no, sample** o, InstrumentInstance* caller)
     {
         module = p->module;
         parent = p;
@@ -71,11 +72,12 @@ public:
     };
 
     virtual ~OscillatorInstance()
-    { };
+    {
+    };
 
     virtual bool MTCT seek(double offset, int origin = MTIS_BEGIN, int units = MTIS_BEATS) = 0;
 
-    virtual bool MTCT process(int offset, int count, bool &silence) = 0;
+    virtual bool MTCT process(int offset, int count, bool& silence) = 0;
 
     virtual void MTCT setnote(double n) = 0;
 
@@ -87,7 +89,7 @@ public:
 
     virtual double MTCT getvolume(int steps = 0) = 0;
 
-    virtual void MTCT getpanning(float *x, float *y, float *z, int steps = 0) = 0;
+    virtual void MTCT getpanning(float* x, float* y, float* z, int steps = 0) = 0;
 
     virtual float MTCT getimportance() = 0;
 };
@@ -131,22 +133,22 @@ class SampleType: public ObjectType
 public:
     SampleType();
 
-    MTObject *MTCT create(MTObject *parent, mt_int32 id, void *param);
+    MTObject* MTCT create(MTObject* parent, mt_int32 id, void* param);
 };
 
 // Sample class
 class MTSample: public Oscillator
 {
 public:
-    MTSample(MTObject *parent, mt_int32 i);
+    MTSample(MTObject* parent, mt_int32 i);
 
     ~MTSample();
 
-    char *filename;
-    void *data[8];
-    MTFile *file;
+    char* filename;
+    void* data[8];
+    MTFile* file;
     int fileoffset;
-    Peaks *peaks;
+    Peaks* peaks;
     int time;
     int length;
     int frequency;
@@ -161,11 +163,11 @@ public:
     int ns;
     int sl;
 
-    int MTCT loadfromstream(MTFile *f, int size, void *params);
+    int MTCT loadfromstream(MTFile* f, int size, void* params);
 
-    int MTCT savetostream(MTFile *f, void *params);
+    int MTCT savetostream(MTFile* f, void* params);
 
-    OscillatorInstance *MTCT createinstance(int noutputs, sample **outputs, InstrumentInstance *caller);
+    OscillatorInstance* MTCT createinstance(int noutputs, sample** outputs, InstrumentInstance* caller);
 
     virtual bool MTCT changesign();
 
@@ -175,7 +177,7 @@ public:
 
     virtual bool MTCT splfree();
 
-    virtual bool MTCT buildpeaks(void *process);
+    virtual bool MTCT buildpeaks(void* process);
 };
 
 class MTSampleInstance: public OscillatorInstance
@@ -184,11 +186,11 @@ public:
     int flags;
     ChannelStatus status[8];
 
-    MTSampleInstance(Oscillator *p, int no, sample **o, InstrumentInstance *caller);
+    MTSampleInstance(Oscillator* p, int no, sample** o, InstrumentInstance* caller);
 
     bool MTCT seek(double offset, int origin, int units);
 
-    bool MTCT process(int offset, int count, bool &silence);
+    bool MTCT process(int offset, int count, bool& silence);
 
     void MTCT setnote(double n);
 
@@ -200,7 +202,7 @@ public:
 
     double MTCT getvolume(int steps = 0);
 
-    void MTCT getpanning(float *x, float *y, float *z, int steps = 0);
+    void MTCT getpanning(float* x, float* y, float* z, int steps = 0);
 
     float MTCT getimportance();
 
@@ -216,9 +218,9 @@ private:
 };
 
 //---------------------------------------------------------------------------
-bool loadWAV(MTObject *object, char *filename, void *process);
+bool loadWAV(MTObject* object, char* filename, void* process);
 
 //---------------------------------------------------------------------------
-extern SampleType *sampletype;
+extern SampleType* sampletype;
 //---------------------------------------------------------------------------
 #endif

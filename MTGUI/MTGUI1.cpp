@@ -29,7 +29,7 @@
 #define SPLITRGB(c, r, g, b) {r=c & 0xFF;g=(c>>8) & 0xFF;b=(c>>16) && 0xFF;}
 
 //---------------------------------------------------------------------------
-static const char *guiname = {"MadTracker GUI Subsystem"};
+static const char* guiname = {"MadTracker GUI Subsystem"};
 
 static const int guiversion = 0x30000;
 
@@ -37,7 +37,7 @@ static const MTXKey guikey = {0, 0, 0, 0};
 
 MTXInterfaces i;
 
-MTGUIInterface *gi;
+MTGUIInterface* gi;
 
 bool candesign = false;
 
@@ -45,21 +45,21 @@ bool design = false;
 
 bool blockinput = false;
 
-void *hinst;
+void* hinst;
 
-MTInterface *mtinterface;
+MTInterface* mtinterface;
 
-MTSystemInterface *si;
+MTSystemInterface* si;
 
-MTDisplayInterface *di;
+MTDisplayInterface* di;
 
 MTGUIPreferences guiprefs = {"Default.mtr", 4, false, false, 4, 4, 192, 32, 30, 50, true, true, true, 500, 20, 300, 20};
 
-MTBitmap *screen = 0;
+MTBitmap* screen = 0;
 
 int ndesktops;
 
-MTDesktop *desktops[32];
+MTDesktop* desktops[32];
 
 int cursorstart = 0;
 
@@ -91,11 +91,11 @@ float vy = 0.0;
 
 WINDOWPLACEMENT wp;
 
-MTHash *shortcuts;
+MTHash* shortcuts;
 
-MTArray *cursors;
+MTArray* cursors;
 
-static const char *wincurmap[16] = {
+static const char* wincurmap[16] = {
     IDC_ARROW,
     IDC_ARROW,
     IDC_APPSTARTING,
@@ -109,15 +109,15 @@ static const char *wincurmap[16] = {
     IDC_SIZENESW,
     IDC_NO,
     IDC_CROSS,
-    (char *) DCUR_DRAG,
-    (char *) DCUR_POINT
+    (char*) DCUR_DRAG,
+    (char*) DCUR_POINT
 };
 
 int ksgroup = 0;
 
 int lastwparam, lastlparam;
 
-Skin *skin;
+Skin* skin;
 
 //---------------------------------------------------------------------------
 inline int WinButtons(int wb)
@@ -125,20 +125,30 @@ inline int WinButtons(int wb)
     int b = 0;
 
     if (wb & MK_CONTROL)
-    { b |= DB_CONTROL; }
+    {
+        b |= DB_CONTROL;
+    }
     if (wb & MK_LBUTTON)
-    { b |= DB_LEFT; }
+    {
+        b |= DB_LEFT;
+    }
     if (wb & MK_MBUTTON)
-    { b |= DB_MIDDLE; }
+    {
+        b |= DB_MIDDLE;
+    }
     if (wb & MK_RBUTTON)
-    { b |= DB_RIGHT; }
+    {
+        b |= DB_RIGHT;
+    }
     if (wb & MK_SHIFT)
-    { b |= DB_SHIFT; }
+    {
+        b |= DB_SHIFT;
+    }
     return b;
 }
 
 //---------------------------------------------------------------------------
-void gradient(PALETTEENTRY *cpal, int color1, int color2, int count)
+void gradient(PALETTEENTRY* cpal, int color1, int color2, int count)
 {
     register int x, f1;
     register unsigned char r1, g1, b1;
@@ -191,17 +201,23 @@ int varcolor(int color1, int color2, int level)
         g += v;
     };
     if (r > 255)
-    { r = 255; }
+    {
+        r = 255;
+    }
     if (g > 255)
-    { g = 255; }
+    {
+        g = 255;
+    }
     if (b > 255)
-    { b = 255; }
+    {
+        b = 255;
+    }
     return r | (g << 8) | (b << 16);
 }
 //---------------------------------------------------------------------------
 #ifdef _DEBUG
 
-void tracergn(void *rgn, MTBitmap *bmp)
+void tracergn(void* rgn, MTBitmap* bmp)
 {
     int x;
     MTRect r;
@@ -213,7 +229,7 @@ void tracergn(void *rgn, MTBitmap *bmp)
     };
 }
 
-void tracerect(MTRect &r, MTBitmap *bmp)
+void tracerect(MTRect& r, MTBitmap* bmp)
 {
     bmp->rectangle(r.left, r.top, r.right - r.left, r.bottom - r.top);
 }
@@ -222,7 +238,13 @@ void tracerect(MTRect &r, MTBitmap *bmp)
 
 //---------------------------------------------------------------------------
 MTGUIInterface::MTGUIInterface():
-    active(true), visible(true), running(false), nsync(0), timercount(0), runningevent(0), timers(0)
+    active(true),
+    visible(true),
+    running(false),
+    nsync(0),
+    timercount(0),
+    runningevent(0),
+    timers(0)
 {
     type = guitype;
     key = &guikey;
@@ -233,20 +255,22 @@ MTGUIInterface::MTGUIInterface():
 
 bool MTGUIInterface::init()
 {
-    MTConfigFile *conf;
+    MTConfigFile* conf;
     WNDCLASSEX wndclass;
 
-    si = (MTSystemInterface *) mtinterface->getinterface(systemtype);
+    si = (MTSystemInterface*) mtinterface->getinterface(systemtype);
     if (!si)
-    { return false; }
+    {
+        return false;
+    }
     ENTER("MTGUIInterface::init");
     quit = false;
     LOGD("%s - [GUI] Initializing..."
              NL);
-    di = (MTDisplayInterface *) mtinterface->getinterface(displaytype);
+    di = (MTDisplayInterface*) mtinterface->getinterface(displaytype);
     shortcuts = si->hashcreate(8);
     cursors = si->arraycreate(4, 0);
-    if ((conf = (MTConfigFile *) mtinterface->getconf("Global", true)))
+    if ((conf = (MTConfigFile*) mtinterface->getconf("Global", true)))
     {
         if (conf->setsection("MTGUI"))
         {
@@ -261,9 +285,13 @@ bool MTGUIInterface::init()
             conf->getparameter("TransparentMenus", &guiprefs.transpmenus, MTCT_BOOLEAN, sizeof(guiprefs.transpmenus));
             conf->getparameter("AnimatedControls", &guiprefs.animctrl, MTCT_BOOLEAN, sizeof(guiprefs.animctrl));
             conf->getparameter("FadeoutTime", &guiprefs.fadeouttime, MTCT_UINTEGER, sizeof(guiprefs.fadeouttime));
-            conf->getparameter("FadeoutInterval", &guiprefs.fadeoutinterval, MTCT_UINTEGER, sizeof(guiprefs.fadeoutinterval));
+            conf->getparameter(
+                "FadeoutInterval", &guiprefs.fadeoutinterval, MTCT_UINTEGER, sizeof(guiprefs.fadeoutinterval)
+            );
             conf->getparameter("AnimationTime", &guiprefs.animtime, MTCT_UINTEGER, sizeof(guiprefs.animtime));
-            conf->getparameter("AnimationInterval", &guiprefs.animinterval, MTCT_UINTEGER, sizeof(guiprefs.animinterval));
+            conf->getparameter(
+                "AnimationInterval", &guiprefs.animinterval, MTCT_UINTEGER, sizeof(guiprefs.animinterval)
+            );
         };
         mtinterface->releaseconf(conf);
     };
@@ -308,7 +336,7 @@ bool MTGUIInterface::init()
 
 void MTGUIInterface::uninit()
 {
-    MTConfigFile *conf;
+    MTConfigFile* conf;
 
     ENTER("MTGUIInterface::uninit");
     quit = true;
@@ -326,7 +354,7 @@ void MTGUIInterface::uninit()
         si->hashdelete(timers);
         timers = 0;
     };
-    if ((conf = (MTConfigFile *) mtinterface->getconf("Global", true)))
+    if ((conf = (MTConfigFile*) mtinterface->getconf("Global", true)))
     {
         if (conf->setsection("MTGUI"))
         {
@@ -341,9 +369,13 @@ void MTGUIInterface::uninit()
             conf->setparameter("TransparentMenus", &guiprefs.transpmenus, MTCT_BOOLEAN, sizeof(guiprefs.transpmenus));
             conf->setparameter("AnimatedControls", &guiprefs.animctrl, MTCT_BOOLEAN, sizeof(guiprefs.animctrl));
             conf->setparameter("FadeoutTime", &guiprefs.fadeouttime, MTCT_UINTEGER, sizeof(guiprefs.fadeouttime));
-            conf->setparameter("FadeoutInterval", &guiprefs.fadeoutinterval, MTCT_UINTEGER, sizeof(guiprefs.fadeoutinterval));
+            conf->setparameter(
+                "FadeoutInterval", &guiprefs.fadeoutinterval, MTCT_UINTEGER, sizeof(guiprefs.fadeoutinterval)
+            );
             conf->setparameter("AnimationTime", &guiprefs.animtime, MTCT_UINTEGER, sizeof(guiprefs.animtime));
-            conf->setparameter("AnimationInterval", &guiprefs.animinterval, MTCT_UINTEGER, sizeof(guiprefs.animinterval));
+            conf->setparameter(
+                "AnimationInterval", &guiprefs.animinterval, MTCT_UINTEGER, sizeof(guiprefs.animinterval)
+            );
         };
         mtinterface->releaseconf(conf);
     };
@@ -379,21 +411,24 @@ void MTGUIInterface::uninit()
 
 #ifdef _DEBUG
 
-void MTCT menusetshadows(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT menusetshadows(MTShortcut* s, MTControl* c, MTUndo*)
 {
     int x;
 
     guiprefs.shadows = !guiprefs.shadows;
     skin->setshadows(guiprefs.shadows);
-    for(x = 0; x < ndesktops; x++) desktops[x]->draw(NORECT);
+    for(x = 0; x < ndesktops; x++)
+    {
+        desktops[x]->draw(NORECT);
+    }
 }
 
-void MTCT menusettransp(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT menusettransp(MTShortcut* s, MTControl* c, MTUndo*)
 {
     guiprefs.transpmenus = !guiprefs.transpmenus;
 }
 
-void MTCT menusetanim(MTShortcut *s, MTControl *c, MTUndo *)
+void MTCT menusetanim(MTShortcut* s, MTControl* c, MTUndo*)
 {
     guiprefs.animctrl = !guiprefs.animctrl;
 }
@@ -403,16 +438,16 @@ void MTCT menusetanim(MTShortcut *s, MTControl *c, MTUndo *)
 void MTGUIInterface::start()
 {
 #ifdef _DEBUG
-    MTDesktop *dsk;
+    MTDesktop* dsk;
 //	MTMenu *menu;
     dsk = gi->getdesktop(0);
     if (dsk)
     {
 //		menu = (MTMenu*)gi->newcontrol(MTC_MENU,0,dsk,0,0,0,0,0);
         dsk->popup->additem("|MTGUI", 0, 0, false, 0);
-        ((MTMenuItem *) dsk->popup->additem("Toggle Shadows", -1, 0, false, 0))->command = menusetshadows;
-        ((MTMenuItem *) dsk->popup->additem("Transparent Menus", -1, 0, false, 0))->command = menusettransp;
-        ((MTMenuItem *) dsk->popup->additem("Animated Controls", -1, 0, false, 0))->command = menusetanim;
+        ((MTMenuItem*) dsk->popup->additem("Toggle Shadows", -1, 0, false, 0))->command = menusetshadows;
+        ((MTMenuItem*) dsk->popup->additem("Transparent Menus", -1, 0, false, 0))->command = menusettransp;
+        ((MTMenuItem*) dsk->popup->additem("Animated Controls", -1, 0, false, 0))->command = menusetanim;
     };
 #endif
     running = true;
@@ -424,24 +459,28 @@ void MTGUIInterface::stop()
     int time;
 
     if (!running)
-    { return; }
+    {
+        return;
+    }
     runningevent->reset();
     time = si->syscounter();
     while(nsync > 0)
     {
         processmessages(false);
         if (si->syscounter() - time > 10000)
-        { break; }
+        {
+            break;
+        }
     };
     running = false;
 }
 
-void MTGUIInterface::processcmdline(void *params)
+void MTGUIInterface::processcmdline(void* params)
 {
 
 }
 
-void MTGUIInterface::showusage(void *out)
+void MTGUIInterface::showusage(void* out)
 {
 
 }
@@ -449,7 +488,9 @@ void MTGUIInterface::showusage(void *out)
 int MTGUIInterface::config(int command, int param)
 {
     if (command < 0)
-    { return (int) &guiprefs; }
+    {
+        return (int) &guiprefs;
+    }
     return 0;
 }
 
@@ -460,7 +501,9 @@ int MTGUIInterface::processmessages(bool userinput)
     if (quit)
     {
         if (nsync == 0)
-        { return 0; }
+        {
+            return 0;
+        }
         if (!PeekMessage(&msg, 0, 0, 0, PM_NOREMOVE))
         {
             si->syswait(10);
@@ -475,7 +518,9 @@ int MTGUIInterface::processmessages(bool userinput)
         return 0;
     }
     else if (res < 0)
-    { return -1; }
+    {
+        return -1;
+    }
     blockinput = !userinput;
     TranslateMessage(&msg);
     DispatchMessage(&msg);
@@ -483,7 +528,7 @@ int MTGUIInterface::processmessages(bool userinput)
     return 1;
 }
 
-static const char *ctrlname[] = {
+static const char* ctrlname[] = {
     "MTCustomControl",
     "MTCustomWincontrol",
     "MTVisual",
@@ -536,18 +581,20 @@ int MTGUIInterface::getnumcontrols()
     return sizeof(ctrltype) / sizeof(int);
 }
 
-bool MTGUIInterface::getcontroltype(int id, char *name, int &type)
+bool MTGUIInterface::getcontroltype(int id, char* name, int& type)
 {
     if (id >= (sizeof(ctrlname) / sizeof(int)))
-    { return false; }
+    {
+        return false;
+    }
     strcpy(name, ctrlname[id]);
     type = ctrltype[id];
     return true;
 }
 
-MTControl *MTGUIInterface::newcontrol(int type, int tag, MTWinControl *parent, int l, int t, int w, int h, void *param)
+MTControl* MTGUIInterface::newcontrol(int type, int tag, MTWinControl* parent, int l, int t, int w, int h, void* param)
 {
-    MTControl *res = 0;
+    MTControl* res = 0;
     RECT r;
 
     FENTER3("MTGUIInterface::newcontrol(%d,%d,%.8X,...)", type, tag, parent);
@@ -624,7 +671,7 @@ MTControl *MTGUIInterface::newcontrol(int type, int tag, MTWinControl *parent, i
             res = new MTSlider(tag, parent, l, t, (int) param);
             break;
         case MTC_OSCILLO:
-            res = new MTOscillo(tag, parent, l, t, w, h, (Track *) param);
+            res = new MTOscillo(tag, parent, l, t, w, h, (Track*) param);
             break;
         case MTC_VISUAL:
             res = new MTVisual(tag, parent, l, t, w, h);
@@ -646,127 +693,143 @@ MTControl *MTGUIInterface::newcontrol(int type, int tag, MTWinControl *parent, i
     if (res)
     {
         if (skin)
-        { skin->initcontrol(res); }
+        {
+            skin->initcontrol(res);
+        }
         if ((parent) && (type != MTC_DESKTOP))
-        { parent->addcontrol(res); }
+        {
+            parent->addcontrol(res);
+        }
     };
     LEAVE();
     return res;
 }
 
-void MTGUIInterface::delcontrol(MTControl *control)
+void MTGUIInterface::delcontrol(MTControl* control)
 {
     if (!control)
-    { return; }
+    {
+        return;
+    }
     FENTER1("MTGUIInterface::delcontrol(%.8X)", control);
     if (control->parent)
-    { control->parent->delcontrol(control); }
+    {
+        control->parent->delcontrol(control);
+    }
     if (skin)
-    { skin->uninitcontrol(control); }
+    {
+        skin->uninitcontrol(control);
+    }
     switch (control->guiid)
     {
         case MTC_DESKTOP:
-            delete (MTDesktop *) control;
+            delete (MTDesktop*) control;
             break;
         case MTC_WINDOW:
         case MTC_TABSHEET:
-            delete (MTWindow *) control;
+            delete (MTWindow*) control;
             break;
         case MTC_LISTITEM:
-            delete (MTListItem *) control;
+            delete (MTListItem*) control;
             break;
         case MTC_MENUITEM:
-            delete (MTMenuItem *) control;
+            delete (MTMenuItem*) control;
             break;
         case MTC_LISTBOX:
-            delete (MTListBox *) control;
+            delete (MTListBox*) control;
             break;
         case MTC_FILELISTBOX:
-            delete (MTFileListBox *) control;
+            delete (MTFileListBox*) control;
             break;
         case MTC_MENU:
-            delete (MTMenu *) control;
+            delete (MTMenu*) control;
             break;
         case MTC_USERLIST:
-            delete (MTUserList *) control;
+            delete (MTUserList*) control;
             break;
         case MTC_PANEL:
-            delete (MTPanel *) control;
+            delete (MTPanel*) control;
             break;
         case MTC_TOOLBAR:
-            delete (MTToolBar *) control;
+            delete (MTToolBar*) control;
             break;
         case MTC_TABCONTROL:
-            delete (MTTabControl *) control;
+            delete (MTTabControl*) control;
             break;
         case MTC_SCROLLER:
-            delete (MTScroller *) control;
+            delete (MTScroller*) control;
             break;
         case MTC_LABEL:
-            delete (MTLabel *) control;
+            delete (MTLabel*) control;
             break;
         case MTC_BUTTON:
-            delete (MTButton *) control;
+            delete (MTButton*) control;
             break;
         case MTC_SIGN:
-            delete (MTSign *) control;
+            delete (MTSign*) control;
             break;
         case MTC_CHECKBOX:
-            delete (MTCheckBox *) control;
+            delete (MTCheckBox*) control;
             break;
         case MTC_EDIT:
-            delete (MTEdit *) control;
+            delete (MTEdit*) control;
             break;
         case MTC_USERCOMBOBOX:
-            delete (MTUserComboBox *) control;
+            delete (MTUserComboBox*) control;
             break;
         case MTC_ITEMCOMBOBOX:
-            delete (MTItemComboBox *) control;
+            delete (MTItemComboBox*) control;
             break;
         case MTC_PROGRESS:
-            delete (MTProgress *) control;
+            delete (MTProgress*) control;
             break;
         case MTC_SLIDER:
-            delete (MTSlider *) control;
+            delete (MTSlider*) control;
             break;
         case MTC_OSCILLO:
-            delete (MTOscillo *) control;
+            delete (MTOscillo*) control;
             break;
         case MTC_VISUAL:
-            delete (MTVisual *) control;
+            delete (MTVisual*) control;
             break;
         case MTC_CUSTOMCTRL:
-            delete (MTCustomControl *) control;
+            delete (MTCustomControl*) control;
             break;
         case MTC_CUSTOMWINCTRL:
-            delete (MTCustomWinControl *) control;
+            delete (MTCustomWinControl*) control;
             break;
         case MTC_OSWINDOW:
-            delete (MTOSWindow *) control;
+            delete (MTOSWindow*) control;
             break;
     };
     LEAVE();
 }
 
-int syncloadwindow(MTSync *s)
+int syncloadwindow(MTSync* s)
 {
-    MTWindow *window;
+    MTWindow* window;
 
-    window = (MTWindow *) gi->newcontrol(MTC_WINDOW, 0, (MTDesktop *) s->param[2], 0, 0, 256, 128, 0);
-    MTTRY window->loadfromstream((MTFile *) s->param[0], s->param[1], 0); MTCATCH gi->delcontrol(window);
-        window = 0; MTEND
+    window = (MTWindow*) gi->newcontrol(MTC_WINDOW, 0, (MTDesktop*) s->param[2], 0, 0, 256, 128, 0);
+    MTTRY
+        window->loadfromstream((MTFile*) s->param[0], s->param[1], 0);
+    MTCATCH
+        gi->delcontrol(window);
+        window = 0;
+    MTEND
     return (int) window;
 }
 
-MTWindow *MTGUIInterface::loadwindow(MTResources *res, int id, MTDesktop *desktop, bool autosave)
+MTWindow* MTGUIInterface::loadwindow(MTResources* res, int id, MTDesktop* desktop, bool autosave)
 {
-    MTFile *f;
-    MTWindow *w;
+    MTFile* f;
+    MTWindow* w;
     int size;
 
     f = res->getresourcefile(MTR_WINDOW, id, &size);
     if (!f)
-    { return 0; }
+    {
+        return 0;
+    }
     w = loadwindowfromfile(f, size, desktop);
     res->releaseresourcefile(f);
     if (autosave)
@@ -777,40 +840,46 @@ MTWindow *MTGUIInterface::loadwindow(MTResources *res, int id, MTDesktop *deskto
     return w;
 }
 
-bool MTGUIInterface::savewindow(MTWindow *window)
+bool MTGUIInterface::savewindow(MTWindow* window)
 {
-    MTFile *f;
+    MTFile* f;
 
     if (!window->res)
-    { return false; }
+    {
+        return false;
+    }
     f = si->fileopen("mem://", MTF_READ | MTF_WRITE);
     if (!f)
-    { return false; }
+    {
+        return false;
+    }
     window->savetostream(f, 0);
     window->res->addfile(MTR_WINDOW, window->resid, f);
     si->fileclose(f);
     return true;
 }
 
-MTWindow *MTGUIInterface::loadwindowfromfile(MTFile *f, int size, MTDesktop *desktop)
+MTWindow* MTGUIInterface::loadwindowfromfile(MTFile* f, int size, MTDesktop* desktop)
 {
     MTSync s;
 
     if (!desktop)
-    { desktop = (MTDesktop *) di->getdefaultdesktop(); }
+    {
+        desktop = (MTDesktop*) di->getdefaultdesktop();
+    }
     s.proc = syncloadwindow;
     s.param[0] = (int) f;
     s.param[1] = size;
     s.param[2] = (int) desktop;
-    return (MTWindow *) synchronize(&s);
+    return (MTWindow*) synchronize(&s);
 }
 
-int MTGUIInterface::savewindowtofile(MTFile *f, MTWindow *window)
+int MTGUIInterface::savewindowtofile(MTFile* f, MTWindow* window)
 {
     return window->savetostream(f, 0);
 }
 
-void MTGUIInterface::loadskin(MTResources *res)
+void MTGUIInterface::loadskin(MTResources* res)
 {
     int x;
     MTCMessage msg = {MTCM_NOTIFY};
@@ -830,14 +899,14 @@ void MTGUIInterface::loadskin(MTResources *res)
     LEAVE();
 }
 
-void *MTGUIInterface::saveskin(int &size)
+void* MTGUIInterface::saveskin(int& size)
 {
 // FIXME
 //	return ::saveskin(size);
     return 0;
 }
 
-void MTGUIInterface::setdisplay(MTBitmap *s)
+void MTGUIInterface::setdisplay(MTBitmap* s)
 {
     screen = s;
 // FIXME
@@ -862,26 +931,33 @@ void MTGUIInterface::setdesign(bool d)
 
     candesign = true;
     design = d;
-    for(x = 0; x < ndesktops; x++) desktops[x]->draw(NORECT);
+    for(x = 0; x < ndesktops; x++)
+    {
+        desktops[x]->draw(NORECT);
+    }
 }
 
-MTDesktop *MTGUIInterface::getdesktop(int id)
+MTDesktop* MTGUIInterface::getdesktop(int id)
 {
     return desktops[id];
 }
 
-int MTGUIInterface::ctrltimer(MTControl *ctrl, int flags, int interval, bool immediate, bool accurate)
+int MTGUIInterface::ctrltimer(MTControl* ctrl, int flags, int interval, bool immediate, bool accurate)
 {
-    MTWinControl *parent;
-    MTDesktop *dsk;
-    _MTTimer *t;
+    MTWinControl* parent;
+    MTDesktop* dsk;
+    _MTTimer* t;
 
     ctrl->timercount = 0;
     parent = ctrl->parent;
     if (!parent)
-    { parent = (MTWinControl *) ctrl; }
+    {
+        parent = (MTWinControl*) ctrl;
+    }
     if ((parent->guiid & 2) == 0)
-    { return 0; }
+    {
+        return 0;
+    }
     if (immediate)
     {
         MTCMessage msg = {MTCM_TIMER, 0, ctrl};
@@ -899,7 +975,9 @@ int MTGUIInterface::ctrltimer(MTControl *ctrl, int flags, int interval, bool imm
     {
         dsk = parent->dsk;
         if (!dsk)
-        { dsk = (MTDesktop *) parent; }
+        {
+            dsk = (MTDesktop*) parent;
+        }
         if (dsk->guiid != MTC_DESKTOP)
         {
             si->memfree(t);
@@ -911,12 +989,12 @@ int MTGUIInterface::ctrltimer(MTControl *ctrl, int flags, int interval, bool imm
     return timercount++;
 }
 
-void MTGUIInterface::deltimer(MTControl *ctrl, int timerid)
+void MTGUIInterface::deltimer(MTControl* ctrl, int timerid)
 {
-    _MTTimer *t;
+    _MTTimer* t;
 
     FENTER2("MTGUIInterface::deltimer(%.8X,%d)", ctrl, timerid);
-    t = (_MTTimer *) timers->getitem(timerid);
+    t = (_MTTimer*) timers->getitem(timerid);
     if (!t)
     {
         LOGD("%s - [GUI] Warning: wrong timerid!"
@@ -935,7 +1013,7 @@ void MTGUIInterface::deltimer(MTControl *ctrl, int timerid)
     LEAVE();
 }
 
-int MTGUIInterface::synchronize(MTSync *param)
+int MTGUIInterface::synchronize(MTSync* param)
 {
     if (si->issysthread())
     {
@@ -947,9 +1025,13 @@ int MTGUIInterface::synchronize(MTSync *param)
         if (!running)
         {
             if ((status & MTX_INITIALIZED) == 0)
-            { return -1; }
+            {
+                return -1;
+            }
             if (!runningevent->wait(5000))
-            { return -1; }
+            {
+                return -1;
+            }
         };
         nsync++;
         if (SendMessage((HWND) desktops[0]->mwnd, WM_USER, (int) param, 0) != 1)
@@ -963,25 +1045,27 @@ int MTGUIInterface::synchronize(MTSync *param)
     return param->result;
 }
 
-void MTGUIInterface::sync(MTSync *param)
+void MTGUIInterface::sync(MTSync* param)
 {
     nsync--;
     param->result = param->proc(param);
 }
 
-void *MTGUIInterface::getimagelist(int id)
+void* MTGUIInterface::getimagelist(int id)
 {
     if (id == 0)
-    { return &sysimages; }
+    {
+        return &sysimages;
+    }
     return 0;
 }
 
-Skin *MTGUIInterface::getskin()
+Skin* MTGUIInterface::getskin()
 {
     return skin;
 }
 
-void *MTGUIInterface::createwindow(int l, int t, int w, int h, const char *caption, int flags, void *parent)
+void* MTGUIInterface::createwindow(int l, int t, int w, int h, const char* caption, int flags, void* parent)
 {
     int stflags, exflags;
     HWND wnd;
@@ -999,43 +1083,53 @@ void *MTGUIInterface::createwindow(int l, int t, int w, int h, const char *capti
         {
             stflags |= WS_CAPTION;
             if (flags & MTW_RESIZABLE)
-            { stflags |= WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME; }
+            {
+                stflags |= WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME;
+            }
         }
         else
         {
             stflags |= WS_POPUPWINDOW;
 //			exflags |= WS_EX_TOOLWINDOW;
             if (flags & MTW_RESIZABLE)
-            { stflags |= WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME; }
+            {
+                stflags |= WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME;
+            }
 //			if (flags & MTW_RESIZABLE) stflags |= WS_THICKFRAME;
         };
     };
     if (flags & MTW_TOPMOST)
-    { exflags |= WS_EX_TOPMOST; }
+    {
+        exflags |= WS_EX_TOPMOST;
+    }
     wnd = CreateWindowEx(exflags, "MT3GUIWindow", caption, stflags, l, t, w, h, (HWND) parent, 0, instance, 0);
     if (mainwindow == 0)
-    { mainwindow = wnd; }
-    return (void *) wnd;
+    {
+        mainwindow = wnd;
+    }
+    return (void*) wnd;
 }
 
-void MTGUIInterface::deletewindow(void *window)
+void MTGUIInterface::deletewindow(void* window)
 {
     if (mainwindow == (HWND) window)
-    { mainwindow = 0; }
+    {
+        mainwindow = 0;
+    }
     DestroyWindow((HWND) window);
 }
 
-void *MTGUIInterface::getwindowproc()
+void* MTGUIInterface::getwindowproc()
 {
     return WindowProc;
 }
 
-void *MTGUIInterface::getappwindow()
+void* MTGUIInterface::getappwindow()
 {
-    return (void *) mainwindow;
+    return (void*) mainwindow;
 }
 
-void MTGUIInterface::monitordesktop(MTDesktop *dsk)
+void MTGUIInterface::monitordesktop(MTDesktop* dsk)
 {
     SetWindowLong((HWND) dsk->mwnd, GWL_USERDATA, (int) dsk);
     SetWindowLong((HWND) dsk->mwnd, GWL_WNDPROC, (int) WindowProc);
@@ -1051,17 +1145,17 @@ void MTGUIInterface::monitordesktop(MTDesktop *dsk)
     };
 }
 
-void MTGUIInterface::invalidaterect(void *wnd, MTRect &r)
+void MTGUIInterface::invalidaterect(void* wnd, MTRect& r)
 {
     InvalidateRect((HWND) wnd, (RECT * ) & r, false);
 }
 
-void MTGUIInterface::invalidatergn(void *wnd, void *rgn)
+void MTGUIInterface::invalidatergn(void* wnd, void* rgn)
 {
     InvalidateRgn((HWND) wnd, (HRGN) rgn, false);
 }
 
-void MTGUIInterface::windowaction(void *wnd, int action)
+void MTGUIInterface::windowaction(void* wnd, int action)
 {
     int command;
 
@@ -1088,7 +1182,7 @@ void MTGUIInterface::windowaction(void *wnd, int action)
     ShowWindow((HWND) wnd, command);
 }
 
-void MTGUIInterface::windowmove(void *wnd, int x, int y, bool relative)
+void MTGUIInterface::windowmove(void* wnd, int x, int y, bool relative)
 {
     if (relative)
     {
@@ -1112,7 +1206,7 @@ float MTGUIInterface::getcursorphase()
     return (cos(f2pi * (si->syscounter() - cursorstart)) + 1.0f) / 2.0f;
 }
 
-MTControl *MTGUIInterface::getfocusedcontrol()
+MTControl* MTGUIInterface::getfocusedcontrol()
 {
     return 0;
 }
@@ -1120,7 +1214,9 @@ MTControl *MTGUIInterface::getfocusedcontrol()
 void MTGUIInterface::setmouseshape(int cursor)
 {
     if (cursors)
-    { cursors->push((void *) cursor); }
+    {
+        cursors->push((void*) cursor);
+    }
     SetCursor(LoadCursor(0, wincurmap[cursor]));
 }
 
@@ -1132,28 +1228,32 @@ void MTGUIInterface::restoremouseshape()
     {
         cursors->pop();
         if (cursors->nitems > 0)
-        { cursor = (int) cursors->a[cursors->nitems - 1]; }
+        {
+            cursor = (int) cursors->a[cursors->nitems - 1];
+        }
     };
     SetCursor(LoadCursor(0, wincurmap[cursor]));
 }
 
-void MTGUIInterface::getmousevector(float &x, float &y)
+void MTGUIInterface::getmousevector(float& x, float& y)
 {
     x = vx;
     y = vy;
 }
 
-void MTGUIInterface::getmousepos(MTPoint &mp)
+void MTGUIInterface::getmousepos(MTPoint& mp)
 {
     GetCursorPos((POINT * ) & mp);
 }
 
-void MTGUIInterface::registershortcut(MTShortcut *s)
+void MTGUIInterface::registershortcut(MTShortcut* s)
 {
     int keylookup;
 
     if (!shortcuts)
-    { return; }
+    {
+        return;
+    }
     if (s->group == 0)
     {
         s->group = ksgroup;
@@ -1167,12 +1267,14 @@ void MTGUIInterface::registershortcut(MTShortcut *s)
     shortcuts->additem(keylookup, s);
 }
 
-void MTGUIInterface::unregistershortcut(MTShortcut *s)
+void MTGUIInterface::unregistershortcut(MTShortcut* s)
 {
     int keylookup;
 
     if (!shortcuts)
-    { return; }
+    {
+        return;
+    }
     keylookup = s->flags & (~MTSF_UICONTROL);
     keylookup |= (s->key << 8);
 #	if (BIG_ENDIAN == 1234)
@@ -1197,36 +1299,44 @@ void MTGUIInterface::needbitmapcheck()
     bitmapcheck = true;
 }
 
-void MTGUIInterface::savewindowstate(void *wnd)
+void MTGUIInterface::savewindowstate(void* wnd)
 {
     wp.length = sizeof(wp);
     GetWindowPlacement((HWND) wnd, &wp);
 }
 
-void MTGUIInterface::restorewindowstate(void *wnd)
+void MTGUIInterface::restorewindowstate(void* wnd)
 {
-    SetWindowPos((HWND) wnd, HWND_NOTOPMOST, wp.rcNormalPosition.left, wp.rcNormalPosition.top, wp.rcNormalPosition.right - wp.rcNormalPosition.left, wp.rcNormalPosition.bottom - wp.rcNormalPosition.top, 0);
+    SetWindowPos(
+        (HWND) wnd,
+        HWND_NOTOPMOST,
+        wp.rcNormalPosition.left,
+        wp.rcNormalPosition.top,
+        wp.rcNormalPosition.right - wp.rcNormalPosition.left,
+        wp.rcNormalPosition.bottom - wp.rcNormalPosition.top,
+        0
+    );
     ShowWindow((HWND) wnd, wp.showCmd);
 }
 
-void MTGUIInterface::getwindowrect(void *wnd, MTRect &rect, bool client)
+void MTGUIInterface::getwindowrect(void* wnd, MTRect& rect, bool client)
 {
     if (client)
     {
-        GetClientRect((HWND)
-        wnd, (LPRECT) & rect);
+        GetClientRect((HWND) wnd, (LPRECT) & rect);
     }
     else
     {
-        GetWindowRect((HWND)
-        wnd, (LPRECT) & rect);
+        GetWindowRect((HWND) wnd, (LPRECT) & rect);
     }
 }
 
-bool MTGUIInterface::isdragged(MTPoint &p1, MTPoint &p2)
+bool MTGUIInterface::isdragged(MTPoint& p1, MTPoint& p2)
 {
     if ((abs(p1.x - p2.x) > dragx) || (abs(p1.y - p2.y) > dragy))
-    { return true; }
+    {
+        return true;
+    }
     return false;
 }
 
@@ -1249,10 +1359,12 @@ int MTGUIInterface::getmetric(int metric)
     };
 }
 
-void MTGUIInterface::setcontrolname(MTControl *ctrl, const char *prefix)
+void MTGUIInterface::setcontrolname(MTControl* ctrl, const char* prefix)
 {
     if (!candesign)
-    { return; }
+    {
+        return;
+    }
     strcpy(ctrl->name, prefix);
 }
 
@@ -1275,7 +1387,7 @@ if (idEvent<0x10000){
 return;
 };
 
-_MTTimer *t = (_MTTimer *) idEvent;
+_MTTimer* t = (_MTTimer*) idEvent;
 
 MTCMessage cmsg = {MTCM_TIMER, 0, t->ctrl, t->flags};
 
@@ -1285,25 +1397,31 @@ message(cmsg);
 
 }
 
-void MTGUIInterface::TimerProc2(MTTimer *timer, int param)
+void MTGUIInterface::TimerProc2(MTTimer* timer, int param)
 {
     MTSync s;
 
-    if (((_MTTimer *) param)->ctrl == 0)
-    { return; }
+    if (((_MTTimer*) param)->ctrl == 0)
+    {
+        return;
+    }
     s.proc = TimerSync;
     s.result = 0;
     s.param[0] = (int) param;
     gi->synchronize(&s);
 }
 
-int MTGUIInterface::TimerSync(MTSync *s)
+int MTGUIInterface::TimerSync(MTSync* s)
 {
-    _MTTimer *t = (_MTTimer *) s->param[0];
+    _MTTimer* t = (_MTTimer*) s->param[0];
     if (gi->timers->getitemid(t) < 0)
-    { return 0; }
+    {
+        return 0;
+    }
     if (!t->ctrl)
-    { return 0; }
+    {
+        return 0;
+    }
     MTCMessage cmsg = {MTCM_TIMER, 0, t->ctrl, t->flags};
     try
     {
@@ -1313,33 +1431,39 @@ int MTGUIInterface::TimerSync(MTSync *s)
     {
         LOGD("%s - [GUI] ERROR: Exception in control timer!"
                  NL);
-        TimerDelete((void *) t, 0);
+        TimerDelete((void*) t, 0);
     };
     return 1;
 }
 
-void MTGUIInterface::TimerDelete(void *item, void *param)
+void MTGUIInterface::TimerDelete(void* item, void* param)
 {
-    _MTTimer *t = (_MTTimer *) item;
+    _MTTimer* t = (_MTTimer*) item;
 
     if (t->accurate)
     {
         t->ctrl = 0;
-        si->timerdelete((MTTimer *) t->id);
+        si->timerdelete((MTTimer*) t->id);
     }
     else
     {
-        MTWinControl *parent;
-        MTDesktop *dsk;
+        MTWinControl* parent;
+        MTDesktop* dsk;
         parent = t->ctrl->parent;
         if (!parent)
-        { parent = (MTWinControl *) t->ctrl; }
+        {
+            parent = (MTWinControl*) t->ctrl;
+        }
         if ((parent->guiid & 2) == 0)
-        { return; }
+        {
+            return;
+        }
         t->ctrl = 0;
         dsk = parent->dsk;
         if (!dsk)
-        { dsk = (MTDesktop *) parent; }
+        {
+            dsk = (MTDesktop*) parent;
+        }
         if (dsk->guiid == MTC_DESKTOP)
         {
             KillTimer((HWND)
@@ -1362,13 +1486,13 @@ long lparam
 
 )
 {
-MTDesktop *dsk = (MTDesktop *) GetWindowLong(wnd, GWL_USERDATA);
+MTDesktop* dsk = (MTDesktop*) GetWindowLong(wnd, GWL_USERDATA);
 
 int newclick, keylookup;
 
 float cx, cy, cd;
 
-MTShortcut *cs;
+MTShortcut* cs;
 
 MTRect r;
 
@@ -1397,7 +1521,7 @@ DefWindowProc(wnd, msg, wparam, lparam
 };
 FENTER4("MTGUIInterface::WindowProc(%.8X,%.8X,%.8X,%.8X)", wnd, msg, wparam, lparam);
 
-mtmemzero(&cmsg,
+mtmemzero(& cmsg,
 
 sizeof(cmsg));
 cmsg.
@@ -2036,7 +2160,7 @@ repeat = lparam >> 30;
 keylookup = swap_dword(keylookup);
 #		endif
 
-cs = (MTShortcut *) shortcuts->getitem(keylookup);
+cs = (MTShortcut*) shortcuts->getitem(keylookup);
 
 if (cs){
 cmsg.
@@ -2156,13 +2280,15 @@ DefWindowProc(wnd, msg, wparam, lparam
 //---------------------------------------------------------------------------
 extern "C" {
 
-MTXInterfaces *MTCT MTXMain(MTInterface *mti)
+MTXInterfaces* MTCT MTXMain(MTInterface* mti)
 {
     mtinterface = mti;
     if (!gi)
-    { gi = new MTGUIInterface(); }
+    {
+        gi = new MTGUIInterface();
+    }
     i.ninterfaces = 1;
-    i.interfaces[0] = (MTXInterface *) gi;
+    i.interfaces[0] = (MTXInterface*) gi;
     return &i;
 }
 

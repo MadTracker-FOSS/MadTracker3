@@ -21,7 +21,7 @@ const double fresostart = 1.44927536231884057971014492753e-2;
 const double fresorange = 0.92753623188405797101449275362319;
 
 //---------------------------------------------------------------------------
-void MTCT a_subfilter_(sample *dest, sample *source, FilterStatus &status, int count)
+void MTCT a_subfilter_(sample* dest, sample* source, FilterStatus& status, int count)
 {
     if ((status.fvarlng) && (status.rvarlng))
     {
@@ -32,9 +32,13 @@ void MTCT a_subfilter_(sample *dest, sample *source, FilterStatus &status, int c
             status.t[0] *= status.r;
             *dest++ += status.t[1];
             if (status.fvarlng-- > 0)
-            { status.c += status.cv; }
+            {
+                status.c += status.cv;
+            }
             if (status.rvarlng-- > 0)
-            { status.r += status.rv; }
+            {
+                status.r += status.rv;
+            }
         };
     }
     else if (status.fvarlng)
@@ -46,7 +50,9 @@ void MTCT a_subfilter_(sample *dest, sample *source, FilterStatus &status, int c
             status.t[0] *= status.r;
             *dest++ += status.t[1];
             if (status.fvarlng-- > 0)
-            { status.c += status.cv; }
+            {
+                status.c += status.cv;
+            }
         };
     }
     else if (status.rvarlng)
@@ -58,7 +64,9 @@ void MTCT a_subfilter_(sample *dest, sample *source, FilterStatus &status, int c
             status.t[0] *= status.r;
             *dest++ += status.t[1];
             if (status.rvarlng-- > 0)
-            { status.r += status.rv; }
+            {
+                status.r += status.rv;
+            }
         };
     }
     else
@@ -72,12 +80,16 @@ void MTCT a_subfilter_(sample *dest, sample *source, FilterStatus &status, int c
         };
     };
     if (IS_DENORMAL(status.t[0]))
-    { status.t[0] = 0.0; }
+    {
+        status.t[0] = 0.0;
+    }
     if (IS_DENORMAL(status.t[1]))
-    { status.t[1] = 0.0; }
+    {
+        status.t[1] = 0.0;
+    }
 }
 
-void MTCT a_filter_(sample *dest, sample *source, FilterStatus &status, int count, int frequency)
+void MTCT a_filter_(sample* dest, sample* source, FilterStatus& status, int count, int frequency)
 {
     double fc, r;
     int i = count;
@@ -92,7 +104,9 @@ void MTCT a_filter_(sample *dest, sample *source, FilterStatus &status, int coun
             fc = 0.25;
         }
         else if (fc < 0.0001)
-        { fc = 0.0001; }
+        {
+            fc = 0.0001;
+        }
         status.c = 2 - 2 * cos(f2pi * fc);
         status.r = sqrt(sqrt(fresostart + status.resonance * fresorange));
         status.flags |= FILTER_INIT;
@@ -100,12 +114,16 @@ void MTCT a_filter_(sample *dest, sample *source, FilterStatus &status, int coun
     while(count > 0)
     {
         if (count < i)
-        { i = count; }
+        {
+            i = count;
+        }
         if (status.fvarlng > 0)
         {
             r = (double) i / (double) status.fvarlng;
             if (r > 1.0)
-            { r = 1.0; }
+            {
+                r = 1.0;
+            }
             status.frequency = status.frequency * (1.0 - r) + status.frequency2 * r;
             fc = status.frequency / frequency;
             if (fc > 0.25)
@@ -113,14 +131,18 @@ void MTCT a_filter_(sample *dest, sample *source, FilterStatus &status, int coun
                 fc = 0.25;
             }
             else if (fc < 0.0001)
-            { fc = 0.0001; }
+            {
+                fc = 0.0001;
+            }
             status.cv = (2 - 2 * cos(f2pi * fc) - status.c) / i;
         };
         if (status.rvarlng > 0)
         {
             r = (double) i / (double) status.rvarlng;
             if (r > 1.0)
-            { r = 1.0; }
+            {
+                r = 1.0;
+            }
             status.resonance = status.resonance2 * (1.0 - r) + status.resonance * r;
             status.rv = (sqrt(sqrt(fresostart + status.resonance * fresorange)) - status.r) / i;
         };

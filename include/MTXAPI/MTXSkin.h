@@ -270,80 +270,80 @@ struct MTSkinInfo
 class Skin
 {
 public:
-    MTBitmap *skinbmp[16];
+    MTBitmap* skinbmp[16];
     int fontwidth;
     int fontheight;
 
-    virtual void MTCT loadfromres(MTResources *res) = 0;
+    virtual void MTCT loadfromres(MTResources* res) = 0;
 
-    virtual void MTCT savetores(MTResources *res) = 0;
+    virtual void MTCT savetores(MTResources* res) = 0;
 
 //	Controls data
-    virtual void MTCT initcontrol(MTControl *ctrl) = 0;
+    virtual void MTCT initcontrol(MTControl* ctrl) = 0;
 
-    virtual void MTCT uninitcontrol(MTControl *ctrl) = 0;
+    virtual void MTCT uninitcontrol(MTControl* ctrl) = 0;
 
-    virtual void MTCT resetcontrol(MTControl *ctrl, bool skinchange) = 0;
+    virtual void MTCT resetcontrol(MTControl* ctrl, bool skinchange) = 0;
 
-    virtual void MTCT timercontrol(MTControl *ctrl) = 0;
+    virtual void MTCT timercontrol(MTControl* ctrl) = 0;
 
 //	Control-specific skin notifications
-    virtual void MTCT notify(MTControl *ctrl, int type, int param1, int param2, void *param3 = 0) = 0;
+    virtual void MTCT notify(MTControl* ctrl, int type, int param1, int param2, void* param3 = 0) = 0;
 
 //	Controls drawing
-    virtual void MTCT drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int y, int flags = 0) = 0;
+    virtual void MTCT drawcontrol(MTControl* ctrl, MTRect& rect, MTBitmap* b, int x, int y, int flags = 0) = 0;
 
-    virtual void MTCT drawcontrol(int guiid, int id, MTRect &rect, MTBitmap *b, int x, int y, int flags = 0) = 0;
+    virtual void MTCT drawcontrol(int guiid, int id, MTRect& rect, MTBitmap* b, int x, int y, int flags = 0) = 0;
 
-    virtual void MTCT drawborder(MTWinControl *ctrl, MTRect &rect, MTBitmap *b, int x, int y) = 0;
+    virtual void MTCT drawborder(MTWinControl* ctrl, MTRect& rect, MTBitmap* b, int x, int y) = 0;
 
-    virtual void MTCT drawmodalveil(MTWinControl *ctrl, MTRect &rect) = 0;
+    virtual void MTCT drawmodalveil(MTWinControl* ctrl, MTRect& rect) = 0;
 
-    virtual void MTCT drawdragbkg(MTBitmap *b, MTRect &rect, int style) = 0;
+    virtual void MTCT drawdragbkg(MTBitmap* b, MTRect& rect, int style) = 0;
 
 //	Dimensions
     virtual void MTCT updatemetrics() = 0;
 
-    virtual MTBitmap *MTCT getbitmap(int id) = 0;
+    virtual MTBitmap* MTCT getbitmap(int id) = 0;
 
-    virtual MTSLMetrics *MTCT getslider(int type, int orientation) = 0;
+    virtual MTSLMetrics* MTCT getslider(int type, int orientation) = 0;
 
     virtual void MTCT calcbounds(int m) = 0;
 
     virtual void MTCT setshadows(bool enabled) = 0;
 
-    virtual void MTCT getcontrolsize(int guiid, int id, int &width, int &height) = 0;
+    virtual void MTCT getcontrolsize(int guiid, int id, int& width, int& height) = 0;
 
-    virtual void MTCT getwindowborders(int style, MTRect *borders) = 0;
+    virtual void MTCT getwindowborders(int style, MTRect* borders) = 0;
 
-    virtual void MTCT getwindowoffsets(int style, MTRect *borders) = 0;
+    virtual void MTCT getwindowoffsets(int style, MTRect* borders) = 0;
 
-    virtual void MTCT getregions(MTControl *ctrl, void **opaque, void **transparent) = 0;
+    virtual void MTCT getregions(MTControl* ctrl, void** opaque, void** transparent) = 0;
 
     virtual int MTCT getcolor(int id) = 0;
 
-    virtual void *MTCT getfont(int id) = 0;
+    virtual void* MTCT getfont(int id) = 0;
 
-    virtual bool MTCT gettextsize(MTControl *ctrl, const char *text, int length, MTPoint *size, int maxwidth = -1) = 0;
+    virtual bool MTCT gettextsize(MTControl* ctrl, const char* text, int length, MTPoint* size, int maxwidth = -1) = 0;
 
-    virtual int MTCT gettextextent(MTControl *ctrl, const char *text, int length, int maxextent) = 0;
+    virtual int MTCT gettextextent(MTControl* ctrl, const char* text, int length, int maxextent) = 0;
 
-    virtual int MTCT gettextheight(MTControl *ctrl) = 0;
+    virtual int MTCT gettextheight(MTControl* ctrl) = 0;
 
-    virtual int MTCT getcharwidth(MTControl *ctrl, char c) = 0;
+    virtual int MTCT getcharwidth(MTControl* ctrl, char c) = 0;
 
 //	Miscellaneous drawing
-    virtual void MTCT drawitem(MTUserList *list, int i, MTRect &rect, MTBitmap *b, const char *caption, int imageindex, int itemflags, bool editable) = 0;
+    virtual void MTCT drawitem(MTUserList* list, int i, MTRect& rect, MTBitmap* b, const char* caption, int imageindex, int itemflags, bool editable) = 0;
 
-    virtual void MTCT drawchar(unsigned char c, MTBitmap *bmp, int &x, int y, int color) = 0;
+    virtual void MTCT drawchar(unsigned char c, MTBitmap* bmp, int& x, int y, int color) = 0;
 
-    virtual void MTCT drawtext(unsigned char *text, MTBitmap *bmp, int &x, int y, int color) = 0;
+    virtual void MTCT drawtext(unsigned char* text, MTBitmap* bmp, int& x, int y, int color) = 0;
 
-    virtual void MTCT drawdec(int val, bool zeroes, int n, MTBitmap *bmp, int &x, int y, int color) = 0;
+    virtual void MTCT drawdec(int val, bool zeroes, int n, MTBitmap* bmp, int& x, int y, int color) = 0;
 
-    virtual void MTCT drawhex(int val, bool zeroes, int n, MTBitmap *bmp, int &x, int y, int color) = 0;
+    virtual void MTCT drawhex(int val, bool zeroes, int n, MTBitmap* bmp, int& x, int y, int color) = 0;
 
-    virtual void MTCT drawframe(MTBitmap *bmp, int x, int y, int w, int h, int flags = 0) = 0;
+    virtual void MTCT drawframe(MTBitmap* bmp, int x, int y, int w, int h, int flags = 0) = 0;
 };
 //---------------------------------------------------------------------------
 #endif

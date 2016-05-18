@@ -16,9 +16,9 @@
 #include <MTXAPI/RES/MT3RES.h>
 
 //---------------------------------------------------------------------------
-extern MTGUIInterface *gi;
+extern MTGUIInterface* gi;
 
-MTWC_main2 *w_main2;
+MTWC_main2* w_main2;
 //---------------------------------------------------------------------------
 //	User includes, variables and functions
 //---------------------------------------------------------------------------
@@ -27,22 +27,24 @@ MTWC_main2 *w_main2;
 #include "MTExtensions.h"
 
 //---------------------------------------------------------------------------
-extern MT3Interface *mi;
+extern MT3Interface* mi;
 
-char *freeslot;
+char* freeslot;
 
 //---------------------------------------------------------------------------
-void MTCT useritemdraw(MTUserList *list, int id, const MTRect &rect, MTBitmap *b)
+void MTCT useritemdraw(MTUserList* list, int id, const MTRect& rect, MTBitmap* b)
 {
-    char *caption;
+    char* caption;
     int l, imageindex, color, w, h, mid;
-    MTObject *object;
+    MTObject* object;
     MTRect r = rect;
     MTPoint p;
     char idt[4];
 
     if (!cmodule)
-    { return; }
+    {
+        return;
+    }
     if (list == w_main2->list1)
     {
         mid = id + 1;
@@ -56,7 +58,9 @@ void MTCT useritemdraw(MTUserList *list, int id, const MTRect &rect, MTBitmap *b
         imageindex = 55;
     }
     else
-    { return; }
+    {
+        return;
+    }
     if (!object)
     {
         imageindex = -1;
@@ -67,7 +71,9 @@ void MTCT useritemdraw(MTUserList *list, int id, const MTRect &rect, MTBitmap *b
         caption = object->name;
     };
     if (id == list->selected)
-    { b->fill(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, skin->getcolor(SC_EDIT_SELECTION)); }
+    {
+        b->fill(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, skin->getcolor(SC_EDIT_SELECTION));
+    }
     skin->getcontrolsize(MTC_STATUS, 0, h, w);
     skin->drawcontrol(MTC_STATUS, 0, r, b, r.left, r.top, 1);
     skin->drawcontrol(MTC_STATUS, 1, r, b, r.left + w, r.top, 0);
@@ -81,7 +87,9 @@ void MTCT useritemdraw(MTUserList *list, int id, const MTRect &rect, MTBitmap *b
         color = skin->getcolor(SC_EDIT_SELECTED);
     }
     else
-    { color = skin->getcolor(SC_TEXT_NORMAL); }
+    {
+        color = skin->getcolor(SC_TEXT_NORMAL);
+    }
     if (b->open(0))
     {
         b->settextcolor(color);
@@ -103,7 +111,9 @@ void MTCT useritemdraw(MTUserList *list, int id, const MTRect &rect, MTBitmap *b
             };
         }
         else
-        { l = -1; }
+        {
+            l = -1;
+        }
         b->drawtext(caption, l, r, DTXT_VCENTER);
         if (l > 0)
         {
@@ -120,54 +130,70 @@ void MTCT useritemdraw(MTUserList *list, int id, const MTRect &rect, MTBitmap *b
     sysimages->drawimage(imageindex, b, r.left, r.top);
 }
 
-int MTCT getiteminfo(MTUserList *list, int id, char **caption, int *imageindex, int *flags, bool *editable)
+int MTCT getiteminfo(MTUserList* list, int id, char** caption, int* imageindex, int* flags, bool* editable)
 {
     if (!cmodule)
-    { return -1; }
+    {
+        return -1;
+    }
     if (list == w_main2->list1)
     {
-        Instrument &cinstr = *A(cmodule->instr, Instrument)[id + 1];
+        Instrument& cinstr = *A(cmodule->instr, Instrument)[id + 1];
         if (&cinstr)
         {
             if (caption)
-            { *caption = cinstr.name; }
+            {
+                *caption = cinstr.name;
+            }
             if (imageindex)
-            { *imageindex = 54; }
+            {
+                *imageindex = 54;
+            }
         }
         else
         {
             if (caption)
-            { *caption = freeslot; }
+            {
+                *caption = freeslot;
+            }
         };
         return id + 1;
     }
     else if (list == w_main2->list2)
     {
-        Oscillator &cosc = *A(cmodule->spl, Oscillator)[id];
+        Oscillator& cosc = *A(cmodule->spl, Oscillator)[id];
         if (&cosc)
         {
             if (caption)
-            { *caption = cosc.name; }
+            {
+                *caption = cosc.name;
+            }
             if (imageindex)
-            { *imageindex = 55; }
+            {
+                *imageindex = 55;
+            }
         }
         else
         {
             if (caption)
-            { *caption = freeslot; }
+            {
+                *caption = freeslot;
+            }
         };
         return id;
     };
     return -1;
 }
 
-void MTCT listmessage(MTUserList *list, int id, MTCMessage &msg)
+void MTCT listmessage(MTUserList* list, int id, MTCMessage& msg)
 {
     switch (msg.msg)
     {
         case MTCM_MOUSEDOWN:
             if ((msg.buttons & DB_DOUBLE) == 0)
-            { break; }
+            {
+                break;
+            }
             switch (list->uid)
             {
                 case MTC_list1:
@@ -183,39 +209,39 @@ void MTCT listmessage(MTUserList *list, int id, MTCMessage &msg)
 //---------------------------------------------------------------------------
 //	Wrapper class code
 //---------------------------------------------------------------------------
-MTWC_main2::MTWC_main2(MTWindow *w):
+MTWC_main2::MTWC_main2(MTWindow* w):
     MTWrapper(w)
 {
-    list1 = (MTUserList *) wthis->getcontrolfromuid(MTC_list1);
-    list2 = (MTUserList *) wthis->getcontrolfromuid(MTC_list2);
-    panel1 = (MTPanel *) wthis->getcontrolfromuid(MTC_panel1);
-    panel2 = (MTPanel *) wthis->getcontrolfromuid(MTC_panel2);
-    bnew = (MTButton *) wthis->getcontrolfromuid(MTC_bnew);
-    bfile = (MTButton *) wthis->getcontrolfromuid(MTC_bfile);
-    binfo = (MTButton *) wthis->getcontrolfromuid(MTC_binfo);
-    bview = (MTButton *) wthis->getcontrolfromuid(MTC_bview);
-    btools = (MTButton *) wthis->getcontrolfromuid(MTC_btools);
-    bhelp = (MTButton *) wthis->getcontrolfromuid(MTC_bhelp);
-    bnetwork = (MTButton *) wthis->getcontrolfromuid(MTC_bnetwork);
-    bconfig = (MTButton *) wthis->getcontrolfromuid(MTC_bconfig);
-    bbegin = (MTButton *) wthis->getcontrolfromuid(MTC_bbegin);
-    brewind = (MTButton *) wthis->getcontrolfromuid(MTC_brewind);
-    bfastforward = (MTButton *) wthis->getcontrolfromuid(MTC_bfastforward);
-    bend = (MTButton *) wthis->getcontrolfromuid(MTC_bend);
-    bstop = (MTButton *) wthis->getcontrolfromuid(MTC_bstop);
-    bplaypause = (MTButton *) wthis->getcontrolfromuid(MTC_bplaypause);
-    brecord = (MTButton *) wthis->getcontrolfromuid(MTC_brecord);
+    list1 = (MTUserList*) wthis->getcontrolfromuid(MTC_list1);
+    list2 = (MTUserList*) wthis->getcontrolfromuid(MTC_list2);
+    panel1 = (MTPanel*) wthis->getcontrolfromuid(MTC_panel1);
+    panel2 = (MTPanel*) wthis->getcontrolfromuid(MTC_panel2);
+    bnew = (MTButton*) wthis->getcontrolfromuid(MTC_bnew);
+    bfile = (MTButton*) wthis->getcontrolfromuid(MTC_bfile);
+    binfo = (MTButton*) wthis->getcontrolfromuid(MTC_binfo);
+    bview = (MTButton*) wthis->getcontrolfromuid(MTC_bview);
+    btools = (MTButton*) wthis->getcontrolfromuid(MTC_btools);
+    bhelp = (MTButton*) wthis->getcontrolfromuid(MTC_bhelp);
+    bnetwork = (MTButton*) wthis->getcontrolfromuid(MTC_bnetwork);
+    bconfig = (MTButton*) wthis->getcontrolfromuid(MTC_bconfig);
+    bbegin = (MTButton*) wthis->getcontrolfromuid(MTC_bbegin);
+    brewind = (MTButton*) wthis->getcontrolfromuid(MTC_brewind);
+    bfastforward = (MTButton*) wthis->getcontrolfromuid(MTC_bfastforward);
+    bend = (MTButton*) wthis->getcontrolfromuid(MTC_bend);
+    bstop = (MTButton*) wthis->getcontrolfromuid(MTC_bstop);
+    bplaypause = (MTButton*) wthis->getcontrolfromuid(MTC_bplaypause);
+    brecord = (MTButton*) wthis->getcontrolfromuid(MTC_brecord);
     w->wrapper = this;
 //---------------------------------------------------------------------------
 //	User construction code
 //---------------------------------------------------------------------------
-    freeslot = (char *) mtres->getresource(MTR_TEXT, MTT_freeslot, 0);
+    freeslot = (char*) mtres->getresource(MTR_TEXT, MTT_freeslot, 0);
     list1->userdrawproc = list2->userdrawproc = useritemdraw;
     list1->getiteminfoproc = list2->getiteminfoproc = getiteminfo;
     list1->itemmessageproc = list2->itemmessageproc = listmessage;
     list1->setnumitems(MAX_INSTRS - 1);
     list2->setnumitems(MAX_SAMPLES);
-    MTMenu *menu = (MTMenu *) gi->newcontrol(MTC_MENU, 0, mtdsk, 0, 0, 0, 0, 0);
+    MTMenu* menu = (MTMenu*) gi->newcontrol(MTC_MENU, 0, mtdsk, 0, 0, 0, 0, 0);
     menu->flags |= MTCF_DONTSAVE;
     menu->additem("|New...", -1, 0, false, 0);
     menu->additem("Module", 53, 0, false, 0);
@@ -224,14 +250,14 @@ MTWC_main2::MTWC_main2(MTWindow *w):
     menu->additem("Pattern", 56, 0, false, 0);
     menu->additem("Controller", 57, 0, false, 0);
     bnew->popup = menu;
-    menu = (MTMenu *) gi->newcontrol(MTC_MENU, 0, mtdsk, 0, 0, 0, 0, 0);
+    menu = (MTMenu*) gi->newcontrol(MTC_MENU, 0, mtdsk, 0, 0, 0, 0, 0);
     menu->flags |= MTCF_DONTSAVE;
     menu->additem("|Show...", -1, 0, false, 0);
     menu->additem("Sequencer", 4, 0, false, 0);
     menu->additem("Mixer", 5, 0, false, 0);
     menu->additem("Browser", 6, 0, false, 0);
     bview->popup = menu;
-    menu = (MTMenu *) gi->newcontrol(MTC_MENU, 0, mtdsk, 0, 0, 0, 0, 0);
+    menu = (MTMenu*) gi->newcontrol(MTC_MENU, 0, mtdsk, 0, 0, 0, 0, 0);
     menu->flags |= MTCF_DONTSAVE;
     menu->additem("Help", 8, 0, false, 0);
     menu->additem("About", 8, 0, false, 0);
@@ -249,7 +275,7 @@ MTWC_main2::~MTWC_main2()
     mtres->releaseresource(freeslot);
 }
 
-bool MTWC_main2::onmessage(MTCMessage &msg)
+bool MTWC_main2::onmessage(MTCMessage& msg)
 {
 //---------------------------------------------------------------------------
 //	User messages handler

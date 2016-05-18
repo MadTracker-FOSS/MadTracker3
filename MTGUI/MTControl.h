@@ -122,7 +122,7 @@ class MTMenu;
 #include <MTXAPI/MTXControls.h>
 
 //---------------------------------------------------------------------------
-extern MTControl *overctrl, *btnctrl;
+extern MTControl* overctrl, * btnctrl;
 
 extern MTCMessage leavemsg, entermsg, btnupmsg;
 //---------------------------------------------------------------------------

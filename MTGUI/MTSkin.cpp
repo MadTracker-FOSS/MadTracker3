@@ -36,11 +36,11 @@ struct MTSignData
 };
 
 //---------------------------------------------------------------------------
-MTResources *skinres;
+MTResources* skinres;
 
 unsigned char MTSkin::fontmap[256];
 
-static const char *passtxt = {"********************************"};
+static const char* passtxt = {"********************************"};
 
 //---------------------------------------------------------------------------
 MTSkin::MTSkin():
@@ -239,10 +239,10 @@ MTSkin::~MTSkin()
     };
 }
 
-void MTSkin::loadfromres(MTResources *res)
+void MTSkin::loadfromres(MTResources* res)
 {
     int type, size, csize, x, l;
-    void *stream;
+    void* stream;
     bool hadshadows;
 
     FENTER1("loadskinfromres(%.8X)", res);
@@ -261,13 +261,13 @@ void MTSkin::loadfromres(MTResources *res)
     stream = res->getresource(MTR_SKIN, 0, &size);
     if (stream)
     {
-        char *sp = (char *) stream;
-        char *ep = sp + size;
+        char* sp = (char*) stream;
+        char* ep = sp + size;
         while(sp < ep)
         {
-            type = *(int *) sp;
+            type = *(int*) sp;
             sp += 4;
-            csize = *(int *) sp;
+            csize = *(int*) sp;
             sp += 4;
             for(x = 0; x < 32; x++)
             {
@@ -275,7 +275,9 @@ void MTSkin::loadfromres(MTResources *res)
                 {
                     l = csize;
                     if (sko[x].s < l)
-                    { l = sko[x].s; }
+                    {
+                        l = sko[x].s;
+                    }
                     memcpy(sko[x].a, sp, l);
                     switch (sko[x].t)
                     {
@@ -300,7 +302,10 @@ void MTSkin::loadfromres(MTResources *res)
             };
             sp += csize;
         };
-        for(x = 0; x < 8; x++) calcbounds(x);
+        for(x = 0; x < 8; x++)
+        {
+            calcbounds(x);
+        }
         updatemetrics();
         sysimages.setmetrics(&ilm);
         res->releaseresource(stream);
@@ -308,16 +313,18 @@ void MTSkin::loadfromres(MTResources *res)
         {
             if (bmpid[x])
             {
-                MTBitmap *cskin = di->newresbitmap(MTB_SKIN, res, bmpid[x], info.colorkey);
+                MTBitmap* cskin = di->newresbitmap(MTB_SKIN, res, bmpid[x], info.colorkey);
                 skinbmp[x] = cskin;
                 cskin->changeproc = skinchange;
-                cskin->param = (void *) x;
+                cskin->param = (void*) x;
                 di->setskinbitmap(x, cskin);
             };
         };
         setfonts();
         if (hadshadows)
-        { setshadows(true); }
+        {
+            setshadows(true);
+        }
     }
     else
     {
@@ -327,11 +334,11 @@ void MTSkin::loadfromres(MTResources *res)
     LEAVE();
 }
 
-void MTSkin::savetores(MTResources *res)
+void MTSkin::savetores(MTResources* res)
 {
 }
 
-void MTSkin::skinchange(MTBitmap *oldskin, MTBitmap *newskin, void *param)
+void MTSkin::skinchange(MTBitmap* oldskin, MTBitmap* newskin, void* param)
 {
     int id = (int) param;
 
@@ -342,20 +349,20 @@ void MTSkin::skinchange(MTBitmap *oldskin, MTBitmap *newskin, void *param)
     };
 }
 
-void MTSkin::initcontrol(MTControl *ctrl)
+void MTSkin::initcontrol(MTControl* ctrl)
 {
     switch (ctrl->guiid)
     {
         case MTC_CHECKBOX:
         {
-            MTCheckBoxData *cbd = mtnew(MTCheckBoxData);
+            MTCheckBoxData* cbd = mtnew(MTCheckBoxData);
             cbd->timerid = gi->ctrltimer(ctrl, MTTF_SKINTIMER, guiprefs.animinterval, false, true);
             ctrl->skindata = cbd;
         };
             break;
         case MTC_SIGN:
         {
-            MTSignData *ad = mtnew(MTSignData);
+            MTSignData* ad = mtnew(MTSignData);
             ad->timerid = gi->ctrltimer(ctrl, MTTF_SKINTIMER, 1000 / animm[0].speed, false, true);
             ctrl->skindata = ad;
         };
@@ -363,19 +370,19 @@ void MTSkin::initcontrol(MTControl *ctrl)
     };
 }
 
-void MTSkin::uninitcontrol(MTControl *ctrl)
+void MTSkin::uninitcontrol(MTControl* ctrl)
 {
     switch (ctrl->guiid)
     {
         case MTC_CHECKBOX:
         {
-            MTCheckBoxData *cbd = (MTCheckBoxData *) ctrl->skindata;
+            MTCheckBoxData* cbd = (MTCheckBoxData*) ctrl->skindata;
             gi->deltimer(ctrl, cbd->timerid);
         };
             break;
         case MTC_SIGN:
         {
-            MTSignData *ad = (MTSignData *) ctrl->skindata;
+            MTSignData* ad = (MTSignData*) ctrl->skindata;
             gi->deltimer(ctrl, ad->timerid);
         };
             break;
@@ -387,39 +394,43 @@ void MTSkin::uninitcontrol(MTControl *ctrl)
     };
 }
 
-void MTSkin::resetcontrol(MTControl *ctrl, bool skinchange)
+void MTSkin::resetcontrol(MTControl* ctrl, bool skinchange)
 {
     switch (ctrl->guiid)
     {
         case MTC_CHECKBOX:
         {
-            MTCheckBoxData *cbd = (MTCheckBoxData *) ctrl->skindata;
-            MTCheckBox &cb = *(MTCheckBox *) ctrl;
+            MTCheckBoxData* cbd = (MTCheckBoxData*) ctrl->skindata;
+            MTCheckBox& cb = *(MTCheckBox*) ctrl;
             if (cbd->timerid)
-            { gi->deltimer(ctrl, cbd->timerid); }
+            {
+                gi->deltimer(ctrl, cbd->timerid);
+            }
             cbd->timerid = gi->ctrltimer(ctrl, MTTF_SKINTIMER, guiprefs.animinterval, false, true);
             cbd->cstate = cb.state;
         };
             break;
         case MTC_SIGN:
         {
-            MTSignData *ad = (MTSignData *) ctrl->skindata;
+            MTSignData* ad = (MTSignData*) ctrl->skindata;
             if (ad->timerid)
-            { gi->deltimer(ctrl, ad->timerid); }
-            ad->timerid = gi->ctrltimer(ctrl, MTTF_SKINTIMER, 1000 / animm[((MTSign *) ctrl)->sign].speed, false, true);
+            {
+                gi->deltimer(ctrl, ad->timerid);
+            }
+            ad->timerid = gi->ctrltimer(ctrl, MTTF_SKINTIMER, 1000 / animm[((MTSign*) ctrl)->sign].speed, false, true);
             break;
         };
     };
 }
 
-void MTSkin::timercontrol(MTControl *ctrl)
+void MTSkin::timercontrol(MTControl* ctrl)
 {
     switch (ctrl->guiid)
     {
         case MTC_CHECKBOX:
         {
-            MTCheckBoxData &cbd = *(MTCheckBoxData *) ctrl->skindata;
-            MTCheckBox &cb = *(MTCheckBox *) ctrl;
+            MTCheckBoxData& cbd = *(MTCheckBoxData*) ctrl->skindata;
+            MTCheckBox& cb = *(MTCheckBox*) ctrl;
             cbd.cstate = cbd.fromcstate + ((float) cb.state - cbd.fromcstate) * (float) (si->syscounter() - cbd.clicktime) / guiprefs.animtime;
             if (cb.state > cbd.fromstate)
             {
@@ -451,9 +462,11 @@ void MTSkin::timercontrol(MTControl *ctrl)
             break;
         case MTC_SIGN:
         {
-            MTSignData *ad = (MTSignData *) ctrl->skindata;
-            if (++ad->frame == animm[((MTSign *) ctrl)->sign].nx * animm[((MTSign *) ctrl)->sign].ny)
-            { ad->frame = 0; }
+            MTSignData* ad = (MTSignData*) ctrl->skindata;
+            if (++ad->frame == animm[((MTSign*) ctrl)->sign].nx * animm[((MTSign*) ctrl)->sign].ny)
+            {
+                ad->frame = 0;
+            }
             MTCMessage msg = {MTCM_CHANGE, 0, ctrl};
             ctrl->parent->message(msg);
         };
@@ -461,21 +474,23 @@ void MTSkin::timercontrol(MTControl *ctrl)
     };
 }
 
-void MTSkin::notify(MTControl *ctrl, int type, int param1, int param2, void *param3)
+void MTSkin::notify(MTControl* ctrl, int type, int param1, int param2, void* param3)
 {
     switch (ctrl->guiid)
     {
         case MTC_CHECKBOX:
         {
-            MTCheckBoxData &cbd = *(MTCheckBoxData *) ctrl->skindata;
-            MTCheckBox &cb = *(MTCheckBox *) ctrl;
+            MTCheckBoxData& cbd = *(MTCheckBoxData*) ctrl->skindata;
+            MTCheckBox& cb = *(MTCheckBox*) ctrl;
             cbd.fromstate = cb.state;
             cbd.fromcstate = cbd.cstate;
             if ((guiprefs.animctrl) && (!design))
             {
                 cbd.clicktime = si->syscounter();
                 if (!cbd.timerid)
-                { cbd.timerid = gi->ctrltimer(ctrl, MTTF_SKINTIMER, guiprefs.animinterval, false, true); }
+                {
+                    cbd.timerid = gi->ctrltimer(ctrl, MTTF_SKINTIMER, guiprefs.animinterval, false, true);
+                }
             }
             else
             {
@@ -486,17 +501,28 @@ void MTSkin::notify(MTControl *ctrl, int type, int param1, int param2, void *par
     };
 }
 
-void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int y, int flags)
+void MTSkin::drawcontrol(MTControl* ctrl, MTRect& rect, MTBitmap* b, int x, int y, int flags)
 {
     switch (ctrl->guiid)
     {
         case MTC_SIGN:
 //	Sign
         {
-            int anim = ((MTSign *) ctrl)->sign;
+            int anim = ((MTSign*) ctrl)->sign;
             if (animm[anim].nx <= 0)
-            { break; }
-            b->skinblta(x + (ctrl->width - animm[anim].a.b.w / animm[anim].nx) / 2, y + (ctrl->height - animm[anim].a.b.h / animm[anim].ny) / 2, 0, 0, animm[anim].a, animm[anim].nx, animm[anim].ny, ((MTSignData *) ctrl->skindata)->frame);
+            {
+                break;
+            }
+            b->skinblta(
+                x + (ctrl->width - animm[anim].a.b.w / animm[anim].nx) / 2,
+                y + (ctrl->height - animm[anim].a.b.h / animm[anim].ny) / 2,
+                0,
+                0,
+                animm[anim].a,
+                animm[anim].nx,
+                animm[anim].ny,
+                ((MTSignData*) ctrl->skindata)->frame
+            );
         };
             break;
         case MTC_LABEL:
@@ -506,7 +532,7 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
             {
                 ctrl->parent->settextcolor(fnm.colors[SC_TEXT_NORMAL & 0xFFFF]);
                 ctrl->parent->setfont(hskfont[1]);
-                ctrl->parent->drawtext(((MTLabel *) ctrl)->caption, -1, rect, DTXT_MULTILINE);
+                ctrl->parent->drawtext(((MTLabel*) ctrl)->caption, -1, rect, DTXT_MULTILINE);
                 ctrl->parent->close(0);
             };
         };
@@ -514,7 +540,7 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
         case MTC_SCROLLER:
 //	Scroller
         {
-            MTScroller &s = *(MTScroller *) ctrl;
+            MTScroller& s = *(MTScroller*) ctrl;
             int ah, i, h, w;
             bool ok = ((s.page < s.maxpos) && (s.maxpos > 0));
 
@@ -523,7 +549,9 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
             {
                 i = 2;
                 if (!ok)
-                { i += 8; }
+                {
+                    i += 8;
+                }
                 b->skinblta(x, y, 0, 0, arm, 8, 2, i + ((s.carrow == 0) ? 4 : 0));
                 i++;
                 b->skinblta(x + s.width - ah, y, 0, 0, arm, 8, 2, i + ((s.carrow == 1) ? 4 : 0));
@@ -532,7 +560,9 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
             {
                 i = 0;
                 if (!ok)
-                { i += 8; }
+                {
+                    i += 8;
+                }
                 b->skinblta(x, y, 0, 0, arm, 8, 2, i + ((s.carrow == 0) ? 4 : 0));
                 i++;
                 b->skinblta(x, y + s.height - ah, 0, 0, arm, 8, 2, i + ((s.carrow == 1) ? 4 : 0));
@@ -574,14 +604,20 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
         case MTC_DESKTOP:
 //	Desktop
         {
-            ((MTWinControl *) ctrl)->skinblt(0, 0, ctrl->width, ctrl->height, bkg);
+            ((MTWinControl*) ctrl)->skinblt(0, 0, ctrl->width, ctrl->height, bkg);
         };
             break;
         case MTC_USERLIST:
         case MTC_FILELISTBOX:
 //	List
         {
-            ((MTWinControl *) ctrl)->fillcolor(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, fnm.colors[SC_EDIT_BACKGROUND & 0xFFFF]);
+            ((MTWinControl*) ctrl)->fillcolor(
+                rect.left,
+                rect.top,
+                rect.right - rect.left,
+                rect.bottom - rect.top,
+                fnm.colors[SC_EDIT_BACKGROUND & 0xFFFF]
+            );
         };
             break;
         case MTC_LISTITEM:
@@ -589,7 +625,7 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
         {
             int l, color;
             MTPoint p;
-            MTListItem &li = *(MTListItem *) ctrl;
+            MTListItem& li = *(MTListItem*) ctrl;
 
             if (li.caption[0] == '|')
             {
@@ -605,13 +641,17 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                     b->setpen(fnm.colors[SC_CTRL_L & 0xFFFF]);
                     b->moveto(x, y + h);
                     b->lineto(x + li.width, y + h);
-                    b->gettextsize(&li.caption[1], -1, (MTPoint *) &r.right);
+                    b->gettextsize(&li.caption[1], -1, (MTPoint*) &r.right);
                     r.right += r.left;
                     r.bottom += r.top;
                     if (r.right > x + li.width - 2)
-                    { r.right = x + li.width - 2; }
+                    {
+                        r.right = x + li.width - 2;
+                    }
                     if (r.bottom > y + li.height)
-                    { r.bottom = y + li.height; }
+                    {
+                        r.bottom = y + li.height;
+                    }
                     b->fillex(r.left, r.top, r.right - r.left, r.bottom - r.top);
                     b->settextcolor(fnm.colors[SC_CTRL_S & 0xFFFF]);
                     b->setfont(hskfont[1]);
@@ -628,7 +668,9 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                         };
                     }
                     else
-                    { l = -1; }
+                    {
+                        l = -1;
+                    }
                     b->drawtext(&li.caption[1], l, r, DTXT_VCENTER);
                     if (l > 0)
                     {
@@ -644,10 +686,16 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
             else
             {
                 MTRect r = {x, y};
-                b->fill(x, y, li.width, li.height, (li.flags & MTCF_SELECTED) ?
-                                                   fnm.colors[SC_EDIT_SELECTION & 0xFFFF] :
-                                                   fnm.colors[SC_EDIT_BACKGROUND & 0xFFFF]);
-                if (((MTListBox *) li.parent)->viewflags & MTVF_IMAGES)
+                b->fill(
+                    x,
+                    y,
+                    li.width,
+                    li.height,
+                    (li.flags & MTCF_SELECTED) ?
+                    fnm.colors[SC_EDIT_SELECTION & 0xFFFF] :
+                    fnm.colors[SC_EDIT_BACKGROUND & 0xFFFF]
+                );
+                if (((MTListBox*) li.parent)->viewflags & MTVF_IMAGES)
                 {
                     sysimages.drawimage(li.imageindex, b, x + 2, y);
                     r.left += 18;
@@ -661,7 +709,9 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                     color = fnm.colors[SC_TEXT_FOCUSED & 0xFFFF];
                 }
                 else
-                { color = fnm.colors[SC_TEXT_NORMAL & 0xFFFF]; }
+                {
+                    color = fnm.colors[SC_TEXT_NORMAL & 0xFFFF];
+                }
                 if (b->open(0))
                 {
                     b->settextcolor(color);
@@ -679,7 +729,9 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                         };
                     }
                     else
-                    { l = -1; }
+                    {
+                        l = -1;
+                    }
                     b->drawtext(li.caption, l, r, DTXT_VCENTER);
                     if (l > 0)
                     {
@@ -700,8 +752,8 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
             int cbtn;
             int bx, by;
             MTRect tr;
-            MTTabControl &ctc = *(MTTabControl *) ctrl;
-            MTWNMetrics &cwnm = wnm[ctc.style];
+            MTTabControl& ctc = *(MTTabControl*) ctrl;
+            MTWNMetrics& cwnm = wnm[ctc.style];
 
             if (!(ctrl->flags & MTCF_DONTDRAW))
             {
@@ -721,41 +773,76 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                     cbtn = 0;
                     if (ctc.cstyle & MTWS_STAYONTOP)
                     {
-                        b->skinblta(bx, by, 0, 0, dbtns.a, dbtns.nx, dbtns.ny, 0 + ((ctc.btnd == cbtn) ?
-                                                                                    12 :
-                                                                                    ((cbtn == ctc.btno) ? 6 : 0)));
+                        b->skinblta(
+                            bx,
+                            by,
+                            0,
+                            0,
+                            dbtns.a,
+                            dbtns.nx,
+                            dbtns.ny,
+                            0 + ((ctc.btnd == cbtn) ? 12 : ((cbtn == ctc.btno) ? 6 : 0))
+                        );
                         bx += ctc.btnw;
                         cbtn++;
                     };
                     if (ctc.cstyle & MTWS_HELP)
                     {
-                        b->skinblta(bx, by, 0, 0, dbtns.a, dbtns.nx, dbtns.ny, 1 + ((ctc.btnd == cbtn) ?
-                                                                                    12 :
-                                                                                    ((cbtn == ctc.btno) ? 6 : 0)));
+                        b->skinblta(
+                            bx,
+                            by,
+                            0,
+                            0,
+                            dbtns.a,
+                            dbtns.nx,
+                            dbtns.ny,
+                            1 + ((ctc.btnd == cbtn) ? 12 : ((cbtn == ctc.btno) ? 6 : 0))
+                        );
                         bx += ctc.btnw;
                         cbtn++;
                     };
                     if (ctc.cstyle & MTWS_MINIMIZE)
                     {
-                        b->skinblta(bx, by, 0, 0, dbtns.a, dbtns.nx, dbtns.ny, 2 + ((ctc.btnd == cbtn) ?
-                                                                                    12 :
-                                                                                    ((cbtn == ctc.btno) ? 6 : 0)));
+                        b->skinblta(
+                            bx,
+                            by,
+                            0,
+                            0,
+                            dbtns.a,
+                            dbtns.nx,
+                            dbtns.ny,
+                            2 + ((ctc.btnd == cbtn) ? 12 : ((cbtn == ctc.btno) ? 6 : 0))
+                        );
                         bx += ctc.btnw;
                         cbtn++;
                     };
                     if (ctc.cstyle & MTWS_MAXIMIZE)
                     {
-                        b->skinblta(bx, by, 0, 0, dbtns.a, dbtns.nx, dbtns.ny, 3 + ((ctc.btnd == cbtn) ?
-                                                                                    12 :
-                                                                                    ((cbtn == ctc.btno) ? 6 : 0)));
+                        b->skinblta(
+                            bx,
+                            by,
+                            0,
+                            0,
+                            dbtns.a,
+                            dbtns.nx,
+                            dbtns.ny,
+                            3 + ((ctc.btnd == cbtn) ? 12 : ((cbtn == ctc.btno) ? 6 : 0))
+                        );
                         bx += ctc.btnw;
                         cbtn++;
                     };
                     if (ctc.cstyle & MTWS_CLOSE)
                     {
-                        b->skinblta(bx, by, 0, 0, dbtns.a, dbtns.nx, dbtns.ny, 5 + ((ctc.btnd == cbtn) ?
-                                                                                    12 :
-                                                                                    ((cbtn == ctc.btno) ? 6 : 0)));
+                        b->skinblta(
+                            bx,
+                            by,
+                            0,
+                            0,
+                            dbtns.a,
+                            dbtns.nx,
+                            dbtns.ny,
+                            5 + ((ctc.btnd == cbtn) ? 12 : ((cbtn == ctc.btno) ? 6 : 0))
+                        );
                         bx += ctc.btnw;
                         cbtn++;
                     };
@@ -766,13 +853,19 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
         case MTC_LISTBOX:
 //	List Box
         {
-            ((MTListBox *) ctrl)->fillcolor(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, fnm.colors[SC_EDIT_BACKGROUND & 0xFFFF]);
+            ((MTListBox*) ctrl)->fillcolor(
+                rect.left,
+                rect.top,
+                rect.right - rect.left,
+                rect.bottom - rect.top,
+                fnm.colors[SC_EDIT_BACKGROUND & 0xFFFF]
+            );
         };
             break;
         case MTC_MENUITEM:
 //	Menu Item
         {
-            MTMenuItem &mi = *(MTMenuItem *) ctrl;
+            MTMenuItem& mi = *(MTMenuItem*) ctrl;
             MTPoint size;
             int color;
 
@@ -790,13 +883,17 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                     b->setpen(fnm.colors[SC_CTRL_L & 0xFFFF]);
                     b->moveto(x, y + h);
                     b->lineto(x + mi.width, y + h);
-                    b->gettextsize(&mi.caption[1], -1, (MTPoint *) &r.right);
+                    b->gettextsize(&mi.caption[1], -1, (MTPoint*) &r.right);
                     r.right += r.left;
                     r.bottom += r.top;
                     if (r.right > x + mi.width - 2)
-                    { r.right = x + mi.width - 2; }
+                    {
+                        r.right = x + mi.width - 2;
+                    }
                     if (r.bottom > y + mi.height)
-                    { r.bottom = y + mi.height; }
+                    {
+                        r.bottom = y + mi.height;
+                    }
                     b->fillex(r.left, r.top, r.right - r.left, r.bottom - r.top);
                     b->settextcolor(fnm.colors[SC_TEXT_NORMAL & 0xFFFF]);
                     b->setfont(hskfont[1]);
@@ -807,10 +904,14 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
             else
             {
                 MTRect r = {x + 2, y, x + mi.width - 2, y + mi.height};
-                b->fill(x, y, mi.width, mi.height, (mi.flags & MTCF_OVER) ?
-                                                   fnm.colors[SC_EDIT_SELECTION & 0xFFFF] :
-                                                   fnm.colors[SC_BACKGROUND & 0xFFFF]);
-                if (((MTListBox *) mi.parent)->viewflags & MTVF_IMAGES)
+                b->fill(
+                    x,
+                    y,
+                    mi.width,
+                    mi.height,
+                    (mi.flags & MTCF_OVER) ? fnm.colors[SC_EDIT_SELECTION & 0xFFFF] : fnm.colors[SC_BACKGROUND & 0xFFFF]
+                );
+                if (((MTListBox*) mi.parent)->viewflags & MTVF_IMAGES)
                 {
                     sysimages.drawimage(mi.imageindex, b, x + 2, y);
                     r.left += 18;
@@ -820,7 +921,9 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                     color = fnm.colors[SC_EDIT_SELECTED & 0xFFFF];
                 }
                 else
-                { color = fnm.colors[SC_TEXT_NORMAL & 0xFFFF]; }
+                {
+                    color = fnm.colors[SC_TEXT_NORMAL & 0xFFFF];
+                }
                 if (b->open(0))
                 {
                     b->settextcolor(color);
@@ -845,16 +948,18 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
         case MTC_MENU:
 //	Menu
         {
-            ((MTMenu *) ctrl)->fillcolor(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, fnm.colors[SC_BACKGROUND & 0xFFFF]);
+            ((MTMenu*) ctrl)->fillcolor(
+                rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, fnm.colors[SC_BACKGROUND & 0xFFFF]
+            );
         };
             break;
         case MTC_WINDOW:
 //	Window
         {
-            MTWindow &w = *(MTWindow *) ctrl;
+            MTWindow& w = *(MTWindow*) ctrl;
             int tflags, bx, by, cbtn;
             int cstyle = w.style & 0xFF;
-            MTWNMetrics &cwnm = wnm[cstyle];
+            MTWNMetrics& cwnm = wnm[cstyle];
             bool clipped = true;
             MTRect cr = {0, 0, w.width, w.height};
             MTRect tr;
@@ -870,9 +975,13 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                 w.unclip();
             };
             if (ctrl->guiid != MTC_WINDOW)
-            { break; }
+            {
+                break;
+            }
             if (&rect)
-            { w.clip(rect); }
+            {
+                w.clip(rect);
+            }
             drawwindow(b, x, y, w.width, w.height, cstyle);
             tr.left = w.width - w.btnx;
             tr.top = -w.btny;
@@ -880,47 +989,47 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
             tr.bottom = -cwnm.btno.y;
             if ((!&rect) || (cliprect(tr, rect)))
             {
-                MTSQMetrics &btns = (cstyle == 7) ? mbtns : wbtns;
+                MTSQMetrics& btns = (cstyle == 7) ? mbtns : wbtns;
                 bx = x + w.width - w.btnx;
                 by = y - w.btny;
                 cbtn = 0;
                 if (w.style & MTWS_STAYONTOP)
                 {
-                    b->skinblta(bx, by, 0, 0, btns.a, btns.nx, btns.ny, 0 + ((w.btnd == cbtn) ?
-                                                                             12 :
-                                                                             ((cbtn == w.btno) ? 6 : 0)));
+                    b->skinblta(
+                        bx, by, 0, 0, btns.a, btns.nx, btns.ny, 0 + ((w.btnd == cbtn) ? 12 : ((cbtn == w.btno) ? 6 : 0))
+                    );
                     bx += w.btnw;
                     cbtn++;
                 };
                 if (w.style & MTWS_HELP)
                 {
-                    b->skinblta(bx, by, 0, 0, btns.a, btns.nx, btns.ny, 1 + ((w.btnd == cbtn) ?
-                                                                             12 :
-                                                                             ((cbtn == w.btno) ? 6 : 0)));
+                    b->skinblta(
+                        bx, by, 0, 0, btns.a, btns.nx, btns.ny, 1 + ((w.btnd == cbtn) ? 12 : ((cbtn == w.btno) ? 6 : 0))
+                    );
                     bx += w.btnw;
                     cbtn++;
                 };
                 if (w.style & MTWS_MINIMIZE)
                 {
-                    b->skinblta(bx, by, 0, 0, btns.a, btns.nx, btns.ny, 2 + ((w.btnd == cbtn) ?
-                                                                             12 :
-                                                                             ((cbtn == w.btno) ? 6 : 0)));
+                    b->skinblta(
+                        bx, by, 0, 0, btns.a, btns.nx, btns.ny, 2 + ((w.btnd == cbtn) ? 12 : ((cbtn == w.btno) ? 6 : 0))
+                    );
                     bx += w.btnw;
                     cbtn++;
                 };
                 if (w.style & MTWS_MAXIMIZE)
                 {
-                    b->skinblta(bx, by, 0, 0, btns.a, btns.nx, btns.ny, 4 + ((w.btnd == cbtn) ?
-                                                                             12 :
-                                                                             ((cbtn == w.btno) ? 6 : 0)));
+                    b->skinblta(
+                        bx, by, 0, 0, btns.a, btns.nx, btns.ny, 4 + ((w.btnd == cbtn) ? 12 : ((cbtn == w.btno) ? 6 : 0))
+                    );
                     bx += w.btnw;
                     cbtn++;
                 };
                 if (w.style & MTWS_CLOSE)
                 {
-                    b->skinblta(bx, by, 0, 0, btns.a, btns.nx, btns.ny, 5 + ((w.btnd == cbtn) ?
-                                                                             12 :
-                                                                             ((cbtn == w.btno) ? 6 : 0)));
+                    b->skinblta(
+                        bx, by, 0, 0, btns.a, btns.nx, btns.ny, 5 + ((w.btnd == cbtn) ? 12 : ((cbtn == w.btno) ? 6 : 0))
+                    );
                     bx += w.btnw;
                     cbtn++;
                 };
@@ -933,7 +1042,9 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                 tr.bottom = -cwnm.co.bottom;
                 if (w.imageindex >= 0)
                 {
-                    sysimages.drawimage(w.imageindex, b, x + tr.left, y + tr.top + (tr.bottom - tr.top - sysimages.ih) / 2);
+                    sysimages.drawimage(
+                        w.imageindex, b, x + tr.left, y + tr.top + (tr.bottom - tr.top - sysimages.ih) / 2
+                    );
                     tr.left += sysimages.iw + 2;
                 };
                 tflags = DTXT_VCENTER;
@@ -942,17 +1053,23 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                     tflags |= DTXT_CENTER;
                 }
                 else if (fnm.caption.flags & SF_RIGHT)
-                { tflags |= DTXT_RIGHT; }
+                {
+                    tflags |= DTXT_RIGHT;
+                }
                 w.open(0);
                 w.setfont(hskfont[0]);
-                w.settextcolor((w.flags & MTCF_FOCUSED) ?
-                               fnm.colors[SC_WINDOW_FOCUSED & 0xFFFF] :
-                               fnm.colors[SC_WINDOW_NORMAL & 0xFFFF]);
+                w.settextcolor(
+                    (w.flags & MTCF_FOCUSED) ?
+                    fnm.colors[SC_WINDOW_FOCUSED & 0xFFFF] :
+                    fnm.colors[SC_WINDOW_NORMAL & 0xFFFF]
+                );
                 w.drawtext(w.caption, -1, tr, tflags);
                 w.close(0);
             };
             if (&rect)
-            { w.unclip(); }
+            {
+                w.unclip();
+            }
         };
             break;
         case MTC_EDIT:
@@ -960,22 +1077,32 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
         case MTC_USERCOMBOBOX:
 // Edit Box / Combo Box
         {
-            MTEdit &e = *(MTEdit *) ctrl;
+            MTEdit& e = *(MTEdit*) ctrl;
             int color;
             int ml, th;
-            const char *mtext = e.text;
+            const char* mtext = e.text;
             MTRect r = {x + e.lblank + 4, y + 2, x + e.width - e.rblank - 4, y + e.height - 2};
 
-            b->fill(x + rect.left, y + rect.top, rect.right - rect.left, rect.bottom - rect.top, fnm.colors[SC_EDIT_BACKGROUND & 0xFFFF]);
+            b->fill(
+                x + rect.left,
+                y + rect.top,
+                rect.right - rect.left,
+                rect.bottom - rect.top,
+                fnm.colors[SC_EDIT_BACKGROUND & 0xFFFF]
+            );
             b->open(0);
             color = fnm.colors[SC_EDIT_NORMAL & 0xFFFF];
             if (e.flags & (MTCF_OVER | MTCF_FOCUSED))
-            { color = fnm.colors[SC_EDIT_FOCUSED & 0xFFFF]; }
+            {
+                color = fnm.colors[SC_EDIT_FOCUSED & 0xFFFF];
+            }
             b->settextcolor(color);
             b->setfont(hskfont[3]);
             ml = strlen(e.text);
             if (e.password)
-            { mtext = passtxt; }
+            {
+                mtext = passtxt;
+            }
             th = b->gettextheight();
             r.top = r.top + (r.bottom - r.top - th) / 2;
             r.bottom = r.top + th;
@@ -984,7 +1111,9 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                 int ss = e.mss;
                 int se = e.mse;
                 if (ss < e.offset)
-                { ss = e.offset; }
+                {
+                    ss = e.offset;
+                }
                 if (se > ss)
                 {
                     MTPoint tss, tse;
@@ -1003,12 +1132,16 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                     if (tss.x < e.width - e.rblank)
                     {
                         if (tse.x >= e.width - e.rblank)
-                        { tse.x = e.width - e.rblank - 1; }
+                        {
+                            tse.x = e.width - e.rblank - 1;
+                        }
                         b->setbrush(fnm.colors[SC_EDIT_SELECTION & 0xFFFF]);
                         b->fillex(x + 4 + tss.x, r.top, tse.x - tss.x, r.bottom - r.top);
                         r.left = x + 4 + tss.x;
                         if (flags & MTCF_FOCUSED)
-                        { b->settextcolor(fnm.colors[SC_EDIT_SELECTED & 0xFFFF]); }
+                        {
+                            b->settextcolor(fnm.colors[SC_EDIT_SELECTED & 0xFFFF]);
+                        }
                         b->drawtext(&mtext[ss], se - ss, r, 0);
                         if (tse.x < e.width - e.rblank - 1)
                         {
@@ -1045,7 +1178,7 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
             b->close(0);
             if (e.guiid != MTC_EDIT)
             {
-                MTComboBox &cb = *(MTComboBox *) ctrl;
+                MTComboBox& cb = *(MTComboBox*) ctrl;
                 int imageindex;
 
                 if (cb.lblank)
@@ -1060,9 +1193,16 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                 };
                 if (e.rblank)
                 {
-                    b->skinblta(x + e.width - 2 - cbbm.b.w / 2, y + e.height - 2 - cbbm.b.h, 0, 0, cbbm, 2, 1, (cb.mlb->flags & MTCF_HIDDEN) ?
-                                                                                                               0 :
-                                                                                                               1);
+                    b->skinblta(
+                        x + e.width - 2 - cbbm.b.w / 2,
+                        y + e.height - 2 - cbbm.b.h,
+                        0,
+                        0,
+                        cbbm,
+                        2,
+                        1,
+                        (cb.mlb->flags & MTCF_HIDDEN) ? 0 : 1
+                    );
                 };
             };
             drawframe(b, x, y, e.width, e.height);
@@ -1071,7 +1211,7 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
         case MTC_BUTTON:
 //	Button
         {
-            MTButton &bc = *(MTButton *) ctrl;
+            MTButton& bc = *(MTButton*) ctrl;
             int iw2, ih2;
             int bt, color, tflags;
             MTPoint size;
@@ -1097,27 +1237,37 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                 bt = 1;
             }
             else
-            { bt = 0; }
-            MTTabControl &ctb = *(MTTabControl *) bc.parent;
+            {
+                bt = 0;
+            }
+            MTTabControl& ctb = *(MTTabControl*) bc.parent;
             if ((&ctb) && (ctb.guiid == MTC_TABCONTROL))
             {
                 if (ctb.getpageid(ctb.page) == bc.tag)
-                { bt = 2; }
+                {
+                    bt = 2;
+                }
                 if ((ctb.parent) && (ctb.parent->guiid == MTC_DESKTOP))
                 {
                     drawbutton(b, x, y, bc.width, bc.height, &dtbtm[bt]);
                 }
                 else
-                { drawbutton(b, x, y, bc.width, bc.height, &tbtm[bt]); }
+                {
+                    drawbutton(b, x, y, bc.width, bc.height, &tbtm[bt]);
+                }
             }
             else
-            { drawbutton(b, x, y, bc.width, bc.height, &btm[bt]); }
+            {
+                drawbutton(b, x, y, bc.width, bc.height, &btm[bt]);
+            }
             if (bc.imageindex >= 0)
             {
                 iw2 = 0;
                 ih2 = (bc.height - sysimages.ih) / 2;
                 if (bc.caption[0] == 0)
-                { iw2 = (bc.width - sysimages.iw) / 2 - 8; }
+                {
+                    iw2 = (bc.width - sysimages.iw) / 2 - 8;
+                }
                 x += 8 + iw2;
                 y += ih2;
                 if (bc.flags & MTCF_DOWN)
@@ -1135,7 +1285,9 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                 {
                     color = fnm.colors[SC_TAB_NORMAL & 0xFFFF];
                     if ((bc.flags & (MTCF_OVER | MTCF_DOWN)) || (ctb.getpageid(ctb.page) == bc.tag) || (bc.flags & MTCF_FOCUSED))
-                    { color = fnm.colors[SC_TAB_FOCUSED & 0xFFFF]; }
+                    {
+                        color = fnm.colors[SC_TAB_FOCUSED & 0xFFFF];
+                    }
                 }
                 else
                 {
@@ -1145,14 +1297,18 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                         color = fnm.colors[SC_BUTTON_DISABLED & 0xFFFF];
                     }
                     else if ((bc.flags & (MTCF_OVER | MTCF_DOWN)) || ((bc.flags & MTCF_FOCUSED) && (flags)))
-                    { color = fnm.colors[SC_BUTTON_FOCUSED & 0xFFFF]; }
+                    {
+                        color = fnm.colors[SC_BUTTON_FOCUSED & 0xFFFF];
+                    }
                 };
                 if (fnm.button.flags & SF_CENTER)
                 {
                     tflags |= DTXT_CENTER;
                 }
                 else if (fnm.button.flags & SF_RIGHT)
-                { tflags |= DTXT_RIGHT; }
+                {
+                    tflags |= DTXT_RIGHT;
+                }
                 if (b->open(0))
                 {
                     b->setfont(hskfont[2]);
@@ -1177,11 +1333,11 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
         case MTC_CHECKBOX:
 //	Check box
         {
-            MTCheckBoxData &cbd = *(MTCheckBoxData *) ctrl->skindata;
-            MTCheckBox &cb = *(MTCheckBox *) ctrl;
+            MTCheckBoxData& cbd = *(MTCheckBoxData*) ctrl->skindata;
+            MTCheckBox& cb = *(MTCheckBox*) ctrl;
             int w, ident, o;
 
-            MTSkinPart &csp = (cb.radio) ? rbm : cbm;
+            MTSkinPart& csp = (cb.radio) ? rbm : cbm;
             ident = csp.b.w / 3 + 4;
             MTRect r = {x + ident, y, x + cb.width, y + cb.height};
             w = csp.b.w / 3;
@@ -1189,7 +1345,9 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
             {
                 b->skinblta(x, y + (cb.height - csp.b.h) / 2, w, csp.b.h, csp, 3, 1, cbd.fromstate);
                 o = (int) (((cbd.cstate - (float) cbd.fromstate) / (cb.state - cbd.fromstate)) * 255.0);
-                skinbmp[csp.bmpid]->blendblt(b, x, y + (cb.height - csp.b.h) / 2, csp.b.w / 3, csp.b.h, csp.b.x + cb.state * w, csp.b.y, o);
+                skinbmp[csp.bmpid]->blendblt(
+                    b, x, y + (cb.height - csp.b.h) / 2, csp.b.w / 3, csp.b.h, csp.b.x + cb.state * w, csp.b.y, o
+                );
             }
             else
             {
@@ -1197,9 +1355,11 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
             };
             if (b->open(0))
             {
-                b->settextcolor(((cb.flags & MTCF_OVER) || ((cb.flags & MTCF_FOCUSED) && (gi->getcursorphase() > 0))) ?
-                                fnm.colors[SC_TEXT_FOCUSED & 0xFFFF] :
-                                fnm.colors[SC_TEXT_NORMAL & 0xFFFF]);
+                b->settextcolor(
+                    ((cb.flags & MTCF_OVER) || ((cb.flags & MTCF_FOCUSED) && (gi->getcursorphase() > 0))) ?
+                    fnm.colors[SC_TEXT_FOCUSED & 0xFFFF] :
+                    fnm.colors[SC_TEXT_NORMAL & 0xFFFF]
+                );
                 b->setfont(hskfont[1]);
                 b->drawtext(cb.caption, -1, r, DTXT_VCENTER);
                 b->close(0);
@@ -1209,15 +1369,17 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
         case MTC_PROGRESS:
 //	Progress bar
         {
-            drawslider(b, x, y, ctrl->width, ctrl->height, 0, 0, ((MTProgress *) ctrl)->maxpos, ((MTProgress *) ctrl)->pos, false);
+            drawslider(
+                b, x, y, ctrl->width, ctrl->height, 0, 0, ((MTProgress*) ctrl)->maxpos, ((MTProgress*) ctrl)->pos, false
+            );
         };
             break;
         case MTC_SLIDER:
 //	Slider
         {
-            MTSlider &s = *(MTSlider *) ctrl;
+            MTSlider& s = *(MTSlider*) ctrl;
             int ox, oy, ow, oh;
-            MTSLMetrics *cm = getslider(s.type, s.orientation);
+            MTSLMetrics* cm = getslider(s.type, s.orientation);
 
             switch (cm->type)
             {
@@ -1240,13 +1402,24 @@ void MTSkin::drawcontrol(MTControl *ctrl, MTRect &rect, MTBitmap *b, int x, int 
                     oh = s.height;
                     break;
             };
-            drawslider(b, x + ox, y + oy, ow, oh, cm, s.minpos, s.maxpos, s.value, (s.flags & MTCF_OVER) || ((s.flags & MTCF_FOCUSED) && (gi->getcursorphase() > 0)));
+            drawslider(
+                b,
+                x + ox,
+                y + oy,
+                ow,
+                oh,
+                cm,
+                s.minpos,
+                s.maxpos,
+                s.value,
+                (s.flags & MTCF_OVER) || ((s.flags & MTCF_FOCUSED) && (gi->getcursorphase() > 0))
+            );
         };
             break;
     };
 }
 
-void MTSkin::drawcontrol(int guiid, int id, MTRect &rect, MTBitmap *b, int x, int y, int flags)
+void MTSkin::drawcontrol(int guiid, int id, MTRect& rect, MTBitmap* b, int x, int y, int flags)
 {
     switch (guiid)
     {
@@ -1270,35 +1443,35 @@ void MTSkin::drawcontrol(int guiid, int id, MTRect &rect, MTBitmap *b, int x, in
     };
 }
 
-void MTSkin::drawborder(MTWinControl *ctrl, MTRect &rect, MTBitmap *b, int x, int y)
+void MTSkin::drawborder(MTWinControl* ctrl, MTRect& rect, MTBitmap* b, int x, int y)
 {
     drawframe(b, x, y, ctrl->width + 4, ctrl->height + 4, (ctrl->flags & MTCF_RAISED) ? 1 : 0);
 }
 
-void MTSkin::drawmodalveil(MTWinControl *ctrl, MTRect &rect)
+void MTSkin::drawmodalveil(MTWinControl* ctrl, MTRect& rect)
 {
     ctrl->fillcolor(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, 0, 64);
 }
 
-void MTSkin::drawdragbkg(MTBitmap *b, MTRect &rect, int style)
+void MTSkin::drawdragbkg(MTBitmap* b, MTRect& rect, int style)
 {
     b->skinblt(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, wnm[style & 0xF].bkg);
 }
 
 void MTSkin::updatemetrics()
 {
-    MTSQMetrics &csq = fnm.pattfont;
+    MTSQMetrics& csq = fnm.pattfont;
 
     fontwidth = csq.a.b.w / csq.nx;
     fontheight = csq.a.b.h / csq.ny;
 }
 
-MTBitmap *MTSkin::getbitmap(int id)
+MTBitmap* MTSkin::getbitmap(int id)
 {
     return skinbmp[id];
 }
 
-MTSLMetrics *MTSkin::getslider(int type, int orientation)
+MTSLMetrics* MTSkin::getslider(int type, int orientation)
 {
     if (type == 1)
     {
@@ -1313,10 +1486,12 @@ MTSLMetrics *MTSkin::getslider(int type, int orientation)
         return &vum;
     }
     else
-    { return (orientation == 0) ? &hslm : &vslm; }
+    {
+        return (orientation == 0) ? &hslm : &vslm;
+    }
 }
 
-void MTSkin::getcontrolsize(int guiid, int id, int &width, int &height)
+void MTSkin::getcontrolsize(int guiid, int id, int& width, int& height)
 {
     switch (guiid)
     {
@@ -1373,7 +1548,9 @@ void MTSkin::getcontrolsize(int guiid, int id, int &width, int &height)
         case MTC_ITEMCOMBOBOX:
         case MTC_USERCOMBOBOX:
             if (id == 1)
-            { width = cbbm.b.w / 2; }
+            {
+                width = cbbm.b.w / 2;
+            }
             break;
         case MTC_PROGRESS:
             switch (prm.type)
@@ -1394,20 +1571,20 @@ void MTSkin::getcontrolsize(int guiid, int id, int &width, int &height)
     };
 }
 
-void MTSkin::getwindowborders(int style, MTRect *borders)
+void MTSkin::getwindowborders(int style, MTRect* borders)
 {
     *borders = br[style];
 }
 
-void MTSkin::getwindowoffsets(int style, MTRect *borders)
+void MTSkin::getwindowoffsets(int style, MTRect* borders)
 {
     *borders = wnm[style].co;
 }
 
-void MTSkin::getregions(MTControl *ctrl, void **opaque, void **transparent)
+void MTSkin::getregions(MTControl* ctrl, void** opaque, void** transparent)
 {
-    void *oprgn, *trrgn;
-    void *op;
+    void* oprgn, * trrgn;
+    void* op;
     int b;
     MTRect r = {0, 0, ctrl->width, ctrl->height};
 
@@ -1416,13 +1593,17 @@ void MTSkin::getregions(MTControl *ctrl, void **opaque, void **transparent)
     {
         r.right = r.bottom = 0;
         if (opaque)
-        { *opaque = oprgn; }
+        {
+            *opaque = oprgn;
+        }
         if (transparent)
-        { *transparent = recttorgn(r); }
+        {
+            *transparent = recttorgn(r);
+        }
         return;
     };
-    MTWindow &w = *(MTWindow *) ctrl;
-    MTWNMetrics &m = wnm[w.style & 0xFF];
+    MTWindow& w = *(MTWindow*) ctrl;
+    MTWNMetrics& m = wnm[w.style & 0xFF];
     r.left += w.br.left;
     r.top += w.br.top;
     r.right += w.br.right;
@@ -1527,24 +1708,30 @@ void MTSkin::getregions(MTControl *ctrl, void **opaque, void **transparent)
     };
     subtractrgn(trrgn, oprgn);
     if (opaque)
-    { *opaque = oprgn; }
+    {
+        *opaque = oprgn;
+    }
     if (transparent)
-    { *transparent = trrgn; }
+    {
+        *transparent = trrgn;
+    }
 }
 
 int MTSkin::getcolor(int id)
 {
     if (id < 0xFF000000)
-    { return id; }
+    {
+        return id;
+    }
     return fnm.colors[id - 0xFF000000];
 }
 
-void *MTSkin::getfont(int id)
+void* MTSkin::getfont(int id)
 {
     return hskfont[id];
 }
 
-bool MTSkin::gettextsize(MTControl *ctrl, const char *text, int length, MTPoint *size, int maxwidth)
+bool MTSkin::gettextsize(MTControl* ctrl, const char* text, int length, MTPoint* size, int maxwidth)
 {
     bool ok = false;
 
@@ -1555,7 +1742,9 @@ bool MTSkin::gettextsize(MTControl *ctrl, const char *text, int length, MTPoint 
             ctrl->parent->setfont(hskfont[2]);
         }
         else
-        { ctrl->parent->setfont(hskfont[1]); }
+        {
+            ctrl->parent->setfont(hskfont[1]);
+        }
         switch (ctrl->guiid)
         {
             case MTC_EDIT:
@@ -1567,7 +1756,9 @@ bool MTSkin::gettextsize(MTControl *ctrl, const char *text, int length, MTPoint 
                     ok = ctrl->parent->gettextsize(passtxt, length, size, maxwidth);
                 }
                 else
-                { ok = ctrl->parent->gettextsize(text, length, size, maxwidth); }
+                {
+                    ok = ctrl->parent->gettextsize(text, length, size, maxwidth);
+                }
             }
                 break;
             default:
@@ -1579,7 +1770,7 @@ bool MTSkin::gettextsize(MTControl *ctrl, const char *text, int length, MTPoint 
     return ok;
 }
 
-int MTSkin::gettextextent(MTControl *ctrl, const char *text, int length, int maxextent)
+int MTSkin::gettextextent(MTControl* ctrl, const char* text, int length, int maxextent)
 {
     int res = 0;
 
@@ -1590,7 +1781,9 @@ int MTSkin::gettextextent(MTControl *ctrl, const char *text, int length, int max
             ctrl->parent->setfont(hskfont[2]);
         }
         else
-        { ctrl->parent->setfont(hskfont[1]); }
+        {
+            ctrl->parent->setfont(hskfont[1]);
+        }
         switch (ctrl->guiid)
         {
             case MTC_EDIT:
@@ -1602,7 +1795,9 @@ int MTSkin::gettextextent(MTControl *ctrl, const char *text, int length, int max
                     res = ctrl->parent->gettextextent(passtxt, length, maxextent);
                 }
                 else
-                { res = ctrl->parent->gettextextent(text, length, maxextent); }
+                {
+                    res = ctrl->parent->gettextextent(text, length, maxextent);
+                }
             }
                 break;
             default:
@@ -1614,7 +1809,7 @@ int MTSkin::gettextextent(MTControl *ctrl, const char *text, int length, int max
     return res;
 }
 
-int MTSkin::gettextheight(MTControl *ctrl)
+int MTSkin::gettextheight(MTControl* ctrl)
 {
     int res = 0;
 
@@ -1625,14 +1820,16 @@ int MTSkin::gettextheight(MTControl *ctrl)
             ctrl->parent->setfont(hskfont[2]);
         }
         else
-        { ctrl->parent->setfont(hskfont[1]); }
+        {
+            ctrl->parent->setfont(hskfont[1]);
+        }
         res = ctrl->parent->gettextheight();
         ctrl->parent->close(0);
     };
     return res;
 }
 
-int MTSkin::getcharwidth(MTControl *ctrl, char c)
+int MTSkin::getcharwidth(MTControl* ctrl, char c)
 {
     int res = 0;
 
@@ -1643,14 +1840,16 @@ int MTSkin::getcharwidth(MTControl *ctrl, char c)
             ctrl->parent->setfont(hskfont[2]);
         }
         else
-        { ctrl->parent->setfont(hskfont[1]); }
+        {
+            ctrl->parent->setfont(hskfont[1]);
+        }
         res = ctrl->parent->getcharwidth(c);
         ctrl->parent->close(0);
     };
     return res;
 }
 
-void MTSkin::drawitem(MTUserList *list, int i, MTRect &rect, MTBitmap *b, const char *caption, int imageindex, int itemflags, bool editable)
+void MTSkin::drawitem(MTUserList* list, int i, MTRect& rect, MTBitmap* b, const char* caption, int imageindex, int itemflags, bool editable)
 {
     int mid, l, color;
     MTPoint p;
@@ -1672,13 +1871,17 @@ void MTSkin::drawitem(MTUserList *list, int i, MTRect &rect, MTBitmap *b, const 
             b->moveto(r.left, mid);
             b->lineto(r.right, mid);
             r.left += 18;
-            b->gettextsize(&caption[1], -1, (MTPoint *) &r.right);
+            b->gettextsize(&caption[1], -1, (MTPoint*) &r.right);
             r.right += r.left;
             r.bottom += r.top;
             if (r.right > rect.right - 2)
-            { r.right = rect.right - 2; }
+            {
+                r.right = rect.right - 2;
+            }
             if (r.bottom > rect.bottom)
-            { r.bottom = rect.bottom; }
+            {
+                r.bottom = rect.bottom;
+            }
             b->fillex(r.left, r.top, r.right - r.left, r.bottom - r.top);
             b->settextcolor(fnm.colors[SC_TEXT_NORMAL & 0xFFFF]);
             b->setfont(hskfont[1]);
@@ -1695,7 +1898,9 @@ void MTSkin::drawitem(MTUserList *list, int i, MTRect &rect, MTBitmap *b, const 
                 };
             }
             else
-            { l = -1; }
+            {
+                l = -1;
+            }
             b->drawtext(&caption[1], l, r, DTXT_VCENTER);
             if (l > 0)
             {
@@ -1710,9 +1915,13 @@ void MTSkin::drawitem(MTUserList *list, int i, MTRect &rect, MTBitmap *b, const 
     }
     else
     {
-        b->fill(r.left, r.top, r.right - r.left, r.bottom - r.top, (i == list->selected) ?
-                                                                   fnm.colors[SC_EDIT_SELECTION & 0xFFFF] :
-                                                                   fnm.colors[SC_EDIT_BACKGROUND & 0xFFFF]);
+        b->fill(
+            r.left,
+            r.top,
+            r.right - r.left,
+            r.bottom - r.top,
+            (i == list->selected) ? fnm.colors[SC_EDIT_SELECTION & 0xFFFF] : fnm.colors[SC_EDIT_BACKGROUND & 0xFFFF]
+        );
         if (list->viewflags & MTVF_IMAGES)
         {
             sysimages.drawimage(imageindex, b, r.left, r.top);
@@ -1727,7 +1936,9 @@ void MTSkin::drawitem(MTUserList *list, int i, MTRect &rect, MTBitmap *b, const 
             color = fnm.colors[SC_EDIT_SELECTED & 0xFFFF];
         }
         else
-        { color = fnm.colors[SC_TEXT_NORMAL & 0xFFFF]; }
+        {
+            color = fnm.colors[SC_TEXT_NORMAL & 0xFFFF];
+        }
         if (b->open(0))
         {
             b->settextcolor(color);
@@ -1745,7 +1956,9 @@ void MTSkin::drawitem(MTUserList *list, int i, MTRect &rect, MTBitmap *b, const 
                 };
             }
             else
-            { l = -1; }
+            {
+                l = -1;
+            }
             b->drawtext(caption, l, r, DTXT_VCENTER);
             if (l > 0)
             {
@@ -1760,18 +1973,18 @@ void MTSkin::drawitem(MTUserList *list, int i, MTRect &rect, MTBitmap *b, const 
     };
 }
 
-void MTSkin::drawchar(unsigned char c, MTBitmap *bmp, int &x, int y, int color)
+void MTSkin::drawchar(unsigned char c, MTBitmap* bmp, int& x, int y, int color)
 {
-    MTSQMetrics &csq = fnm.pattfont;
+    MTSQMetrics& csq = fnm.pattfont;
 
     bmp->skinblta(x, y, fontwidth, fontheight, csq.a, csq.nx, csq.ny, fontmap[c], color);
     x += fontwidth;
 }
 
-void MTSkin::drawtext(unsigned char *text, MTBitmap *bmp, int &x, int y, int color)
+void MTSkin::drawtext(unsigned char* text, MTBitmap* bmp, int& x, int y, int color)
 {
-    unsigned char *p = text;
-    MTSQMetrics &csq = fnm.pattfont;
+    unsigned char* p = text;
+    MTSQMetrics& csq = fnm.pattfont;
 
     while(*p)
     {
@@ -1781,11 +1994,11 @@ void MTSkin::drawtext(unsigned char *text, MTBitmap *bmp, int &x, int y, int col
     };
 }
 
-void MTSkin::drawdec(int val, bool zeroes, int n, MTBitmap *bmp, int &x, int y, int color)
+void MTSkin::drawdec(int val, bool zeroes, int n, MTBitmap* bmp, int& x, int y, int color)
 {
     int z, x2;
     char c;
-    MTSQMetrics &csq = fnm.pattfont;
+    MTSQMetrics& csq = fnm.pattfont;
 
     x += fontwidth * n;
     x2 = x - fontwidth;
@@ -1795,16 +2008,18 @@ void MTSkin::drawdec(int val, bool zeroes, int n, MTBitmap *bmp, int &x, int y, 
         val /= 10;
         bmp->skinblta(x2, y, fontwidth, fontheight, csq.a, csq.nx, csq.ny, fontmap[c + '0'], color);
         if ((!val) && (!zeroes))
-        { return; }
+        {
+            return;
+        }
         x2 -= fontwidth;
     };
 }
 
-void MTSkin::drawhex(int val, bool zeroes, int n, MTBitmap *bmp, int &x, int y, int color)
+void MTSkin::drawhex(int val, bool zeroes, int n, MTBitmap* bmp, int& x, int y, int color)
 {
     int z, x2;
     char c;
-    MTSQMetrics &csq = fnm.pattfont;
+    MTSQMetrics& csq = fnm.pattfont;
 
     x += fontwidth * n;
     x2 = x - fontwidth;
@@ -1817,21 +2032,25 @@ void MTSkin::drawhex(int val, bool zeroes, int n, MTBitmap *bmp, int &x, int y, 
             c += '0';
         }
         else
-        { c += 'A' - 10; }
+        {
+            c += 'A' - 10;
+        }
         bmp->skinblta(x2, y, fontwidth, fontheight, csq.a, csq.nx, csq.ny, fontmap[c], color);
         if ((!val) && (!zeroes))
-        { return; }
+        {
+            return;
+        }
         x2 -= fontwidth;
     };
 }
 
-void MTSkin::drawshadow(MTBitmap *bmp, int x, int y, int w, int h, int style)
+void MTSkin::drawshadow(MTBitmap* bmp, int x, int y, int w, int h, int style)
 {
     int b, cx, cy;
-    void *rgn, *op;
-    MTWNMetrics &m = wnm[style];
-    MTMask &cmask = *mask[style];
-    MTRect *cmr = mr[style];
+    void* rgn, * op;
+    MTWNMetrics& m = wnm[style];
+    MTMask& cmask = *mask[style];
+    MTRect* cmr = mr[style];
     MTRect r = {x, y, x + w, y + h};
 
     rgn = copyrgn(bmp->getclip());
@@ -1845,34 +2064,50 @@ void MTSkin::drawshadow(MTBitmap *bmp, int x, int y, int w, int h, int style)
     b = m.tl.b.w - m.tlo.x;
     cx = m.bl.b.w - m.blo.x;
     if (cx > b)
-    { b = cx; }
+    {
+        b = cx;
+    }
     cx = m.l.b.w - m.lo;
     if (cx > b)
-    { b = cx; }
+    {
+        b = cx;
+    }
     r.left = x - b;
     b = m.tl.b.h - m.tlo.y;
     cx = m.t.b.h - m.to;
     if (cx > b)
-    { cx = b; }
+    {
+        cx = b;
+    }
     cx = m.tr.b.h - m.tro.y;
     if (cx > b)
-    { cx = b; }
+    {
+        cx = b;
+    }
     r.top = y - b;
     b = -m.tro.x + m.tr.b.w + 20;
     cx = -m.bro.x + m.br.b.w + 20;
     if (cx > b)
-    { b = cx; }
+    {
+        b = cx;
+    }
     cx = -m.ro + m.r.b.w + 20;
     if (cx > b)
-    { b = cx; }
+    {
+        b = cx;
+    }
     r.right = x + w + b;
     b = -m.blo.y + m.bl.b.h + 20;
     cx = -m.bo + m.b.b.h + 20;
     if (cx > b)
-    { b = cx; }
+    {
+        b = cx;
+    }
     cx = -m.bro.y + m.br.b.h + 20;
     if (cx > b)
-    { b = cx; }
+    {
+        b = cx;
+    }
     r.bottom = y + h + b;
 //	bmp->openbits(r,&tmp,&b);
     // Top-left
@@ -1949,52 +2184,72 @@ void MTSkin::drawshadow(MTBitmap *bmp, int x, int y, int w, int h, int style)
 
 void MTSkin::calcbounds(int m)
 {
-    MTWNMetrics &cwnm = wnm[m];
+    MTWNMetrics& cwnm = wnm[m];
     int x;
 
     br[m].left = -cwnm.tl.b.w + cwnm.tlo.x;
     x = -cwnm.l.b.w + cwnm.lo;
     if (x < br[m].left)
-    { br[m].left = x; }
+    {
+        br[m].left = x;
+    }
     x = -cwnm.bl.b.w + cwnm.blo.x;
     if (x < br[m].left)
-    { br[m].left = x; }
+    {
+        br[m].left = x;
+    }
     br[m].top = -cwnm.tl.b.h + cwnm.tlo.y;
     x = -cwnm.t.b.h + cwnm.to;
     if (x < br[m].top)
-    { br[m].top = x; }
+    {
+        br[m].top = x;
+    }
     x = -cwnm.tr.b.h + cwnm.tro.y;
     if (x < br[m].top)
-    { br[m].top = x; }
+    {
+        br[m].top = x;
+    }
     br[m].right = cwnm.tr.b.w - cwnm.tro.x;
     x = cwnm.r.b.w - cwnm.ro;
     if (x > br[m].right)
-    { br[m].right = x; }
+    {
+        br[m].right = x;
+    }
     x = cwnm.br.b.w - cwnm.bro.x;
     if (x > br[m].right)
-    { br[m].right = x; }
+    {
+        br[m].right = x;
+    }
     br[m].bottom = cwnm.bl.b.h - cwnm.bro.y;
     x = cwnm.b.b.h - cwnm.bo;
     if (x > br[m].bottom)
-    { br[m].bottom = x; }
+    {
+        br[m].bottom = x;
+    }
     x = cwnm.br.b.h - cwnm.bro.y;
     if (x > br[m].bottom)
-    { br[m].bottom = x; }
+    {
+        br[m].bottom = x;
+    }
 }
 
-void MTSkin::drawwindow(MTBitmap *bmp, int x, int y, int w, int h, int style)
+void MTSkin::drawwindow(MTBitmap* bmp, int x, int y, int w, int h, int style)
 {
-    MTWNMetrics &m = wnm[style];
+    MTWNMetrics& m = wnm[style];
     int b;
 
     if ((guiprefs.shadows) && (mask[style]))
-    { drawshadow(bmp, x, y, w, h, style); }
+    {
+        drawshadow(bmp, x, y, w, h, style);
+    }
     // Top-left
     bmp->skinblt(x - m.tl.b.w + m.tlo.x, y - m.tl.b.h + m.tlo.y, 0, 0, m.tl);
     // Top
     b = w - m.tlo.x - m.tro.x;
     if (b)
-    { bmp->skinblt(x + m.tlo.x, y - m.t.b.h + m.to, b, 0, m.t); }
+    {
+        bmp->skinblt(x + m.tlo.x, y - m.t.b.h + m.to, b, 0, m.t);
+    }
     // Top-right
     bmp->skinblt(x + w - m.tro.x, y - m.tr.b.h + m.tro.y, 0, 0, m.tr);
     // Bottom-left
@@ -2002,35 +2257,52 @@ void MTSkin::drawwindow(MTBitmap *bmp, int x, int y, int w, int h, int style)
     // Bottom
     b = w - m.blo.x - m.bro.x;
     if (b)
-    { bmp->skinblt(x + m.blo.x, y + h - m.bo, b, 0, m.b); }
+    {
+        bmp->skinblt(x + m.blo.x, y + h - m.bo, b, 0, m.b);
+    }
     // Bottom-right
     bmp->skinblt(x + w - m.bro.x, y + h - m.bro.y, 0, 0, m.br);
     // Left
     b = h - m.tlo.y - m.blo.y;
     if (b)
-    { bmp->skinblt(x - m.l.b.w + m.lo, y + m.tlo.y, 0, b, m.l); }
+    {
+        bmp->skinblt(x - m.l.b.w + m.lo, y + m.tlo.y, 0, b, m.l);
+    }
     // Right
     b = h - m.tro.y - m.bro.y;
     if (b)
-    { bmp->skinblt(x + w - m.ro, y + m.tro.y, 0, b, m.r); }
+    {
+        bmp->skinblt(x + w - m.ro, y + m.tro.y, 0, b, m.r);
+    }
 }
 
-void MTSkin::drawinnerwindow(MTBitmap *bmp, int x, int y, int w, int h, int style)
+void MTSkin::drawinnerwindow(MTBitmap* bmp, int x, int y, int w, int h, int style)
 {
-    drawwindow(bmp, x - br[style].left, y - br[style].top, w + br[style].left - br[style].right, h + br[style].top - br[style].bottom, style);
+    drawwindow(
+        bmp,
+        x - br[style].left,
+        y - br[style].top,
+        w + br[style].left - br[style].right,
+        h + br[style].top - br[style].bottom,
+        style
+    );
 }
 
-void MTSkin::drawbutton(MTBitmap *bmp, int x, int y, int w, int h, MTBTMetrics *m)
+void MTSkin::drawbutton(MTBitmap* bmp, int x, int y, int w, int h, MTBTMetrics* m)
 {
     unsigned short ox1, oy1, ox2, oy2, bw, bh;
 
     ox1 = m->tl.b.w;
     if (m->l.b.w > ox1)
-    { ox1 = m->l.b.w; }
+    {
+        ox1 = m->l.b.w;
+    }
     oy1 = m->tl.b.h;
     ox2 = m->tr.b.w;
     if (m->r.b.w > ox2)
-    { ox2 = m->r.b.w; }
+    {
+        ox2 = m->r.b.w;
+    }
     oy2 = m->bl.b.h;
     if (m->t.mode == SKIN_FIXED)
     {
@@ -2090,16 +2362,20 @@ void MTSkin::drawbutton(MTBitmap *bmp, int x, int y, int w, int h, MTBTMetrics *
     };
     // Background
     if ((bw) && (bh))
-    { bmp->skinblt(x + ox1, y + oy1, bw, bh, m->bkg); }
+    {
+        bmp->skinblt(x + ox1, y + oy1, bw, bh, m->bkg);
+    }
 }
 
-void MTSkin::drawslider(MTBitmap *bmp, int x, int y, int w, int h, MTSLMetrics *m, int min, int max, int pos, bool focused)
+void MTSkin::drawslider(MTBitmap* bmp, int x, int y, int w, int h, MTSLMetrics* m, int min, int max, int pos, bool focused)
 {
     int o1, o2, b, cx, cy;
     double a;
 
     if (!m)
-    { m = &prm; }
+    {
+        m = &prm;
+    }
     switch (m->type)
     {
         case SKIN_BUTTON:
@@ -2144,7 +2420,9 @@ void MTSkin::drawslider(MTBitmap *bmp, int x, int y, int w, int h, MTSLMetrics *
                 o2 = m->b.pe.b.w;
                 b = ((pos - min) * w) / (max - min);
                 if (!b)
-                { break; }
+                {
+                    break;
+                }
                 if ((o1) && (o2))
                 {
                     if (b < o1 + o2 + 4)
@@ -2157,7 +2435,9 @@ void MTSkin::drawslider(MTBitmap *bmp, int x, int y, int w, int h, MTSLMetrics *
                 bmp->skinblt(x, y, o1, h, m->b.ps);
                 bmp->skinblt(x + b + o1, y, o2, h, m->b.pe);
                 if (b > 0)
-                { bmp->skinblt(x + o1, y, b, h, m->b.pm); }
+                {
+                    bmp->skinblt(x + o1, y, b, h, m->b.pm);
+                }
             }
             else
             {
@@ -2176,7 +2456,9 @@ void MTSkin::drawslider(MTBitmap *bmp, int x, int y, int w, int h, MTSLMetrics *
                 bmp->skinblt(x, y + h - o1, w, o1, m->b.ps);
                 bmp->skinblt(x, y + h - o1 - b - o2, w, o2, m->b.pe);
                 if (b)
-                { bmp->skinblt(x, y + h - o1 - b, w, b, m->b.pm); }
+                {
+                    bmp->skinblt(x, y + h - o1 - b, w, b, m->b.pm);
+                }
             };
             break;
         case SKIN_XPROGR:
@@ -2191,7 +2473,9 @@ void MTSkin::drawslider(MTBitmap *bmp, int x, int y, int w, int h, MTSLMetrics *
                 o2 = m->xb.pe.b.w;
                 b = ((pos - min) * w) / (max - min);
                 if (!b)
-                { break; }
+                {
+                    break;
+                }
                 if ((o1) && (o2))
                 {
                     if (b < o1 + o2 + 4)
@@ -2204,7 +2488,9 @@ void MTSkin::drawslider(MTBitmap *bmp, int x, int y, int w, int h, MTSLMetrics *
                 bmp->skinblt(x, y, o1, h, m->xb.ps);
                 bmp->skinblt(x + b + o1, y, o2, h, m->xb.pe);
                 if (b > 0)
-                { bmp->skinblt(x + o1, y, b, h, m->xb.pm); }
+                {
+                    bmp->skinblt(x + o1, y, b, h, m->xb.pm);
+                }
             }
             else
             {
@@ -2223,7 +2509,9 @@ void MTSkin::drawslider(MTBitmap *bmp, int x, int y, int w, int h, MTSLMetrics *
                 bmp->skinblt(x, y + h - o1, w, o1, m->xb.ps);
                 bmp->skinblt(x, y + h - o1 - b - o2, w, o2, m->xb.pe);
                 if (b > 0)
-                { bmp->skinblt(x, y + h - o1 - b, w, b, m->xb.pm); }
+                {
+                    bmp->skinblt(x, y + h - o1 - b, w, b, m->xb.pm);
+                }
             };
             break;
         case SKIN_ANIM:
@@ -2251,12 +2539,20 @@ void MTSkin::drawslider(MTBitmap *bmp, int x, int y, int w, int h, MTSLMetrics *
         case SKIN_VUMETER:
             bmp->skinblt(x, y, w, h, m->e.s);
             b = ((pos - min) * m->e.v.b.h) / (max - min);
-            skinbmp[m->e.v.bmpid]->blt(bmp, x + m->e.sa.left, y + h - m->e.sa.bottom - b, m->e.v.b.w, b, m->e.v.b.x, m->e.v.b.y + m->e.v.b.h - b);
+            skinbmp[m->e.v.bmpid]->blt(
+                bmp,
+                x + m->e.sa.left,
+                y + h - m->e.sa.bottom - b,
+                m->e.v.b.w,
+                b,
+                m->e.v.b.x,
+                m->e.v.b.y + m->e.v.b.h - b
+            );
             break;
     };
 }
 
-void MTSkin::drawframe(MTBitmap *bmp, int x, int y, int w, int h, int flags)
+void MTSkin::drawframe(MTBitmap* bmp, int x, int y, int w, int h, int flags)
 {
     if (flags == 0)
     {
@@ -2312,10 +2608,12 @@ void MTSkin::setshadows(bool enabled)
     for(x = 0; x < 8; x++)
     {
         if ((x == 5) || (x == 6) || (x == 7))
-        { continue; }
-        MTWNMetrics &m = wnm[x];
-        MTMask *cmask;
-        MTRect *cr = mr[x];
+        {
+            continue;
+        }
+        MTWNMetrics& m = wnm[x];
+        MTMask* cmask;
+        MTRect* cr = mr[x];
         ox1 = m.tl.b.w - m.tlo.x;
         oy1 = m.tl.b.h - m.tlo.y;
         ox2 = m.br.b.w - m.bro.x;
@@ -2323,11 +2621,15 @@ void MTSkin::setshadows(bool enabled)
         w = m.t.b.w * 4 + m.tlo.x + m.tro.x + ox1 + ox2;
         t = m.b.b.w * 4 + m.blo.x + m.bro.x + ox1 + ox2;
         if (t > w)
-        { w = t; }
+        {
+            w = t;
+        }
         h = m.l.b.h * 4 + m.tlo.y + m.blo.y + oy1 + oy2;
         t = m.r.b.h * 4 + m.tro.y + m.bro.y + oy1 + oy2;
         if (t > h)
-        { h = t; }
+        {
+            h = t;
+        }
         cmask = di->newmask(w + 32, h + 32);
         // Top-left
         cr[0].left = 16;
@@ -2407,15 +2709,15 @@ void MTSkin::delshadows()
 bool initSkin()
 {
     char defskin[512];
-    char *ext;
+    char* ext;
     int flags;
-    MTPreferences *prefs;
-    MTResources *res;
-    MTFile *f;
+    MTPreferences* prefs;
+    MTResources* res;
+    MTFile* f;
 
     ENTER("initSkin");
     skin = new MTSkin();
-    prefs = (MTPreferences *) mtinterface->getprefs();
+    prefs = (MTPreferences*) mtinterface->getprefs();
     if (prefs)
     {
         strcpy(defskin, prefs->syspath[SP_SKINS]);
@@ -2439,7 +2741,9 @@ bool initSkin()
             {
                 gi->loadskin(res);
                 if (skinres)
-                { si->resclose(skinres); }
+                {
+                    si->resclose(skinres);
+                }
                 skinres = res;
             };
             LEAVE();
