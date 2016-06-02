@@ -74,6 +74,8 @@ int MTConsole::reads(char *buffer,int maxsize)
 */
 int MTConsole::write(const void* buffer, int size)
 {
+    // Could be that MTConsole only inherits MTFile so that it can
+    // do I/O on a log file. Scary!
 #	ifdef _WIN32
     size = 0;
 #	else
@@ -133,6 +135,15 @@ MTFile* MTConsole::subclass(int start, int length, int access)
 
 int MTConsole::userinput(const char* input)
 {
+    /**
+     * VALID COMMANDS:
+     * open <module> (does nothing yet)
+     * load <module> (does nothing yet)
+     * exit
+     * quit
+     *
+     * Everything else results in the "Unknown command" error message.
+     */
     int x, y;
     bool ok = false;
     char cmd[64];
@@ -185,6 +196,9 @@ int MTConsole::userinput(const char* input)
             cmd[sizeof(cmd) - 1] = 0;
             strncpy(cmd, input, sizeof(cmd) - 1);
         };
+        // equivalent of the following 2 lines:
+        // logfile << "Unknown command " << cmd << "\n";
+        // with logfile being of type std::fstream
         sprintf(buf, "Unknown command %s!"NL, cmd);
         write(buf, strlen(buf));
     };

@@ -277,7 +277,7 @@ struct MTCPUState
 
 //---------------------------------------------------------------------------
 
-class MTLock
+class MTLock // A mutex lock
 {
 public:
     MTLock();
@@ -530,7 +530,7 @@ private:
 class MTArray
 {
 public:
-    int _is;    // an index counter to be used as iterator
+    int _is;    // item size, initialized with a sizeof() call
     int nitems; // size() or capacity(). Looking at "na" in the private section, it's probably the latter.
     union
     { // wat?

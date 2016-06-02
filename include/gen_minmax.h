@@ -1,7 +1,3 @@
-//
-// Created by ih3 on 2/10/16.
-//
-
 #ifndef MADTRACKER3_GEN_MINMAX_H
 #define MADTRACKER3_GEN_MINMAX_H
 

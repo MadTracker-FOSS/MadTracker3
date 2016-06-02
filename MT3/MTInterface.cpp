@@ -25,6 +25,7 @@
 #include "../MTGUI/MTGUITools.h"
 #include <MTXAPI/MTXInput.h>
 #include <MTXAPI/RES/MT3RES.h>
+#include <iostream>
 
 //---------------------------------------------------------------------------
 void MTCT designmode(MTShortcut*, MTControl*, MTUndo*);
@@ -172,6 +173,8 @@ void MTCT loadprogress(MTProcess* process, void* param, float p)
 
 void loadmodule(const char* filename)
 {
+    std::clog << "Now entering loadmodule(" << filename << ")" << std::endl;
+
     int x;
     char* file;
 
@@ -547,10 +550,10 @@ void MTSplashLogo::ondraw(MTRect& rect)
     int x = 0;
     int y = 0;
 
-    if (&rect)
-    {
+//    if (&rect) // <- always true
+//    {
         r = rect;
-    }
+//    }
     x = parent->left + (parent->width - logo->width) / 2;
     y = parent->top + (parent->height - logo->height) / 2;
     parent->parent->preparedraw(&b, x, y);

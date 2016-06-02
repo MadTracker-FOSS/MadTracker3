@@ -48,7 +48,8 @@ SET(MT3SRC
 	${MT3SRCDIR}/MTInterface.cpp
 	${MT3SRCDIR}/MTWC_Main.cpp
 	${MT3SRCDIR}/MTWC_Main2.cpp
-    include/gen_minmax.h)
+    include/gen_minmax.h
+	)
 SET(MTAUDIOSRC
 	${MTAUDIOSRCDIR}/MTAudio.cpp
 	${MTAUDIOSRCDIR}/MTAudio1.cpp

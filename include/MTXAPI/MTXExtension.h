@@ -110,7 +110,7 @@
 //	Data types
 //
 
-// Commented out by irrenhaus3, replaced down below with standard library typedefs.
+//NOTE Commented out by irrenhaus3, replaced down below with standard library typedefs.
 
 //#if defined(_WIN32)
 //#	if defined(__CYGWIN__)
@@ -230,6 +230,8 @@ typedef float sample;
 
 #define MTX_INITIALIZED    1
 
+//TODO name the enums below, and disallow their usage as integer types.
+
 // SP stands for system path! Also, I really really hope no parts of this code
 // rely on the actual integer values of this enum.
 // Update: Of COURSE they do. It's used for array indexing. Nice.
@@ -261,6 +263,7 @@ struct MTPreferences
     char options[16];   // <- this is just cruel. There don't even seem to be usages.
     char* path[8];      // <- 8 paths. For whatever.
     char* syspath[8];   // <- 8 syspaths. And yes, there is an iteration over these.
+    // the last two are trivially replaceable by std::map<[ENUM VALUE],std::string>.
 };
 
 // Some apparently meaningless key constants that will come back and haunt
@@ -319,7 +322,8 @@ const MTUserID MTUID_MTSTAFF = {0, 0x00000004};
 // TODO put into own header?
 struct MTColor
 {
-    mt_uint8 R, G, B, A;
+    using u8 = mt_uint8;
+    u8 R, G, B, A;
 
     constexpr mt_uint32 getRGBA() const
     {
@@ -335,10 +339,10 @@ struct MTColor
     }
 
     constexpr MTColor(mt_uint32 rgba):
-        R((rgba & 0xFF000000) >> 24),
-        G((rgba & 0x00FF0000) >> 16),
-        B((rgba & 0x0000FF00) >> 8),
-        A((rgba & 0x000000FF) >> 0)
+        R(u8((rgba & 0xFF000000) >> 24)),
+        G(u8((rgba & 0x00FF0000) >> 16)),
+        B(u8((rgba & 0x0000FF00) >> 8)),
+        A(u8((rgba & 0x000000FF) >> 0))
     {
     }
 
@@ -350,21 +354,23 @@ struct MTColor
     }
 
     // operators + and * operate via saturation arithmetic.
+    // they temporarily cast their internal values to 32bit int
+    // to avoid overflow bugs
     inline MTColor& operator+=(MTColor const& other)
     {
-        R = util::min(255u, (mt_uint32) (R) + other.R);
-        B = util::min(255u, (mt_uint32) (G) + other.B);
-        G = util::min(255u, (mt_uint32) (B) + other.G);
-        A = util::min(255u, (mt_uint32) (A) + other.A);
+        R = (u8) util::min(255u, (mt_uint32) (R) + other.R);
+        B = (u8) util::min(255u, (mt_uint32) (G) + other.B);
+        G = (u8) util::min(255u, (mt_uint32) (B) + other.G);
+        A = (u8) util::min(255u, (mt_uint32) (A) + other.A);
         return *this;
     }
 
     inline MTColor& operator*=(MTColor const& other)
     {
-        R = (mt_uint32) (R) * other.R / 0xff;
-        B = (mt_uint32) (B) * other.B / 0xff;
-        G = (mt_uint32) (G) * other.G / 0xff;
-        A = (mt_uint32) (A) * other.A / 0xff;
+        R = (u8) ((mt_uint32) (R) * other.R / 0xff);
+        B = (u8) ((mt_uint32) (B) * other.B / 0xff);
+        G = (u8) ((mt_uint32) (G) * other.G / 0xff);
+        A = (u8) ((mt_uint32) (A) * other.A / 0xff);
         return *this;
     }
 };

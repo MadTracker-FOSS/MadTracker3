@@ -301,6 +301,14 @@ void MTCT ConfDelete(void* item, void* param)
 }
 
 //---------------------------------------------------------------------------
+
+/**
+ * Some thoughts about this next function (added here AFTER the function-internal comments):
+ * It relies a lot on char*s read from POSIX-compliant environment functions. Most of the
+ * prefs.syspath stuff can be easily replaced by std::map<[enum],std::string>. malloc should disappear
+ * ASAP since its entire usage here is basically re-implementing std::string.
+ */
+
 bool init()
 //
 //	Main initialization
@@ -394,16 +402,17 @@ bool init()
     //Which means it fails as soon as you use gdb or a detatched shell (->your IDE), and/or if mt3 was not the command that
     //invoked the shell in which the actual program runs.
 
-    int l;
     if (!b1)
     {
         binpath = argv0; //FIXME This line throws linker errors when argv0 is un-globaled in MT3.cpp
     }
     else if (!strstr(argv0, b1)) //FIXME This line throws linker errors when argv0 is un-globaled in MT3.cpp
     {
-        binpath = argv0;
-    } //FIXME This line throws linker errors when argv0 is un-globaled in MT3.cpp
-    l = readlink(binpath, applpath, sizeof(applpath) - 1);
+        binpath = argv0; //FIXME This line throws linker errors when argv0 is un-globaled in MT3.cpp
+    }
+
+    // ssize_t is a signed type. No trouble here. It's NOT int, though.
+    ssize_t l = readlink(binpath, applpath, sizeof(applpath) - 1);
     if (l == -1)
     {
         strcpy(applpath, binpath);
@@ -513,7 +522,7 @@ void uninit()
     uninitConsole();
     si->stop();
     stopExtensions();
-    MTTRY // Most worthless macro ever. It's just "try{"
+    MTTRY // Most worthless macro ever. It's just "try{" except for dinosaur systems
         if (output)
         {
             output->lock->lock();
@@ -527,7 +536,7 @@ void uninit()
             };
         };
     MTCATCH // and this is "} catch(...) {"
-    MTEND // and this is "}". Why anyone would rather type MTEND than } is beyond me.
+    MTEND // and this is "}".
     // Update: maybe not THAT worthless? They do different stuff on windows, because windows seems to really suck at try/catch.
     if (output)
     {

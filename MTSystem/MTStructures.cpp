@@ -86,11 +86,15 @@ MTArray::~MTArray()
 //TODO find out what this code actually does.
 int MTArray::additem(int at, void* item)
 {
-    int cat;
+//    int cat;
 //	int x;  // Moved to proper scopes.
 
-    cat = nitems;
+    int cat = nitems;
     nitems++;
+    // apparently we need a distinction here between item size 0 and non-0.
+    // If it's 0, the array stores pointers, otherwise it stores values.
+    // This ties in to the union struct with a void* and a void**.
+    // --> use std::vector to get rid of all this.
     if (_is == 0)
     {
         if (nitems > na)

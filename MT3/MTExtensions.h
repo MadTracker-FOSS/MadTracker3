@@ -8,6 +8,7 @@
 
 //---------------------------------------------------------------------------
 static const int mt3type = FOURCC('X', 'M', 'T', '3');
+// the first 4 bytes in any MT3 file.
 
 #define MAX_EXTENSIONS 256
 

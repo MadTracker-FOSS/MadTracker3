@@ -713,7 +713,7 @@ int MT3Interface::processinput(const char* input)
      * If the first word is "open" or "load", load module from filename given by 2nd word.
      * If the first word is "exit" or "quit", terminate the program.
      * If either of the two applied, return 1.
-     * Otherwise, do nothing and return 0.
+     * Otherwise, do nothing and return 0. (This triggers "Unknown command XXX!" in MTConsole)
      */
 
     /**
@@ -762,6 +762,7 @@ int MT3Interface::processinput(const char* input)
     }
     else if ((stricmp(command, "exit") == 0) || (stricmp(command, "quit") == 0))
     {
+        std::clog << "Now exiting..." << std::endl;
 #ifdef _WIN32
         PostQuitMessage(0);
 #else
