@@ -672,9 +672,12 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
     bool moved, resized;
     bool bdesign = design;
     void* flushrgn, * drawrgn;
-    MTRect or = {
+    MTRect orect = {
         0, 0, 0, 0
-    }; // "or" is a reserved keyword. I'm surprised that this even compiles. // UPDATE: Ah. It doesn't. I was compiling madtracker without GUI.
+    };
+    // "or" is a reserved keyword. I'm surprised that this even compiles. // UPDATE: Ah. It doesn't. I was compiling madtracker without GUI.
+    // Renamed it to orect.
+
     MTRect dr, or2 = {0, 0, 0, 0};
 
     FENTER4("MTWinControl::setbounds(%d,%d,%d,%d)", l, t, w, h);
@@ -817,7 +820,7 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
         LEAVE();
         return;
     };
-    flushrgn = recttorgn( or);
+    flushrgn = recttorgn( orect);
     drawrgn = copyrgn(flushrgn);
     getrect(or2, 0);
     if (parent)
@@ -828,18 +831,18 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
     flags |= MTCF_DONTFLUSH;
     if ((moved) || (resized))
     {
-        or.left = left;
-        or.top = top;
-        if (w < width) or.right = left + w;
-        else or.right = left + width;
-        if (h < height) or.bottom = top + h;
-        else or.bottom = top + height;
+        orect.left = left;
+        orect.top = top;
+        if (w < width) orect.right = left + w;
+        else orect.right = left + width;
+        if (h < height) orect.bottom = top + h;
+        else orect.bottom = top + height;
         if (flags & MTCF_BORDER)
         {
-            or.left -= 2;
-            or.top -= 2;
-            or.right += 2;
-            or.bottom += 2;
+            orect.left -= 2;
+            orect.top -= 2;
+            orect.right += 2;
+            orect.bottom += 2;
         };
         left = l;
         top = t;
@@ -865,11 +868,11 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                 void* brdrgn;                      // Borders region
                 void* bltrgn;                      // Source client area being moved
                 void* cdrawrgn;                    // Area to be redrawn
-                void* corgn = recttorgn( or);       // Source client area
+                void* corgn = recttorgn( orect);       // Source client area
                 void* cdrgn = recttorgn(dr);       // Destination client area
                 void* drgn;                        // Destination area
-                cl = dr.left - or.left;
-                ct = dr.top - or.top;
+                cl = dr.left - orect.left;
+                ct = dr.top - orect.top;
                 cliprgn = getvisiblergn(false);
                 brdrgn = getvisiblergn(true);
                 subtractrgn(brdrgn, cliprgn);
@@ -962,14 +965,14 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
         {
             if (((flags & MTCF_CANTDRAW) == 0) && (parent) && ((w > ow) || (h > oh)))
             {
-                or.left = or.top = 0;
-                or.right = w;
-                or.bottom = h;
-                dr = or;
+                orect.left = orect.top = 0;
+                orect.right = w;
+                orect.bottom = h;
+                dr = orect;
                 dr.right = ow;
                 dr.bottom = oh;
                 void* clrgn = getvisiblergn(false);
-                void* orgn = recttorgn( or);
+                void* orgn = recttorgn( orect);
                 void* drgn = recttorgn(dr);
                 subtractrgn(orgn, drgn);
                 offsetrgn(clrgn, left, top);
@@ -1024,8 +1027,8 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                     ct = cctrl.top;
                     cw = cctrl.width;
                     ch = cctrl.height;
-                    cctrl.getrect( or , 0);
-                    clrgn = recttorgn( or);
+                    cctrl.getrect( orect , 0);
+                    clrgn = recttorgn( orect);
                     offsetrgn(clrgn, box, boy);
                     addrgn(drawrgn, clrgn);
                     addrgn(flushrgn, clrgn);
@@ -1047,8 +1050,8 @@ void MTWinControl::setbounds(int l, int t, int w, int h)
                         cw += w - ow;
                     }
                     cctrl.setbounds(cl, ct, cw, ch);
-                    cctrl.getrect( or , 0);
-                    clrgn = recttorgn( or);
+                    cctrl.getrect( orect , 0);
+                    clrgn = recttorgn( orect);
                     offsetrgn(clrgn, box, boy);
                     addrgn(drawrgn, clrgn);
                     addrgn(flushrgn, clrgn);
@@ -1086,8 +1089,8 @@ if (guiid==MTC_WINDOW){
         parent->flags = pf;
         if (!isemptyrgn(flushrgn))
         {
-            rgntorect(flushrgn, or);
-            parent->flush( or);
+            rgntorect(flushrgn, orect);
+            parent->flush( orect);
         };
     };
     deletergn(drawrgn);

@@ -15,6 +15,11 @@
 //---------------------------------------------------------------------------
 #include <MTXAPI/config/MT3Config.h>
 //---------------------------------------------------------------------------
+
+//#define MTSYSTEM_EXPORTS //un-comment to debug. The symbol only appears in this header and its source.
+// Fair warning that I have no idea where else the code depending on this symbol is used, so
+// a whole lot may break horribly.
+
 #define MTS_WINNT    0x00001
 #define MTS_MMX      0x00002
 #define MTS_SSE      0x00004

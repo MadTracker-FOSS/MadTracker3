@@ -208,6 +208,13 @@ class MTTabControl;
 #include "MTXWrapper.h"
 
 //---------------------------------------------------------------------------
+
+/*
+ * If you hear a faint cracking noise right now - that's me, grinding my teeth.
+ * This class tries to be a bazillion things at once and act as a common interface
+ * to a bunch of similar functionality.
+ * See also: Polymorphism, Inheritance, For The Love Of $%#@! Write C++ And Not C.
+ */
 struct MTCMessage
 {
     int msg;
@@ -307,7 +314,7 @@ protected:
 
     int cborder;
     int mox, moy, mow, moh;
-    bool moving, sizing, triggered;
+    bool moving, sizing, triggered; // *TRIGGERED*
 };
 
 typedef bool (MTCT* MTCMessageProc)(MTWinControl* window, MTCMessage& msg);
