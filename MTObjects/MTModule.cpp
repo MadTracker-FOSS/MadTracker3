@@ -1807,7 +1807,7 @@ void MTModule::updaterouting()
                         buffers->push(buffer);
                         A(tmpbuf, TmpBuf)[e.id]->buffer[pin->s] = buffer;
                         ri.i = RI_CLEARBUFFER;
-                        ri.level = 65533;
+                        ri.level = 65533; //TODO magic number
 #						ifdef MTVERSION_PROFESSIONAL
                         ri.cpu = ccpu;
                         if ((smpsupport) && (++ccpu==nthreads)) ccpu = 0;

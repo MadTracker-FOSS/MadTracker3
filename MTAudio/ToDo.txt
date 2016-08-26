@@ -6,6 +6,7 @@ Problems
 
 How?
 ----
+Fast Fourier Transformation of the sampled / mixed data!
 
 
 ToDo

@@ -67,11 +67,11 @@ public:
 
     void MTCT notify(MTObject* source, int message, int param1, void* param2);
 
+    //TODO should these two be rescoped as EffectInstance::EffectInstance(Effect const&)?
     EffectInstance* MTCT createinstance(int noutputs, sample** outputs, int ninputs, sample** inputs, InstrumentInstance* caller = 0);
-
     void MTCT deleteinstance(EffectInstance* i);
 
-    int MTCT getnumparams(int cat);
+    int MTCT getnumparams(int cat); //NOTE This is NOT an override of Effect::getnumparams. Dunno if it's supposed to be one either.
 
     const char* MTCT getparamname(int cat, int id);
 

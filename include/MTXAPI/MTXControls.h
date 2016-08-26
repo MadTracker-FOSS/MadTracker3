@@ -213,7 +213,8 @@ class MTTabControl;
  * If you hear a faint cracking noise right now - that's me, grinding my teeth.
  * This class tries to be a bazillion things at once and act as a common interface
  * to a bunch of similar functionality.
- * See also: Polymorphism, Inheritance, For The Love Of $%#@! Write C++ And Not C.
+ *
+ * From the first Ctrl+F over the codebase, it seems to be a command-pattern / event thing.
  */
 struct MTCMessage
 {

@@ -70,12 +70,21 @@
 #	define NL "\n"
 #endif
 
-#ifdef MTVERSION_COMMERCIAL
-#	define MTVERSION_PROFESSIONAL
-#endif
-#ifdef MTVERSION_PROFESSIONAL
-#	define MTVERSION_BASIC
-#endif
+
+//TODO get rid of basic/pro version logic depending on these next macros
+
+//First trademark ih3 workaround: Just #define the pro version macros to enable all features.
+#define MTVERSION_BASIC
+#define MTVERSION_COMMERCIAL
+#define MTVERSION_PROFESSIONAL
+
+//Original code:
+//#ifdef MTVERSION_COMMERCIAL
+//#	define MTVERSION_PROFESSIONAL
+//#endif
+//#ifdef MTVERSION_PROFESSIONAL
+//#	define MTVERSION_BASIC
+//#endif
 
 //
 //	Uncomment the following line if you compile under a big endian processor
@@ -441,7 +450,9 @@ public:
     };
 };
 
-// Are you shitting me?
+// Why does this have a "number of interfaces" member and then an array-to-pointer of size 1?
+// Is the MTXInterface* an array in itself? If so, does ninterfaces denote that array's size?
+// And why even have a size-1 array at all? Was it supposed to be extended sometime?
 struct MTXInterfaces
 {
     int ninterfaces;
@@ -540,7 +551,6 @@ typedef MTXInterfaces* MTCT MTXMainCall(MTInterface* mti);
 //TODO These may all become unneccessary as soon as the assembly stuff is gone.
 // There may be some I/O on binary files though that depends on it.
 // We'll have to see.
-
 #ifdef FASTCALL
 #error FASTCALL previously defined?
 #endif
@@ -571,6 +581,15 @@ inline long FASTCALL swap_dword(long a)
     return (a >> 24) | ((a & 0xFF0000) >> 8) | ((a & 0xFF00) << 8) | ((a & 0xFF) << 24);
 }
 
+// TODO this next function appears only in a really awful windows-only context. Possible to get rid of it?
+// I fear though that this is not just a standard typecast.
+/*
+ * What it does:
+ * Creates a value of type double, set to (2^32*HI)+LO, where HI is the first 8*sizeof(int) bits of int64,
+ * and LO the last 8*sizeof(int) bits - hoping that 8*sizeof(int) is 32, not 64, otherwise it produces garbage.
+ * Then writes the value of that double to the object behind double* d.
+ * Also, int64 is a void*, so not even guaranteed to be 8*sizeof(int)*2 - OR - 64 bits in size.
+ */
 inline void FASTCALL int64todouble(void* int64, double* d)
 {
     *d = ((double) (*(int*) int64)) * 4294967296.0 + (double) (*(((int*) int64) + 1));

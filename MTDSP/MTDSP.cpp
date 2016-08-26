@@ -60,6 +60,13 @@ bool MTDSPInterface::init()
     ENTER("MTDSPInterface::init");
     LOGD("%s - [DSP] Initializing..."
              NL);
+
+    /*
+     * Lots of linker errors here; these symbols come from MTBufferASM.h but are not defined
+     * anywhere - that's because they are functions implemented in the MTBuffer.asm assembly code.
+     * I guess mtdsp is supposed to link against the library created by the assembly.
+     * TODO: Replace the assembly with C/C++ code
+     */
     emptybuffer = a_emptybuffer;
     replacebuffer = a_replacebuffer;
     replacebuffermul = a_replacebuffermul;

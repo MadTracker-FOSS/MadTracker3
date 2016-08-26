@@ -321,7 +321,7 @@ bool init()
 
     // We start off with using enum constants as array indices. Yikes!
     //TODO Don't. Use std::map or sth.
-    prefs.syspath[SP_ROOT] = (char*) malloc(512);
+    prefs.syspath[SP_ROOT] = (char*) malloc(512);   //TODO find out where the magic 512 comes from and why it's here
     prefs.syspath[SP_USER] = (char*) malloc(512);
     prefs.syspath[SP_CONFIG] = (char*) malloc(512);
     prefs.syspath[SP_USERCONFIG] = (char*) malloc(512);
@@ -374,9 +374,11 @@ bool init()
     strcpy(e,"MadTracker/");
 #	else
 
-    // So that's why they're global? Are you shitting me?
-    // Update: There is no reason to keep this the way it is, especially seeing how IDEs have enormeous problems
+    // So that's why cmdline and argv0 are global.
+    // There is no reason to keep this the way it is, especially seeing how some IDEs have enormeous problems
     // tracking symbol usage through "extern". This needs refactoring, badly.
+    // argv0 is used ONLY in MT3.cpp and MTData.cpp (this file)
+    // Same for cmdline.
     extern const char* argv0;
     extern char* cmdline;
 
@@ -412,6 +414,7 @@ bool init()
     }
 
     // ssize_t is a signed type. No trouble here. It's NOT int, though.
+    // This is all unistd.h POSIX stuff
     ssize_t l = readlink(binpath, applpath, sizeof(applpath) - 1);
     if (l == -1)
     {
@@ -537,7 +540,8 @@ void uninit()
         };
     MTCATCH // and this is "} catch(...) {"
     MTEND // and this is "}".
-    // Update: maybe not THAT worthless? They do different stuff on windows, because windows seems to really suck at try/catch.
+    // Update: maybe not THAT worthless?
+    // The macros actually do different stuff on windows, because the winapi seems to really suck at try/catch.
     if (output)
     {
         output->lock->unlock();

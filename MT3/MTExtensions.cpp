@@ -720,8 +720,7 @@ int MT3Interface::processinput(const char* input)
      * POSSIBLE REFACTOR:
      * void MTInterface::processinput(std::string const& input)
      * {
-     *      // using posai-StringUtils or an equivalent string utility lib
-     *      // see https://github.com/xenonbirds/posai-StringUtils
+     *      // using StringUtils or an equivalent string utility lib
      *
      *      auto words = str::split(input," ");
      *      if (!words.empty())

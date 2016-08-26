@@ -10,6 +10,14 @@
 //	$Id: MTKernel.h 100 2005-11-30 20:19:39Z Yannick $
 //
 //---------------------------------------------------------------------------
+
+/*
+ * A whole bunch of lowlevel routines, mainly related to threading
+ * and process creation. Unfortunately it's pretty hard to figure
+ * out what's going on in this code.
+ * But my best guess is that most of it can be easily replaced with C++11
+ * threading library and thread_local state.
+ */
 #ifndef MTKERNEL_INCLUDED
 #define MTKERNEL_INCLUDED
 //---------------------------------------------------------------------------

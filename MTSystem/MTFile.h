@@ -47,8 +47,21 @@ extern "C" {
 void initFiles();
 void uninitFiles();
 //---------------------------------------------------------------------------
+
+/**
+ * Opens a file for r/w and returns a handle to it.
+ * @param url File location. Hooks support HTTP, local and memory files
+ * @param flags One or several of the MTF constants defined above, bit-OR'd together
+ * @return A valid MTFile pointer if the file was opened successfully, otherwise a null pointer.
+ */
 MTFile* MTCT mtfileopen(const char* url, int flags);
+
+/**
+ * Closes a file handle AND "delete"s the pointer (it is "new"ed via a file hook in mtfileopen)
+ * @param file File handle pointer; allowed to be null.
+ */
 void MTCT mtfileclose(MTFile* file);
+
 MTFolder* MTCT mtfolderopen(char* url);
 void MTCT mtfolderclose(MTFolder* folder);
 bool MTCT mtfileexists(char* url);

@@ -108,6 +108,10 @@ bool MTCT a_floattofixed(double f, int& i, unsigned int& d)
 //---------------------------------------------------------------------------
 void MTCT a_changesign(char* buffer, int count)
 {
+    /*
+     * TODO There are syntax errors in the assembly.
+     * Be very afraid.
+     */
 #	ifndef __GNUC__
     _asm{
         push	esi

@@ -26,10 +26,10 @@
 #ifndef _WIN32
 struct _mutex_cond
 {
-    pthread_mutex_t i_mutex;
-    pthread_cond_t i_cv;
+    pthread_mutex_t i_mutex;    // POSIX mutex lock
+    pthread_cond_t i_cv;        // POSIX condition variable; a semaphore to wait for a certain predicate on shared data
 };
-struct _le
+struct _le // "list element"? So a 2x linked list of mutex conditions?
 {
     struct _le* next;
     struct _le* prev;
@@ -208,7 +208,7 @@ enum MTConfigType
 #endif
 
 // Somewhat like C++ operator new, but only allocates; no constructor is called.
-// (Maybe this happens implicitly?)
+// Smells like handmade standard data structures.
 #define mtnew(T) (T*)si->memalloc(sizeof(T),MTM_ZERO)
 
 // These two are just... bad. My guess is that they're used to retreive MTArray members.
@@ -235,8 +235,8 @@ enum MTConfigType
 #endif
 
 /*
- *  The following code segments look like a custom threading library. Fuck me, right?
- *  We can probably throw this out entirely. And I mean ENTIRELY. C++11 has std::thread
+ *  The following code segments look like a custom threading library.
+ *  We can probably throw this out entirely. C++11 has std::thread
  *  and friends, so all of this stuff should be standardizable.
  */
 
@@ -277,6 +277,11 @@ struct MTCPUState
 
 //---------------------------------------------------------------------------
 
+/**
+ * @class MTLock
+ * @brief Mutex lock
+ * @deprecated Should be replaced with C++11 std::mutex
+ */
 class MTLock // A mutex lock
 {
 public:
@@ -296,6 +301,11 @@ private:
 #endif
 };
 
+/**
+ * @class MTEvent
+ * Unclear what exactly it does, but it seems to be threading-related.
+ * TODO investigate
+ */
 class MTEvent
 {
 public:
@@ -324,8 +334,8 @@ protected:
     void *d2;
         HANDLE event;
 #else
-    bool d2, d3, d4;
-    void* d5, * d6, * d7; // I hate you.
+    bool d2, d3, d4;        // ???
+    void* d5, * d6, * d7;   // ??!?!?!!! 111
     static void LinuxEventProc(sigval);
 
     bool signaled, needreset, needpulse;
@@ -647,6 +657,7 @@ private:
 // Correction: getresourceurl() is never used, and the rest of the member function
 // usages pop up in interface init routines and places like getdisplayname in
 // MTModule. So yes, a resource can be anything in any savefile.
+// TODO investigate.
 class MTResources
 {
 public:

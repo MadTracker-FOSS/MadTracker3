@@ -83,6 +83,9 @@ typedef void (MTCT* MTCommand)(MTShortcut*, MTControl*, MTUndo*);
 #include "MTXSkin.h"
 
 //---------------------------------------------------------------------------
+// A helper class to keep track of recent commands so they can be un-/redone.
+// Not too sure about these "param" ints and void* - seems smelly.
+// MTCommand is in itself not a type, but a function pointer; see above.
 struct MTUndo
 {
     bool redo;
@@ -92,6 +95,8 @@ struct MTUndo
     void* param4;
 };
 
+// Yuck, union type. Seems to be a keyboard shortcut.
+// TODO refactor and get rid of the union struct.
 struct MTShortcut
 {
     unsigned char flags;

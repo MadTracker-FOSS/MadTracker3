@@ -6,6 +6,11 @@
 #include <MTXAPI/MTXGUI.h>
 
 //---------------------------------------------------------------------------
+
+/**
+ * Lots and lots of global data here, all related to the behaviour of madtracker's GUI.
+ */
+
 static const int guietype = FOURCC('G', 'U', 'I', 'E');
 
 #define NICE_RATIO 2.5

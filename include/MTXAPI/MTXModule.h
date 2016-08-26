@@ -22,6 +22,7 @@
 #define MAX_LAYERS    32
 #define MAX_SEQUENCES 256
 
+///Anon. enum; buttons in editor toolbar? commands? Why is it part of Module.h?
 enum
 {
     PLAY_STOP = 0, PLAY_SONG, PLAY_PATTERN, PLAY_LOOP, PLAY_EXPORT

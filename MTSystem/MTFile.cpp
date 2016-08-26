@@ -113,7 +113,7 @@ MTFile* mtfileopen(const char* url, int flags)
         }
         return 0;
     };
-    f->url = (char*) mtmemalloc(strlen(url) + 1);
+    f->url = (char*) mtmemalloc(strlen(url) + 1); //TODO std::string
     strcpy(f->url, url);
     return f;
 }

@@ -21,6 +21,13 @@ BOOL APIENTRY DllMain(HANDLE hModule,DWORD ul_reason_for_call,LPVOID lpReserved)
 }
 #else
 
+/*
+ * Audio subsystem - this one actually compiles on linux!
+ * It can't be tested yet though; the core program needs to link against the library
+ * created by this module and then successfully load and use it.
+ * Looots of things that can go wrong.
+ */
+
 int main(int argc, const char* argv[])
 {
     return 0;

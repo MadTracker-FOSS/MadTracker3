@@ -39,6 +39,8 @@ int MTConsole::read(void* buffer, int size)
 
 int MTConsole::readln(char* buffer, int maxsize)
 {
+    //TODO this can probably be easily replaced with std::getline
+
     int read = 0;
 
 #	ifndef _WIN32
@@ -182,8 +184,7 @@ int MTConsole::userinput(const char* input)
         const char* e = strchr(input, ' ');
         if (e)
         {
-            // pointer arithmetiXX. bah.
-            x = e - input;
+            x = e - input; // pointer arithmetics, and storing the difference in an int. yuck!
             if (x > sizeof(cmd) - 1)
             {
                 x = sizeof(cmd) - 1;
@@ -196,6 +197,7 @@ int MTConsole::userinput(const char* input)
             cmd[sizeof(cmd) - 1] = 0;
             strncpy(cmd, input, sizeof(cmd) - 1);
         };
+
         // equivalent of the following 2 lines:
         // logfile << "Unknown command " << cmd << "\n";
         // with logfile being of type std::fstream

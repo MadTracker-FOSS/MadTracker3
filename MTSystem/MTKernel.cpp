@@ -127,11 +127,13 @@ MTProcess* mtprocesscreate(ThreadProc tproc, void* param, int type, int priority
     return new MTProcess(tproc, param, type, priority, data, pproc, silent, name);
 }
 
+//TODO Use std::mutex
 MTLock* mtlockcreate()
 {
     return new MTLock();
 }
 
+//TODO see above
 void mtlockdelete(MTLock* lock)
 {
     delete lock;
@@ -214,6 +216,7 @@ bool mtsyscounterex(double* count)
 #endif
 }
 
+//TODO Use std::chrono and std::this_thread::sleep
 void mtsyswait(int ms)
 {
 #if defined(_WIN32)
@@ -226,6 +229,7 @@ void mtsyswait(int ms)
 #endif
 }
 
+//TODO It makes me very angry that there is a type called _le in this code. Also, this function needs jesus.
 int mtsyswaitmultiple(int count, MTEvent** events, bool all, int timeout)
 {
     int x, res;

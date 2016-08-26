@@ -19,12 +19,20 @@
  */
 
 // There are no comments. Nowhere. None. TODO Add them. Everywhere.
-// TODO Fix/redesign ALL errors caused by precision loss, until mt3 compiles without -fpermissive.
+// TODO Fix/refactor all errors caused by precision loss, until mt3 compiles without -fpermissive.
 // TODO Fix all, yes all, warnings thrown by -Wall, -Wextra and -pedantic under C++11 compilation.
-
 // Example: The NL macro that's used in lots of const char* literal strings is interpreted as a
 // user-defined literal suffix under C++11. Using std::string and plain old \n instead and then
 // using an output stream to get the proper linebreak character would fix these warnings.
+
+
+/**
+ * ih3 says:
+ * My best guess so far is that this program is only a small core template and all
+ * additional modules are supposed to be loaded at runtime. The reason it creates an I/O console
+ * is that the GUI module may be unloaded and if that happens you can still test functionality
+ * by inputting commands.
+ */
 
 #ifdef _WIN32
 #	include <windows.h>
@@ -90,12 +98,10 @@ bool running = true;
 //NOTE: There are multiple main functions throughout the code. This might be because all submodules were originally builds of their own.
 int main(int argc, const char* argv[])
 {
-    // The temporaries x and l were moved to the scopes where they're actually used.
-    // Really no point in declaring them ahead of time and making the code less readable;
-    // C++ int initialization rules take care of everything either way.
+    // Moved variable declaration into scope
 
     char input[4096];       // standard-fare input buffer
-    MTConsole* console;     // User I/O, actually on console? (it's on windows, so probably not always)
+    MTConsole* console;     // User I/O, actually on console
 
     instance = (void*) getpid(); // this is a unistd.h function. huh. does it exist on windows? No it doesn't.
 
@@ -110,11 +116,13 @@ int main(int argc, const char* argv[])
             l += strlen(argv[x]) + 1; // this counts the terminating \0 too, so it becomes the actual array size.
         }
 
-        cmdline = (char*) calloc(1, l); // i hate you. Anyway, this allocates space for the global command line string.
+        cmdline = (char*) calloc(1, l); // Allocation for 1 object of size l, where l is the total string length +1 for \0 at the end.
+        // (this, of course, can be replaced with std::string)
+
         for(int x = 1; x < argc - 1; x++)
         { // now processing all arguments up until the last one.
             // so we read out an argument (without the \0) and append it to cmdline, then add a " " at the back
-            // where toe \0 was previously.
+            // where the \0 was previously.
             strcat(cmdline, argv[x]);
             strcat(cmdline, " ");
         };
@@ -122,8 +130,8 @@ int main(int argc, const char* argv[])
         strcat(cmdline, argv[argc - 1]);
     };
 
-    init(); // I'm gonna guess this thing processes the command line arguments.
-    // TODO: Use. std::. Motherfucking. vector. And pass it to this init function.
+    init(); // This thing processes the command line arguments.
+    // TODO: Use a std::vector and pass it to this init function.
 
     if (mi)
     { // mi, too, is one of these global pointers. It's of the type MT3Interface,
@@ -146,7 +154,8 @@ int main(int argc, const char* argv[])
             {
                 if (console->readln(input, sizeof(input)))
                 {
-                    console->userinput(input);  // input is the global char buffer, so if this is the main loop,
+                    console->userinput(input);
+                    // input is the global char buffer, so if this is the main loop,
                     // I would assume this buffer is used quite a lot throughout the program.
                     // If we refactor this, a lot of the program would have to be remodeled.
 

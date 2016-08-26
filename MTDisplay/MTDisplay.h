@@ -34,6 +34,7 @@ inline int swapcolor(int color)
     return ((color & 0xFF) << 16) | (color & 0xFF00) | ((color >> 16) & 0xFF);
 }
 
+//TODO should colors be represented by vec3 instead?
 inline int combinecolor(int color1, int color2)
 {
     unsigned int r1, g1, b1, r2, g2, b2;

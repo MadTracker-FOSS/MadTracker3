@@ -38,6 +38,13 @@
 #define  MTC_SEQUENCE          0x8001
 #define  MTC_OSWINDOW          0xFF01
 
+/**
+ * Madtracker Control Message
+ * Constants used for the MTCMessage all-in-one struct;
+ * There are key events, mouse events, window events,
+ * timer events and state-constants (??).
+ * Lots of stuff, need to figure it out
+ */
 #define MTCM_MOUSEDOWN   0x0001
 #define MTCM_MOUSEMOVE   0x0002
 #define MTCM_MOUSEUP     0x0003
@@ -72,6 +79,9 @@
 #define MTCM_TOUCHED     0x6000
 #define MTCM_USER        0x80000000
 
+// MT Control flag?
+// The numeric values suggest that they are
+// bit-OR'd.
 #define MTCF_DISABLED    0x00000001
 #define MTCF_FOCUSED     0x00000002
 #define MTCF_SELECTED    0x00000004
@@ -99,6 +109,7 @@
 #define MTCF_CANTDRAW    0x00002040
 #define MTCF_CANTTOUCH   0x00040040
 
+// This is just a nullptr. No idea why it needs to be a macro?!?
 #define NORECT *(MTRect*)0
 
 #define ControlNP 9

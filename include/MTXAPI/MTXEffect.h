@@ -23,10 +23,13 @@ class EffectInstance;
 #include <memory.h>
 
 //---------------------------------------------------------------------------
+/**
+ * Modtracker audio effect description, polymorph.
+ */
 class Effect: public Node
 {
 public:
-    float quality;
+    float quality; //TODO find out what this thing affects
     float dry, wet;
     EffectInstance* ei;
 
