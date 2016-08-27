@@ -176,8 +176,8 @@ extern MTLock* objectlock;
 
 extern WaveOutput* output;
 
-#ifdef MTVERSION_PROFESSIONAL
+//#ifdef MTVERSION_PROFESSIONAL
 extern bool smpsupport;
-#endif
+//#endif
 //---------------------------------------------------------------------------
 #endif

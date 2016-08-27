@@ -72,19 +72,8 @@
 
 
 //TODO get rid of basic/pro version logic depending on these next macros
-
-//First trademark ih3 workaround: Just #define the pro version macros to enable all features.
-#define MTVERSION_BASIC
-#define MTVERSION_COMMERCIAL
-#define MTVERSION_PROFESSIONAL
-
-//Original code:
-//#ifdef MTVERSION_COMMERCIAL
-//#	define MTVERSION_PROFESSIONAL
-//#endif
-//#ifdef MTVERSION_PROFESSIONAL
-//#	define MTVERSION_BASIC
-//#endif
+// Update: Done; all checks for the MTVERSION_PROFESSIONAL macro have been commented out.
+// The macros MTVERSION_BASIC and MTVERSION_COMMERCIAL were not used anywhere outside of this file.
 
 //
 //	Uncomment the following line if you compile under a big endian processor

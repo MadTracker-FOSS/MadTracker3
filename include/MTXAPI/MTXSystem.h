@@ -469,7 +469,9 @@ public:
 
     virtual int MTCT readln(char* buffer, int maxsize) = 0;
 
-//	virtual int MTCT reads(char *buffer,int maxsize) = 0;
+    //unused
+	virtual int MTCT reads(char *buffer,int maxsize) = 0;
+
     virtual int MTCT write(const void* buffer, int size) = 0;
 
     virtual int MTCT seek(int pos, int origin) = 0;
@@ -683,10 +685,12 @@ public:
 
     virtual void MTCT releaseresourcefile(MTFile* f);
 
+    //unused
     virtual bool MTCT addresource(int type, int uid, void* res, int size);
 
     virtual bool MTCT addfile(int type, int uid, MTFile* f);
 
+    //unused
     virtual const char* MTCT getresourceurl();
 
 private:
@@ -717,6 +721,7 @@ public:
 
     virtual ~MTConfigFile();
 
+    //unused
     virtual void MTCT clear();
 
     virtual bool MTCT setsection(const char* name);
@@ -783,12 +788,16 @@ public:
 
     virtual double MTCT getcpu(int id);
 
+    //unused
     virtual void* MTCT getcpustate(int id);
 
+    //unused
     virtual int MTCT getcpustateid(void* s);
 
+    //unused
     virtual int MTCT addcpustate();
 
+    //unused
     virtual void MTCT delcpustate(int id);
 
 private:

@@ -101,6 +101,7 @@ struct PlayStatus
 };
 
 // Module class
+// Describes a tracker module. Unknown yet if it differentiates mt2, mod, xm etc.
 class MTModule: public MTObject
 {
 public:

@@ -75,9 +75,9 @@ WaveOutput* output;
 
 MTObjectWrapper ow;
 
-#ifdef MTVERSION_PROFESSIONAL
+//#ifdef MTVERSION_PROFESSIONAL
 bool smpsupport = true;
-#endif
+//#endif
 
 //---------------------------------------------------------------------------
 bool grantaccess(MTObject* object, int access, bool silent = true, bool lock = false)
@@ -324,22 +324,22 @@ bool MTObjectsInterface::init()
         return false;
     };
 #	endif
-#	ifdef MTVERSION_PROFESSIONAL
+//#	ifdef MTVERSION_PROFESSIONAL
     nthreads = si->ncpu;
-#	endif
+//#	endif
 #	ifdef MTSYSTEM_CONFIG
     if ((conf = (MTConfigFile*) mtinterface->getconf("Global", false)))
     {
         if (conf->setsection("MTObjects"))
         {
-#				ifdef MTVERSION_PROFESSIONAL
+//#				ifdef MTVERSION_PROFESSIONAL
             if (smpsupport){
                 conf->getparameter("SMPSupport",&smpsupport,MTCT_BOOLEAN,sizeof(smpsupport));
                 conf->getparameter("Threads",&nthreads,MTCT_UINTEGER,sizeof(nthreads));
                 if (nthreads<1) nthreads = 1;
                 else if (nthreads>128) nthreads = 128;
             };
-#				endif
+//#				endif
         };
         mtinterface->releaseconf(conf);
     };
@@ -374,7 +374,7 @@ bool MTObjectsInterface::init()
     addload(MTO_OSCILLATOR, loadWAV, ".wav", "Wave Sample");
     addload(MTO_INSTRUMENT, loadSF2, ".sf2", "Sound Font 2");
     status |= MTX_INITIALIZED;
-#	ifdef MTVERSION_PROFESSIONAL
+//#	ifdef MTVERSION_PROFESSIONAL
     if (smpsupport){
         if (nthreads>1){
             FLOGD1("%s - [Objects] Preparing engine for %d CPU's..."NL,nthreads);
@@ -383,7 +383,7 @@ bool MTObjectsInterface::init()
             };
         };
     };
-#	endif
+//#	endif
     LEAVE();
     return true;
 }
@@ -396,7 +396,7 @@ void MTObjectsInterface::uninit()
     ENTER("MTObjectsInterface::uninit");
     LOGD("%s - [Objects] Uninitializing..."
              NL);
-#	ifdef MTVERSION_PROFESSIONAL
+//#	ifdef MTVERSION_PROFESSIONAL
     if (smpsupport){
         if (nthreads>1){
             LOGD("%s - [Objects] Stopping engine threads..."NL);
@@ -405,7 +405,7 @@ void MTObjectsInterface::uninit()
             };
         };
     };
-#	endif
+//#	endif
     status &= (~MTX_INITIALIZED);
     oldlock = objectlock;
     objectlock = 0;
@@ -521,7 +521,7 @@ void MTObjectsInterface::stop()
 
 void MTObjectsInterface::processcmdline(void* params)
 {
-#	ifdef MTVERSION_PROFESSIONAL
+//#	ifdef MTVERSION_PROFESSIONAL
     MTArray *pa = (MTArray*)params;
     MTCLParam *np;
 
@@ -533,17 +533,17 @@ void MTObjectsInterface::processcmdline(void* params)
             break;
         };
     };
-#	endif
+//#	endif
 }
 
 void MTObjectsInterface::showusage(void* out)
 {
-#	ifdef MTVERSION_PROFESSIONAL
+//#	ifdef MTVERSION_PROFESSIONAL
     MTFile *co = (MTFile*)out;
     const char *usage = {"      --nosmp       Disable SMP support"NL};
 
     co->write(usage,strlen(usage));
-#	endif
+//#	endif
 }
 
 int MTObjectsInterface::config(int command, int param)

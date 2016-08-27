@@ -13,7 +13,7 @@
 #ifndef MTOBJECTS2_INCLUDED
 #define MTOBJECTS2_INCLUDED
 //---------------------------------------------------------------------------
-#ifdef MTVERSION_PROFESSIONAL
+//#ifdef MTVERSION_PROFESSIONAL
 //---------------------------------------------------------------------------
 #include <MTXAPI/MTXSystem.h>
 //---------------------------------------------------------------------------
@@ -22,6 +22,6 @@ int MTCT engineproc(MTThread *thread,void *param);
 extern int nthreads;
 extern MTThread *thread[128];
 //---------------------------------------------------------------------------
-#endif // MTVERSION_PROFESSIONAL
+//#endif // MTVERSION_PROFESSIONAL
 //---------------------------------------------------------------------------
 #endif

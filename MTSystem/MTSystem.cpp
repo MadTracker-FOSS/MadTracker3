@@ -771,15 +771,14 @@ void delalloc(unsigned int id)
 #endif
 
 //---------------------------------------------------------------------------
-void* mtmemalloc(int size, int flags)
+void* mtmemalloc(int size, int flags) // This may be the function behind MTInterface::memalloc
 {
     void* mem;
 
 #	ifdef _DEBUG
     if (size > 0x2000000)
     {
-        FLOGD1("%s - [System] ERROR: Too big memory allocation! (%d)"
-                   NL, size);
+        FLOGD1("%s - [System] ERROR: Too big memory allocation! (%d)"NL, size);
         return 0;
     };
 #	endif

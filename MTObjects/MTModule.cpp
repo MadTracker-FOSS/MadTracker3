@@ -118,14 +118,16 @@ MTModule::MTModule(mt_int32 i):
     {
         trk->a[x] = new Track(this, x);
     }
-#	ifdef MTVERSION_PROFESSIONAL
+//#	ifdef MTVERSION_PROFESSIONAL
+    //TODO Compiler error; nthreads is an unknown symbol. Where does it come from?
+    //Found it, it's defined in MTObjects2.cpp and extern-declared in the corresponding header.
     mts = si->memalloc(sizeof(ThreadStatus)*nthreads,MTM_ZERO);
     for (x=1;x<nthreads;x++){
         ThreadStatus &cts = ((ThreadStatus*)mts)[x];
         cts.ready = si->eventcreate(true,0,0,true,false);
         cts.go = si->eventcreate(true,0,0,true,false);
     };
-#	endif
+//#	endif
 }
 
 void clearobject(void* o, void*)
@@ -198,7 +200,8 @@ MTModule::~MTModule()
     si->lockdelete(mlock);
     si->memfree(filename);
     delete cpu;
-#	ifdef MTVERSION_PROFESSIONAL
+//#	ifdef MTVERSION_PROFESSIONAL
+    //TODO Compiler error; same as above
     if (mts){
         for (x=1;x<nthreads;x++){
             ThreadStatus &cts = ((ThreadStatus*)mts)[x];
@@ -207,7 +210,7 @@ MTModule::~MTModule()
         };
         si->memfree(mts);
     };
-#	endif
+//#	endif
 }
 
 void MTModule::setmodified(int value, int flags)
@@ -1194,7 +1197,7 @@ bool MTModule::subprocess(WaveOutput* output, int cpuid, double inc, int lng, bo
     int x;
     RI* ri;
 
-#	ifdef MTVERSION_PROFESSIONAL
+//#	ifdef MTVERSION_PROFESSIONAL
     ThreadStatus *cts = (ThreadStatus*)mts;
     MTEvent *events[32];
 
@@ -1205,13 +1208,13 @@ bool MTModule::subprocess(WaveOutput* output, int cpuid, double inc, int lng, bo
             if (x>0) thread[x]->postmessage(4096,(int)this,lng);
         };
     };
-#	endif
+//#	endif
     ris->reset();
     routing:
     MTTRY
         while((ri = (RI*) ris->next()))
         {
-#			ifdef MTVERSION_PROFESSIONAL
+//#			ifdef MTVERSION_PROFESSIONAL
             if ((ri->cpu!=255) && (ri->cpu!=cpuid)) continue;
             if ((smpsupport) && (ri->level<cts[cpuid].level)){
                 if (cpuid==0){
@@ -1227,7 +1230,7 @@ bool MTModule::subprocess(WaveOutput* output, int cpuid, double inc, int lng, bo
                 };
             };
             if ((smpsupport) && (ri->lock) && (!ri->lock->lock())) continue;
-#			endif
+//#			endif
             switch (ri->i)
             {
                 case RI_CLEARBUFFER:
@@ -1277,11 +1280,11 @@ bool MTModule::subprocess(WaveOutput* output, int cpuid, double inc, int lng, bo
                 default:
                     break;
             };
-#			ifdef MTVERSION_PROFESSIONAL
+//#			ifdef MTVERSION_PROFESSIONAL
             if ((smpsupport) && (ri->lock)) ri->lock->unlock();
-#			endif
+//#			endif
         };
-#		ifdef MTVERSION_PROFESSIONAL
+//#		ifdef MTVERSION_PROFESSIONAL
         if (smpsupport){
             if (cpuid==0){
                 x = si->syswaitmultiple(nthreads-1,&events[1],true,1000);
@@ -1293,7 +1296,7 @@ bool MTModule::subprocess(WaveOutput* output, int cpuid, double inc, int lng, bo
                 if (!cts[cpuid].go->wait(1000)) return false;
             };
         };
-#		endif
+//#		endif
     MTCATCH
         LOGD("%s - [Objects] ERROR: Exception while sub-processing!"
                  NL);
@@ -1662,10 +1665,10 @@ void MTModule::updaterouting()
     MTArray* tmpbuf;
     RI ri, iri;
     RI* i;
-#ifdef MTVERSION_PROFESSIONAL
+//#ifdef MTVERSION_PROFESSIONAL
     unsigned char ccpu = 0;
     bool inlevel[256];
-#endif
+//#endif
 
 #	ifdef _DEBUG
 #		ifdef _WIN32
@@ -1770,12 +1773,12 @@ void MTModule::updaterouting()
         ri.level = 65534;
         for(x = 0; x < ntracks; x++)
         {
-#			ifdef MTVERSION_PROFESSIONAL
+//#			ifdef MTVERSION_PROFESSIONAL
             ri.cpu = ccpu;
             if ((smpsupport) && (++ccpu==nthreads)) ccpu = 0;
-#			else
-            ri.cpu = 0;
-#			endif
+//#			else
+//            ri.cpu = 0;
+//#			endif
             for(y = 0; y < A(trk, Track)[x]->noutputs; y++)
             {
                 ri.buffer = A(trk, Track)[x]->buffer[y];
@@ -1808,12 +1811,12 @@ void MTModule::updaterouting()
                         A(tmpbuf, TmpBuf)[e.id]->buffer[pin->s] = buffer;
                         ri.i = RI_CLEARBUFFER;
                         ri.level = 65533; //TODO magic number
-#						ifdef MTVERSION_PROFESSIONAL
+//#						ifdef MTVERSION_PROFESSIONAL
                         ri.cpu = ccpu;
                         if ((smpsupport) && (++ccpu==nthreads)) ccpu = 0;
-#						else
-                        ri.cpu = 0;
-#						endif
+//#						else
+//                        ri.cpu = 0;
+//#						endif
                         ri.buffer = buffer;
                         ris->push(&ri);
                     };
@@ -1827,12 +1830,12 @@ void MTModule::updaterouting()
             sample* outputs[8] = {0, 0, 0, 0, 0, 0, 0, 0};
             b = A(nodes, RN)[x];
             ri.level = b->level;
-#			ifdef MTVERSION_PROFESSIONAL
+//#			ifdef MTVERSION_PROFESSIONAL
             ri.cpu = ccpu;
             if ((smpsupport) && (++ccpu==nthreads)) ccpu = 0;
-#			else
-            ri.cpu = 0;
-#			endif
+//#			else
+//            ri.cpu = 0;
+//#			endif
             Node& cn = *(b->node);
 // Skip master tracks
             if (((cn.objecttype & MTO_TYPEMASK) == MTO_TRACK) && (cn.id >= MAX_TRACKS))
@@ -2062,7 +2065,7 @@ void MTModule::updaterouting()
                 }
             };
         };
-#		ifdef MTVERSION_PROFESSIONAL
+//#		ifdef MTVERSION_PROFESSIONAL
         // Add NOOP instructions to empty levels for synchronization
                     if (smpsupport){
                         ri.i = RI_NOOP;
@@ -2096,7 +2099,7 @@ void MTModule::updaterouting()
                             };
                         };
                     };
-#		endif
+//#		endif
 #		ifdef _DEBUG
         if (log)
         {
