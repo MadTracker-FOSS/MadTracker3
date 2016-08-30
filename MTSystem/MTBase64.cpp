@@ -272,6 +272,9 @@ static const unsigned char pr2six[256] = {
     64
 };
 
+// ^ What is this? It looks like some sort of huge buffer that doesn't need to
+// be statically defined...
+
 int mtbase64decode_len(const char* bufcoded)
 {
     int nbytesdecoded;
